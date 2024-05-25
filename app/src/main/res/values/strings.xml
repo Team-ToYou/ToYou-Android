@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">ToYou</string>
+    <string name="title_home">Home</string>
+    <string name="title_calendar">Calendar</string>
+    <string name="title_diary">Diary</string>
+    <string name="title_mypage">Mypage</string>
+</resources>
