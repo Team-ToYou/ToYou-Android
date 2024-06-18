@@ -17,4 +17,9 @@
     <color name="b03">#FFA8D7F2</color>
     <color name="y02">#FFFAE28F</color>
     <color name="r01">#FFEB8B8B</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="bl00">#FFB3B3B3</color>
+    <color name="bl01">#FFA6A6A6</color>
+    <color name="bl02">#FF939292</color>
+    <color name="g00">#FFD9D9D9</color>
 </resources>
