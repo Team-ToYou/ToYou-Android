@@ -92,12 +92,12 @@
 
 
     <Button
-        style="@style/sc_m13"
+        style="@style/sc_r15"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/create_next_btn"
-        android:text="다음"
-        android:textColor="@color/bl01"
+        android:text="저장하기"
+        android:background="#00ff0000"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="@id/guideline3"
         app:layout_constraintStart_toStartOf="@id/guideline6"
         app:layout_constraintTop_toBottomOf="@id/guideline4"
