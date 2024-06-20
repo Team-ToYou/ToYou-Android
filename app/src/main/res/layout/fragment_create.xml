@@ -89,19 +89,6 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.06" />
 
-    <Button
-        android:layout_width="10dp"
-        android:layout_height="10dp"
-        android:background="@drawable/create_selector_btn"
-        app:layout_constraintStart_toStartOf="@id/guideline" />
-
-    <TextView
-        style="@style/sc_l10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="요즘 어떻게 지내?"
-        android:textColor="@color/black" />
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/card_rv"
