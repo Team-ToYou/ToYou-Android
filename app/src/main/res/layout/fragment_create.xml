@@ -102,6 +102,19 @@
         android:text="요즘 어떻게 지내?"
         android:textColor="@color/black" />
 
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/card_rv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="@id/guideline8"
+        app:layout_constraintStart_toStartOf="@id/guideline"
+        app:layout_constraintTop_toBottomOf="@id/create_title_bottom"
+        android:layout_marginTop="25dp"
+        app:layout_constraintBottom_toTopOf="@id/guideline4"
+        android:layout_marginBottom="25dp"/>
+
+
     <Button
         style="@style/sc_m13"
         android:layout_width="0dp"
@@ -109,10 +122,10 @@
         android:background="@drawable/create_next_btn"
         android:text="다음"
         android:textColor="@color/bl01"
+        app:layout_constraintBottom_toTopOf="@id/guideline7"
         app:layout_constraintEnd_toEndOf="@id/guideline3"
         app:layout_constraintStart_toStartOf="@id/guideline6"
-        app:layout_constraintTop_toBottomOf="@id/guideline4"
-        app:layout_constraintBottom_toTopOf="@id/guideline7"/>
+        app:layout_constraintTop_toBottomOf="@id/guideline4" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline7"
@@ -120,6 +133,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.93" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.96" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
