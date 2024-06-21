@@ -21,6 +21,6 @@
         android:text="요즘 어떻게 지내?"
         android:textColor="@color/black"
         app:layout_constraintStart_toEndOf="@+id/button"
-        android:layout_marginStart="3dp"/>
+        android:layout_marginStart="3dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

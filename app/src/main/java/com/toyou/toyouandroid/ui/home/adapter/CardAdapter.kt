@@ -38,11 +38,18 @@ class CardAdapter(private val onItemClick: (Int) -> Unit) : RecyclerView.Adapter
         init {
             button.setOnClickListener {
                 onItemClick(adapterPosition)
+                button.isEnabled != button.isEnabled
             }
         }
+
+
         fun bind(card : CardModel){
             cardMessageTextView.text = card.message
-
+            updateButtonBackground(button.isEnabled)
+        }
+        private fun updateButtonBackground(isEnabled: Boolean) {
+            val backgroundRes = if (isEnabled) R.drawable.create_unclicked_btn else R.drawable.create_clicked_btn
+            button.setBackgroundResource(backgroundRes)
         }
 
     }

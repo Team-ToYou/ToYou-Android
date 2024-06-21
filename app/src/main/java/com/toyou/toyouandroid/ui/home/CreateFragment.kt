@@ -23,6 +23,7 @@ class CreateFragment : Fragment(){
     private lateinit var cardAdapter : CardAdapter
     private lateinit var cardViewModel: CardViewModel
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         cardViewModel = ViewModelProvider(this).get(CardViewModel::class.java)
@@ -36,7 +37,12 @@ class CreateFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentCreateBinding.inflate(inflater, container, false)
-        cardAdapter = CardAdapter()
+        cardAdapter = CardAdapter { position ->
+            Log.d("CreateFragment", "Item clicked at position: $position")
+
+        }
+        //adapter = cardAdapter
+
 
         binding.cardRv.apply {
             layoutManager = LinearLayoutManager(requireContext())
