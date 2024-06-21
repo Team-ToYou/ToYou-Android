@@ -102,17 +102,18 @@
         android:layout_marginBottom="25dp"/>
 
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         style="@style/sc_m13"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/create_next_btn"
         android:text="다음"
-        android:textColor="@color/bl01"
+        android:textColor="@drawable/next_txt_color"
         app:layout_constraintBottom_toTopOf="@id/guideline7"
         app:layout_constraintEnd_toEndOf="@id/guideline3"
         app:layout_constraintStart_toStartOf="@id/guideline6"
-        app:layout_constraintTop_toBottomOf="@id/guideline4" />
+        app:layout_constraintTop_toBottomOf="@id/guideline4"
+        android:enabled="false"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline7"
