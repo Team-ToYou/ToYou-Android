@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.model.CardModel
 
-class CardAdapter : RecyclerView.Adapter<CardAdapter.CardViewHolder>() {
+class CardAdapter(private val onItemClick: (Int) -> Unit) : RecyclerView.Adapter<CardAdapter.CardViewHolder>() {
     private var cardList: List<CardModel> = emptyList()
 
     fun setCards(cards : List<CardModel>){
@@ -21,7 +21,7 @@ class CardAdapter : RecyclerView.Adapter<CardAdapter.CardViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_rv_card, parent, false)
-        return CardViewHolder(view)
+        return CardViewHolder(view, onItemClick)
     }
 
     override fun onBindViewHolder(holder: CardAdapter.CardViewHolder, position: Int) {
@@ -30,10 +30,16 @@ class CardAdapter : RecyclerView.Adapter<CardAdapter.CardViewHolder>() {
 
     override fun getItemCount(): Int = cardList.size
 
-    class CardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    class CardViewHolder(itemView: View, onItemClick: (Int) -> Unit) : RecyclerView.ViewHolder(itemView){
         private val cardMessageTextView : TextView = itemView.findViewById(R.id.textMessage)
+        private val button : Button = itemView.findViewById(R.id.button)
 
 
+        init {
+            button.setOnClickListener {
+                onItemClick(adapterPosition)
+            }
+        }
         fun bind(card : CardModel){
             cardMessageTextView.text = card.message
 
