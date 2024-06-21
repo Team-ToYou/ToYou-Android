@@ -10,7 +10,12 @@ class CardViewModel : ViewModel(){
     private val _cards = MutableLiveData<List<CardModel>>()
     val cards: LiveData<List<CardModel>> get() = _cards
 
-    private fun loadCardData(){
+    init {
+        loadCardData()
+    }
+
+
+    fun loadCardData(){
         val sampleCards = listOf(
             CardModel("요즘 어떻게 지내?"),
             CardModel("요즘 즐겨하는 취미는?"),
