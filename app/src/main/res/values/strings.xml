@@ -4,4 +4,25 @@
     <string name="title_calendar">Calendar</string>
     <string name="title_diary">Diary</string>
     <string name="title_mypage">Mypage</string>
+
+    <string name="signup_agree_title">약관 동의</string>
+    <string name="signup_agree_sub_title">투유와 함께하기 전\n필요한 약관들을 확인해주세요!</string>
+    <string name="signup_agree_select_1">전체선택</string>
+    <string name="signup_agree_select_2">만 14세 이상입니다</string>
+    <string name="signup_agree_select_3">이용약관 동의</string>
+    <string name="signup_agree_select_4">개인정보 수집 및 이용동의</string>
+    <string name="signup_agree_select_5">마케팅 활용 / 광고성 정보 수신동의</string>
+
+    <string name="signup_nickname_title">투유에서 사용할 닉네임을 알려주세요.</string>
+    <string name="signup_nickname_message_default">중복된 닉네임인지 확인해주세요</string>
+    <string name="signup_nickname_message_confirm">사용 가능한 닉네임입니다</string>
+
+    <string name="signup_status_title">현재 상태를 알려주세요.</string>
+    <string name="signup_status_subtitle">선택하신 정보를 기반으로 맞춤형 질문을 추천해드립니다. \\n 다른 목적으로 사용되거나 제 3자에게 제공되지 않습니다.</string>
+    <string name="signup_status_option_1">중·고등학생</string>
+    <string name="signup_status_option_2">대학생</string>
+    <string name="signup_status_option_3">직장인</string>
+    <string name="signup_status_option_4">기타</string>
+
+    <string name="notice">알림</string>
 </resources>
