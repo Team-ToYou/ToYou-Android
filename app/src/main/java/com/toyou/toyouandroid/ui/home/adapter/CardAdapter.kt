@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.model.CardModel
 
-class CardAdapter(private val onItemClick: (Int) -> Unit) : RecyclerView.Adapter<CardAdapter.CardViewHolder>() {
+class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit) : RecyclerView.Adapter<CardAdapter.CardViewHolder>() {
     private var cardList: List<CardModel> = emptyList()
 
     fun setCards(cards : List<CardModel>){
@@ -30,7 +30,7 @@ class CardAdapter(private val onItemClick: (Int) -> Unit) : RecyclerView.Adapter
 
     override fun getItemCount(): Int = cardList.size
 
-    class CardViewHolder(itemView: View, onItemClick: (Int) -> Unit) : RecyclerView.ViewHolder(itemView){
+    class CardViewHolder(itemView: View, onItemClick: (Int, Boolean) -> Unit) : RecyclerView.ViewHolder(itemView){
         private val cardMessageTextView : TextView = itemView.findViewById(R.id.textMessage)
         private val button : Button = itemView.findViewById(R.id.button)
         private var isSelected: Boolean = false
@@ -39,7 +39,7 @@ class CardAdapter(private val onItemClick: (Int) -> Unit) : RecyclerView.Adapter
         init {
             button.setOnClickListener {
                 updateButtonBackground(isSelected)
-                onItemClick(adapterPosition)
+                onItemClick(adapterPosition, isSelected)
                 isSelected = !isSelected
             }
         }
@@ -47,6 +47,7 @@ class CardAdapter(private val onItemClick: (Int) -> Unit) : RecyclerView.Adapter
 
         fun bind(card : CardModel){
             cardMessageTextView.text = card.message
+            card.isButtonSelected = isSelected
         }
         private fun updateButtonBackground(isSelected: Boolean) {
             val backgroundRes = if (isSelected) R.drawable.create_clicked_btn else R.drawable.create_unclicked_btn

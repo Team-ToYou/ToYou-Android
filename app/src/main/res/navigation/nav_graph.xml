@@ -10,7 +10,12 @@
         android:id="@+id/navigation_home"
         android:name="com.toyou.toyouandroid.ui.home.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_create_fragment"
+            app:destination="@id/create_fragment"
+            app:popUpTo="@id/navigation_home"/>
+    </fragment>
     <fragment
         android:id="@+id/navigation_diary"
         android:name="com.toyou.toyouandroid.ui.diary.DiaryFragment"
@@ -30,7 +35,8 @@
         android:id="@+id/create_fragment"
         android:name="com.toyou.toyouandroid.ui.home.CreateFragment"
         android:label="CreateFragment"
-        tools:layout="@layout/fragment_create"/>
+        tools:layout="@layout/fragment_create">
+    </fragment>
 
 
 </navigation>

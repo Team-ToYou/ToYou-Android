@@ -25,4 +25,14 @@ class CardViewModel : ViewModel(){
 
         _cards.value = sampleCards
     }
+
+    fun updateButtonState(position : Int, isSelected : Boolean){
+        _cards.value = _cards.value?.mapIndexed { index, card ->
+            if (index == position) {
+                card.copy(isButtonSelected = isSelected)
+            } else {
+                card
+            }
+        }
+    }
 }
