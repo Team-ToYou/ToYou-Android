@@ -40,6 +40,7 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit) : RecyclerVie
             button.setOnClickListener {
                 updateButtonBackground(isSelected)
                 isSelected = !isSelected
+                //버튼 클릭 업데이트 후 onItemClick 함수 호출하기!
                 onItemClick(adapterPosition, isSelected)
             }
         }

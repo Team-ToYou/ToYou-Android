@@ -54,6 +54,12 @@ class CreateFragment : Fragment(){
             Log.d("CreateFragment", "Item clicked at position: $position")
             Log.d("CreateFragment", "Item clicked at position: $isSelected, ${cardViewModel.cards.value}")
 
+            if (isSelected == true){
+                binding.nextBtn.isEnabled = true
+            } else{
+                binding.nextBtn.isEnabled = false
+            }
+
         }
         //adapter = cardAdapter
 
@@ -73,10 +79,6 @@ class CreateFragment : Fragment(){
             addItemDecoration(RVMarginItemDecoration(margin))
         }
 
-        /*cardViewModel = ViewModelProvider(this).get(CardViewModel::class.java)
-        Log.d("CreateFragment", "ViewModel created: ${cardViewModel}") // 로그 추가*/
-
-
 
         val mainActivity = activity as MainActivity // casting
         mainActivity.hideBottomNavigation(true)
@@ -94,8 +96,6 @@ class CreateFragment : Fragment(){
                 navController.popBackStack()
             }
         }
-
-
 
     }
 
