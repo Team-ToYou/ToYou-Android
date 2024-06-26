@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:background="@drawable/create_selector_btn"
+        app:layout_constraintBottom_toBottomOf="@+id/textMessage"
+        app:layout_constraintTop_toTopOf="@+id/textMessage" />
+
+    <TextView
+        android:id="@+id/textMessage"
+        style="@style/sc_l10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="요즘 어떻게 지내?"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toEndOf="@+id/button"
+        android:layout_marginStart="3dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

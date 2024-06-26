@@ -98,6 +98,13 @@
         <item name="android:textSize">15sp</item>
     </style>
 
+    <style name="sc_m13">
+        <item name="android:fontStyle">normal</item>
+        <item name="android:font">@font/scdream5</item>
+        <item name="android:fontWeight">500</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+
     <style name="sc_m15">
         <item name="android:fontStyle">normal</item>
         <item name="android:font">@font/scdream5</item>

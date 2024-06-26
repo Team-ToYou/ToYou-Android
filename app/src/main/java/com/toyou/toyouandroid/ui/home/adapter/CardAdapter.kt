@@ -1,0 +1,56 @@
+package com.toyou.toyouandroid.ui.home.adapter
+
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import com.toyou.toyouandroid.R
+import com.toyou.toyouandroid.model.CardModel
+
+class CardAdapter(private val onItemClick: (Int) -> Unit) : RecyclerView.Adapter<CardAdapter.CardViewHolder>() {
+    private var cardList: List<CardModel> = emptyList()
+
+    fun setCards(cards : List<CardModel>){
+        this.cardList = cards
+        Log.d("CardAdapter", "setCards called with: $cards")
+        notifyDataSetChanged()
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_rv_card, parent, false)
+        return CardViewHolder(view, onItemClick)
+    }
+
+    override fun onBindViewHolder(holder: CardAdapter.CardViewHolder, position: Int) {
+        holder.bind(cardList[position])
+    }
+
+    override fun getItemCount(): Int = cardList.size
+
+    class CardViewHolder(itemView: View, onItemClick: (Int) -> Unit) : RecyclerView.ViewHolder(itemView){
+        private val cardMessageTextView : TextView = itemView.findViewById(R.id.textMessage)
+        private val button : Button = itemView.findViewById(R.id.button)
+
+
+        init {
+            button.setOnClickListener {
+                onItemClick(adapterPosition)
+                button.isEnabled != button.isEnabled
+            }
+        }
+
+
+        fun bind(card : CardModel){
+            cardMessageTextView.text = card.message
+            updateButtonBackground(button.isEnabled)
+        }
+        private fun updateButtonBackground(isEnabled: Boolean) {
+            val backgroundRes = if (isEnabled) R.drawable.create_unclicked_btn else R.drawable.create_clicked_btn
+            button.setBackgroundResource(backgroundRes)
+        }
+
+    }
+}
