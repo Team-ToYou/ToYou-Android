@@ -9,7 +9,7 @@
         android:id="@+id/button"
         android:layout_width="10dp"
         android:layout_height="10dp"
-        android:background="@drawable/create_selector_btn"
+        android:background="@drawable/create_clicked_btn"
         app:layout_constraintBottom_toBottomOf="@+id/textMessage"
         app:layout_constraintTop_toTopOf="@+id/textMessage" />
 

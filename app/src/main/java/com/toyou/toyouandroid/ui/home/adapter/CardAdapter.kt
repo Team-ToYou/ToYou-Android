@@ -33,22 +33,23 @@ class CardAdapter(private val onItemClick: (Int) -> Unit) : RecyclerView.Adapter
     class CardViewHolder(itemView: View, onItemClick: (Int) -> Unit) : RecyclerView.ViewHolder(itemView){
         private val cardMessageTextView : TextView = itemView.findViewById(R.id.textMessage)
         private val button : Button = itemView.findViewById(R.id.button)
+        private var isSelected: Boolean = false
 
 
         init {
             button.setOnClickListener {
+                updateButtonBackground(isSelected)
                 onItemClick(adapterPosition)
-                button.isEnabled != button.isEnabled
+                isSelected = !isSelected
             }
         }
 
 
         fun bind(card : CardModel){
             cardMessageTextView.text = card.message
-            updateButtonBackground(button.isEnabled)
         }
-        private fun updateButtonBackground(isEnabled: Boolean) {
-            val backgroundRes = if (isEnabled) R.drawable.create_unclicked_btn else R.drawable.create_clicked_btn
+        private fun updateButtonBackground(isSelected: Boolean) {
+            val backgroundRes = if (isSelected) R.drawable.create_clicked_btn else R.drawable.create_unclicked_btn
             button.setBackgroundResource(backgroundRes)
         }
 
