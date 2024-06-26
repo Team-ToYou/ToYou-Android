@@ -39,15 +39,15 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit) : RecyclerVie
         init {
             button.setOnClickListener {
                 updateButtonBackground(isSelected)
-                onItemClick(adapterPosition, isSelected)
                 isSelected = !isSelected
+                onItemClick(adapterPosition, isSelected)
             }
         }
 
 
         fun bind(card : CardModel){
             cardMessageTextView.text = card.message
-            card.isButtonSelected = isSelected
+            //card.isButtonSelected = isSelected
         }
         private fun updateButtonBackground(isSelected: Boolean) {
             val backgroundRes = if (isSelected) R.drawable.create_clicked_btn else R.drawable.create_unclicked_btn

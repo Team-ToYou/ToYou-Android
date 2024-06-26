@@ -43,14 +43,21 @@ class CreateFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentCreateBinding.inflate(inflater, container, false)
+
+        cardViewModel.cards.observe(viewLifecycleOwner, Observer { cards ->
+            Log.d("CreateFragment", "Loading cards: ${cardViewModel.cards.value}") // 디버그 로그 추가
+            cardAdapter.setCards(cards)
+        })
+
         cardAdapter = CardAdapter { position, isSelected ->
             cardViewModel.updateButtonState(position, isSelected)
             Log.d("CreateFragment", "Item clicked at position: $position")
             Log.d("CreateFragment", "Item clicked at position: $isSelected, ${cardViewModel.cards.value}")
 
-
         }
         //adapter = cardAdapter
+
+        cardViewModel.loadCardData()
 
 
         binding.cardRv.apply {
@@ -66,17 +73,10 @@ class CreateFragment : Fragment(){
             addItemDecoration(RVMarginItemDecoration(margin))
         }
 
+        /*cardViewModel = ViewModelProvider(this).get(CardViewModel::class.java)
+        Log.d("CreateFragment", "ViewModel created: ${cardViewModel}") // 로그 추가*/
 
 
-        cardViewModel = ViewModelProvider(this).get(CardViewModel::class.java)
-        Log.d("CreateFragment", "ViewModel created: ${cardViewModel}") // 로그 추가
-
-        cardViewModel.cards.observe(viewLifecycleOwner, Observer { cards ->
-            Log.d("CardViewModel", "Loading cards: ${cardViewModel.cards.value}") // 디버그 로그 추가
-            cardAdapter.setCards(cards)
-        })
-
-        cardViewModel.loadCardData()
 
         val mainActivity = activity as MainActivity // casting
         mainActivity.hideBottomNavigation(true)
@@ -94,6 +94,8 @@ class CreateFragment : Fragment(){
                 navController.popBackStack()
             }
         }
+
+
 
     }
 
