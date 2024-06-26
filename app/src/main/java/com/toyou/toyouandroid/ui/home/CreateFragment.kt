@@ -9,7 +9,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.toyou.toyouandroid.MainActivity
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentCreateBinding
 import com.toyou.toyouandroid.ui.home.adapter.CardAdapter
@@ -22,6 +26,8 @@ class CreateFragment : Fragment(){
 
     private lateinit var cardAdapter : CardAdapter
     private lateinit var cardViewModel: CardViewModel
+
+    lateinit var navController: NavController
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,11 +43,27 @@ class CreateFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentCreateBinding.inflate(inflater, container, false)
-        cardAdapter = CardAdapter { position ->
+
+        cardViewModel.cards.observe(viewLifecycleOwner, Observer { cards ->
+            Log.d("CreateFragment", "Loading cards: ${cardViewModel.cards.value}") // 디버그 로그 추가
+            cardAdapter.setCards(cards)
+        })
+
+        cardAdapter = CardAdapter { position, isSelected ->
+            cardViewModel.updateButtonState(position, isSelected)
             Log.d("CreateFragment", "Item clicked at position: $position")
+            Log.d("CreateFragment", "Item clicked at position: $isSelected, ${cardViewModel.cards.value}")
+
+            if (isSelected == true){
+                binding.nextBtn.isEnabled = true
+            } else{
+                binding.nextBtn.isEnabled = false
+            }
 
         }
         //adapter = cardAdapter
+
+        cardViewModel.loadCardData()
 
 
         binding.cardRv.apply {
@@ -58,24 +80,29 @@ class CreateFragment : Fragment(){
         }
 
 
-
-        cardViewModel = ViewModelProvider(this).get(CardViewModel::class.java)
-        Log.d("CreateFragment", "ViewModel created: ${cardViewModel}") // 로그 추가
-
-        cardViewModel.cards.observe(viewLifecycleOwner, Observer { cards ->
-            Log.d("CardViewModel", "Loading cards: $cards") // 디버그 로그 추가
-            cardAdapter.setCards(cards)
-        })
-
-        cardViewModel.loadCardData()
+        val mainActivity = activity as MainActivity // casting
+        mainActivity.hideBottomNavigation(true)
 
 
         val root: View = binding.root
         return root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        navController = Navigation.findNavController(view)
+
+        binding.backBtn.setOnClickListener {
+            binding.backBtn.setOnClickListener {
+                navController.popBackStack()
+            }
+        }
+
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
+        val mainActivity = activity as MainActivity
+        mainActivity.hideBottomNavigation(false)
         _binding = null
     }
 

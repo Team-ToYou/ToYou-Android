@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.model.CardModel
 
-class CardAdapter(private val onItemClick: (Int) -> Unit) : RecyclerView.Adapter<CardAdapter.CardViewHolder>() {
+class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit) : RecyclerView.Adapter<CardAdapter.CardViewHolder>() {
     private var cardList: List<CardModel> = emptyList()
 
     fun setCards(cards : List<CardModel>){
@@ -30,25 +30,28 @@ class CardAdapter(private val onItemClick: (Int) -> Unit) : RecyclerView.Adapter
 
     override fun getItemCount(): Int = cardList.size
 
-    class CardViewHolder(itemView: View, onItemClick: (Int) -> Unit) : RecyclerView.ViewHolder(itemView){
+    class CardViewHolder(itemView: View, onItemClick: (Int, Boolean) -> Unit) : RecyclerView.ViewHolder(itemView){
         private val cardMessageTextView : TextView = itemView.findViewById(R.id.textMessage)
         private val button : Button = itemView.findViewById(R.id.button)
+        private var isSelected: Boolean = false
 
 
         init {
             button.setOnClickListener {
-                onItemClick(adapterPosition)
-                button.isEnabled != button.isEnabled
+                updateButtonBackground(isSelected)
+                isSelected = !isSelected
+                //버튼 클릭 업데이트 후 onItemClick 함수 호출하기!
+                onItemClick(adapterPosition, isSelected)
             }
         }
 
 
         fun bind(card : CardModel){
             cardMessageTextView.text = card.message
-            updateButtonBackground(button.isEnabled)
+            //card.isButtonSelected = isSelected
         }
-        private fun updateButtonBackground(isEnabled: Boolean) {
-            val backgroundRes = if (isEnabled) R.drawable.create_unclicked_btn else R.drawable.create_clicked_btn
+        private fun updateButtonBackground(isSelected: Boolean) {
+            val backgroundRes = if (isSelected) R.drawable.create_clicked_btn else R.drawable.create_unclicked_btn
             button.setBackgroundResource(backgroundRes)
         }
 
