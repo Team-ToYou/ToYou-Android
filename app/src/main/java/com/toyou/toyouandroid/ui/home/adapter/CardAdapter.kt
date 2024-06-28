@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.R
@@ -34,14 +35,18 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit) : RecyclerVie
         private val cardMessageTextView : TextView = itemView.findViewById(R.id.textMessage)
         private val button : Button = itemView.findViewById(R.id.button)
         private var isSelected: Boolean = false
+        private val editText : EditText = itemView.findViewById(R.id.memo_et)
 
 
         init {
             button.setOnClickListener {
-                updateButtonBackground(isSelected)
+                Log.d("선택1", "$isSelected")
                 isSelected = !isSelected
                 //버튼 클릭 업데이트 후 onItemClick 함수 호출하기!
+                updateButtonBackground(isSelected)
+                updateEditTextBoxVisibility(isSelected)
                 onItemClick(adapterPosition, isSelected)
+                Log.d("선택2", "$isSelected")
             }
         }
 
@@ -51,8 +56,16 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit) : RecyclerVie
             //card.isButtonSelected = isSelected
         }
         private fun updateButtonBackground(isSelected: Boolean) {
-            val backgroundRes = if (isSelected) R.drawable.create_clicked_btn else R.drawable.create_unclicked_btn
+            val backgroundRes = if (isSelected) R.drawable.create_unclicked_btn else R.drawable.create_clicked_btn
             button.setBackgroundResource(backgroundRes)
+        }
+
+        private fun updateEditTextBoxVisibility(isSelected: Boolean) {
+            if (isSelected) {
+                editText.visibility = View.VISIBLE
+            } else{
+                editText.visibility = View.GONE
+            }
         }
 
     }
