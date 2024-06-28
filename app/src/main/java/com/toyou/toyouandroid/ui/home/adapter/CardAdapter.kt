@@ -36,24 +36,29 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit) : RecyclerVie
         private val button : Button = itemView.findViewById(R.id.button)
         private var isSelected: Boolean = false
         private val editText : EditText = itemView.findViewById(R.id.memo_et)
+        private val fromWho : TextView = itemView.findViewById(R.id.fromWho_tv)
+        private val fromWhoEt : TextView = itemView.findViewById(R.id.fromWhoEt_tv)
 
 
         init {
             button.setOnClickListener {
-                Log.d("선택1", "$isSelected")
                 isSelected = !isSelected
                 //버튼 클릭 업데이트 후 onItemClick 함수 호출하기!
                 updateButtonBackground(isSelected)
                 updateEditTextBoxVisibility(isSelected)
+                updateUiEditTextVisibility(isSelected)
                 onItemClick(adapterPosition, isSelected)
-                Log.d("선택2", "$isSelected")
             }
         }
 
 
         fun bind(card : CardModel){
             cardMessageTextView.text = card.message
-            //card.isButtonSelected = isSelected
+            if (isSelected) {
+                fromWhoEt.text = card.fromWho
+            } else{
+                fromWho.text = card.fromWho
+            }
         }
         private fun updateButtonBackground(isSelected: Boolean) {
             val backgroundRes = if (isSelected) R.drawable.create_unclicked_btn else R.drawable.create_clicked_btn
@@ -65,6 +70,16 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit) : RecyclerVie
                 editText.visibility = View.VISIBLE
             } else{
                 editText.visibility = View.GONE
+            }
+        }
+
+        private fun updateUiEditTextVisibility(isSelected: Boolean){
+            if (isSelected){
+                fromWho.visibility = View.GONE
+                fromWhoEt.visibility = View.VISIBLE
+            } else{
+                fromWho.visibility = View.VISIBLE
+                fromWhoEt.visibility = View.GONE
             }
         }
 
