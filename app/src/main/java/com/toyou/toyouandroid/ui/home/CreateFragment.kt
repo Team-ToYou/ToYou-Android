@@ -28,6 +28,7 @@ class CreateFragment : Fragment(){
     private lateinit var cardViewModel: CardViewModel
 
     lateinit var navController: NavController
+    var count : Int = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,6 +48,19 @@ class CreateFragment : Fragment(){
         cardViewModel.cards.observe(viewLifecycleOwner, Observer { cards ->
             Log.d("CreateFragment", "Loading cards: ${cardViewModel.cards.value}") // 디버그 로그 추가
             cardAdapter.setCards(cards)
+
+            cards?.let {
+                for (card in it) {
+                    if (card.isButtonSelected) {
+                        count = 1
+                        binding.nextBtn.isEnabled = true
+                    }
+                }
+                if (count == 0)
+                    binding.nextBtn.isEnabled = false
+                count=0
+            }
+
         })
 
         cardAdapter = CardAdapter { position, isSelected ->
@@ -54,14 +68,9 @@ class CreateFragment : Fragment(){
             Log.d("CreateFragment", "Item clicked at position: $position")
             Log.d("CreateFragment", "Item clicked at position: $isSelected, ${cardViewModel.cards.value}")
 
-            if (isSelected == true){
-                binding.nextBtn.isEnabled = true
-            } else{
-                binding.nextBtn.isEnabled = false
-            }
-
         }
-        //adapter = cardAdapter
+
+
 
         cardViewModel.loadCardData()
 

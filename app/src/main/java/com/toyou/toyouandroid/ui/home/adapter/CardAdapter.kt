@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.R
@@ -34,13 +35,18 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit) : RecyclerVie
         private val cardMessageTextView : TextView = itemView.findViewById(R.id.textMessage)
         private val button : Button = itemView.findViewById(R.id.button)
         private var isSelected: Boolean = false
+        private val editText : EditText = itemView.findViewById(R.id.memo_et)
+        private val fromWho : TextView = itemView.findViewById(R.id.fromWho_tv)
+        private val fromWhoEt : TextView = itemView.findViewById(R.id.fromWhoEt_tv)
 
 
         init {
             button.setOnClickListener {
-                updateButtonBackground(isSelected)
                 isSelected = !isSelected
                 //버튼 클릭 업데이트 후 onItemClick 함수 호출하기!
+                updateButtonBackground(isSelected)
+                updateEditTextBoxVisibility(isSelected)
+                updateUiEditTextVisibility(isSelected)
                 onItemClick(adapterPosition, isSelected)
             }
         }
@@ -48,11 +54,33 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit) : RecyclerVie
 
         fun bind(card : CardModel){
             cardMessageTextView.text = card.message
-            //card.isButtonSelected = isSelected
+            if (isSelected) {
+                fromWhoEt.text = card.fromWho
+            } else{
+                fromWho.text = card.fromWho
+            }
         }
         private fun updateButtonBackground(isSelected: Boolean) {
-            val backgroundRes = if (isSelected) R.drawable.create_clicked_btn else R.drawable.create_unclicked_btn
+            val backgroundRes = if (isSelected) R.drawable.create_unclicked_btn else R.drawable.create_clicked_btn
             button.setBackgroundResource(backgroundRes)
+        }
+
+        private fun updateEditTextBoxVisibility(isSelected: Boolean) {
+            if (isSelected) {
+                editText.visibility = View.VISIBLE
+            } else{
+                editText.visibility = View.GONE
+            }
+        }
+
+        private fun updateUiEditTextVisibility(isSelected: Boolean){
+            if (isSelected){
+                fromWho.visibility = View.GONE
+                fromWhoEt.visibility = View.VISIBLE
+            } else{
+                fromWho.visibility = View.VISIBLE
+                fromWhoEt.visibility = View.GONE
+            }
         }
 
     }
