@@ -91,7 +91,13 @@
 
 
 
-    <Button
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/preview_char1"/>
+
+
+    <androidx.appcompat.widget.AppCompatButton
         style="@style/sc_r15"
         android:layout_width="0dp"
         android:layout_height="0dp"

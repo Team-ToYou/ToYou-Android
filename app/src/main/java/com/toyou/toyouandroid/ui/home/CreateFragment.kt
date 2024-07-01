@@ -22,7 +22,7 @@ import com.toyou.toyouandroid.view_model.CardViewModel
 class CreateFragment : Fragment(){
 
     private var _binding: FragmentCreateBinding? = null
-    private val binding: FragmentCreateBinding get() = requireNotNull(_binding) { "FragmentCreateBinding should not be null" }
+    private val binding: FragmentCreateBinding get() = requireNotNull(_binding) { "널" }
 
     private lateinit var cardAdapter : CardAdapter
     private lateinit var cardViewModel: CardViewModel
@@ -114,6 +114,5 @@ class CreateFragment : Fragment(){
         mainActivity.hideBottomNavigation(false)
         _binding = null
     }
-
 
 }
