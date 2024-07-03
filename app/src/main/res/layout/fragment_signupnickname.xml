@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_paper">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_title_v"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="19dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_next_v"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="30dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_screen_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="47dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_title_h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="136dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_next_h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="662dp" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/back_button"
+        app:layout_constraintStart_toStartOf="@id/guideline_title_v"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/screen_bar_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="9dp"
+        android:fontFamily="@font/scdream5"
+        android:text="@string/signup_screen_bar_title"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/guideline_screen_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <View
+        android:id="@+id/seperator_screen_bar"
+        android:layout_width="420dp"
+        android:layout_height="2dp"
+        android:background="@color/g00"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline_screen_bar" />
+
+    <TextView
+        android:id="@+id/signup_nickname_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/scdream4"
+        android:text="@string/signup_nickname_title"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@id/guideline_title_v"
+        app:layout_constraintTop_toTopOf="@id/guideline_title_h" />
+
+    <EditText
+        android:id="@+id/signup_nickname_input"
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:hint="@string/signup_nickname_placeholder"
+        style="@style/sc_l10"
+        android:textColor="@color/bg"
+        android:layout_marginTop="7dp"
+        android:background="@drawable/signupnickname_input"
+        app:layout_constraintStart_toStartOf="@id/guideline_title_v"
+        app:layout_constraintTop_toBottomOf="@+id/signup_nickname_title"
+        android:autofillHints="name" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/signup_agree_nickname_doublecheck"
+        android:layout_width="61dp"
+        android:layout_height="30dp"
+        android:text="@string/signup_nickname_double_check"
+        style="@style/sc_l10"
+        android:textColor="@color/bl01"
+        android:background="@drawable/signupnickname_input"
+        android:layout_marginStart="4dp"
+        app:layout_constraintStart_toEndOf="@+id/signup_nickname_input"
+        app:layout_constraintTop_toTopOf="@+id/signup_nickname_input" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/signup_nickname_message_default"
+        style="@style/sc_l10"
+        android:layout_marginTop="7dp"
+        app:layout_constraintStart_toStartOf="@+id/guideline_title_v"
+        app:layout_constraintTop_toBottomOf="@+id/signup_nickname_input" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="360dp"
+        android:layout_height="40dp"
+        android:background="@drawable/next_button"
+        android:text="@string/next_button"
+        android:textColor="@color/bl01"
+        style="@style/sc_m13"
+        app:layout_constraintStart_toStartOf="@id/guideline_next_v"
+        app:layout_constraintTop_toTopOf="@id/guideline_next_h" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
