@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.model.PreviewCardModel
 
-class CardPreviewListAdapter(val context: Context, val cardList: ArrayList<PreviewCardModel>) : BaseAdapter(){
+class CardPreviewListAdapter(val cardList: ArrayList<PreviewCardModel>) : BaseAdapter(){
     override fun getCount(): Int {
         return cardList.size
     }
@@ -24,13 +24,17 @@ class CardPreviewListAdapter(val context: Context, val cardList: ArrayList<Previ
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val view : View = LayoutInflater.from(context).inflate(R.layout.card_qa_list, null)
+
+        var view = convertView
+        if (view == null) view =
+            LayoutInflater.from(parent?.context).inflate(R.layout.card_qa_list, parent, false)
+
         val questionText = view?.findViewById<TextView>(R.id.question)
         questionText!!.text = cardList[position].question
         val  answerText = view?.findViewById<TextView>(R.id.answer)
         answerText!!.text = cardList[position].answer
 
-        return view
+        return view!!
     }
 
 }
