@@ -1,4 +1,4 @@
-package com.toyou.toyouandroid.ui.onBoarding
+package com.toyou.toyouandroid.ui.onboarding
 
 import android.os.Bundle
 import android.view.LayoutInflater
