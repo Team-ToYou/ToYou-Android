@@ -1,4 +1,4 @@
-package com.toyou.toyouandroid.view_model
+package com.toyou.toyouandroid.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
