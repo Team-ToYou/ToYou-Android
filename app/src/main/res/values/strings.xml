@@ -5,6 +5,8 @@
     <string name="title_diary">Diary</string>
     <string name="title_mypage">Mypage</string>
 
+    <string name="ToYou_hanguel">투유</string>
+
     <string name="signup_screen_bar_title">회원가입</string>
     <string name="next_button">다음</string>
     <string name="complete_button">완료</string>
@@ -23,6 +25,7 @@
     <string name="signup_nickname_placeholder">닉네임을 입력해주세요.</string>
     <string name="signup_nickname_message_default">중복된 닉네임인지 확인해주세요.</string>
     <string name="signup_nickname_message_confirm">사용 가능한 닉네임입니다.</string>
+    <string name="signup_nickname_message_count">15자 이내로 입력해주세요.</string>
     <string name="signup_nickname_double_check">중복확인</string>
 
     <string name="signup_status_title">현재 상태를 알려주세요.</string>
@@ -33,4 +36,23 @@
     <string name="signup_status_option_4">기타</string>
 
     <string name="notice">알림</string>
+
+    <string name="home_stamp_title_1">오늘 하루는 어땠나요?</string>
+    <string name="home_stamp_title_2">감정우표를 선택해주세요</string>
+    <string name="home_stamp_subtitle">선택한 감정우표를 기반으로 맞춤형 질문이 배달됩니다</string>
+    <string name="home_stamp_option_happy">더없이 행복한 하루였어요</string>
+    <string name="home_stamp_option_exciting">들뜨고 흥분돼요</string>
+    <string name="home_stamp_option_normal">평범한 하루였어요</string>
+    <string name="home_stamp_option_anxiety">생각이 많아지고 불안해요</string>
+    <string name="home_stamp_option_upset">부글부글 화가 나요</string>
+    <string name="home_stamp_result_happy">너무 행복한 날이었나봐요! \n 이 소중한 순간을 꼭 기록해봐요</string>
+    <string name="home_stamp_result_exciting">좋은 기분이네요! \n 이 기분을 느끼면서 즐겨보세요</string>
+    <string name="home_stamp_result_normal">가끔은 아무 생각 없는 게 좋죠</string>
+    <string name="home_stamp_result_anxiety">그런 날도 있죠. \n 차근차근 풀어나갈 수 있을 거에요</string>
+    <string name="home_stamp_result_upset">화가 나는 날도 있죠. \n 함께 해결책을 찾아봐요</string>
+
+    <string name="home_date">20240503</string>
+
+    <string name="home_sidemenu_title">따끈따끈한 친구들의 일기카드를 확인해보세요!</string>
+
 </resources>
