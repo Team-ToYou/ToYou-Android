@@ -22,7 +22,7 @@ import com.toyou.toyouandroid.view_model.CardViewModel
 class CreateFragment : Fragment(){
 
     private var _binding: FragmentCreateBinding? = null
-    private val binding: FragmentCreateBinding get() = requireNotNull(_binding) { "FragmentCreateBinding should not be null" }
+    private val binding: FragmentCreateBinding get() = requireNotNull(_binding) { "널" }
 
     private lateinit var cardAdapter : CardAdapter
     private lateinit var cardViewModel: CardViewModel
@@ -65,9 +65,7 @@ class CreateFragment : Fragment(){
 
         cardAdapter = CardAdapter { position, isSelected ->
             cardViewModel.updateButtonState(position, isSelected)
-            Log.d("CreateFragment", "Item clicked at position: $position")
-            Log.d("CreateFragment", "Item clicked at position: $isSelected, ${cardViewModel.cards.value}")
-
+            Log.d("CreateFragment", "Item clicked at position: $isSelected, ${cardViewModel.previewCards.value}")
         }
 
 
@@ -101,19 +99,24 @@ class CreateFragment : Fragment(){
         navController = Navigation.findNavController(view)
 
         binding.backBtn.setOnClickListener {
-            binding.backBtn.setOnClickListener {
+            val mainActivity = activity as MainActivity
+            mainActivity.hideBottomNavigation(false)
                 navController.popBackStack()
-            }
+
+        }
+
+        binding.nextBtn.setOnClickListener {
+
+            navController.navigate(R.id.action_create_fragment_to_previewFragment)
         }
 
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        val mainActivity = activity as MainActivity
-        mainActivity.hideBottomNavigation(false)
+
+
         _binding = null
     }
-
 
 }
