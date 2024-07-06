@@ -41,7 +41,8 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
 
-        binding.textHomeBtn.setOnClickListener {
+        // 우체통 클릭시 일기카드 생성 화면으로 전환(임시)
+        binding.homeMailboxIv.setOnClickListener {
             navController.navigate(R.id.action_navigation_home_to_create_fragment)
         }
     }

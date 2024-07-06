@@ -11,13 +11,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.toyou.toyouandroid.MainActivity
-import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentCreateBinding
 import com.toyou.toyouandroid.ui.home.adapter.CardAdapter
-import com.toyou.toyouandroid.view_model.CardViewModel
+import com.toyou.toyouandroid.viewmodel.CardViewModel
 
 class CreateFragment : Fragment(){
 
