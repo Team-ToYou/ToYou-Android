@@ -1,6 +1,7 @@
 package com.toyou.toyouandroid.ui.home.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +11,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.model.PreviewCardModel
 
-class CardPreviewListAdapter(val cardList: ArrayList<PreviewCardModel>) : BaseAdapter(){
+class CardPreviewListAdapter(private var cardList: List<PreviewCardModel>) : BaseAdapter() {
+
+    fun setCards(newCards: List<PreviewCardModel>) {
+        cardList = newCards
+        notifyDataSetChanged()
+        Log.d("카드1", cardList.toString())
+    }
+
     override fun getCount(): Int {
         return cardList.size
     }
