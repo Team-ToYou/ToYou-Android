@@ -1,19 +1,21 @@
-package com.toyou.toyouandroid.ui.onboarding
+package com.toyou.toyouandroid.presentation.fragment.onboarding
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.toyou.toyouandroid.databinding.FragmentHomeBinding
 import com.toyou.toyouandroid.databinding.FragmentLoginBinding
 
 class LoginFragment : Fragment() {
 
     private var _binding: FragmentLoginBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
+//    private val binding get() = _binding!!
+
+    private val binding: FragmentLoginBinding
+        get() = requireNotNull(_binding){"FragmentLoginBinding -> null"}
 
     override fun onCreateView(
         inflater: LayoutInflater,

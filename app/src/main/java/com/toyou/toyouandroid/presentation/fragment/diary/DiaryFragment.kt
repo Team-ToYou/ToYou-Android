@@ -1,4 +1,4 @@
-package com.toyou.toyouandroid.ui.diary
+package com.toyou.toyouandroid.presentation.fragment.diary
 
 import android.os.Bundle
 import android.view.LayoutInflater

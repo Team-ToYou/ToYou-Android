@@ -1,4 +1,4 @@
-package com.toyou.toyouandroid.ui.mypage
+package com.toyou.toyouandroid.presentation.fragment.mypage
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

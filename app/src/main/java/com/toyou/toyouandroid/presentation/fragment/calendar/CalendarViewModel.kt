@@ -1,4 +1,4 @@
-package com.toyou.toyouandroid.ui.calendar
+package com.toyou.toyouandroid.presentation.fragment.calendar
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

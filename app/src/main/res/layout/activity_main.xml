@@ -3,7 +3,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".MainActivity"
+    tools:context=".presentation.base.MainActivity"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <androidx.fragment.app.FragmentContainerView

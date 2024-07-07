@@ -1,4 +1,4 @@
-package com.toyou.toyouandroid.ui.home
+package com.toyou.toyouandroid.presentation.fragment.home
 
 import android.os.Bundle
 import android.util.DisplayMetrics
@@ -12,10 +12,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.toyou.toyouandroid.MainActivity
+import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.databinding.FragmentCreateBinding
-import com.toyou.toyouandroid.ui.home.adapter.CardAdapter
-import com.toyou.toyouandroid.viewmodel.CardViewModel
+import com.toyou.toyouandroid.presentation.fragment.home.adapter.CardAdapter
+import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 
 class CreateFragment : Fragment(){
 

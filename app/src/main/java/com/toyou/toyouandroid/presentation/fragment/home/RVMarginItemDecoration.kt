@@ -1,4 +1,4 @@
-package com.toyou.toyouandroid.ui.home
+package com.toyou.toyouandroid.presentation.fragment.home
 
 import android.graphics.Rect
 import android.view.View

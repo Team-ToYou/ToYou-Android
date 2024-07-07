@@ -1,4 +1,4 @@
-package com.toyou.toyouandroid.ui.diary
+package com.toyou.toyouandroid.presentation.fragment.diary
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

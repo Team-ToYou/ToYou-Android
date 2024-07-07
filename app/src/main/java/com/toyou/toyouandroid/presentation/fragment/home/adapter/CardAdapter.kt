@@ -1,4 +1,4 @@
-package com.toyou.toyouandroid.ui.home.adapter
+package com.toyou.toyouandroid.presentation.fragment.home.adapter
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -25,7 +25,7 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit) : RecyclerVie
         return CardViewHolder(view, onItemClick)
     }
 
-    override fun onBindViewHolder(holder: CardAdapter.CardViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
         holder.bind(cardList[position])
     }
 
