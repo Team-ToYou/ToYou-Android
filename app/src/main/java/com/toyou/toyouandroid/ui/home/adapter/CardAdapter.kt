@@ -54,7 +54,6 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit) : RecyclerVie
                 onItemClick(adapterPosition, isSelected,)
 
 
-
             editText.addTextChangedListener(object : TextWatcher{
                 override fun beforeTextChanged(
                     s: CharSequence?,

@@ -33,7 +33,7 @@ class CreateFragment : Fragment(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        cardViewModel = ViewModelProvider(this).get(CardViewModel::class.java)
+        cardViewModel = ViewModelProvider(requireActivity()).get(CardViewModel::class.java)
 
         cardViewModel.loadCardData()
     }
@@ -65,6 +65,7 @@ class CreateFragment : Fragment(){
 
         cardAdapter = CardAdapter { position, isSelected ->
             cardViewModel.updateButtonState(position, isSelected)
+
             Log.d("CreateFragment", "Item clicked at position: $isSelected, ${cardViewModel.previewCards.value}")
         }
 
@@ -86,10 +87,8 @@ class CreateFragment : Fragment(){
             addItemDecoration(RVMarginItemDecoration(margin))
         }
 
-
         val mainActivity = activity as MainActivity // casting
         mainActivity.hideBottomNavigation(true)
-
 
         val root: View = binding.root
         return root
@@ -104,19 +103,20 @@ class CreateFragment : Fragment(){
                 navController.popBackStack()
 
         }
-
         binding.nextBtn.setOnClickListener {
+            cardViewModel.updatePreviewCard()
 
+            cardViewModel.previewCards.value?.let { previewCards ->
+                if (previewCards.isNotEmpty()) {
+                    Log.d("카드3", previewCards[0].question)
+                }
+            }
             navController.navigate(R.id.action_create_fragment_to_previewFragment)
         }
 
+
+
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-
-        _binding = null
-    }
 
 }

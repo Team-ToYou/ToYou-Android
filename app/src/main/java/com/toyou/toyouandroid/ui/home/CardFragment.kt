@@ -6,27 +6,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
-import com.toyou.toyouandroid.MainActivity
-import com.toyou.toyouandroid.R
-import com.toyou.toyouandroid.databinding.FragmentCreateBinding
+import com.toyou.toyouandroid.databinding.CardLayoutBinding
 import com.toyou.toyouandroid.databinding.FragmentPreviewBinding
-import com.toyou.toyouandroid.model.PreviewCardModel
 import com.toyou.toyouandroid.ui.home.adapter.CardPreviewListAdapter
 import com.toyou.toyouandroid.view_model.CardViewModel
 
-class PreviewFragment : Fragment(){
+class CardFragment : Fragment() {
 
-    private var _binding : FragmentPreviewBinding? = null
-    private val binding: FragmentPreviewBinding get() = requireNotNull(_binding){"FragmentPreview 널"}
+    private var _binding : CardLayoutBinding? = null
+    private val binding: CardLayoutBinding get() = requireNotNull(_binding){"FragmentPreview 널"}
 
     private lateinit var listAdapter : CardPreviewListAdapter
-    private lateinit var cardViewModel : CardViewModel
+    private lateinit var cardViewModel: CardViewModel
 
-    lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,18 +35,7 @@ class PreviewFragment : Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentPreviewBinding.inflate(inflater, container, false)
-
-        if (savedInstanceState == null) {
-            // 프래그먼트 인스턴스 생성
-            val fragment = CardFragment()
-
-            // FragmentTransaction을 사용하여 프래그먼트를 추가
-            childFragmentManager.beginTransaction()
-                .add(R.id.card_container, fragment)
-                .commit()
-        }
-
+        _binding = CardLayoutBinding.inflate(inflater, container, false)
 
 
         return binding.root
@@ -58,17 +43,21 @@ class PreviewFragment : Fragment(){
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        navController = Navigation.findNavController(view)
 
-        binding.imageButton.setOnClickListener {
-            navController.popBackStack()
+        listAdapter = CardPreviewListAdapter(emptyList())
+        binding.cardList.adapter = listAdapter
 
-        }
+        cardViewModel.previewCards.observe(viewLifecycleOwner, Observer { previewCards ->
+            listAdapter.setCards(previewCards)
+            Log.d("카드2", previewCards.toString())
+
+        })
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+
     }
 
 }
