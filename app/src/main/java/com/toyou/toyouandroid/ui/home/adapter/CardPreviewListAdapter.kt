@@ -38,7 +38,7 @@ class CardPreviewListAdapter(private var cardList: List<PreviewCardModel>) : Bas
             LayoutInflater.from(parent?.context).inflate(R.layout.card_qa_list, parent, false)
 
         val questionText = view?.findViewById<TextView>(R.id.question)
-        questionText!!.text = cardList[position].answer
+        questionText!!.text = cardList[position].question
         val  answerText = view?.findViewById<TextView>(R.id.answer)
         answerText!!.text = cardList[position].answer
 
