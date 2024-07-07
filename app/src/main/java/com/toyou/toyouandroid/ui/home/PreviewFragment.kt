@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import com.toyou.toyouandroid.MainActivity
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentCreateBinding
@@ -57,6 +58,12 @@ class PreviewFragment : Fragment(){
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        navController = Navigation.findNavController(view)
+
+        binding.imageButton.setOnClickListener {
+            navController.popBackStack()
+
+        }
     }
 
     override fun onDestroyView() {
