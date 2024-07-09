@@ -19,7 +19,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{viewModel.HomeOptionResult.sentence}"
+            android:text="@{viewModel.sentence.toString()}"
             android:gravity="center"
             style="@style/gangwon25"
             app:layout_constraintStart_toStartOf="parent"
