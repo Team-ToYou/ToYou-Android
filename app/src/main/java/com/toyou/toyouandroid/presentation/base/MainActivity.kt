@@ -37,4 +37,8 @@ class MainActivity : AppCompatActivity() {
     fun hideBottomNavigation(state:Boolean){
         if(state) binding.bottomNavi.visibility = View.GONE else binding.bottomNavi.visibility=View.VISIBLE
     }
+
+    fun setSelectedStamp(stamp: String) {
+        // Implement logic to handle the selected stamp
+    }
 }
