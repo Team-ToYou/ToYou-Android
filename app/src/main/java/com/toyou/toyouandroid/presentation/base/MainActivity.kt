@@ -30,15 +30,9 @@ class MainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
         findViewById<BottomNavigationView>(R.id.bottom_navi)
             .setupWithNavController(navController)
-
-
     }
 
     fun hideBottomNavigation(state:Boolean){
         if(state) binding.bottomNavi.visibility = View.GONE else binding.bottomNavi.visibility=View.VISIBLE
-    }
-
-    fun setSelectedStamp(stamp: String) {
-        // Implement logic to handle the selected stamp
     }
 }

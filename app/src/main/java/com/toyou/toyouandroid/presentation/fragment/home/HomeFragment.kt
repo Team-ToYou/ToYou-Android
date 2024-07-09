@@ -34,8 +34,12 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
 
-//        binding.viewModel = viewModel
-//        binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
+
+//        viewModel.selectedStamp.observe(viewLifecycleOwner) { stamp ->
+//            (activity as MainActivity).setSelectedStamp(stamp)
+//        }
 
         // 우체통 클릭시 일기카드 생성 화면으로 전환(임시)
         binding.homeMailboxIv.setOnClickListener {

@@ -19,7 +19,11 @@ class HomeResultViewModel @Inject constructor(
     private val _sentence = MutableLiveData<HomeOptionResult>()
     val sentence: LiveData<HomeOptionResult> get() = _sentence
 
-    init {
+    private val _selectedStamp = MutableLiveData<String>()
+    val selectedStamp: LiveData<String> get() = _selectedStamp
+
+    fun setSelectedStamp(stamp: String) {
+        _selectedStamp.value = stamp
         viewModelScope.launch {
             delay(2000)
             navigator.navigateToHomeFragment()
