@@ -10,14 +10,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeOptionViewModel @Inject constructor(
-    private val navigator: FragmentNavigator
+    private val navigator: FragmentNavigator,
+    private val homeResultViewModel: HomeResultViewModel
 ) : ViewModel() {
 
-    private val _selectedStamp = MutableLiveData<String>()
-    val selectedStamp: LiveData<String> get() = _selectedStamp
-
     fun onStampSelected(stamp: String) {
-        _selectedStamp.value = stamp
+        homeResultViewModel.setSelectedStamp(stamp)
         navigator.navigateToResultFragment()
     }
 }
