@@ -1,4 +1,6 @@
 package com.toyou.toyouandroid.ui.social
 
-class SocialFragment {
+import androidx.fragment.app.Fragment
+
+class SocialFragment : Fragment() {
 }
