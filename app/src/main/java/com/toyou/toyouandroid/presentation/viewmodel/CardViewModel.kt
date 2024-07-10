@@ -5,17 +5,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.toyou.toyouandroid.model.CardModel
+import com.toyou.toyouandroid.model.PreviewCardModel
 
 class CardViewModel : ViewModel(){
     private val _cards = MutableLiveData<List<CardModel>>()
     val cards: LiveData<List<CardModel>> get() = _cards
+
+    private val _previewCards = MutableLiveData<List<PreviewCardModel>>()
+    val previewCards : LiveData<List<PreviewCardModel>> get() = _previewCards
 
 
     //뷰모델이 생성될때 초기값 설정
     init {
         loadCardData()
     }
-
 
     fun loadCardData(){
         val sampleCards = listOf(
@@ -37,4 +40,12 @@ class CardViewModel : ViewModel(){
             }
         }
     }
+
+    fun updatePreviewCard(){
+        _previewCards.value = _cards.value?.filter {it.isButtonSelected}?.map {
+            PreviewCardModel(answer = "", question = it.message)
+        }
+    }
+
+
 }
