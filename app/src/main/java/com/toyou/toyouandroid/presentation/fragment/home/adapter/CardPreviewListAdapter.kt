@@ -10,13 +10,14 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.model.PreviewCardModel
+import timber.log.Timber
 
 class CardPreviewListAdapter(private var cardList: List<PreviewCardModel>) : BaseAdapter() {
 
     fun setCards(newCards: List<PreviewCardModel>) {
         cardList = newCards
         notifyDataSetChanged()
-        Log.d("카드1", cardList.toString())
+        Timber.tag("카드1").d(cardList.toString())
     }
 
     override fun getCount(): Int {

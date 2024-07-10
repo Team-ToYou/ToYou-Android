@@ -1,4 +1,4 @@
-package com.toyou.toyouandroid.view_model
+package com.toyou.toyouandroid.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 

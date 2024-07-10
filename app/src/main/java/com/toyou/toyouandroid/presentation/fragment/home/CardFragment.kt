@@ -12,8 +12,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import com.toyou.toyouandroid.databinding.CardLayoutBinding
 import com.toyou.toyouandroid.databinding.FragmentPreviewBinding
+import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 import com.toyou.toyouandroid.ui.home.adapter.CardPreviewListAdapter
-import com.toyou.toyouandroid.view_model.CardViewModel
+import timber.log.Timber
 
 class CardFragment : Fragment() {
 
@@ -33,7 +34,7 @@ class CardFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         _binding = CardLayoutBinding.inflate(inflater, container, false)
 
@@ -49,7 +50,7 @@ class CardFragment : Fragment() {
 
         cardViewModel.previewCards.observe(viewLifecycleOwner, Observer { previewCards ->
             listAdapter.setCards(previewCards)
-            Log.d("카드2", previewCards.toString())
+            Timber.tag("카드2").d(previewCards.toString())
 
         })
     }
