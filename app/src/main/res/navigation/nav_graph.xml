@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.toyou.toyouandroid.ui.home.HomeFragment"
+        android:name="com.toyou.toyouandroid.presentation.fragment.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -18,22 +18,22 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_diary"
-        android:name="com.toyou.toyouandroid.ui.diary.DiaryFragment"
+        android:name="com.toyou.toyouandroid.presentation.fragment.diary.DiaryFragment"
         android:label="fragment_diary"
         tools:layout="@layout/fragment_diary" />
     <fragment
         android:id="@+id/navigation_calendar"
-        android:name="com.toyou.toyouandroid.ui.calendar.CalendarFragment"
+        android:name="com.toyou.toyouandroid.presentation.fragment.calendar.CalendarFragment"
         android:label="fragment_calendar"
         tools:layout="@layout/fragment_calendar" />
     <fragment
         android:id="@+id/navigation_mypage"
-        android:name="com.toyou.toyouandroid.ui.mypage.MypageFragment"
+        android:name="com.toyou.toyouandroid.presentation.fragment.mypage.MypageFragment"
         android:label="fragment_mypage"
         tools:layout="@layout/fragment_mypage" />
     <fragment
         android:id="@+id/create_fragment"
-        android:name="com.toyou.toyouandroid.ui.home.CreateFragment"
+        android:name="com.toyou.toyouandroid.presentation.fragment.home.CreateFragment"
         android:label="CreateFragment"
         tools:layout="@layout/fragment_create">
         <action
