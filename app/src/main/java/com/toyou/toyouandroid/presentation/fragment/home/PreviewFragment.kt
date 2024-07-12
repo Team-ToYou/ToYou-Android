@@ -10,13 +10,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import com.toyou.toyouandroid.MainActivity
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentCreateBinding
 import com.toyou.toyouandroid.databinding.FragmentPreviewBinding
 import com.toyou.toyouandroid.model.PreviewCardModel
+import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 import com.toyou.toyouandroid.ui.home.adapter.CardPreviewListAdapter
-import com.toyou.toyouandroid.view_model.CardViewModel
 
 class PreviewFragment : Fragment(){
 

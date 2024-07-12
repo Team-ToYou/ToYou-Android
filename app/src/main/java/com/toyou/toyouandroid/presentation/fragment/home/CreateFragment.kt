@@ -12,10 +12,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.databinding.FragmentCreateBinding
 import com.toyou.toyouandroid.presentation.fragment.home.adapter.CardAdapter
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
+import timber.log.Timber
 
 class CreateFragment : Fragment(){
 
@@ -39,7 +41,7 @@ class CreateFragment : Fragment(){
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         _binding = FragmentCreateBinding.inflate(inflater, container, false)
 
@@ -56,7 +58,7 @@ class CreateFragment : Fragment(){
                 }
                 if (count == 0)
                     binding.nextBtn.isEnabled = false
-                count=0
+                count = 0
             }
 
         })
@@ -88,8 +90,7 @@ class CreateFragment : Fragment(){
         val mainActivity = activity as MainActivity // casting
         mainActivity.hideBottomNavigation(true)
 
-        val root: View = binding.root
-        return root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -106,7 +107,7 @@ class CreateFragment : Fragment(){
 
             cardViewModel.previewCards.value?.let { previewCards ->
                 if (previewCards.isNotEmpty()) {
-                    Log.d("카드3", previewCards[0].question)
+                    Timber.tag("카드3").d(previewCards[0].question)
                 }
             }
             navController.navigate(R.id.action_create_fragment_to_previewFragment)
