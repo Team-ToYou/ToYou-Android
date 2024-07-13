@@ -83,148 +83,16 @@
         app:layout_constraintBottom_toBottomOf="@+id/balloon_tv"
         app:layout_constraintTop_toTopOf="@+id/balloon_tv"/>
 
-    <ImageView
-        android:id="@+id/container"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_container_question"
         android:layout_width="0dp"
-        android:layout_height="100dp"
-        android:background="@drawable/answer_box"
+        android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="@id/guideline20"
         app:layout_constraintStart_toEndOf="@id/guideline19"
-        app:layout_constraintTop_toBottomOf="@+id/balloon_tv"
-        android:layout_marginTop="25dp"/>
-
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:weightSum="3"
-        app:layout_constraintEnd_toEndOf="@id/guideline20"
-        app:layout_constraintStart_toEndOf="@id/guideline19"
-        app:layout_constraintTop_toTopOf="@id/container"
-        android:layout_marginTop="10dp">
+        app:layout_constraintTop_toBottomOf="@id/balloon_tv"
+        app:layout_constraintBottom_toTopOf="@id/next_btn"/>
 
 
-        <ImageView
-            android:id="@+id/char1_iv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/social_char" />
-
-        <ImageView
-            android:id="@+id/char2_iv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/social_char" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/social_char" />
-
-    </LinearLayout>
-    
-    <LinearLayout
-        android:id="@+id/linear_tv"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-        android:weightSum="6"
-        app:layout_constraintEnd_toEndOf="@id/guideline20"
-        app:layout_constraintStart_toEndOf="@id/guideline19">
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-
-    <TextView
-        style="@style/gangwon15"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="선택형"
-        android:textColor="@color/bl00"
-        android:layout_weight="1"/>
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-
-        <TextView
-            style="@style/gangwon15"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="단답형"
-            android:textColor="@color/bl00"
-            android:layout_weight="1"/>
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-
-        <TextView
-            style="@style/gangwon15"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="장문형"
-            android:textColor="@color/bl00"
-            android:layout_weight="1"/>
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/linear_tv"
-        android:weightSum="6"
-        app:layout_constraintEnd_toEndOf="@id/guideline20"
-        app:layout_constraintStart_toEndOf="@id/guideline19">
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-
-        <TextView
-            style="@style/gangwon15"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="(보기를 만들 수 있어요)"
-            android:textColor="@color/bl00"
-            android:layout_weight="1"/>
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-
-        <TextView
-            style="@style/gangwon15"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="(간단하게 물어보세요)"
-            android:textColor="@color/bl00"
-            android:layout_weight="1"/>
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-
-        <TextView
-            style="@style/gangwon15"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="(긴 답변을 원해요)"
-            android:textColor="@color/bl00"
-            android:layout_weight="1"/>
-
-    </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/next_btn"
