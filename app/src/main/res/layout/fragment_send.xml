@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/background_paper">
+
+    <ImageButton
+        android:id="@+id/back_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/create_back"
+        app:layout_constraintStart_toStartOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@id/guideline2" />
+
+    <TextView
+        android:id="@+id/title_tv"
+        style="@style/sc_r15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="질문하기"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/guideline18"
+        app:layout_constraintStart_toStartOf="@id/guideline19"/>
+
+    <TextView
+        android:id="@+id/subTitle_tv"
+        style="@style/sc_l12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="익명으로 질문을 보낼 수 있어요"
+        app:layout_constraintTop_toBottomOf="@id/title_tv"
+        app:layout_constraintStart_toStartOf="@id/guideline19"
+        android:textColor="@color/black" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="0dp"
+        android:layout_height="1px"
+        android:layout_marginTop="5dp"
+        android:background="#939292"
+        app:layout_constraintEnd_toEndOf="@id/guideline20"
+        app:layout_constraintStart_toEndOf="@id/guideline19"
+        app:layout_constraintTop_toBottomOf="@id/subTitle_tv" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/send_card"
+        app:layout_constraintBottom_toTopOf="@+id/next_btn"
+        app:layout_constraintEnd_toStartOf="@+id/guideline20"
+        app:layout_constraintStart_toStartOf="@+id/guideline19"
+        app:layout_constraintTop_toBottomOf="@+id/view" />
+    
+    <CheckBox
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        app:layout_constraintBottom_toTopOf="@id/next_btn"
+        app:layout_constraintEnd_toStartOf="@id/check_tv"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="5dp"/>
+
+    <TextView
+        android:id="@+id/check_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="익명으로 보내기"
+        style="@style/gangwon15"
+        app:layout_constraintEnd_toEndOf="@id/guideline20"
+        app:layout_constraintStart_toStartOf="@id/guideline19"
+        app:layout_constraintBottom_toTopOf="@id/next_btn"
+        android:layout_marginBottom="10dp"/>
+
+    
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/next_btn"
+        style="@style/sc_m13"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/create_next_btn"
+        android:text="질문 보내기"
+        android:textColor="@drawable/next_txt_color"
+        app:layout_constraintBottom_toTopOf="@id/guideline7"
+        app:layout_constraintEnd_toEndOf="@id/guideline20"
+        app:layout_constraintStart_toStartOf="@id/guideline19"
+        app:layout_constraintTop_toBottomOf="@id/guideline4"
+        android:enabled="false"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.93" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.86" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline19"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.06" />
+
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.94" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.04" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.02" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.1" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
