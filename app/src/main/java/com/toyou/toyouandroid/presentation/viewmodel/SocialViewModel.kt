@@ -22,4 +22,5 @@ class SocialViewModel : ViewModel() {
         _friends.value = sampleData
     }
 
+
 }

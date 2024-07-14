@@ -71,7 +71,6 @@ class CreateFragment : Fragment(){
         }
 
 
-
         cardViewModel.loadCardData()
 
 

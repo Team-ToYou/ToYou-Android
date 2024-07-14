@@ -20,7 +20,11 @@
         android:id="@+id/navigation_social"
         android:name="com.toyou.toyouandroid.ui.social.SocialFragment"
         android:label="fragment_social"
-        tools:layout="@layout/fragment_social" />
+        tools:layout="@layout/fragment_social" >
+        <action
+            android:id="@+id/action_navigation_social_to_questionTypeFragment"
+            app:destination="@id/questionTypeFragment" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_calendar"
         android:name="com.toyou.toyouandroid.presentation.fragment.calendar.CalendarFragment"
@@ -45,6 +49,20 @@
         android:name="com.toyou.toyouandroid.ui.home.PreviewFragment"
         android:label="PreviewFragment"
         tools:layout="@layout/fragment_preview"/>
+    <fragment
+        android:id="@+id/questionTypeFragment"
+        android:name="com.toyou.toyouandroid.ui.social.QuestionTypeFragment"
+        android:label="QuestionTypeFragment"
+        tools:layout="@layout/fragment_question_type">
+        <action
+            android:id="@+id/action_questionTypeFragment_to_questionContentFragment"
+            app:destination="@id/questionContentFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/questionContentFragment"
+        android:name="com.toyou.toyouandroid.ui.social.QuestionContentFragment"
+        android:label="QuestionContentFragment"
+        tools:layout="@layout/fragment_question_content"/>
 
 
 </navigation>

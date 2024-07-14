@@ -10,8 +10,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.Adapter
+import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentSocialBinding
 import com.toyou.toyouandroid.presentation.fragment.home.RVMarginItemDecoration
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
@@ -33,8 +35,6 @@ class SocialFragment : Fragment() {
 
         socialViewModel = ViewModelProvider(requireActivity()).get(SocialViewModel::class.java)
 
-        socialViewModel.loadFriendData()
-        socialAdapter = SocialRVAdapter() //어댑터 applu전에 무조건 초기화해주기
     }
 
     override fun onCreateView(
@@ -44,15 +44,15 @@ class SocialFragment : Fragment() {
     ): View? {
         _binding = FragmentSocialBinding.inflate(inflater, container, false)
 
-        socialViewModel.friends.observe(viewLifecycleOwner, Observer { friends ->
-            socialAdapter.setFriendData(friends)
-            socialAdapter.notifyDataSetChanged()
-        })
+        //어탭터 초기화 후 뷰모델 데이터 관찰
+        socialAdapter = SocialRVAdapter { position ->
+            navController.navigate(R.id.action_navigation_social_to_questionTypeFragment)
+            Log.d("아이템", position.toString())
+        }
 
         binding.socialRv.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = socialAdapter
-
 
             val displayMetrics = DisplayMetrics()
             requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
@@ -63,8 +63,19 @@ class SocialFragment : Fragment() {
             addItemDecoration(RVMarginItemDecoration(margin,false))
         }
 
+        socialViewModel.friends.observe(viewLifecycleOwner, Observer { friends ->
+            socialAdapter.setFriendData(friends)
+            socialAdapter.notifyDataSetChanged()
+        })
+
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        navController = Navigation.findNavController(view)
+
     }
 
     override fun onDestroy() {
