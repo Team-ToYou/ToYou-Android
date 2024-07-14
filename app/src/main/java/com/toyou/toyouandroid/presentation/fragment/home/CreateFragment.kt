@@ -36,6 +36,7 @@ class CreateFragment : Fragment(){
         cardViewModel = ViewModelProvider(requireActivity()).get(CardViewModel::class.java)
 
         cardViewModel.loadCardData()
+
     }
 
     override fun onCreateView(
@@ -84,7 +85,7 @@ class CreateFragment : Fragment(){
             val margin = (screenWidth * 0.02).toInt() // 화면 너비의 5%를 마진으로 사용
 
             // 아이템 데코레이션 추가
-            addItemDecoration(RVMarginItemDecoration(margin))
+            addItemDecoration(RVMarginItemDecoration(margin, true))
         }
 
         val mainActivity = activity as MainActivity // casting
@@ -116,6 +117,5 @@ class CreateFragment : Fragment(){
 
 
     }
-
 
 }

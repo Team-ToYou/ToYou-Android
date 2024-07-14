@@ -13,6 +13,10 @@ class SocialRVAdapter : RecyclerView.Adapter<SocialRVAdapter.SocialViewHolder>()
 
     private var friendList : List<FriendListModel> = emptyList()
 
+    fun setFriendData(friends : List<FriendListModel>){
+        this.friendList = friends
+    }
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
