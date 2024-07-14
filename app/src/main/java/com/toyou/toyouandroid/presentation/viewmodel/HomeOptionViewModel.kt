@@ -5,11 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.Navigator
 import com.toyou.toyouandroid.di.FragmentNavigator
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 
-@HiltViewModel
-class HomeOptionViewModel @Inject constructor(
+class HomeOptionViewModel (
     private val navigator: FragmentNavigator,
     private val homeResultViewModel: HomeResultViewModel
 ) : ViewModel() {

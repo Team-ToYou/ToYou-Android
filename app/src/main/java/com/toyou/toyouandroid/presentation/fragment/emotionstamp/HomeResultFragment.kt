@@ -9,9 +9,7 @@ import androidx.fragment.app.viewModels
 import com.toyou.toyouandroid.databinding.FragmentHomeBinding
 import com.toyou.toyouandroid.databinding.FragmentHomeResultBinding
 import com.toyou.toyouandroid.presentation.viewmodel.HomeResultViewModel
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class HomeResultFragment : Fragment() {
 
     private var _binding: FragmentHomeResultBinding? = null

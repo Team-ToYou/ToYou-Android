@@ -8,10 +8,8 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.ActivityMainBinding
-import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
-@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
