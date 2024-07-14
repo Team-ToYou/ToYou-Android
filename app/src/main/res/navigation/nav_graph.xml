@@ -62,7 +62,25 @@
         android:id="@+id/questionContentFragment"
         android:name="com.toyou.toyouandroid.ui.social.QuestionContentFragment"
         android:label="QuestionContentFragment"
-        tools:layout="@layout/fragment_question_content"/>
+        tools:layout="@layout/fragment_question_content">
+        <action
+            android:id="@+id/action_questionContentFragment_to_sendFragment"
+            app:destination="@id/sendFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/sendFragment"
+        android:name="com.toyou.toyouandroid.ui.social.SendFragment"
+        android:label="SendFragment"
+        tools:layout="@layout/fragment_send">
+        <action
+            android:id="@+id/action_sendFragment_to_sendFinalFragment"
+            app:destination="@id/sendFinalFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/sendFinalFragment"
+        android:name="com.toyou.toyouandroid.ui.social.SendFinalFragment"
+        android:label="SendFinalFragment"
+        tools:layout="@layout/fragment_send_final"/>
 
 
 </navigation>

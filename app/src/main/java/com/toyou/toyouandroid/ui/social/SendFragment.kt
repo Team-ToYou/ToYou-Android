@@ -9,10 +9,11 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentQuestionContentBinding
+import com.toyou.toyouandroid.databinding.FragmentSendBinding
 
-class QuestionContentFragment : Fragment() {
-    private var _binding : FragmentQuestionContentBinding? = null
-    private val binding : FragmentQuestionContentBinding get() = requireNotNull(_binding){"널"}
+class SendFragment: Fragment() {
+    private var _binding : FragmentSendBinding? = null
+    private val binding : FragmentSendBinding get() = requireNotNull(_binding){"널"}
 
     private lateinit var navController: NavController
 
@@ -25,7 +26,7 @@ class QuestionContentFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentQuestionContentBinding.inflate(inflater, container, false)
+        _binding = FragmentSendBinding.inflate(inflater, container, false)
 
 
         return binding.root
@@ -37,7 +38,7 @@ class QuestionContentFragment : Fragment() {
         navController = Navigation.findNavController(view)
 
         binding.nextBtn.setOnClickListener {
-            navController.navigate(R.id.action_questionContentFragment_to_sendFragment)
+            navController.navigate(R.id.action_sendFragment_to_sendFinalFragment)
         }
     }
 }
