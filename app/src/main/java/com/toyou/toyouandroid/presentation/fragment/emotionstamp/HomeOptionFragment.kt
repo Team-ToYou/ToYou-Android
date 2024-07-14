@@ -9,9 +9,7 @@ import androidx.fragment.app.viewModels
 import com.toyou.toyouandroid.databinding.FragmentHomeOptionBinding
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.presentation.viewmodel.HomeOptionViewModel
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class HomeOptionFragment : Fragment() {
 
     private var _binding: FragmentHomeOptionBinding? = null

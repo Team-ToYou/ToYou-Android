@@ -6,13 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.toyou.toyouandroid.di.FragmentNavigator
 import com.toyou.toyouandroid.model.HomeOptionResult
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class HomeResultViewModel @Inject constructor(
+class HomeResultViewModel (
     private val navigator: FragmentNavigator
 ) : ViewModel() {
 
