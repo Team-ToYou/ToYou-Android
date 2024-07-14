@@ -17,10 +17,10 @@
             app:popUpTo="@id/navigation_home"/>
     </fragment>
     <fragment
-        android:id="@+id/navigation_diary"
-        android:name="com.toyou.toyouandroid.presentation.fragment.diary.DiaryFragment"
-        android:label="fragment_diary"
-        tools:layout="@layout/fragment_diary" />
+        android:id="@+id/navigation_social"
+        android:name="com.toyou.toyouandroid.ui.social.SocialFragment"
+        android:label="fragment_social"
+        tools:layout="@layout/fragment_social" />
     <fragment
         android:id="@+id/navigation_calendar"
         android:name="com.toyou.toyouandroid.presentation.fragment.calendar.CalendarFragment"

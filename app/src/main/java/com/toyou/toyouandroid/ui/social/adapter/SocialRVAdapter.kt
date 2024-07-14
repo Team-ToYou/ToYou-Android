@@ -42,3 +42,4 @@ class SocialRVAdapter : RecyclerView.Adapter<SocialRVAdapter.SocialViewHolder>()
 
 
 }
+
