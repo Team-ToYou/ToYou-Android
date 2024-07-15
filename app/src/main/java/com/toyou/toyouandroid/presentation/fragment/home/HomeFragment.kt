@@ -45,6 +45,10 @@ class HomeFragment : Fragment() {
         binding.homeMailboxIv.setOnClickListener {
             navController.navigate(R.id.action_navigation_home_to_create_fragment)
         }
+
+        // BottomSheetDialogFragment를 호출하는 코드
+        val bottomSheetFragment = HomeBottomSheetFragment()
+        bottomSheetFragment.show(parentFragmentManager, bottomSheetFragment.tag)
     }
 
 
