@@ -7,7 +7,7 @@
         />
 
     <item
-        android:id="@+id/navigation_diary"
+        android:id="@+id/navigation_social"
         android:icon="@drawable/lucide_pencil_line"
         />
 
