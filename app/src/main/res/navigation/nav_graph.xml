@@ -15,6 +15,10 @@
             android:id="@+id/action_navigation_home_to_create_fragment"
             app:destination="@id/create_fragment"
             app:popUpTo="@id/navigation_home"/>
+        <action
+            android:id="@+id/action_navigation_home_to_notice_fragment"
+            app:destination="@id/naviagation_notice"
+            app:popUpTo="@id/navigation_home"/>
     </fragment>
     <fragment
         android:id="@+id/navigation_diary"
@@ -45,6 +49,14 @@
         android:name="com.toyou.toyouandroid.ui.home.PreviewFragment"
         android:label="PreviewFragment"
         tools:layout="@layout/fragment_preview"/>
-
-
+    <fragment
+        android:id="@+id/naviagation_notice"
+        android:name="com.toyou.toyouandroid.presentation.fragment.notice.NoticeFragment"
+        android:label="NoticeFragment"
+        tools:layout="@layout/fragment_notice">
+        <action
+            android:id="@+id/action_navigation_notice_to_home_fragment"
+            app:destination="@id/navigation_home"
+            app:popUpTo="@id/navigation_home"/>
+    </fragment>
 </navigation>
