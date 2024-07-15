@@ -11,6 +11,8 @@
     <string name="next_button">다음</string>
     <string name="complete_button">완료</string>
 
+    <string name="login_title">당신을 만나는 매일의 질문</string>
+
     <string name="signup_agree_title">약관 동의</string>
     <string name="signup_agree_sub_title">투유와 함께하기 전\n필요한 약관들을 확인해주세요!</string>
     <string name="signup_agree_select_1">전체선택</string>
