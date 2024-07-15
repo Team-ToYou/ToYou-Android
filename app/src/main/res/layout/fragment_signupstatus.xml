@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_paper">
+    android:background="@drawable/background_white">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_back_v"
@@ -54,11 +54,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="9dp"
-        android:fontFamily="@font/scdream5"
         android:text="@string/signup_screen_bar_title"
         android:textColor="@color/black"
-        android:textSize="18sp"
-        android:textStyle="bold"
+        style="@style/sc_r18"
         app:layout_constraintBottom_toTopOf="@id/guideline_screen_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -66,7 +64,7 @@
     <View
         android:id="@+id/seperator_screen_bar"
         android:layout_width="420dp"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         android:background="@color/g00"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline_screen_bar" />
@@ -89,6 +87,7 @@
         android:text="@string/signup_status_subtitle"
         android:textColor="@color/bl02"
         style="@style/sc_l10"
+        android:layout_marginTop="2dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/signup_status_title" />
@@ -99,7 +98,8 @@
         android:layout_height="30dp"
         android:background="@drawable/signupnickname_input"
         android:text="@string/signup_status_option_1"
-        style="@style/sc_l10"
+        android:textColor="@color/black"
+        style="@style/sc_r10"
         android:layout_marginTop="9dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -111,7 +111,8 @@
         android:layout_height="30dp"
         android:background="@drawable/signupnickname_input"
         android:text="@string/signup_status_option_2"
-        style="@style/sc_l10"
+        android:textColor="@color/black"
+        style="@style/sc_r10"
         android:layout_marginTop="9dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -123,7 +124,8 @@
         android:layout_height="30dp"
         android:background="@drawable/signupnickname_input"
         android:text="@string/signup_status_option_3"
-        style="@style/sc_l10"
+        android:textColor="@color/black"
+        style="@style/sc_r10"
         android:layout_marginTop="9dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -135,7 +137,8 @@
         android:layout_height="30dp"
         android:background="@drawable/signupnickname_input"
         android:text="@string/signup_status_option_4"
-        style="@style/sc_l10"
+        android:textColor="@color/black"
+        style="@style/sc_r10"
         android:layout_marginTop="9dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

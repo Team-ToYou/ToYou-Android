@@ -6,13 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.Navigator
 import com.toyou.toyouandroid.di.FragmentNavigator
 
-class HomeOptionViewModel (
-    private val navigator: FragmentNavigator,
-    private val homeResultViewModel: HomeResultViewModel
-) : ViewModel() {
+class HomeOptionViewModel : ViewModel() {
 
     fun onStampSelected(stamp: String) {
-        homeResultViewModel.setSelectedStamp(stamp)
-        navigator.navigateToResultFragment()
     }
 }

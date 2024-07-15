@@ -16,7 +16,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background"
+        android:background="@drawable/background_white"
         tools:context=".presentation.fragment.home.HomeFragment">
 
         <androidx.constraintlayout.widget.Guideline
@@ -93,6 +93,7 @@
             android:layout_width="60dp"
             android:layout_height="70dp"
             app:imageResource="@{viewModel.selectedStamp}"
+            android:src="@drawable/home_emotion_none"
             android:layout_marginTop="18dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

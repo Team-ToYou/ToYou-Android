@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_paper">
+    android:background="@drawable/background_white">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_title_v"
@@ -54,11 +54,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="9dp"
-        android:fontFamily="@font/scdream5"
         android:text="@string/signup_screen_bar_title"
         android:textColor="@color/black"
-        android:textSize="18sp"
-        android:textStyle="bold"
+        style="@style/sc_r18"
         app:layout_constraintBottom_toTopOf="@id/guideline_screen_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -66,7 +64,7 @@
     <View
         android:id="@+id/seperator_screen_bar"
         android:layout_width="420dp"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         android:background="@color/g00"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline_screen_bar" />
@@ -75,10 +73,9 @@
         android:id="@+id/signup_nickname_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/scdream4"
         android:text="@string/signup_nickname_title"
         android:textColor="@color/black"
-        android:textSize="18sp"
+        style="@style/sc_r18"
         app:layout_constraintStart_toStartOf="@id/guideline_title_v"
         app:layout_constraintTop_toTopOf="@id/guideline_title_h" />
 
@@ -87,8 +84,9 @@
         android:layout_width="300dp"
         android:layout_height="30dp"
         android:hint="@string/signup_nickname_placeholder"
+        android:textColorHint="@color/g00"
         style="@style/sc_l10"
-        android:textColor="@color/bg"
+        android:textColor="@color/black"
         android:layout_marginTop="7dp"
         android:background="@drawable/signupnickname_input"
         app:layout_constraintStart_toStartOf="@id/guideline_title_v"
@@ -111,6 +109,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/signup_nickname_message_default"
+        android:textColor="@color/black"
         style="@style/sc_l10"
         android:layout_marginTop="7dp"
         app:layout_constraintStart_toStartOf="@+id/guideline_title_v"

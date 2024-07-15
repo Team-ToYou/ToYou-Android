@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_paper">
+    android:background="@drawable/background_white">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_title_v"
@@ -61,11 +61,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="9dp"
-        android:fontFamily="@font/scdream5"
         android:text="@string/signup_screen_bar_title"
         android:textColor="@color/black"
-        android:textSize="18sp"
-        android:textStyle="bold"
+        style="@style/sc_r18"
         app:layout_constraintBottom_toTopOf="@id/guideline_screen_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -73,7 +71,7 @@
     <View
         android:id="@+id/seperator_screen_bar"
         android:layout_width="420dp"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         android:background="@color/g00"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline_screen_bar" />
@@ -82,11 +80,9 @@
         android:id="@+id/signup_agree_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/scdream5"
         android:text="@string/signup_agree_title"
         android:textColor="@color/black"
-        android:textSize="18sp"
-        android:textStyle="bold"
+        style="@style/sc_r20"
         app:layout_constraintStart_toStartOf="@id/guideline_title_v"
         app:layout_constraintTop_toTopOf="@id/guideline_title_h" />
 
@@ -94,9 +90,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:fontFamily="@font/scdream4"
         android:text="@string/signup_agree_sub_title"
-        android:textSize="18sp"
+        android:textColor="@color/bl02"
+        style="@style/sc_r18"
         app:layout_constraintStart_toStartOf="@id/guideline_title_v"
         app:layout_constraintTop_toBottomOf="@id/signup_agree_title" />
 
@@ -114,18 +110,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="86dp"
-        android:fontFamily="@font/scdream5"
         android:text="@string/signup_agree_select_1"
         android:textColor="@color/black"
-        android:textSize="18sp"
-        android:textStyle="bold"
+        style="@style/sc_r18"
         app:layout_constraintStart_toEndOf="@+id/guideline_agree_select"
         app:layout_constraintTop_toBottomOf="@id/signup_agree_title" />
 
     <View
         android:id="@+id/seperator_agree"
         android:layout_width="420dp"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         android:layout_marginTop="11dp"
         android:background="@color/g00"
         app:layout_constraintStart_toStartOf="parent"
@@ -144,10 +138,10 @@
         android:id="@+id/signup_agree_select_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/black"
         android:layout_marginTop="14dp"
-        android:fontFamily="@font/scdream4"
         android:text="@string/signup_agree_select_2"
-        android:textSize="15sp"
+        style="@style/sc_r15"
         app:layout_constraintStart_toStartOf="@+id/guideline_agree_select"
         app:layout_constraintTop_toBottomOf="@id/seperator_agree" />
 
@@ -157,7 +151,7 @@
         android:layout_height="17dp"
         android:text="@string/signup_agree_essential"
         android:textColor="@color/white"
-        android:textSize="11sp"
+        style="@style/sc_r10"
         android:background="@drawable/signupagree_essential"
         android:layout_marginStart="4dp"
         app:layout_constraintStart_toEndOf="@+id/signup_agree_select_2"
@@ -178,9 +172,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="19dp"
-        android:fontFamily="@font/scdream4"
         android:text="@string/signup_agree_select_3"
-        android:textSize="15sp"
+        android:textColor="@color/black"
+        style="@style/sc_r15"
         app:layout_constraintStart_toEndOf="@+id/guideline_agree_select"
         app:layout_constraintTop_toBottomOf="@id/signup_agree_select_2" />
 
@@ -190,7 +184,7 @@
         android:layout_height="17dp"
         android:text="@string/signup_agree_essential"
         android:textColor="@color/white"
-        android:textSize="11sp"
+        style="@style/sc_r10"
         android:background="@drawable/signupagree_essential"
         android:layout_marginStart="4dp"
         app:layout_constraintStart_toEndOf="@+id/signup_agree_select_3"
@@ -218,9 +212,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="19dp"
-        android:fontFamily="@font/scdream4"
         android:text="@string/signup_agree_select_4"
-        android:textSize="15sp"
+        android:textColor="@color/black"
+        style="@style/sc_r15"
         app:layout_constraintStart_toEndOf="@+id/guideline_agree_select"
         app:layout_constraintTop_toBottomOf="@id/signup_agree_select_3" />
 
@@ -230,7 +224,7 @@
         android:layout_height="17dp"
         android:text="@string/signup_agree_essential"
         android:textColor="@color/white"
-        android:textSize="11sp"
+        style="@style/sc_r10"
         android:background="@drawable/signupagree_essential"
         android:layout_marginStart="4dp"
         app:layout_constraintStart_toEndOf="@+id/signup_agree_select_4"
@@ -258,9 +252,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="19dp"
-        android:fontFamily="@font/scdream4"
         android:text="@string/signup_agree_select_5"
-        android:textSize="15sp"
+        android:textColor="@color/black"
+        style="@style/sc_r15"
         app:layout_constraintStart_toEndOf="@+id/guideline_agree_select"
         app:layout_constraintTop_toBottomOf="@id/signup_agree_select_4" />
 
@@ -270,7 +264,7 @@
         android:layout_height="17dp"
         android:text="@string/signup_agree_choose"
         android:textColor="@color/r01"
-        android:textSize="11sp"
+        style="@style/sc_r10"
         android:background="@drawable/signupagree_choose"
         android:layout_marginStart="4dp"
         app:layout_constraintStart_toEndOf="@+id/signup_agree_select_5"
@@ -285,10 +279,13 @@
         app:layout_constraintTop_toTopOf="@+id/signup_agree_select_5" />
 
     <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/signupagree_next"
         android:layout_width="360dp"
         android:layout_height="40dp"
         android:background="@drawable/next_button"
         android:text="@string/next_button"
+        android:textColor="@color/bl01"
+        style="@style/sc_r15"
         app:layout_constraintStart_toStartOf="@id/guideline_next_v"
         app:layout_constraintTop_toTopOf="@id/guideline_next_h" />
 
