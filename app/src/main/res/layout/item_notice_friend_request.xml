@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="item_friend_request"
+            type="com.toyou.toyouandroid.model.NoticeItem.NoticeFriendRequestItem" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/notice_mypage_box">
+
+        <TextView
+            android:id="@+id/notice_box"
+            android:layout_width="300dp"
+            android:layout_height="60dp"
+            android:text="@{String.format(@string/notice_friend_request, item_friend_request.nickname)}"
+            android:textColor="@color/black"
+            style="@style/sc_r10"
+            android:gravity="center_vertical"
+            android:paddingStart="17dp"
+            android:paddingEnd="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/notice_friend_request_btn"
+            android:layout_width="44dp"
+            android:layout_height="18dp"
+            android:background="@drawable/notice_activated_btn"
+            android:text="@string/notice_friend_request_btn"
+            android:textColor="@color/black"
+            style="@style/gangwon10"
+            android:layout_marginTop="21dp"
+            android:layout_marginEnd="17dp"
+            app:layout_constraintEnd_toEndOf="@+id/notice_box"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

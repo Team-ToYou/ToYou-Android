@@ -38,6 +38,9 @@
     <string name="signup_status_option_4">기타</string>
 
     <string name="notice">알림</string>
+    <string name="notice_friend_request">%1$s님이 친구 요청을 보넀습니다.</string>
+    <string name="notice_friend_request_btn">친구 수락</string>
+    <string name="notice_card_check">%1$s님이 질문 카드를 보냈습니다. 확인해보세요!</string>
 
     <string name="home_stamp_title_1">오늘 하루는 어땠나요?</string>
     <string name="home_stamp_title_2">감정우표를 선택해주세요</string>
