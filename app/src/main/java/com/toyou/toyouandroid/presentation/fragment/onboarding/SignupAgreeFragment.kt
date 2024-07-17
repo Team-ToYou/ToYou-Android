@@ -5,15 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
+import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentLoginBinding
 import com.toyou.toyouandroid.databinding.FragmentSignupagreeBinding
+import com.toyou.toyouandroid.presentation.base.MainActivity
 
 class SignupAgreeFragment : Fragment() {
 
+    private lateinit var navController: NavController
     private var _binding: FragmentSignupagreeBinding? = null
-
-//    private val binding get() = _binding!!
-
     private val binding: FragmentSignupagreeBinding
         get() = requireNotNull(_binding){"FragmentSignupagreeBinding -> null"}
 
@@ -26,6 +28,20 @@ class SignupAgreeFragment : Fragment() {
         _binding = FragmentSignupagreeBinding.inflate(inflater, container, false)
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // MainActivity의 메소드를 호출하여 바텀 네비게이션 뷰 숨기기
+        (requireActivity() as MainActivity).hideBottomNavigation(true)
+
+        // navController 초기화
+        navController = findNavController()
+
+        binding.signupagreeNextBtn.setOnClickListener{
+            navController.navigate(R.id.action_navigation_signup_agree_to_signup_nickname_fragment)
+        }
     }
 
     override fun onDestroyView() {

@@ -116,6 +116,7 @@
         app:layout_constraintTop_toBottomOf="@+id/signup_nickname_input" />
 
     <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/signup_nickname_btn"
         android:layout_width="360dp"
         android:layout_height="40dp"
         android:background="@drawable/next_button"
