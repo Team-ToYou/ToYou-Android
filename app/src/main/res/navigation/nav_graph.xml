@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/navigation_home">
+    app:startDestination="@id/navigation_splash">
 
     <fragment
         android:id="@+id/navigation_home"
@@ -20,10 +20,55 @@
             app:popUpTo="@id/navigation_home"/>
     </fragment>
     <fragment
-        android:id="@+id/navigation_diary"
-        android:name="com.toyou.toyouandroid.presentation.fragment.diary.DiaryFragment"
-        android:label="fragment_diary"
-        tools:layout="@layout/fragment_diary" />
+        android:id="@+id/navigation_splash"
+        android:name="com.toyou.toyouandroid.presentation.fragment.onboarding.SplashFragment"
+        android:label="fragment_splash"
+        tools:layout="@layout/fragment_splash" >
+        <action
+            android:id="@+id/action_navigation_splash_to_login_fragment"
+            app:destination="@id/navigation_login"
+            app:popUpTo="@id/navigation_login"/>
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_login"
+        android:name="com.toyou.toyouandroid.presentation.fragment.onboarding.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_navigation_login_to_signup_agree_fragment"
+            app:destination="@id/navigation_signup_agree"
+            app:popUpTo="@id/navigation_signup_agree"/>
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_signup_agree"
+        android:name="com.toyou.toyouandroid.presentation.fragment.onboarding.SignupAgreeFragment"
+        android:label="fragment_signup_agree"
+        tools:layout="@layout/fragment_signupagree" >
+        <action
+            android:id="@+id/action_navigation_signup_agree_to_signup_nickname_fragment"
+            app:destination="@id/navigation_signup_nickname"
+            app:popUpTo="@id/navigation_signup_nickname"/>
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_signup_nickname"
+        android:name="com.toyou.toyouandroid.presentation.fragment.onboarding.SignupNicknameFragment"
+        android:label="fragment_signup_nickname"
+        tools:layout="@layout/fragment_signupnickname" >
+        <action
+            android:id="@+id/action_navigation_signup_nickname_to_signup_status_fragment"
+            app:destination="@id/navigation_signup_status"
+            app:popUpTo="@id/navigation_signup_status"/>
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_signup_status"
+        android:name="com.toyou.toyouandroid.presentation.fragment.onboarding.SignupStatusFragment"
+        android:label="fragment_signup_status"
+        tools:layout="@layout/fragment_signupstatus" >
+        <action
+            android:id="@+id/action_navigation_signup_status_to_home_fragment"
+            app:destination="@id/navigation_home"
+            app:popUpToInclusive="false"/>
+    </fragment>
     <fragment
         android:id="@+id/navigation_calendar"
         android:name="com.toyou.toyouandroid.presentation.fragment.calendar.CalendarFragment"
