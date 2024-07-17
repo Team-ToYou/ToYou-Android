@@ -26,8 +26,12 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment
 
         val navController = navHostFragment.navController
-        findViewById<BottomNavigationView>(R.id.bottom_navi)
-            .setupWithNavController(navController)
+
+//        findViewById<BottomNavigationView>(R.id.bottom_navi)
+//            .setupWithNavController(navController)
+
+        // BottomNavigationView 설정
+        binding.bottomNavi.setupWithNavController(navController)
     }
 
     fun hideBottomNavigation(state:Boolean){
