@@ -60,4 +60,20 @@
 
     <string name="home_sidemenu_title">따끈따끈한 친구들의 일기카드를 확인해보세요!</string>
 
+    <string name="calendar_my_record">나의 기록</string>
+    <string name="calendar_friend_record">친구 기록</string>
+    <string name="calendar_my_record_date">20240501 나의 기록</string>
+    <string name="calendar_friend_record_date">20240501 친구 기록</string>
+
+    <string name="mypage_title">마이페이지</string>
+    <string name="mypage_nickname">테디</string>
+    <string name="mypage_friend_count">친구 4명</string>
+    <string name="mypage_notice_setting">알림 설정</string>
+    <string name="mypage_contact">문의하기</string>
+    <string name="mypage_version">서비스 버전</string>
+    <string name="mypage_terms_of_use">서비스 이용약관</string>
+    <string name="mypage_privacy_policy">개인정보처리방침</string>
+    <string name="mypage_logout">로그아웃</string>
+    <string name="mypage_signout">회원탈퇴</string>
+
 </resources>
