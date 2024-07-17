@@ -1,22 +1,263 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.fragment.mypage.MypageFragment">
+    android:background="@drawable/background_white">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_back_btn_v"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="17dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_title_v"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="24dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_profile_v"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="36dp" />
+
+    <ImageView
+        android:id="@+id/mypage_back_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/back_button"
+        android:layout_marginTop="15dp"
+        app:layout_constraintStart_toStartOf="@+id/guideline_back_btn_v"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/text_mypage"
-        android:layout_width="match_parent"
+        android:id="@+id/mypage_title"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/mypage_title"
+        android:textColor="@color/black"
+        style="@style/sc_r15"
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="@+id/guideline_title_v"
+        app:layout_constraintTop_toBottomOf="@+id/mypage_back_btn" />
+
+    <ImageView
+        android:id="@+id/mypage_profile_background"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/mypage_profile_background"
+        android:layout_marginTop="26dp"
+        app:layout_constraintStart_toStartOf="@+id/guideline_profile_v"
+        app:layout_constraintTop_toBottomOf="@+id/mypage_title" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/mypage_profile_default"
+        app:layout_constraintStart_toStartOf="@+id/mypage_profile_background"
+        app:layout_constraintEnd_toEndOf="@+id/mypage_profile_background"
+        app:layout_constraintTop_toTopOf="@+id/mypage_profile_background"
+        app:layout_constraintBottom_toBottomOf="@+id/mypage_profile_background"/>
+
+    <TextView
+        android:id="@+id/profile_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="4dp"
+        android:text="@string/mypage_nickname"
+        android:textColor="@color/black"
+        style="@style/gangwon22"
+        app:layout_constraintStart_toEndOf="@+id/mypage_profile_background"
+        app:layout_constraintTop_toTopOf="@+id/mypage_profile_background" />
+
+    <TextView
+        android:id="@+id/profile_friend_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/mypage_friend_count"
+        android:textColor="@color/black"
+        style="@style/gangwon16"
+        app:layout_constraintStart_toEndOf="@+id/mypage_profile_background"
+        app:layout_constraintTop_toTopOf="@+id/profile_nickname" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/mypage_profile_btn"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@drawable/social_arrow"
+        android:layout_marginBottom="40dp"
+        app:layout_constraintEnd_toEndOf="@+id/mypage_notice_setting_btn"
+        app:layout_constraintBottom_toTopOf="@+id/mypage_notice_setting" />
+
+    <TextView
+        android:id="@+id/mypage_notice_setting"
+        android:layout_width="340dp"
+        android:layout_height="60dp"
+        android:text="@string/mypage_notice_setting"
+        android:textColor="@color/black"
+        style="@style/sc_r10"
+        android:gravity="center_vertical"
+        android:paddingStart="17dp"
+        android:paddingEnd="0dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/notice_mypage_box"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mypage_profile_background" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/mypage_notice_setting_btn"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@drawable/social_arrow"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/mypage_notice_setting"
+        app:layout_constraintTop_toTopOf="@+id/mypage_notice_setting" />
+
+    <TextView
+        android:id="@+id/mypage_contact"
+        android:layout_width="340dp"
+        android:layout_height="60dp"
+        android:text="@string/mypage_contact"
+        android:textColor="@color/black"
+        style="@style/sc_r10"
+        android:gravity="center_vertical"
+        android:paddingStart="17dp"
+        android:paddingEnd="0dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/notice_mypage_box"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mypage_notice_setting" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/mypage_contact_btn"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@drawable/social_arrow"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/mypage_contact"
+        app:layout_constraintTop_toTopOf="@+id/mypage_contact" />
+
+    <TextView
+        android:id="@+id/mypage_version"
+        android:layout_width="340dp"
+        android:layout_height="60dp"
+        android:text="@string/mypage_version"
+        android:textColor="@color/black"
+        style="@style/sc_r10"
+        android:gravity="center_vertical"
+        android:paddingStart="17dp"
+        android:paddingEnd="0dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/notice_mypage_box"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mypage_contact" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/mypage_version_btn"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@drawable/social_arrow"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/mypage_version"
+        app:layout_constraintTop_toTopOf="@+id/mypage_version" />
+
+    <TextView
+        android:id="@+id/mypage_terms_of_use"
+        android:layout_width="340dp"
+        android:layout_height="60dp"
+        android:text="@string/mypage_terms_of_use"
+        android:textColor="@color/black"
+        style="@style/sc_r10"
+        android:gravity="center_vertical"
+        android:paddingStart="17dp"
+        android:paddingEnd="0dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/notice_mypage_box"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mypage_version" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/mypage_terms_of_use_btn"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@drawable/social_arrow"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/mypage_terms_of_use"
+        app:layout_constraintTop_toTopOf="@+id/mypage_terms_of_use" />
+
+    <TextView
+        android:id="@+id/mypage_privacy_policy"
+        android:layout_width="340dp"
+        android:layout_height="60dp"
+        android:text="@string/mypage_privacy_policy"
+        android:textColor="@color/black"
+        style="@style/sc_r10"
+        android:gravity="center_vertical"
+        android:paddingStart="17dp"
+        android:paddingEnd="0dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/notice_mypage_box"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mypage_terms_of_use" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/mypage_privacy_policy_btn"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@drawable/social_arrow"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/mypage_privacy_policy"
+        app:layout_constraintTop_toTopOf="@+id/mypage_privacy_policy" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mypage_privacy_policy">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/mypage_logout_btn"
+            android:layout_width="92dp"
+            android:layout_height="33dp"
+            android:text="@string/mypage_logout"
+            style="@style/gangwon15"
+            android:background="@drawable/next_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/mypage_signout_btn"
+            android:layout_width="92dp"
+            android:layout_height="33dp"
+            android:text="@string/mypage_signout"
+            style="@style/gangwon15"
+            android:background="@drawable/next_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,7 +5,6 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/navigation_home">
 
-
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.toyou.toyouandroid.presentation.fragment.home.HomeFragment"
@@ -34,7 +33,66 @@
         android:id="@+id/navigation_mypage"
         android:name="com.toyou.toyouandroid.presentation.fragment.mypage.MypageFragment"
         android:label="fragment_mypage"
-        tools:layout="@layout/fragment_mypage" />
+        tools:layout="@layout/fragment_mypage" >
+        <action
+            android:id="@+id/action_navigation_mypage_to_home_fragment"
+            app:destination="@id/navigation_home"
+            app:popUpTo="@id/navigation_home"/>
+        <action
+            android:id="@+id/action_navigation_mypage_to_contact_fragment"
+            app:destination="@id/navigation_contact"
+            app:popUpTo="@id/navigation_contact" />
+        <action
+            android:id="@+id/action_navigation_mypage_to_notice_setting_fragment"
+            app:destination="@+id/navigation_notice_setting"
+            app:popUpTo="@id/navigation_notice_setting" />
+        <action
+            android:id="@+id/action_navigation_mypage_to_privacy_policy_fragment"
+            app:destination="@+id/navigation_privacy_policy"
+            app:popUpTo="@id/navigation_privacy_policy" />
+        <action
+            android:id="@+id/action_navigation_mypage_to_profile_fragment"
+            app:destination="@+id/navigation_profile"
+            app:popUpTo="@id/navigation_profile" />
+        <action
+            android:id="@+id/action_navigation_mypage_to_terms_of_use_fragment"
+            app:destination="@+id/navigation_terms_of_use"
+            app:popUpTo="@id/navigation_terms_of_use" />
+        <action
+            android:id="@+id/action_navigation_mypage_to_version_fragment"
+            app:destination="@+id/navigation_version"
+            app:popUpTo="@id/navigation_version" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_contact"
+        android:name="com.toyou.toyouandroid.presentation.fragment.mypage.ContactFragment"
+        android:label="ContactFragment"
+        tools:layout="@layout/fragment_contact" />
+    <fragment
+        android:id="@+id/navigation_notice_setting"
+        android:name="com.toyou.toyouandroid.presentation.fragment.mypage.NoticeSettingFragment"
+        android:label="NoticeSettingFragment"
+        tools:layout="@layout/fragment_notice_setting" />
+    <fragment
+        android:id="@+id/navigation_privacy_policy"
+        android:name="com.toyou.toyouandroid.presentation.fragment.mypage.PrivacyPolicyFragment"
+        android:label="PrivacyPolicyFragment"
+        tools:layout="@layout/fragment_privacy_policy" />
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.toyou.toyouandroid.presentation.fragment.mypage.ProfileFragment"
+        android:label="ProfileFragment"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/navigation_terms_of_use"
+        android:name="com.toyou.toyouandroid.presentation.fragment.mypage.TermsOfUseFragment"
+        android:label="TermsOfUseFragment"
+        tools:layout="@layout/fragment_terms_of_use" />
+    <fragment
+        android:id="@+id/navigation_version"
+        android:name="com.toyou.toyouandroid.presentation.fragment.mypage.VersionFragment"
+        android:label="VersionFragment"
+        tools:layout="@layout/fragment_version" />
     <fragment
         android:id="@+id/create_fragment"
         android:name="com.toyou.toyouandroid.presentation.fragment.home.CreateFragment"
