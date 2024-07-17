@@ -9,7 +9,7 @@
         android:id="@+id/navigation_home"
         android:name="com.toyou.toyouandroid.presentation.fragment.home.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_navigation_home_to_create_fragment"
             app:destination="@id/create_fragment"
@@ -23,47 +23,55 @@
         android:id="@+id/navigation_splash"
         android:name="com.toyou.toyouandroid.presentation.fragment.onboarding.SplashFragment"
         android:label="fragment_splash"
-        tools:layout="@layout/fragment_splash" >
+        tools:layout="@layout/fragment_splash">
         <action
             android:id="@+id/action_navigation_splash_to_login_fragment"
             app:destination="@id/navigation_login"
-            app:popUpTo="@id/navigation_login"/>
+            app:popUpTo="@id/navigation_login"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
     </fragment>
     <fragment
         android:id="@+id/navigation_login"
         android:name="com.toyou.toyouandroid.presentation.fragment.onboarding.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_navigation_login_to_signup_agree_fragment"
             app:destination="@id/navigation_signup_agree"
-            app:popUpTo="@id/navigation_signup_agree"/>
+            app:popUpTo="@id/navigation_signup_agree"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_in_left"/>
     </fragment>
     <fragment
         android:id="@+id/navigation_signup_agree"
         android:name="com.toyou.toyouandroid.presentation.fragment.onboarding.SignupAgreeFragment"
         android:label="fragment_signup_agree"
-        tools:layout="@layout/fragment_signupagree" >
+        tools:layout="@layout/fragment_signupagree">
         <action
             android:id="@+id/action_navigation_signup_agree_to_signup_nickname_fragment"
             app:destination="@id/navigation_signup_nickname"
-            app:popUpTo="@id/navigation_signup_nickname"/>
+            app:popUpTo="@id/navigation_signup_nickname"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_in_left"/>
     </fragment>
     <fragment
         android:id="@+id/navigation_signup_nickname"
         android:name="com.toyou.toyouandroid.presentation.fragment.onboarding.SignupNicknameFragment"
         android:label="fragment_signup_nickname"
-        tools:layout="@layout/fragment_signupnickname" >
+        tools:layout="@layout/fragment_signupnickname">
         <action
             android:id="@+id/action_navigation_signup_nickname_to_signup_status_fragment"
             app:destination="@id/navigation_signup_status"
-            app:popUpTo="@id/navigation_signup_status"/>
+            app:popUpTo="@id/navigation_signup_status"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_in_left"/>
     </fragment>
     <fragment
         android:id="@+id/navigation_signup_status"
         android:name="com.toyou.toyouandroid.presentation.fragment.onboarding.SignupStatusFragment"
         android:label="fragment_signup_status"
-        tools:layout="@layout/fragment_signupstatus" >
+        tools:layout="@layout/fragment_signupstatus">
         <action
             android:id="@+id/action_navigation_signup_status_to_home_fragment"
             app:destination="@id/navigation_home"
@@ -73,71 +81,85 @@
         android:id="@+id/navigation_calendar"
         android:name="com.toyou.toyouandroid.presentation.fragment.calendar.CalendarFragment"
         android:label="fragment_calendar"
-        tools:layout="@layout/fragment_calendar" />
+        tools:layout="@layout/fragment_calendar"/>
     <fragment
         android:id="@+id/navigation_mypage"
         android:name="com.toyou.toyouandroid.presentation.fragment.mypage.MypageFragment"
         android:label="fragment_mypage"
-        tools:layout="@layout/fragment_mypage" >
+        tools:layout="@layout/fragment_mypage">
         <action
             android:id="@+id/action_navigation_mypage_to_home_fragment"
             app:destination="@id/navigation_home"
-            app:popUpTo="@id/navigation_home"/>
+            app:popUpTo="@id/navigation_home"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
         <action
             android:id="@+id/action_navigation_mypage_to_contact_fragment"
             app:destination="@id/navigation_contact"
-            app:popUpTo="@id/navigation_contact" />
+            app:popUpTo="@id/navigation_contact"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_in_left"/>
         <action
             android:id="@+id/action_navigation_mypage_to_notice_setting_fragment"
             app:destination="@+id/navigation_notice_setting"
-            app:popUpTo="@id/navigation_notice_setting" />
+            app:popUpTo="@id/navigation_notice_setting"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_in_left"/>
         <action
             android:id="@+id/action_navigation_mypage_to_privacy_policy_fragment"
             app:destination="@+id/navigation_privacy_policy"
-            app:popUpTo="@id/navigation_privacy_policy" />
+            app:popUpTo="@id/navigation_privacy_policy"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_in_left"/>
         <action
             android:id="@+id/action_navigation_mypage_to_profile_fragment"
             app:destination="@+id/navigation_profile"
-            app:popUpTo="@id/navigation_profile" />
+            app:popUpTo="@id/navigation_profile"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_in_left"/>
         <action
             android:id="@+id/action_navigation_mypage_to_terms_of_use_fragment"
             app:destination="@+id/navigation_terms_of_use"
-            app:popUpTo="@id/navigation_terms_of_use" />
+            app:popUpTo="@id/navigation_terms_of_use"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_in_left"/>
         <action
             android:id="@+id/action_navigation_mypage_to_version_fragment"
             app:destination="@+id/navigation_version"
-            app:popUpTo="@id/navigation_version" />
+            app:popUpTo="@id/navigation_version"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_in_left"/>
     </fragment>
     <fragment
         android:id="@+id/navigation_contact"
         android:name="com.toyou.toyouandroid.presentation.fragment.mypage.ContactFragment"
         android:label="ContactFragment"
-        tools:layout="@layout/fragment_contact" />
+        tools:layout="@layout/fragment_contact"/>
     <fragment
         android:id="@+id/navigation_notice_setting"
         android:name="com.toyou.toyouandroid.presentation.fragment.mypage.NoticeSettingFragment"
         android:label="NoticeSettingFragment"
-        tools:layout="@layout/fragment_notice_setting" />
+        tools:layout="@layout/fragment_notice_setting"/>
     <fragment
         android:id="@+id/navigation_privacy_policy"
         android:name="com.toyou.toyouandroid.presentation.fragment.mypage.PrivacyPolicyFragment"
         android:label="PrivacyPolicyFragment"
-        tools:layout="@layout/fragment_privacy_policy" />
+        tools:layout="@layout/fragment_privacy_policy"/>
     <fragment
         android:id="@+id/navigation_profile"
         android:name="com.toyou.toyouandroid.presentation.fragment.mypage.ProfileFragment"
         android:label="ProfileFragment"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile"/>
     <fragment
         android:id="@+id/navigation_terms_of_use"
         android:name="com.toyou.toyouandroid.presentation.fragment.mypage.TermsOfUseFragment"
         android:label="TermsOfUseFragment"
-        tools:layout="@layout/fragment_terms_of_use" />
+        tools:layout="@layout/fragment_terms_of_use"/>
     <fragment
         android:id="@+id/navigation_version"
         android:name="com.toyou.toyouandroid.presentation.fragment.mypage.VersionFragment"
         android:label="VersionFragment"
-        tools:layout="@layout/fragment_version" />
+        tools:layout="@layout/fragment_version"/>
     <fragment
         android:id="@+id/create_fragment"
         android:name="com.toyou.toyouandroid.presentation.fragment.home.CreateFragment"
@@ -160,6 +182,8 @@
         <action
             android:id="@+id/action_navigation_notice_to_home_fragment"
             app:destination="@id/navigation_home"
-            app:popUpTo="@id/navigation_home"/>
+            app:popUpTo="@id/navigation_home"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
     </fragment>
 </navigation>
