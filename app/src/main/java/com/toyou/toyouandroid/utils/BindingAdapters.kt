@@ -4,7 +4,6 @@ import android.graphics.BitmapFactory
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LiveData
-import com.toyou.toyouandroid.R
 import java.io.File
 
 @BindingAdapter("imageResource")
