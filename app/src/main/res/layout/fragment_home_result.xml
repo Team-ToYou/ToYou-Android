@@ -17,11 +17,13 @@
         android:background="@drawable/background_paper">
 
         <TextView
+            android:id="@+id/home_result_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{viewModel.sentence.toString()}"
             android:gravity="center"
+            android:textColor="@color/black"
             style="@style/gangwon25"
+            android:alpha="0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
