@@ -51,9 +51,18 @@ class HomeResultFragment : Fragment() {
             start()
         }
 
-        Handler(Looper.getMainLooper()).postDelayed({
+        // 자동 화면 전환 및 클릭 시 전환
+        val handler = Handler(Looper.getMainLooper())
+        val navigateRunnable = Runnable {
             navController.navigate(R.id.action_navigation_home_result_to_home_fragment)
-        }, 4000)
+        }
+
+        handler.postDelayed(navigateRunnable, 4000)
+
+        binding.root.setOnClickListener {
+            handler.removeCallbacks(navigateRunnable)
+            navController.navigate(R.id.action_navigation_home_result_to_home_fragment)
+        }
     }
 
     override fun onDestroyView() {
