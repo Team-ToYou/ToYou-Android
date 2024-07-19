@@ -1,7 +1,9 @@
 package com.toyou.toyouandroid.utils
 
 import android.graphics.BitmapFactory
+import android.widget.Button
 import android.widget.ImageView
+import androidx.appcompat.widget.AppCompatButton
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LiveData
 import java.io.File
@@ -20,4 +22,9 @@ fun loadImage(view: ImageView, imagePath: String) {
         val bitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
         view.setImageBitmap(bitmap)
     }
+}
+
+@BindingAdapter("android:setBackground")
+fun setBackground(button: AppCompatButton, resource: Int?) {
+    resource?.let { button.setBackgroundResource(it) }
 }
