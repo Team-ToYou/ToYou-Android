@@ -70,7 +70,7 @@
             android:id="@+id/home_date_tv"
             android:layout_width="151dp"
             android:layout_height="wrap_content"
-            android:text="@string/home_date"
+            android:text=""
             android:textColor="@color/black"
             android:background="@color/g00"
             android:gravity="center"
