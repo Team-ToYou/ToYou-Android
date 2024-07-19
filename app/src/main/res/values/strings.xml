@@ -73,11 +73,13 @@
     <string name="mypage_nickname">테디</string>
     <string name="mypage_friend_count">친구 4명</string>
     <string name="mypage_notice_setting">알림 설정</string>
+    <string name="mypage_opinion">의견 보내기</string>
     <string name="mypage_contact">문의하기</string>
+    <string name="mypage_terms_of_use">약관 및 정책</string>
     <string name="mypage_version">서비스 버전</string>
-    <string name="mypage_terms_of_use">서비스 이용약관</string>
-    <string name="mypage_privacy_policy">개인정보처리방침</string>
+    <string name="mypage_version_name">1.0</string>
     <string name="mypage_logout">로그아웃</string>
     <string name="mypage_signout">회원탈퇴</string>
+    <string name="home_emotion_tv">멘트</string>
 
 </resources>
