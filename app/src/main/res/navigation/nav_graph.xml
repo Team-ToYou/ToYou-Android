@@ -18,6 +18,10 @@
             android:id="@+id/action_navigation_home_to_notice_fragment"
             app:destination="@id/naviagation_notice"
             app:popUpTo="@id/navigation_home"/>
+        <action
+            android:id="@+id/action_navigation_home_to_home_option_fragment"
+            app:destination="@id/navigation_home_option"
+            app:popUpTo="@id/navigation_home"/>
     </fragment>
     <fragment
         android:id="@+id/navigation_splash"
@@ -74,6 +78,34 @@
         tools:layout="@layout/fragment_signupstatus">
         <action
             android:id="@+id/action_navigation_signup_status_to_home_fragment"
+            app:destination="@id/navigation_home"
+            app:popUpToInclusive="false"/>
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_home_option"
+        android:name="com.toyou.toyouandroid.presentation.fragment.emotionstamp.HomeOptionFragment"
+        android:label="fragment_home_option"
+        tools:layout="@layout/fragment_home_option">
+        <action
+            android:id="@+id/action_navigation_home_option_to_home_result_fragment"
+            app:destination="@id/navigation_home_result"
+            app:popUpTo="@id/navigation_home_result"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_in_left"/>
+        <action
+            android:id="@+id/action_navigation_home_option_to_home_fragment"
+            app:destination="@id/navigation_home"
+            app:popUpTo="@id/navigation_home"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_home_result"
+        android:name="com.toyou.toyouandroid.presentation.fragment.emotionstamp.HomeResultFragment"
+        android:label="fragment_home_result"
+        tools:layout="@layout/fragment_home_result">
+        <action
+            android:id="@+id/action_navigation_home_result_to_home_fragment"
             app:destination="@id/navigation_home"
             app:popUpToInclusive="false"/>
     </fragment>
