@@ -40,18 +40,12 @@ class HomeBottomSheetFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val items = listOf(
-            HomeBottomSheetItem("drawable/send_card.xml"),
-            HomeBottomSheetItem("drawable/send_card.xml"),
-            HomeBottomSheetItem("drawable/send_card.xml"),
-            HomeBottomSheetItem("drawable/send_card.xml"),
-            HomeBottomSheetItem("drawable/send_card.xml"),
-            HomeBottomSheetItem("drawable/send_card.xml"),
-            HomeBottomSheetItem("drawable/send_card.xml"),
-            HomeBottomSheetItem("drawable/send_card.xml"),
-            HomeBottomSheetItem("drawable/send_card.xml"),
-            HomeBottomSheetItem("drawable/send_card.xml"),
-            HomeBottomSheetItem("drawable/send_card.xml"),
-            HomeBottomSheetItem("drawable/send_card.xml"),
+            HomeBottomSheetItem(R.drawable.send_card, "테디"),
+            HomeBottomSheetItem(R.drawable.send_card, "테디"),
+            HomeBottomSheetItem(R.drawable.send_card, "테디"),
+            HomeBottomSheetItem(R.drawable.send_card, "테디"),
+            HomeBottomSheetItem(R.drawable.send_card, "테디"),
+            HomeBottomSheetItem(R.drawable.send_card, "테디"),
         )
 
         val adapter = HomeBottomSheetAdapter(items)

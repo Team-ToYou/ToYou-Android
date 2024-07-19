@@ -16,12 +16,12 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:imagePath="@{item.imagePath}"/>
+            imageResource="@{item.imagePath}"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/notice" />
+            android:text="@{item.nickname}" />
 
     </LinearLayout>
 </layout>
