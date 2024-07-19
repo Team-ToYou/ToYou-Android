@@ -126,6 +126,32 @@
         app:layout_constraintTop_toTopOf="@+id/mypage_notice_setting" />
 
     <TextView
+        android:id="@+id/mypage_opinion"
+        android:layout_width="340dp"
+        android:layout_height="60dp"
+        android:text="@string/mypage_opinion"
+        android:textColor="@color/black"
+        style="@style/sc_r10"
+        android:gravity="center_vertical"
+        android:paddingStart="17dp"
+        android:paddingEnd="0dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/notice_mypage_box"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mypage_notice_setting" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/mypage_opinion_btn"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@drawable/social_arrow"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/mypage_opinion"
+        app:layout_constraintTop_toTopOf="@+id/mypage_opinion" />
+
+    <TextView
         android:id="@+id/mypage_contact"
         android:layout_width="340dp"
         android:layout_height="60dp"
@@ -139,7 +165,7 @@
         android:background="@drawable/notice_mypage_box"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mypage_notice_setting" />
+        app:layout_constraintTop_toBottomOf="@+id/mypage_opinion" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/mypage_contact_btn"
@@ -150,32 +176,6 @@
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="@+id/mypage_contact"
         app:layout_constraintTop_toTopOf="@+id/mypage_contact" />
-
-    <TextView
-        android:id="@+id/mypage_version"
-        android:layout_width="340dp"
-        android:layout_height="60dp"
-        android:text="@string/mypage_version"
-        android:textColor="@color/black"
-        style="@style/sc_r10"
-        android:gravity="center_vertical"
-        android:paddingStart="17dp"
-        android:paddingEnd="0dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/notice_mypage_box"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mypage_contact" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/mypage_version_btn"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:background="@drawable/social_arrow"
-        android:layout_marginTop="18dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="@+id/mypage_version"
-        app:layout_constraintTop_toTopOf="@+id/mypage_version" />
 
     <TextView
         android:id="@+id/mypage_terms_of_use"
@@ -191,7 +191,7 @@
         android:background="@drawable/notice_mypage_box"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mypage_version" />
+        app:layout_constraintTop_toBottomOf="@+id/mypage_contact" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/mypage_terms_of_use_btn"
@@ -204,10 +204,10 @@
         app:layout_constraintTop_toTopOf="@+id/mypage_terms_of_use" />
 
     <TextView
-        android:id="@+id/mypage_privacy_policy"
+        android:id="@+id/mypage_version"
         android:layout_width="340dp"
         android:layout_height="60dp"
-        android:text="@string/mypage_privacy_policy"
+        android:text="@string/mypage_version"
         android:textColor="@color/black"
         style="@style/sc_r10"
         android:gravity="center_vertical"
@@ -219,15 +219,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mypage_terms_of_use" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/mypage_privacy_policy_btn"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:background="@drawable/social_arrow"
-        android:layout_marginTop="18dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="@+id/mypage_privacy_policy"
-        app:layout_constraintTop_toTopOf="@+id/mypage_privacy_policy" />
+    <TextView
+        android:id="@+id/mypage_version_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/mypage_version_name"
+        android:textColor="@color/black"
+        style="@style/sc_r10"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toEndOf="@+id/mypage_version"
+        app:layout_constraintTop_toTopOf="@+id/mypage_version" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="220dp"
@@ -235,13 +237,14 @@
         android:layout_marginTop="30dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mypage_privacy_policy">
+        app:layout_constraintTop_toBottomOf="@+id/mypage_version">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/mypage_logout_btn"
             android:layout_width="92dp"
             android:layout_height="33dp"
             android:text="@string/mypage_logout"
+            android:textColor="@color/black"
             style="@style/gangwon15"
             android:background="@drawable/next_button"
             app:layout_constraintStart_toStartOf="parent"
@@ -252,6 +255,7 @@
             android:layout_width="92dp"
             android:layout_height="33dp"
             android:text="@string/mypage_signout"
+            android:textColor="@color/black"
             style="@style/gangwon15"
             android:background="@drawable/next_button"
             app:layout_constraintEnd_toEndOf="parent"

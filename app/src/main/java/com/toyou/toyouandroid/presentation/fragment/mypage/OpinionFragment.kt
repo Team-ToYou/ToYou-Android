@@ -7,15 +7,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import com.toyou.toyouandroid.databinding.FragmentPrivacyPolicyBinding
+import com.toyou.toyouandroid.databinding.FragmentOpinionBinding
 
-class PrivacyPolicyFragment : Fragment() {
+class OpinionFragment : Fragment() {
 
     private lateinit var navController: NavController
 
-    private var _binding: FragmentPrivacyPolicyBinding? = null
-    private val binding: FragmentPrivacyPolicyBinding
-        get() = requireNotNull(_binding){"FragmentPrivacyPolicyBinding -> null"}
+    private var _binding: FragmentOpinionBinding? = null
+    private val binding: FragmentOpinionBinding
+        get() = requireNotNull(_binding){"FragmentOpinionBinding -> null"}
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -23,7 +23,7 @@ class PrivacyPolicyFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentPrivacyPolicyBinding.inflate(inflater, container, false)
+        _binding = FragmentOpinionBinding.inflate(inflater, container, false)
 
         return binding.root
     }

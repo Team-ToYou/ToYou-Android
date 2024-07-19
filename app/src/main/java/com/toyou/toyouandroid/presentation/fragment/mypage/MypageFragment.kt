@@ -45,20 +45,20 @@ class MypageFragment : Fragment() {
             navController.navigate(R.id.action_navigation_mypage_to_notice_setting_fragment)
         }
 
-        binding.mypageContact.setOnClickListener {
-            navController.navigate(R.id.action_navigation_mypage_to_contact_fragment)
+        binding.mypageOpinion.setOnClickListener {
+            navController.navigate(R.id.action_navigation_mypage_to_opinion_fragment)
         }
 
-        binding.mypageVersion.setOnClickListener {
-            navController.navigate(R.id.action_navigation_mypage_to_version_fragment)
+        binding.mypageContact.setOnClickListener {
+            navController.navigate(R.id.action_navigation_mypage_to_contact_fragment)
         }
 
         binding.mypageTermsOfUse.setOnClickListener {
             navController.navigate(R.id.action_navigation_mypage_to_terms_of_use_fragment)
         }
 
-        binding.mypagePrivacyPolicy.setOnClickListener {
-            navController.navigate(R.id.action_navigation_mypage_to_privacy_policy_fragment)
+        binding.mypageVersion.setOnClickListener {
+            navController.navigate(R.id.action_navigation_mypage_to_version_fragment)
         }
     }
 

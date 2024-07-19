@@ -126,9 +126,9 @@
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out"/>
         <action
-            android:id="@+id/action_navigation_mypage_to_contact_fragment"
-            app:destination="@id/navigation_contact"
-            app:popUpTo="@id/navigation_contact"
+            android:id="@+id/action_navigation_mypage_to_opinion_fragment"
+            app:destination="@id/navigation_opinion"
+            app:popUpTo="@+id/navigation_opinion"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_in_left"/>
         <action
@@ -138,9 +138,9 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_in_left"/>
         <action
-            android:id="@+id/action_navigation_mypage_to_privacy_policy_fragment"
-            app:destination="@+id/navigation_privacy_policy"
-            app:popUpTo="@id/navigation_privacy_policy"
+            android:id="@+id/action_navigation_mypage_to_version_fragment"
+            app:destination="@+id/navigation_version"
+            app:popUpTo="@id/navigation_version"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_in_left"/>
         <action
@@ -156,27 +156,27 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_in_left"/>
         <action
-            android:id="@+id/action_navigation_mypage_to_version_fragment"
-            app:destination="@+id/navigation_version"
-            app:popUpTo="@id/navigation_version"
+            android:id="@+id/action_navigation_mypage_to_contact_fragment"
+            app:destination="@+id/navigation_contact"
+            app:popUpTo="@id/navigation_contact"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_in_left"/>
     </fragment>
     <fragment
-        android:id="@+id/navigation_contact"
-        android:name="com.toyou.toyouandroid.presentation.fragment.mypage.ContactFragment"
-        android:label="ContactFragment"
-        tools:layout="@layout/fragment_contact"/>
+        android:id="@+id/navigation_opinion"
+        android:name="com.toyou.toyouandroid.presentation.fragment.mypage.OpinionFragment"
+        android:label="OpinionFragment"
+        tools:layout="@layout/fragment_opinion"/>
     <fragment
         android:id="@+id/navigation_notice_setting"
         android:name="com.toyou.toyouandroid.presentation.fragment.mypage.NoticeSettingFragment"
         android:label="NoticeSettingFragment"
         tools:layout="@layout/fragment_notice_setting"/>
     <fragment
-        android:id="@+id/navigation_privacy_policy"
-        android:name="com.toyou.toyouandroid.presentation.fragment.mypage.PrivacyPolicyFragment"
-        android:label="PrivacyPolicyFragment"
-        tools:layout="@layout/fragment_privacy_policy"/>
+        android:id="@+id/navigation_version"
+        android:name="com.toyou.toyouandroid.presentation.fragment.mypage.VersionFragment"
+        android:label="VersionFragment"
+        tools:layout="@layout/fragment_version"/>
     <fragment
         android:id="@+id/navigation_profile"
         android:name="com.toyou.toyouandroid.presentation.fragment.mypage.ProfileFragment"
@@ -188,10 +188,10 @@
         android:label="TermsOfUseFragment"
         tools:layout="@layout/fragment_terms_of_use"/>
     <fragment
-        android:id="@+id/navigation_version"
-        android:name="com.toyou.toyouandroid.presentation.fragment.mypage.VersionFragment"
-        android:label="VersionFragment"
-        tools:layout="@layout/fragment_version"/>
+        android:id="@+id/navigation_contact"
+        android:name="com.toyou.toyouandroid.presentation.fragment.mypage.ContactFragment"
+        android:label="ContactFragment"
+        tools:layout="@layout/fragment_contact"/>
     <fragment
         android:id="@+id/create_fragment"
         android:name="com.toyou.toyouandroid.presentation.fragment.home.CreateFragment"

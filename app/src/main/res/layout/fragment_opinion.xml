@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="개인정보처리방침 화면"
+        android:text="의견 보내기 화면"
         android:textColor="@color/black"
         style="@style/gangwon30"
         app:layout_constraintStart_toStartOf="parent"
