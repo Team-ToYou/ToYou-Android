@@ -57,8 +57,12 @@
     <string name="home_stamp_result_upset">화가 나는 날도 있죠. \n 함께 해결책을 찾아봐요</string>
 
     <string name="home_date">20240503</string>
-
     <string name="home_sidemenu_title">따끈따끈한 친구들의 일기카드를 확인해보세요!</string>
+    <string name="home_emotion_normal_title">평범한 하루였어요</string>
+    <string name="home_emotion_upset_title">부글부글 화가 나요</string>
+    <string name="home_emotion_anxiety_title">생각이 많아지고 불안해요</string>
+    <string name="home_emotion_happy_title">더없이 행복한 하루였어요</string>
+    <string name="home_emotion_exciting_title">들뜨고 흥분돼요</string>
 
     <string name="calendar_my_record">나의 기록</string>
     <string name="calendar_friend_record">친구 기록</string>
