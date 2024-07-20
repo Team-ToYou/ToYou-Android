@@ -70,6 +70,12 @@
             app:popUpTo="@id/navigation_signup_status"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_in_left"/>
+        <action
+            android:id="@+id/action_navigation_signup_nickname_to_signup_agree_fragment"
+            app:destination="@id/navigation_signup_agree"
+            app:popUpTo="@id/navigation_signup_agree"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_in_right"/>
     </fragment>
     <fragment
         android:id="@+id/navigation_signup_status"
@@ -79,7 +85,15 @@
         <action
             android:id="@+id/action_navigation_signup_status_to_home_fragment"
             app:destination="@id/navigation_home"
-            app:popUpToInclusive="false"/>
+            app:popUpToInclusive="false"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
+        <action
+            android:id="@+id/action_navigation_signup_status_to_signup_nickname_fragment"
+            app:destination="@id/navigation_signup_nickname"
+            app:popUpTo="@id/navigation_signup_nickname"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_in_right"/>
     </fragment>
     <fragment
         android:id="@+id/navigation_home_option"
