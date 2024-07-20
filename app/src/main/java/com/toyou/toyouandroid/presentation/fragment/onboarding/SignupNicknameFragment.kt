@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
@@ -43,6 +45,10 @@ class SignupNicknameFragment : Fragment() {
         // navController 초기화
         navController = findNavController()
 
+        binding.signupNicknameBackBtn.setOnClickListener {
+            navController.navigate(R.id.action_navigation_signup_nickname_to_signup_agree_fragment)
+        }
+
         binding.signupNicknameInput.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
@@ -52,7 +58,10 @@ class SignupNicknameFragment : Fragment() {
                 viewModel.duplicateBtnActivate()
             }
 
-            override fun afterTextChanged(s: Editable?) {}
+            override fun afterTextChanged(s: Editable?) {
+                val nickname = s?.toString() ?: ""
+                viewModel.setNickname(nickname)
+            }
         })
 
         binding.signupNicknameBtn.setOnClickListener{
@@ -61,7 +70,25 @@ class SignupNicknameFragment : Fragment() {
 
         binding.signupAgreeNicknameDoublecheckBtn.setOnClickListener {
             viewModel.checkDuplicate()
+            hideKeyboard()
         }
+
+        binding.root.setOnTouchListener { v, event ->
+            if (event.action == MotionEvent.ACTION_DOWN) {
+                hideKeyboard()
+                v.performClick()
+            }
+            false
+        }
+
+        binding.root.setOnClickListener {
+            hideKeyboard()
+        }
+    }
+
+    private fun hideKeyboard() {
+        val imm = requireActivity().getSystemService(InputMethodManager::class.java)
+        imm.hideSoftInputFromWindow(view?.windowToken, 0)
     }
 
     override fun onDestroyView() {
