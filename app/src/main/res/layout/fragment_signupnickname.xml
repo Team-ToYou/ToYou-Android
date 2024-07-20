@@ -49,6 +49,7 @@
             app:layout_constraintGuide_begin="662dp" />
 
         <ImageView
+            android:id="@+id/signup_nickname_back_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
@@ -98,6 +99,8 @@
             android:textColor="@color/black"
             android:layout_marginTop="7dp"
             android:background="@drawable/signupnickname_input"
+            android:imeOptions="actionDone"
+            android:inputType="text"
             app:layout_constraintStart_toStartOf="@id/guideline_title_v"
             app:layout_constraintTop_toBottomOf="@+id/signup_nickname_title"
             android:autofillHints="name" />
