@@ -75,7 +75,10 @@ class SignupNicknameViewModel : ViewModel() {
         _duplicateCheckButtonBackground.value = R.drawable.signupnickname_doublecheck_activate
     }
 
-    fun onNextClicked() {
-        // 다음 버튼 클릭 처리
+    private val _nickname = MutableLiveData<String>()
+    val nickname: LiveData<String> get() = _nickname
+
+    fun setNickname(newNickname: String) {
+        _nickname.value = newNickname
     }
 }
