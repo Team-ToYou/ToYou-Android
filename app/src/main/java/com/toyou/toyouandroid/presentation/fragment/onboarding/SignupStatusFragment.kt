@@ -64,6 +64,10 @@ class SignupStatusFragment : Fragment() {
             binding.signupStatusCompleteBtn.isEnabled = isEnabled
         }
 
+        binding.signupStatusBackBtn.setOnClickListener {
+            navController.navigate(R.id.action_navigation_signup_status_to_signup_nickname_fragment)
+        }
+
         binding.signupStatusCompleteBtn.setOnClickListener {
             navController.navigate(R.id.action_navigation_signup_status_to_home_fragment)
         }
