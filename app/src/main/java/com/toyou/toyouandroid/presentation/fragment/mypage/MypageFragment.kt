@@ -5,10 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentMypageBinding
+import com.toyou.toyouandroid.presentation.fragment.onboarding.SignupNicknameViewModel
 
 class MypageFragment : Fragment() {
 
@@ -17,6 +19,8 @@ class MypageFragment : Fragment() {
     private var _binding: FragmentMypageBinding? = null
     private val binding: FragmentMypageBinding
         get() = requireNotNull(_binding){"FragmentMypageBinding -> null"}
+    private val nicknameViewModel: SignupNicknameViewModel by viewModels()
+    private val viewModel: MypageViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,7 +29,8 @@ class MypageFragment : Fragment() {
     ): View {
 
         _binding = FragmentMypageBinding.inflate(inflater, container, false)
-
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
         return binding.root
     }
 
@@ -59,6 +64,11 @@ class MypageFragment : Fragment() {
 
         binding.mypageVersion.setOnClickListener {
             navController.navigate(R.id.action_navigation_mypage_to_version_fragment)
+        }
+
+        // ViewModel에서 닉네임을 가져와서 TextView에 설정
+        nicknameViewModel.nickname.observe(viewLifecycleOwner) { nickname ->
+            binding.profileNickname.text = nickname
         }
     }
 
