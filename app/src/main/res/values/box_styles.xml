@@ -3,4 +3,9 @@
     <style name="EditTextNoUnderline">
         <item name="android:background">@android:color/transparent</item>
     </style>
+
+    <style name="AppModalStyle"
+        parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/home_bottom_sheet</item>
+    </style>
 </resources>

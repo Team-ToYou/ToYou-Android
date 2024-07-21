@@ -11,6 +11,8 @@
     <string name="next_button">다음</string>
     <string name="complete_button">완료</string>
 
+    <string name="login_title">당신을 만나는 매일의 질문</string>
+
     <string name="signup_agree_title">약관 동의</string>
     <string name="signup_agree_sub_title">투유와 함께하기 전\n필요한 약관들을 확인해주세요!</string>
     <string name="signup_agree_select_1">전체선택</string>
@@ -36,6 +38,9 @@
     <string name="signup_status_option_4">기타</string>
 
     <string name="notice">알림</string>
+    <string name="notice_friend_request">%1$s님이 친구 요청을 보넀습니다.</string>
+    <string name="notice_friend_request_btn">친구 수락</string>
+    <string name="notice_card_check">%1$s님이 질문 카드를 보냈습니다. 확인해보세요!</string>
 
     <string name="home_stamp_title_1">오늘 하루는 어땠나요?</string>
     <string name="home_stamp_title_2">감정우표를 선택해주세요</string>
@@ -52,7 +57,29 @@
     <string name="home_stamp_result_upset">화가 나는 날도 있죠. \n 함께 해결책을 찾아봐요</string>
 
     <string name="home_date">20240503</string>
-
     <string name="home_sidemenu_title">따끈따끈한 친구들의 일기카드를 확인해보세요!</string>
+    <string name="home_emotion_normal_title">평범한 하루였어요</string>
+    <string name="home_emotion_upset_title">부글부글 화가 나요</string>
+    <string name="home_emotion_anxiety_title">생각이 많아지고 불안해요</string>
+    <string name="home_emotion_happy_title">더없이 행복한 하루였어요</string>
+    <string name="home_emotion_exciting_title">들뜨고 흥분돼요</string>
+
+    <string name="calendar_my_record">나의 기록</string>
+    <string name="calendar_friend_record">친구 기록</string>
+    <string name="calendar_my_record_date">20240501 나의 기록</string>
+    <string name="calendar_friend_record_date">20240501 친구 기록</string>
+
+    <string name="mypage_title">마이페이지</string>
+    <string name="mypage_nickname">테디</string>
+    <string name="mypage_friend_count">친구 4명</string>
+    <string name="mypage_notice_setting">알림 설정</string>
+    <string name="mypage_opinion">의견 보내기</string>
+    <string name="mypage_contact">문의하기</string>
+    <string name="mypage_terms_of_use">약관 및 정책</string>
+    <string name="mypage_version">서비스 버전</string>
+    <string name="mypage_version_name">1.0</string>
+    <string name="mypage_logout">로그아웃</string>
+    <string name="mypage_signout">회원탈퇴</string>
+    <string name="home_emotion_tv">멘트</string>
 
 </resources>
