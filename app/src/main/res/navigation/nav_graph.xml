@@ -122,6 +122,7 @@
             android:id="@+id/action_navigation_home_result_to_home_fragment"
             app:destination="@id/navigation_home"
             app:popUpToInclusive="false"/>
+    </fragment>
     <fragment
         android:id="@+id/navigation_social"
         android:name="com.toyou.toyouandroid.ui.social.SocialFragment"
