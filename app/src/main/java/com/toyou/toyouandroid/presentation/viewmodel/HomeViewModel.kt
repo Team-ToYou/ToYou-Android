@@ -3,6 +3,7 @@ package com.toyou.toyouandroid.presentation.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.utils.getCurrentDate
 
 class HomeViewModel : ViewModel() {
@@ -22,6 +23,9 @@ class HomeViewModel : ViewModel() {
     private val _currentDate = MutableLiveData<String>()
     val currentDate: LiveData<String> get() = _currentDate
 
+    private val _mypageEmotionStamp = MutableLiveData<Int>()
+    val mypageEmotionStamp: LiveData<Int> get() = _mypageEmotionStamp
+
     init {
         _currentDate.value = getCurrentDate()
     }
@@ -31,5 +35,9 @@ class HomeViewModel : ViewModel() {
         _text.value = text
         _homeDateBackground.value = date
         _homeBackground.value = background
+    }
+
+    fun updateMypageEmotion(emotion: Int) {
+        _mypageEmotionStamp.value = emotion
     }
 }

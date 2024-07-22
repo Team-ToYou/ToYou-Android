@@ -12,6 +12,7 @@ import androidx.navigation.Navigation
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentMypageBinding
 import com.toyou.toyouandroid.presentation.fragment.onboarding.SignupNicknameViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModel
 
 class MypageFragment : Fragment() {
 
@@ -21,6 +22,7 @@ class MypageFragment : Fragment() {
     private val binding: FragmentMypageBinding
         get() = requireNotNull(_binding){"FragmentMypageBinding -> null"}
     private val nicknameViewModel: SignupNicknameViewModel by activityViewModels()
+    private val homeViewModel: HomeViewModel by activityViewModels()
     private val viewModel: MypageViewModel by viewModels()
 
     override fun onCreateView(
@@ -70,6 +72,10 @@ class MypageFragment : Fragment() {
         // ViewModel에서 닉네임을 가져와서 TextView에 설정
         nicknameViewModel.nickname.observe(viewLifecycleOwner) { nickname ->
             binding.profileNickname.text = nickname
+        }
+
+        homeViewModel.mypageEmotionStamp.observe(viewLifecycleOwner) { emotion ->
+            binding.mypageEmotionStamp.setImageResource(emotion)
         }
     }
 
