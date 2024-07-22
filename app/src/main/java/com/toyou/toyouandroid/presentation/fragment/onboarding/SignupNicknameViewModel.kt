@@ -41,6 +41,8 @@ class SignupNicknameViewModel : ViewModel() {
     }
     val duplicateCheckButtonBackground: LiveData<Int> = _duplicateCheckButtonBackground
 
+    private val _length15 = MutableLiveData<String>()
+    val length15: LiveData<String> = _length15
 
     private val _isNextButtonEnabled = MutableLiveData(false)
     val isNextButtonEnabled: LiveData<Boolean> = _isNextButtonEnabled
@@ -73,6 +75,16 @@ class SignupNicknameViewModel : ViewModel() {
     fun duplicateBtnActivate() {
         _duplicateCheckButtonTextColor.value = 0xFF000000.toInt()
         _duplicateCheckButtonBackground.value = R.drawable.signupnickname_doublecheck_activate
+    }
+
+    fun updateLength15(length: Int) {
+        if (length >= 15) {
+            _duplicateCheckMessage.value = "15자 이내로 입력해주세요."
+            _duplicateCheckMessageColor.value = 0xFF000000.toInt()
+        } else {
+            _duplicateCheckMessage.value = "중복된 닉네임인지 확인해주세요"
+            _duplicateCheckMessageColor.value = 0xFF000000.toInt()
+        }
     }
 
     private val _nickname = MutableLiveData<String>()

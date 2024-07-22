@@ -56,6 +56,7 @@ class SignupNicknameFragment : Fragment() {
                 val length = s?.length ?: 0
                 viewModel.updateTextCount(length)
                 viewModel.duplicateBtnActivate()
+                viewModel.updateLength15(length)
             }
 
             override fun afterTextChanged(s: Editable?) {
