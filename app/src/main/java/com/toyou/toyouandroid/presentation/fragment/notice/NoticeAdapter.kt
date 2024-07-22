@@ -10,7 +10,7 @@ import com.toyou.toyouandroid.databinding.ItemNoticeFriendRequestAcceptedBinding
 import com.toyou.toyouandroid.databinding.ItemNoticeFriendRequestBinding
 import com.toyou.toyouandroid.model.NoticeItem
 
-class NoticeAdapter(private val items: List<NoticeItem>) :
+class NoticeAdapter(private val items: MutableList<NoticeItem>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     companion object {
         private const val TYPE_FRIEND_REQUEST = 1
@@ -87,6 +87,13 @@ class NoticeAdapter(private val items: List<NoticeItem>) :
         fun bind(item: NoticeItem.NoticeCardCheckItem) {
             binding.itemCardCheck = item
             binding.executePendingBindings()
+        }
+    }
+
+    fun removeItem(position: Int) {
+        if (position >= 0 && position < items.size) {
+            items.removeAt(position)
+            notifyItemRemoved(position)
         }
     }
 }
