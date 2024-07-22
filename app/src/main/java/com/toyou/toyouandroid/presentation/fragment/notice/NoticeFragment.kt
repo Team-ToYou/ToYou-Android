@@ -8,9 +8,11 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentNoticeBinding
 import com.toyou.toyouandroid.model.NoticeItem
+import com.toyou.toyouandroid.utils.SwipeToDeleteNotice
 
 class NoticeFragment : Fragment() {
 
@@ -35,7 +37,7 @@ class NoticeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
 
-        val items = listOf(
+        val items = mutableListOf(
             NoticeItem.NoticeFriendRequestItem("테디"),
             NoticeItem.NoticeCardCheckItem("승원"),
             NoticeItem.NoticeFriendRequestItem("테디"),
@@ -65,6 +67,9 @@ class NoticeFragment : Fragment() {
         val adapter = NoticeAdapter(items)
         binding.noticeRv.layoutManager = GridLayoutManager(context, 1)
         binding.noticeRv.adapter = adapter
+
+        val itemTouchHelper = ItemTouchHelper(SwipeToDeleteNotice(adapter))
+        itemTouchHelper.attachToRecyclerView(binding.noticeRv)
 
         val verticalSpaceHeight = resources.getDimensionPixelSize(R.dimen.recycler_item_spacing)
         binding.noticeRv.addItemDecoration(NoticeItemDecoration(verticalSpaceHeight))
