@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.toyou.toyouandroid.R
@@ -22,7 +22,7 @@ class SignupNicknameFragment : Fragment() {
     private var _binding: FragmentSignupnicknameBinding? = null
     private val binding: FragmentSignupnicknameBinding
         get() = requireNotNull(_binding){"FragmentSignupnicknameBinding -> null"}
-    private val viewModel: SignupNicknameViewModel by viewModels()
+    private val viewModel: SignupNicknameViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
