@@ -56,6 +56,8 @@ class HomeOptionFragment : Fragment() {
                 R.color.g01,
                 R.drawable.background_green)
 
+            homeViewModel.updateMypageEmotion(R.drawable.home_stamp_option_anxiety)
+
             navController.navigate(R.id.action_navigation_home_option_to_home_result_fragment, bundle)
         }
 
@@ -70,6 +72,8 @@ class HomeOptionFragment : Fragment() {
                 getString(R.string.home_emotion_exciting_title),
                 R.color.b01,
                 R.drawable.background_skyblue)
+
+            homeViewModel.updateMypageEmotion(R.drawable.home_stamp_option_exciting)
 
             navController.navigate(R.id.action_navigation_home_option_to_home_result_fragment, bundle)
         }
@@ -86,6 +90,8 @@ class HomeOptionFragment : Fragment() {
                 R.color.y01,
                 R.drawable.background_yellow)
 
+            homeViewModel.updateMypageEmotion(R.drawable.home_stamp_option_happy)
+
             navController.navigate(R.id.action_navigation_home_option_to_home_result_fragment, bundle)
         }
 
@@ -101,6 +107,8 @@ class HomeOptionFragment : Fragment() {
                 R.color.p01,
                 R.drawable.background_purple)
 
+            homeViewModel.updateMypageEmotion(R.drawable.home_stamp_option_normal)
+
             navController.navigate(R.id.action_navigation_home_option_to_home_result_fragment, bundle)
         }
 
@@ -115,6 +123,8 @@ class HomeOptionFragment : Fragment() {
                 getString(R.string.home_emotion_upset_title),
                 R.color.r01,
                 R.drawable.background_red)
+
+            homeViewModel.updateMypageEmotion(R.drawable.home_stamp_option_upset)
 
             navController.navigate(R.id.action_navigation_home_option_to_home_result_fragment, bundle)
         }
