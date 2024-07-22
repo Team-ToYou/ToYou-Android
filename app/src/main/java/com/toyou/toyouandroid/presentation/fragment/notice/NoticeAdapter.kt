@@ -6,6 +6,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.ItemNoticeCardCheckBinding
+import com.toyou.toyouandroid.databinding.ItemNoticeFriendRequestAcceptedBinding
 import com.toyou.toyouandroid.databinding.ItemNoticeFriendRequestBinding
 import com.toyou.toyouandroid.model.NoticeItem
 
@@ -14,11 +15,13 @@ class NoticeAdapter(private val items: List<NoticeItem>) :
     companion object {
         private const val TYPE_FRIEND_REQUEST = 1
         private const val TYPE_CARD_CHECK = 2
+        private const val TYPE_FRIEND_REQUEST_ACCEPTED = 3
     }
 
     override fun getItemViewType(position: Int): Int {
         return when (items[position]) {
             is NoticeItem.NoticeFriendRequestItem -> TYPE_FRIEND_REQUEST
+            is NoticeItem.NoticeFriendRequestAcceptedItem -> TYPE_FRIEND_REQUEST_ACCEPTED
             is NoticeItem.NoticeCardCheckItem -> TYPE_CARD_CHECK
         }
     }
@@ -43,6 +46,15 @@ class NoticeAdapter(private val items: List<NoticeItem>) :
                 )
                 CardCheckViewHolder(binding)
             }
+            TYPE_FRIEND_REQUEST_ACCEPTED -> {
+                val binding = DataBindingUtil.inflate<ItemNoticeFriendRequestAcceptedBinding>(
+                    LayoutInflater.from(parent.context),
+                    R.layout.item_notice_friend_request_accepted,
+                    parent,
+                    false
+                )
+                FriendRequestAcceptedViewHolder(binding)
+            }
             else -> throw IllegalArgumentException("유효하지 않은 NoticeAdapter type입니다.")
         }
     }
@@ -50,6 +62,7 @@ class NoticeAdapter(private val items: List<NoticeItem>) :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is FriendRequestViewHolder -> holder.bind(items[position] as NoticeItem.NoticeFriendRequestItem)
+            is FriendRequestAcceptedViewHolder -> holder.bind(items[position] as NoticeItem.NoticeFriendRequestAcceptedItem)
             is CardCheckViewHolder -> holder.bind(items[position] as NoticeItem.NoticeCardCheckItem)
         }
     }
@@ -59,6 +72,13 @@ class NoticeAdapter(private val items: List<NoticeItem>) :
     class FriendRequestViewHolder(private val binding: ItemNoticeFriendRequestBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: NoticeItem.NoticeFriendRequestItem) {
             binding.itemFriendRequest = item
+            binding.executePendingBindings()
+        }
+    }
+
+    class FriendRequestAcceptedViewHolder(private val binding: ItemNoticeFriendRequestAcceptedBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: NoticeItem.NoticeFriendRequestAcceptedItem) {
+            binding.itemFriendRequestAccepted = item
             binding.executePendingBindings()
         }
     }
