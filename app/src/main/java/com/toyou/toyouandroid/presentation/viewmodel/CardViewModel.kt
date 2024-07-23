@@ -53,7 +53,7 @@ class CardViewModel : ViewModel(){
 
     fun updatePreviewCard(){
         _previewCards.value = _cards.value?.filter {it.isButtonSelected}?.map {
-            PreviewCardModel(answer = "", question = it.message)
+            PreviewCardModel(answer = "", question = it.message, type = it.questionType)
         }
     }
 
