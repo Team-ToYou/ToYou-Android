@@ -89,4 +89,15 @@ class SignupNicknameViewModel : ViewModel() {
     fun setNickname(newNickname: String) {
         _nickname.value = newNickname
     }
+
+    fun resetState() {
+        _duplicateCheckMessage.value = "중복된 닉네임인지 확인해주세요"
+        _duplicateCheckMessageColor.value = 0xFF000000.toInt()
+        _isNextButtonEnabled.value = false
+        _nextButtonTextColor.value = 0xFFA6A6A6.toInt()
+        _nextButtonBackground.value = R.drawable.next_button
+        _nickname.value = ""
+        _duplicateCheckButtonTextColor.value = 0xFFA6A6A6.toInt()
+        _duplicateCheckButtonBackground.value = R.drawable.next_button
+    }
 }
