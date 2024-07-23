@@ -69,5 +69,35 @@ class QuestionContentFragment : Fragment() {
                 wordCount.text = "${questionEt.length} / 50"
             }
         })
+
+        binding.plusBtn.setOnClickListener {
+            if (binding.plusBox2Iv.visibility == View.GONE)
+            {
+                binding.plusBox2Iv.visibility = View.VISIBLE
+                binding.plusDelete2Btn.visibility = View.VISIBLE
+            } else if (binding.plusBox2Iv.visibility == View.VISIBLE && binding.plusBox3Iv.visibility ==View.GONE)
+        {
+            binding.plusBox3Iv.visibility = View.VISIBLE
+            binding.plusDelete3Btn.visibility = View.VISIBLE
+        } else if (binding.plusBox2Iv.visibility == View.VISIBLE && binding.plusBox3Iv.visibility ==View.VISIBLE
+                && binding.plusBox4Iv.visibility ==View.GONE)
+            {
+                binding.plusBox4Iv.visibility = View.VISIBLE
+                binding.plusDelete4Btn.visibility = View.VISIBLE
+            }
+        }
+
+        binding.plusDelete2Btn.setOnClickListener {
+            binding.plusBox2Iv.visibility = View.GONE
+            binding.plusDelete2Btn.visibility = View.GONE
+        }
+        binding.plusDelete3Btn.setOnClickListener {
+            binding.plusBox3Iv.visibility = View.GONE
+            binding.plusDelete3Btn.visibility = View.GONE
+        }
+        binding.plusDelete4Btn.setOnClickListener {
+            binding.plusBox4Iv.visibility = View.GONE
+            binding.plusDelete4Btn.visibility = View.GONE
+        }
     }
 }
