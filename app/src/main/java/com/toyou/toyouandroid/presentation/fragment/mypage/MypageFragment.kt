@@ -48,10 +48,6 @@ class MypageFragment : Fragment() {
         navController = Navigation.findNavController(view)
         viewModelManager = ViewModelManager(nicknameViewModel, homeViewModel)
 
-        binding.mypageBackBtn.setOnClickListener {
-            navController.navigate(R.id.action_navigation_mypage_to_home_fragment)
-        }
-
         binding.mypageProfileBtn.setOnClickListener {
             navController.navigate(R.id.action_navigation_mypage_to_profile_fragment)
         }
