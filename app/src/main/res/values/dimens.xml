@@ -3,5 +3,5 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="recycler_item_spacing">20dp</dimen>
-    <dimen name="bottom_sheet_peek_height">130dp</dimen>
+    <dimen name="bottom_sheet_peek_height">80dp</dimen>
 </resources>
