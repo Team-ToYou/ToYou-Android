@@ -62,12 +62,13 @@ class CreateFragment : Fragment(){
                 count = 0
             }
 
+
         })
 
         cardAdapter = CardAdapter { position, isSelected ->
             cardViewModel.updateButtonState(position, isSelected)
+            Log.d("버튼", position.toString())
 
-            Log.d("CreateFragment", "Item clicked at position: $isSelected, ${cardViewModel.previewCards.value}")
         }
 
 

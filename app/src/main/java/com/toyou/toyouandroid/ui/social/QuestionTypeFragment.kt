@@ -1,5 +1,6 @@
 package com.toyou.toyouandroid.ui.social
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -43,13 +44,68 @@ class QuestionTypeFragment : Fragment(){
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
 
-        binding.char1Iv.setOnClickListener {
-            binding.nextBtn.isEnabled = true
-        }
 
         binding.nextBtn.setOnClickListener {
             navController.navigate(R.id.action_questionTypeFragment_to_questionContentFragment)
         }
+
+
+        binding.char1Iv.setOnClickListener {
+            if (binding.char2Iv.isSelected){
+                binding.char2Iv.isSelected = !binding.char2Iv.isSelected
+                binding.shortTv.isSelected = !binding.shortTv.isSelected
+                binding.detail2Tv.isSelected =!binding.detail2Tv.isSelected
+            } else if (binding.char3Iv.isSelected){
+                binding.char3Iv.isSelected = !binding.char3Iv.isSelected
+                binding.longTv.isSelected = !binding.longTv.isSelected
+                binding.detail3Tv.isSelected =!binding.detail3Tv.isSelected
+            }
+            binding.char1Iv.isSelected = !binding.char1Iv.isSelected
+            binding.chooseTv.isSelected = !binding.chooseTv.isSelected
+            binding.detail1Tv.isSelected = !binding.detail1Tv.isSelected
+            binding.nextBtn.isEnabled = binding.char1Iv.isSelected || binding.char2Iv.isSelected || binding.char3Iv.isSelected
+
+        }
+        binding.char2Iv.setOnClickListener {
+            if (binding.char1Iv.isSelected){
+                binding.char1Iv.isSelected = !binding.char1Iv.isSelected
+                binding.chooseTv.isSelected = !binding.chooseTv.isSelected
+                binding.detail1Tv.isSelected = !binding.detail1Tv.isSelected
+            } else if (binding.char3Iv.isSelected){
+                binding.char3Iv.isSelected = !binding.char3Iv.isSelected
+                binding.longTv.isSelected = !binding.longTv.isSelected
+                binding.detail3Tv.isSelected =!binding.detail3Tv.isSelected
+            }
+            binding.char2Iv.isSelected = !binding.char2Iv.isSelected
+            binding.shortTv.isSelected = !binding.shortTv.isSelected
+            binding.detail2Tv.isSelected =!binding.detail2Tv.isSelected
+            binding.nextBtn.isEnabled = binding.char1Iv.isSelected || binding.char2Iv.isSelected || binding.char3Iv.isSelected
+
+        }
+        binding.char3Iv.setOnClickListener {
+            if (binding.char1Iv.isSelected){
+                binding.char1Iv.isSelected = !binding.char1Iv.isSelected
+                binding.chooseTv.isSelected = !binding.chooseTv.isSelected
+                binding.detail1Tv.isSelected = !binding.detail1Tv.isSelected
+            } else if (binding.char2Iv.isSelected){
+                binding.char2Iv.isSelected = !binding.char2Iv.isSelected
+                binding.shortTv.isSelected = !binding.shortTv.isSelected
+                binding.detail2Tv.isSelected =!binding.detail2Tv.isSelected
+            }
+            binding.char3Iv.isSelected = !binding.char3Iv.isSelected
+            binding.longTv.isSelected = !binding.longTv.isSelected
+            binding.detail3Tv.isSelected =!binding.detail3Tv.isSelected
+            binding.nextBtn.isEnabled = binding.char1Iv.isSelected || binding.char2Iv.isSelected || binding.char3Iv.isSelected
+
+        }
+
+        binding.backBtn.setOnClickListener {
+            val mainActivity = activity as MainActivity
+            mainActivity.hideBottomNavigation(false)
+            navController.popBackStack()
+
+        }
+
     }
 
     override fun onDestroy() {

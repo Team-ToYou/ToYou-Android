@@ -1,6 +1,8 @@
 package com.toyou.toyouandroid.ui.social
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +12,7 @@ import androidx.navigation.Navigation
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentSendBinding
 import com.toyou.toyouandroid.databinding.FragmentSendFinalBinding
+import com.toyou.toyouandroid.presentation.base.MainActivity
 
 class SendFinalFragment: Fragment() {
     private var _binding : FragmentSendFinalBinding? = null
@@ -36,6 +39,12 @@ class SendFinalFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            val mainActivity = activity as MainActivity
+            mainActivity.hideBottomNavigation(false)
+            navController.navigate(R.id.action_sendFinalFragment_to_navigation_home)
+        }, 2000)
 
     }
 }
