@@ -1,6 +1,5 @@
 package com.toyou.toyouandroid.presentation.fragment.home
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent

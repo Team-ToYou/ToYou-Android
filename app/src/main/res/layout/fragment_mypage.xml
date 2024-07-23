@@ -264,7 +264,7 @@
                 app:layout_constraintTop_toTopOf="parent"/>
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/mypage_login_btn"
+                android:id="@+id/mypage_logout_btn"
                 android:layout_width="92dp"
                 android:layout_height="33dp"
                 android:text="@string/mypage_logout"
