@@ -22,7 +22,7 @@ import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModel
 
 class HomeFragment : Fragment() {
 
-    lateinit var navController: NavController
+    private lateinit var navController: NavController
     private var _binding: FragmentHomeBinding? = null
     private val binding: FragmentHomeBinding
         get() = requireNotNull(_binding){"FragmentHomeBinding -> null"}
@@ -108,10 +108,6 @@ class HomeFragment : Fragment() {
             }
         }
 
-        binding.homeBottomSheet.setOnClickListener {
-            // 클릭 시 수행할 작업
-        }
-
         viewModel.currentDate.observe(viewLifecycleOwner) { date ->
             binding.homeDateTv.text = date
         }
@@ -144,6 +140,10 @@ class HomeFragment : Fragment() {
         viewModel.homeBackground.observe(viewLifecycleOwner) { background ->
             binding.layoutHome.setBackgroundResource(background)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
     }
 
     override fun onDestroyView() {

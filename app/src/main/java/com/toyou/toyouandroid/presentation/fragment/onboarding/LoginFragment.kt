@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.Navigation
 import com.kakao.sdk.user.UserApiClient
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentLoginBinding
@@ -43,7 +43,8 @@ class LoginFragment : Fragment() {
         (requireActivity() as MainActivity).hideBottomNavigation(true)
 
         // navController 초기화
-        navController = findNavController()
+//        navController = findNavController()
+        navController = Navigation.findNavController(view)
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
