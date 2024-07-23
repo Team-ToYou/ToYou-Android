@@ -9,20 +9,29 @@
             type="com.toyou.toyouandroid.model.HomeBottomSheetItem" />
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <ImageView
+            android:id="@+id/home_bottom_sheet_card"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            imageResource="@{item.imagePath}"/>
+            imageResource="@{item.imagePath}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{item.nickname}" />
+            android:text="@{item.nickname}"
+            android:textColor="@color/black"
+            style="@style/gangwon16"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/home_bottom_sheet_card" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
