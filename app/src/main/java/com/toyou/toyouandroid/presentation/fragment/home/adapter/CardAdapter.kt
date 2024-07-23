@@ -40,6 +40,7 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit) : RecyclerVie
         private val editText : EditText = itemView.findViewById(R.id.memo_et)
         private val fromWho : TextView = itemView.findViewById(R.id.fromWho_tv)
         private val fromWhoEt : TextView = itemView.findViewById(R.id.fromWhoEt_tv)
+        private val wordCount : TextView = itemView.findViewById(R.id.limit_200)
 
         var message : String = ""
 
@@ -61,16 +62,16 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit) : RecyclerVie
                     count: Int,
                     after: Int
                 ) {
-
+                    wordCount.text = "0/200"
                 }
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     message = s.toString()
-
+                    wordCount.text = message.length.toString() + " / 200"
                 }
 
                 override fun afterTextChanged(s: Editable?) {
-
+                    wordCount.text = message.length.toString() + " / 200"
                 }
 
             })
@@ -95,8 +96,10 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit) : RecyclerVie
         private fun updateEditTextBoxVisibility(isSelected: Boolean) {
             if (isSelected) {
                 editText.visibility = View.VISIBLE
+                wordCount.visibility = View.VISIBLE
             } else{
                 editText.visibility = View.GONE
+                wordCount.visibility = View.GONE
             }
         }
 

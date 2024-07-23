@@ -35,9 +35,23 @@
         android:id="@+id/memo_et"
         android:layout_width="320dp"
         android:layout_height="100dp"
+        style="@style/sc_l10"
         android:background="@drawable/card_edit_border"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@+id/textMessage" />
+        app:layout_constraintTop_toBottomOf="@+id/textMessage"
+        android:maxLength="200"/>
+
+    <TextView
+        android:id="@+id/limit_200"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0/200"
+        style="@style/sc_l8"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="5dp"
+        app:layout_constraintBottom_toBottomOf="@id/memo_et"
+        app:layout_constraintEnd_toEndOf="@+id/memo_et"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/fromWhoEt_tv"

@@ -62,6 +62,7 @@ class CreateFragment : Fragment(){
                 count = 0
             }
 
+
         })
 
         cardAdapter = CardAdapter { position, isSelected ->
