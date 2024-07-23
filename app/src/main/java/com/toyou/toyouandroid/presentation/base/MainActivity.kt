@@ -2,7 +2,6 @@ package com.toyou.toyouandroid.presentation.base
 
 import android.os.Bundle
 import android.view.View
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -27,19 +26,11 @@ class MainActivity : AppCompatActivity() {
 
         val navController = navHostFragment.navController
 
-//        findViewById<BottomNavigationView>(R.id.bottom_navi)
-//            .setupWithNavController(navController)
-
         // BottomNavigationView 설정
         binding.bottomNavi.setupWithNavController(navController)
     }
 
     fun hideBottomNavigation(state:Boolean){
         if(state) binding.bottomNavi.visibility = View.GONE else binding.bottomNavi.visibility=View.VISIBLE
-    }
-
-    fun bringBottomNavigationViewToFront() {
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navi)
-        bottomNavigationView.bringToFront()
     }
 }
