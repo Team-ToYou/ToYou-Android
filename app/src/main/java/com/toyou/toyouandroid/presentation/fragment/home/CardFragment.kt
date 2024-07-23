@@ -53,6 +53,10 @@ class CardFragment : Fragment() {
             Timber.tag("카드2").d(previewCards.toString())
 
         })
+
+        binding.lockFreeIv.setOnClickListener {
+            cardViewModel.isLockSelected(binding.lockFreeIv)
+        }
     }
 
     override fun onDestroyView() {

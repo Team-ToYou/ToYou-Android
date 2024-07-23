@@ -45,6 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="From."
+        android:layout_marginTop="10dp"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@+id/memo_et"
         app:layout_constraintTop_toBottomOf="@+id/memo_et" />

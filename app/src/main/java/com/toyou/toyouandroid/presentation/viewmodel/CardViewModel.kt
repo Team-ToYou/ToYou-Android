@@ -1,6 +1,7 @@
 package com.toyou.toyouandroid.presentation.viewmodel
 
 import android.util.Log
+import android.widget.ImageView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,6 +14,11 @@ class CardViewModel : ViewModel(){
 
     private val _previewCards = MutableLiveData<List<PreviewCardModel>>()
     val previewCards : LiveData<List<PreviewCardModel>> get() = _previewCards
+
+
+    fun isLockSelected(lock : ImageView){
+        lock.isSelected = !lock.isSelected
+    }
 
 
     //뷰모델이 생성될때 초기값 설정
