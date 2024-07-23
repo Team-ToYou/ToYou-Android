@@ -28,6 +28,29 @@ class MainActivity : AppCompatActivity() {
 
         // BottomNavigationView 설정
         binding.bottomNavi.setupWithNavController(navController)
+
+        // BottomNavigationView 아이템 선택 리스너 설정
+        binding.bottomNavi.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_home -> {
+                    navController.navigate(R.id.navigation_home)
+                    true
+                }
+                R.id.navigation_social -> {
+                    navController.navigate(R.id.navigation_social)
+                    true
+                }
+                R.id.navigation_calendar -> {
+                    navController.navigate(R.id.navigation_calendar)
+                    true
+                }
+                R.id.navigation_mypage -> {
+                    navController.navigate(R.id.navigation_mypage)
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     fun hideBottomNavigation(state:Boolean){
