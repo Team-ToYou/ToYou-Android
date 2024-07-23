@@ -160,6 +160,7 @@
         app:layout_constraintStart_toEndOf="@id/guideline19"
         app:layout_constraintTop_toBottomOf="@id/balloon_tv"
         android:layout_marginTop="25dp"
+        style="@style/sc_r10"
         android:maxLength="50"/>
 
     <TextView
@@ -204,7 +205,18 @@
         app:layout_constraintEnd_toEndOf="@id/guideline20"
         app:layout_constraintStart_toEndOf="@id/guideline19"
         app:layout_constraintTop_toBottomOf="@id/plus_box_iv"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        />
+
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        style="@style/sc_r10"
+        app:layout_constraintStart_toStartOf="@id/plus_box2_iv"
+        app:layout_constraintEnd_toEndOf="@id/plus_box2_iv"
+        app:layout_constraintTop_toTopOf="@id/plus_box2_iv"
+        app:layout_constraintBottom_toBottomOf="@id/plus_box2_iv"
+        android:background="@null"/>
 
     <ImageView
         android:id="@+id/plus_delete2_btn"
@@ -228,6 +240,15 @@
         app:layout_constraintEnd_toEndOf="@id/guideline20"
         android:visibility="gone"
         />
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        style="@style/sc_r10"
+        app:layout_constraintStart_toStartOf="@id/plus_box3_iv"
+        app:layout_constraintEnd_toEndOf="@id/plus_box3_iv"
+        app:layout_constraintTop_toTopOf="@id/plus_box3_iv"
+        app:layout_constraintBottom_toBottomOf="@id/plus_box3_iv"
+        android:background="@null"/>
 
     <ImageView
         android:id="@+id/plus_delete3_btn"
@@ -251,6 +272,15 @@
         app:layout_constraintEnd_toEndOf="@id/guideline20"
         android:visibility="gone"
         />
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        style="@style/sc_r10"
+        app:layout_constraintStart_toStartOf="@id/plus_box4_iv"
+        app:layout_constraintEnd_toEndOf="@id/plus_box4_iv"
+        app:layout_constraintTop_toTopOf="@id/plus_box4_iv"
+        app:layout_constraintBottom_toBottomOf="@id/plus_box4_iv"
+        android:background="@null"/>
 
     <ImageView
         android:id="@+id/plus_delete4_btn"
