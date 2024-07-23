@@ -9,6 +9,7 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentQuestionContentBinding
+import com.toyou.toyouandroid.presentation.base.MainActivity
 
 class QuestionContentFragment : Fragment() {
     private var _binding : FragmentQuestionContentBinding? = null
@@ -38,6 +39,10 @@ class QuestionContentFragment : Fragment() {
 
         binding.nextBtn.setOnClickListener {
             navController.navigate(R.id.action_questionContentFragment_to_sendFragment)
+        }
+        binding.backBtn.setOnClickListener {
+            navController.popBackStack()
+
         }
     }
 }

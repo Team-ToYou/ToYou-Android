@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.R
@@ -41,6 +42,10 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit) : RecyclerVie
         private val fromWho : TextView = itemView.findViewById(R.id.fromWho_tv)
         private val fromWhoEt : TextView = itemView.findViewById(R.id.fromWhoEt_tv)
         private val wordCount : TextView = itemView.findViewById(R.id.limit_200)
+        private val chooseTwo : LinearLayout = itemView.findViewById(R.id.choose_two_linear)
+        private val chooseThree : LinearLayout = itemView.findViewById(R.id.choose_three_linear)
+        private val chooseFour : LinearLayout = itemView.findViewById(R.id.choose_forth_linear)
+        private val chooseFive : LinearLayout = itemView.findViewById(R.id.choose_five_linear)
 
         var message : String = ""
 
@@ -50,7 +55,6 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit) : RecyclerVie
                 isSelected = !isSelected
                 //버튼 클릭 업데이트 후 onItemClick 함수 호출하기!
                 updateButtonBackground(isSelected)
-                updateEditTextBoxVisibility(isSelected)
                 updateUiEditTextVisibility(isSelected)
                 onItemClick(adapterPosition, isSelected,)
 
@@ -62,16 +66,16 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit) : RecyclerVie
                     count: Int,
                     after: Int
                 ) {
-                    wordCount.text = "0/200"
+                    wordCount.text = "(0/200)"
                 }
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     message = s.toString()
-                    wordCount.text = message.length.toString() + " / 200"
+                    wordCount.text = message.length.toString() + "( / 200)"
                 }
 
                 override fun afterTextChanged(s: Editable?) {
-                    wordCount.text = message.length.toString() + " / 200"
+                    wordCount.text = message.length.toString() + "( / 200)"
                 }
 
             })
@@ -87,6 +91,15 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit) : RecyclerVie
             } else{
                 fromWho.text = card.fromWho
             }
+
+            when(card.questionType){
+                1 -> updateEditTextBoxVisibility(isSelected)
+                2 -> updateTwoVisibility(isSelected)
+                3 -> updateThreeVisibility(isSelected)
+                4 -> updateFourVisibility(isSelected)
+                5 -> updateFiveVisibility(isSelected)
+
+            }
         }
         private fun updateButtonBackground(isSelected: Boolean) {
             val backgroundRes = if (isSelected) R.drawable.create_unclicked_btn else R.drawable.create_clicked_btn
@@ -100,6 +113,39 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit) : RecyclerVie
             } else{
                 editText.visibility = View.GONE
                 wordCount.visibility = View.GONE
+
+            }
+        }
+
+        private fun updateTwoVisibility(isSelected: Boolean) {
+            if (isSelected) {
+                chooseTwo.visibility = View.VISIBLE
+            } else{
+                chooseTwo.visibility = View.GONE
+            }
+        }
+
+        private fun updateThreeVisibility(isSelected: Boolean) {
+            if (isSelected) {
+                chooseThree.visibility = View.VISIBLE
+            } else{
+                chooseThree.visibility = View.GONE
+            }
+        }
+
+        private fun updateFourVisibility(isSelected: Boolean) {
+            if (isSelected) {
+                chooseFour.visibility = View.VISIBLE
+            } else{
+                chooseFour.visibility = View.GONE
+            }
+        }
+
+        private fun updateFiveVisibility(isSelected: Boolean) {
+            if (isSelected) {
+                chooseFive.visibility = View.VISIBLE
+            } else{
+                chooseFive.visibility = View.GONE
             }
         }
 

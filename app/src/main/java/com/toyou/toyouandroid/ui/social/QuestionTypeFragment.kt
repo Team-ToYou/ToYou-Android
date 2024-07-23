@@ -99,6 +99,13 @@ class QuestionTypeFragment : Fragment(){
 
         }
 
+        binding.backBtn.setOnClickListener {
+            val mainActivity = activity as MainActivity
+            mainActivity.hideBottomNavigation(false)
+            navController.popBackStack()
+
+        }
+
     }
 
     override fun onDestroy() {

@@ -28,9 +28,13 @@ class CardViewModel : ViewModel(){
 
     fun loadCardData(){
         val sampleCards = listOf(
-            CardModel("요즘 어떻게 지내?", "From. 현정"),
-            CardModel("요즘 즐겨하는 취미는?", "From. 현정"),
-            CardModel("짜장면 vs 짬뽕", "From. 현정")
+            CardModel("요즘 어떻게 지내?", "From. 현정",1),
+            //CardModel("요즘 즐겨하는 취미는?", "From. 현정"),
+            CardModel("짜장면 vs 짬뽕", "From. 현정",2),
+            CardModel("오늘 몇시에 잘거야?", "From. 현정",3),
+            CardModel("오늘 커피 몇잔 마셨어?", "From. 현정",4),
+            CardModel("오늘 물 몇잔 마셨어?", "From. 현정",5),
+
         )
         Log.d("CardViewModel", "Loading cards: $sampleCards") // 디버그 로그 추가
 
