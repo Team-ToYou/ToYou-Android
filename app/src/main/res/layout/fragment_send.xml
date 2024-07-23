@@ -53,12 +53,15 @@
         app:layout_constraintTop_toTopOf="parent" />
     
     <CheckBox
-        android:layout_width="15dp"
-        android:layout_height="15dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         app:layout_constraintBottom_toTopOf="@id/next_btn"
         app:layout_constraintEnd_toStartOf="@id/check_tv"
-        android:layout_marginBottom="10dp"
-        android:layout_marginRight="5dp"/>
+        android:layout_marginBottom="7dp"
+        android:layout_marginRight="5dp"
+        android:button="@null"
+        android:background="@drawable/custom_checkbox"
+        />
 
     <TextView
         android:id="@+id/check_tv"

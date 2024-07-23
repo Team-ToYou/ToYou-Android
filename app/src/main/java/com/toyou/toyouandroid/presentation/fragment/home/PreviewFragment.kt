@@ -65,7 +65,7 @@ class PreviewFragment : Fragment(){
         }
 
         binding.nextBtn.setOnClickListener {
-
+            navController.navigate(R.id.action_previewFragment_to_modifyFragment)
         }
     }
 

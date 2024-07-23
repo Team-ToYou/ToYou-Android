@@ -228,7 +228,11 @@
         android:id="@+id/previewFragment"
         android:name="com.toyou.toyouandroid.ui.home.PreviewFragment"
         android:label="PreviewFragment"
-        tools:layout="@layout/fragment_preview"/>
+        tools:layout="@layout/fragment_preview">
+        <action
+            android:id="@+id/action_previewFragment_to_modifyFragment"
+            app:destination="@id/modifyFragment" />
+    </fragment>
     <fragment
         android:id="@+id/naviagation_notice"
         android:name="com.toyou.toyouandroid.presentation.fragment.notice.NoticeFragment"
@@ -272,5 +276,18 @@
         android:id="@+id/sendFinalFragment"
         android:name="com.toyou.toyouandroid.ui.social.SendFinalFragment"
         android:label="SendFinalFragment"
-        tools:layout="@layout/fragment_send_final"/>
+        tools:layout="@layout/fragment_send_final">
+        <action
+            android:id="@+id/action_sendFinalFragment_to_navigation_home"
+            app:destination="@id/navigation_home" />
+    </fragment>
+    <fragment
+        android:id="@+id/modifyFragment"
+        android:name="com.toyou.toyouandroid.presentation.fragment.home.ModifyFragment"
+        android:label="ModifyFragment"
+        tools:layout="@layout/fragment_modify">
+        <action
+            android:id="@+id/action_modifyFragment_to_create_fragment"
+            app:destination="@id/create_fragment" />
+    </fragment>
 </navigation>
