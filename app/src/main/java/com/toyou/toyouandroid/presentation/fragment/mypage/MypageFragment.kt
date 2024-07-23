@@ -1,5 +1,6 @@
 package com.toyou.toyouandroid.presentation.fragment.mypage
 
+import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,10 +10,13 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.kakao.sdk.user.UserApiClient
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentMypageBinding
 import com.toyou.toyouandroid.presentation.fragment.onboarding.SignupNicknameViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.ViewModelManager
+import timber.log.Timber
 
 class MypageFragment : Fragment() {
 
@@ -24,22 +28,25 @@ class MypageFragment : Fragment() {
     private val nicknameViewModel: SignupNicknameViewModel by activityViewModels()
     private val homeViewModel: HomeViewModel by activityViewModels()
     private val viewModel: MypageViewModel by viewModels()
+    private lateinit var viewModelManager: ViewModelManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
 
         _binding = FragmentMypageBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
+        viewModelManager = ViewModelManager(nicknameViewModel, homeViewModel)
 
         binding.mypageBackBtn.setOnClickListener {
             navController.navigate(R.id.action_navigation_mypage_to_home_fragment)
@@ -69,6 +76,24 @@ class MypageFragment : Fragment() {
             navController.navigate(R.id.action_navigation_mypage_to_version_fragment)
         }
 
+        binding.mypageLogoutBtn.setOnClickListener {
+            UserApiClient.instance.logout { error ->
+                if (error != null) {
+                    Timber.tag(TAG).e(error, "로그아웃 실패. SDK에서 토큰 삭제됨")
+                }
+                else {
+                    Timber.tag(TAG).i("로그아웃 성공. SDK에서 토큰 삭제됨")
+                }
+            }
+            viewModelManager.resetAllViewModels()
+//            resetApp()
+            navController.navigate(R.id.action_navigation_mypage_to_login_fragment)
+        }
+
+        binding.mypageSignoutBtn.setOnClickListener {
+            activity?.finishAffinity()
+        }
+
         // ViewModel에서 닉네임을 가져와서 TextView에 설정
         nicknameViewModel.nickname.observe(viewLifecycleOwner) { nickname ->
             binding.profileNickname.text = nickname
@@ -77,6 +102,11 @@ class MypageFragment : Fragment() {
         homeViewModel.mypageEmotionStamp.observe(viewLifecycleOwner) { emotion ->
             binding.mypageEmotionStamp.setImageResource(emotion)
         }
+    }
+
+    private fun resetApp() {
+        val navGraph = navController.navInflater.inflate(R.navigation.nav_graph)
+        navController.graph = navGraph
     }
 
     override fun onDestroyView() {
