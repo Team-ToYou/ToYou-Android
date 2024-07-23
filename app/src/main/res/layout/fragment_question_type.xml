@@ -109,20 +109,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/social_char" />
+            android:src="@drawable/type1_iv_selector" />
 
         <ImageView
             android:id="@+id/char2_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/social_char" />
+            android:src="@drawable/type1_iv_selector" />
 
         <ImageView
+            android:id="@+id/char3_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/social_char" />
+            android:src="@drawable/type1_iv_selector" />
 
     </LinearLayout>
 
@@ -141,11 +142,12 @@
             android:layout_weight="1"/>
 
         <TextView
+            android:id="@+id/choose_tv"
             style="@style/gangwon15"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="선택형"
-            android:textColor="@color/bl00"
+            android:textColor="@color/type_text_selector"
             android:layout_weight="1"/>
 
         <View
@@ -154,11 +156,12 @@
             android:layout_weight="1"/>
 
         <TextView
+            android:id="@+id/short_tv"
             style="@style/gangwon15"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="단답형"
-            android:textColor="@color/bl00"
+            android:textColor="@color/type_text_selector"
             android:layout_weight="1"/>
 
         <View
@@ -167,11 +170,12 @@
             android:layout_weight="1"/>
 
         <TextView
+            android:id="@+id/long_tv"
             style="@style/gangwon15"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="장문형"
-            android:textColor="@color/bl00"
+            android:textColor="@color/type_text_selector"
             android:layout_weight="1"/>
 
 
@@ -191,11 +195,12 @@
             android:layout_weight="1"/>
 
         <TextView
+            android:id="@+id/detail1_tv"
             style="@style/gangwon15"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="(보기를 만들 수 있어요)"
-            android:textColor="@color/bl00"
+            android:textColor="@color/type_text_selector"
             android:layout_weight="1"/>
 
         <View
@@ -204,11 +209,12 @@
             android:layout_weight="1"/>
 
         <TextView
+            android:id="@+id/detail2_tv"
             style="@style/gangwon15"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="(간단하게 물어보세요)"
-            android:textColor="@color/bl00"
+            android:textColor="@color/type_text_selector"
             android:layout_weight="1"/>
 
         <View
@@ -217,11 +223,12 @@
             android:layout_weight="1"/>
 
         <TextView
+            android:id="@+id/detail3_tv"
             style="@style/gangwon15"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="(긴 답변을 원해요)"
-            android:textColor="@color/bl00"
+            android:textColor="@color/type_text_selector"
             android:layout_weight="1"/>
 
     </LinearLayout>
