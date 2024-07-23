@@ -1,7 +1,5 @@
 package com.toyou.toyouandroid.presentation.fragment.onboarding
 
-import android.app.Application
-import android.content.res.Resources
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -41,8 +39,6 @@ class SignupNicknameViewModel : ViewModel() {
     }
     val duplicateCheckButtonBackground: LiveData<Int> = _duplicateCheckButtonBackground
 
-    private val _length15 = MutableLiveData<String>()
-    val length15: LiveData<String> = _length15
 
     private val _isNextButtonEnabled = MutableLiveData(false)
     val isNextButtonEnabled: LiveData<Boolean> = _isNextButtonEnabled
