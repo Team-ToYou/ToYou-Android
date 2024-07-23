@@ -46,6 +46,11 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit) : RecyclerVie
         private val chooseThree : LinearLayout = itemView.findViewById(R.id.choose_three_linear)
         private val chooseFour : LinearLayout = itemView.findViewById(R.id.choose_forth_linear)
         private val chooseFive : LinearLayout = itemView.findViewById(R.id.choose_five_linear)
+        private val fromTwo : TextView = itemView.findViewById(R.id.fromWhoTwo_tv)
+        private val fromThree : TextView = itemView.findViewById(R.id.fromWhoThree_tv)
+        private val fromFour : TextView = itemView.findViewById(R.id.fromWhoFour_tv)
+        private val fromFive : TextView = itemView.findViewById(R.id.fromWhoFive_tv)
+
 
         var message : String = ""
 
@@ -55,7 +60,6 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit) : RecyclerVie
                 isSelected = !isSelected
                 //버튼 클릭 업데이트 후 onItemClick 함수 호출하기!
                 updateButtonBackground(isSelected)
-                updateUiEditTextVisibility(isSelected)
                 onItemClick(adapterPosition, isSelected,)
 
 
@@ -90,14 +94,33 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit) : RecyclerVie
                 fromWhoEt.text = card.fromWho
             } else{
                 fromWho.text = card.fromWho
+                fromTwo.text = card.fromWho
+                fromThree.text = card.fromWho
+                fromFour.text = card.fromWho
+                fromFive.text = card.fromWho
             }
 
             when(card.questionType){
-                1 -> updateEditTextBoxVisibility(isSelected)
-                2 -> updateTwoVisibility(isSelected)
-                3 -> updateThreeVisibility(isSelected)
-                4 -> updateFourVisibility(isSelected)
-                5 -> updateFiveVisibility(isSelected)
+                1 -> {
+                    updateEditTextBoxVisibility(isSelected)
+                    updateUiEditTextVisibility(isSelected)
+                }
+                2 -> {
+                    updateTwoVisibility(isSelected)
+                    updateUiTwoTextVisibility(isSelected)
+                }
+                3 -> {
+                    updateThreeVisibility(isSelected)
+                    updateUiThreeTextVisibility(isSelected)
+                }
+                4 -> {
+                    updateFourVisibility(isSelected)
+                    updateUiFourTextVisibility(isSelected)
+                }
+                5 -> {
+                    updateFiveVisibility(isSelected)
+                    updateUiFiveTextVisibility(isSelected)
+                }
 
             }
         }
@@ -158,6 +181,45 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit) : RecyclerVie
                 fromWhoEt.visibility = View.GONE
             }
         }
+
+        private fun updateUiTwoTextVisibility(isSelected: Boolean){
+            if (isSelected){
+                fromWho.visibility = View.GONE
+                fromTwo.visibility = View.VISIBLE
+            } else{
+                fromWho.visibility = View.VISIBLE
+                fromTwo.visibility = View.GONE
+            }
+        }
+        private fun updateUiThreeTextVisibility(isSelected: Boolean){
+            if (isSelected){
+                fromWho.visibility = View.GONE
+                fromThree.visibility = View.VISIBLE
+            } else{
+                fromWho.visibility = View.VISIBLE
+                fromThree.visibility = View.GONE
+            }
+        }
+        private fun updateUiFourTextVisibility(isSelected: Boolean){
+            if (isSelected){
+                fromWho.visibility = View.GONE
+                fromFour.visibility = View.VISIBLE
+            } else{
+                fromWho.visibility = View.VISIBLE
+                fromFour.visibility = View.GONE
+            }
+        }
+        private fun updateUiFiveTextVisibility(isSelected: Boolean){
+            if (isSelected){
+                fromWho.visibility = View.GONE
+                fromFive.visibility = View.VISIBLE
+            } else{
+                fromWho.visibility = View.VISIBLE
+                fromFive.visibility = View.GONE
+            }
+        }
+
+
 
     }
 }
