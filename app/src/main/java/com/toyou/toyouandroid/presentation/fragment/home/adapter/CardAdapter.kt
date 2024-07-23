@@ -17,7 +17,7 @@ import com.toyou.toyouandroid.model.CardModel
 class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit) : RecyclerView.Adapter<CardAdapter.CardViewHolder>() {
     private var cardList: List<CardModel> = emptyList()
 
-    fun setCards(cards : List<CardModel>){
+    fun setCards(cards: List<CardModel>) {
         this.cardList = cards
         Log.d("CardAdapter", "setCards called with: $cards")
         notifyDataSetChanged()
@@ -34,36 +34,69 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit) : RecyclerVie
 
     override fun getItemCount(): Int = cardList.size
 
-    class CardViewHolder(itemView: View, onItemClick: (Int, Boolean,) -> Unit) : RecyclerView.ViewHolder(itemView){
-        private val cardMessageTextView : TextView = itemView.findViewById(R.id.textMessage)
-        private val button : Button = itemView.findViewById(R.id.button)
+    class CardViewHolder(itemView: View, onItemClick: (Int, Boolean) -> Unit) :
+        RecyclerView.ViewHolder(itemView) {
+        private val cardMessageTextView: TextView = itemView.findViewById(R.id.textMessage)
+        private val button: Button = itemView.findViewById(R.id.button)
         private var isSelected: Boolean = false
-        private val editText : EditText = itemView.findViewById(R.id.memo_et)
-        private val fromWho : TextView = itemView.findViewById(R.id.fromWho_tv)
-        private val fromWhoEt : TextView = itemView.findViewById(R.id.fromWhoEt_tv)
-        private val wordCount : TextView = itemView.findViewById(R.id.limit_200)
-        private val chooseTwo : LinearLayout = itemView.findViewById(R.id.choose_two_linear)
-        private val chooseThree : LinearLayout = itemView.findViewById(R.id.choose_three_linear)
-        private val chooseFour : LinearLayout = itemView.findViewById(R.id.choose_forth_linear)
-        private val chooseFive : LinearLayout = itemView.findViewById(R.id.choose_five_linear)
-        private val fromTwo : TextView = itemView.findViewById(R.id.fromWhoTwo_tv)
-        private val fromThree : TextView = itemView.findViewById(R.id.fromWhoThree_tv)
-        private val fromFour : TextView = itemView.findViewById(R.id.fromWhoFour_tv)
-        private val fromFive : TextView = itemView.findViewById(R.id.fromWhoFive_tv)
+        private val editText: EditText = itemView.findViewById(R.id.memo_et)
+        private val fromWho: TextView = itemView.findViewById(R.id.fromWho_tv)
+        private val fromWhoEt: TextView = itemView.findViewById(R.id.fromWhoEt_tv)
+        private val wordCount: TextView = itemView.findViewById(R.id.limit_200)
+        private val chooseLayouts = listOf(
+            itemView.findViewById<LinearLayout>(R.id.choose_two_linear),
+            itemView.findViewById<LinearLayout>(R.id.choose_three_linear),
+            itemView.findViewById<LinearLayout>(R.id.choose_forth_linear),
+            itemView.findViewById<LinearLayout>(R.id.choose_five_linear)
+        )
+        private val fromTexts = listOf(
+            itemView.findViewById<TextView>(R.id.fromWhoTwo_tv),
+            itemView.findViewById<TextView>(R.id.fromWhoThree_tv),
+            itemView.findViewById<TextView>(R.id.fromWhoFour_tv),
+            itemView.findViewById<TextView>(R.id.fromWhoFive_tv)
+        )
+        private var chooseTwoAnswer1Selected: Boolean = false
+        private var chooseTwoAnswer2Selected: Boolean = false
+        private val chooseTwoAnswer1: TextView = itemView.findViewById(R.id.choose_two_first_tv)
+        private val chooseTwoAnswer2: TextView = itemView.findViewById(R.id.choose_two_second_tv)
+        private val chooseButtonsFive = listOf(
+            itemView.findViewById<TextView>(R.id.choose_five_first_tv),
+            itemView.findViewById<TextView>(R.id.choose_five_second_tv),
+            itemView.findViewById<TextView>(R.id.choose_five_third_tv),
+            itemView.findViewById<TextView>(R.id.choose_five_forth_tv),
+            itemView.findViewById<TextView>(R.id.choose_five_fifth_tv)
+        )
+        private var selectedButtonIndex: Int? = null
+        private val chooseButtonsFour = listOf(
+            itemView.findViewById<TextView>(R.id.choose_forth_first_tv),
+            itemView.findViewById<TextView>(R.id.choose_forth_second_tv),
+            itemView.findViewById<TextView>(R.id.choose_forth_third_tv),
+            itemView.findViewById<TextView>(R.id.choose_forth_forth_tv),
+        )
+        private var selectedButtonIndexFour: Int? = null
+        private val chooseButtonsFThree = listOf(
+            itemView.findViewById<TextView>(R.id.choose_three_first_tv),
+            itemView.findViewById<TextView>(R.id.choose_three_second_tv),
+            itemView.findViewById<TextView>(R.id.choose_three_third_tv),
+        )
+        private var selectedButtonIndexThree: Int? = null
+        private val chooseButtonsTwo = listOf(
+            itemView.findViewById<TextView>(R.id.choose_two_first_tv),
+            itemView.findViewById<TextView>(R.id.choose_two_second_tv),
+        )
+        private var selectedButtonTwo: Int? = null
 
 
-        var message : String = ""
-
+        var message: String = ""
 
         init {
             button.setOnClickListener {
                 isSelected = !isSelected
-                //버튼 클릭 업데이트 후 onItemClick 함수 호출하기!
                 updateButtonBackground(isSelected)
-                onItemClick(adapterPosition, isSelected,)
+                onItemClick(adapterPosition, isSelected)
+            }
 
-
-            editText.addTextChangedListener(object : TextWatcher{
+            editText.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(
                     s: CharSequence?,
                     start: Int,
@@ -75,151 +108,81 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit) : RecyclerVie
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     message = s.toString()
-                    wordCount.text = message.length.toString() + "( / 200)"
+                    wordCount.text = "${message.length} / 200"
                 }
 
                 override fun afterTextChanged(s: Editable?) {
-                    wordCount.text = message.length.toString() + "( / 200)"
+                    wordCount.text = "${message.length} / 200"
                 }
-
             })
 
+            chooseButtonsFive.forEachIndexed { index, textView ->
+                textView.setOnClickListener {
+                    toggleSelection(index, chooseButtonsFive)
+                }
+            }
 
+            chooseButtonsFour.forEachIndexed { index, textView ->
+                textView.setOnClickListener {
+                    toggleSelection(index, chooseButtonsFour)
+                }
+            }
+            chooseButtonsFThree.forEachIndexed { index, textView ->
+                textView.setOnClickListener {
+                    toggleSelection(index, chooseButtonsFThree)
+                }
+            }
+            chooseButtonsTwo.forEachIndexed { index, textView ->
+                textView.setOnClickListener {
+                    toggleSelection(index, chooseButtonsTwo)
+                }
             }
         }
 
-        fun bind(card : CardModel){
+        fun bind(card: CardModel) {
             cardMessageTextView.text = card.message
-            if (isSelected) {
-                fromWhoEt.text = card.fromWho
-            } else{
-                fromWho.text = card.fromWho
-                fromTwo.text = card.fromWho
-                fromThree.text = card.fromWho
-                fromFour.text = card.fromWho
-                fromFive.text = card.fromWho
-            }
+            fromWhoEt.text = if (isSelected) card.fromWho else ""
+            fromWho.text = if (!isSelected) card.fromWho else ""
 
-            when(card.questionType){
-                1 -> {
-                    updateEditTextBoxVisibility(isSelected)
-                    updateUiEditTextVisibility(isSelected)
-                }
+            fromTexts.forEach { it.text = card.fromWho }
+
+            when (card.questionType) {
+                1 -> updateVisibility(isSelected, editText, wordCount, fromWhoEt)
                 2 -> {
-                    updateTwoVisibility(isSelected)
-                    updateUiTwoTextVisibility(isSelected)
-                }
-                3 -> {
-                    updateThreeVisibility(isSelected)
-                    updateUiThreeTextVisibility(isSelected)
-                }
-                4 -> {
-                    updateFourVisibility(isSelected)
-                    updateUiFourTextVisibility(isSelected)
-                }
-                5 -> {
-                    updateFiveVisibility(isSelected)
-                    updateUiFiveTextVisibility(isSelected)
+                    updateVisibility(isSelected, chooseLayouts[0], fromTexts[0])
                 }
 
+                3 -> updateVisibility(isSelected, chooseLayouts[1], fromTexts[1])
+                4 -> updateVisibility(isSelected, chooseLayouts[2], fromTexts[2])
+                5 -> updateVisibility(isSelected, chooseLayouts[3], fromTexts[3])
             }
         }
+
+        private fun toggleSelection(buttonIndex: Int, list: List<View>) {
+            selectedButtonIndex = if (selectedButtonIndex == buttonIndex) null else buttonIndex
+            updateButtonColors(list)
+        }
+
+        private fun updateButtonColors(list: List<View>) {
+            list.forEachIndexed { index, textView ->
+                val isSelected = index == selectedButtonIndex
+                val backgroundRes =
+                    if (isSelected) R.drawable.tv_selector else R.drawable.search_container
+                textView.setBackgroundResource(backgroundRes)
+                textView.isSelected = isSelected
+            }
+        }
+
+
         private fun updateButtonBackground(isSelected: Boolean) {
-            val backgroundRes = if (isSelected) R.drawable.create_unclicked_btn else R.drawable.create_clicked_btn
+            val backgroundRes =
+                if (isSelected) R.drawable.create_unclicked_btn else R.drawable.create_clicked_btn
             button.setBackgroundResource(backgroundRes)
         }
 
-        private fun updateEditTextBoxVisibility(isSelected: Boolean) {
-            if (isSelected) {
-                editText.visibility = View.VISIBLE
-                wordCount.visibility = View.VISIBLE
-            } else{
-                editText.visibility = View.GONE
-                wordCount.visibility = View.GONE
-
-            }
+        private fun updateVisibility(isSelected: Boolean, vararg views: View) {
+            views.forEach { it.visibility = if (isSelected) View.VISIBLE else View.GONE }
         }
-
-        private fun updateTwoVisibility(isSelected: Boolean) {
-            if (isSelected) {
-                chooseTwo.visibility = View.VISIBLE
-            } else{
-                chooseTwo.visibility = View.GONE
-            }
-        }
-
-        private fun updateThreeVisibility(isSelected: Boolean) {
-            if (isSelected) {
-                chooseThree.visibility = View.VISIBLE
-            } else{
-                chooseThree.visibility = View.GONE
-            }
-        }
-
-        private fun updateFourVisibility(isSelected: Boolean) {
-            if (isSelected) {
-                chooseFour.visibility = View.VISIBLE
-            } else{
-                chooseFour.visibility = View.GONE
-            }
-        }
-
-        private fun updateFiveVisibility(isSelected: Boolean) {
-            if (isSelected) {
-                chooseFive.visibility = View.VISIBLE
-            } else{
-                chooseFive.visibility = View.GONE
-            }
-        }
-
-        private fun updateUiEditTextVisibility(isSelected: Boolean){
-            if (isSelected){
-                fromWho.visibility = View.GONE
-                fromWhoEt.visibility = View.VISIBLE
-            } else{
-                fromWho.visibility = View.VISIBLE
-                fromWhoEt.visibility = View.GONE
-            }
-        }
-
-        private fun updateUiTwoTextVisibility(isSelected: Boolean){
-            if (isSelected){
-                fromWho.visibility = View.GONE
-                fromTwo.visibility = View.VISIBLE
-            } else{
-                fromWho.visibility = View.VISIBLE
-                fromTwo.visibility = View.GONE
-            }
-        }
-        private fun updateUiThreeTextVisibility(isSelected: Boolean){
-            if (isSelected){
-                fromWho.visibility = View.GONE
-                fromThree.visibility = View.VISIBLE
-            } else{
-                fromWho.visibility = View.VISIBLE
-                fromThree.visibility = View.GONE
-            }
-        }
-        private fun updateUiFourTextVisibility(isSelected: Boolean){
-            if (isSelected){
-                fromWho.visibility = View.GONE
-                fromFour.visibility = View.VISIBLE
-            } else{
-                fromWho.visibility = View.VISIBLE
-                fromFour.visibility = View.GONE
-            }
-        }
-        private fun updateUiFiveTextVisibility(isSelected: Boolean){
-            if (isSelected){
-                fromWho.visibility = View.GONE
-                fromFive.visibility = View.VISIBLE
-            } else{
-                fromWho.visibility = View.VISIBLE
-                fromFive.visibility = View.GONE
-            }
-        }
-
-
-
     }
+
 }
