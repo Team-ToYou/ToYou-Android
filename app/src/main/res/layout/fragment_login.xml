@@ -46,16 +46,27 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_title" />
 
-    <androidx.appcompat.widget.AppCompatImageButton
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/kakao_login_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/kakao_btn"
-        android:background="@color/white"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:stateListAnimator="@null"
+        android:text="카카오 로그인"
+        android:textColor="@color/black"
+        style="@style/sc_m13"
+        android:background="@drawable/kakao_btn"
         android:layout_marginBottom="62dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/kakao_talk"
+        android:layout_marginStart="12dp"
+        app:layout_constraintStart_toStartOf="@id/kakao_login_btn"
+        app:layout_constraintTop_toTopOf="@id/kakao_login_btn"
+        app:layout_constraintBottom_toBottomOf="@+id/kakao_login_btn"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

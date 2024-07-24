@@ -1,8 +1,15 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
 }
+
+val localProperties = Properties()
+localProperties.load(project.rootProject.file("local.properties").inputStream())
+val kakaoApiKey = localProperties.getProperty("kakao_NATIVE_APP_KEY")?:""
+val nativeAppKey = localProperties.getProperty("kakao_NATIVE_APP_KEY_MANIFEST")?:""
 
 android {
     namespace = "com.toyou.toyouandroid"
@@ -16,6 +23,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "kakao_NATIVE_APP_KEY", "\"$kakaoApiKey\"")
+        manifestPlaceholders["NATIVE_APP_KEY"] = nativeAppKey
     }
 
     buildTypes {
@@ -37,6 +47,7 @@ android {
     buildFeatures {
         viewBinding = true
         dataBinding = true
+        buildConfig = true
     }
 }
 
@@ -59,4 +70,5 @@ dependencies {
 
     implementation("com.jakewharton.timber:timber:4.7.1")
 
+    implementation ("com.kakao.sdk:v2-all:2.20.3")
 }

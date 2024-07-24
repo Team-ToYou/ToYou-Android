@@ -55,14 +55,18 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_begin="662dp" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:src="@drawable/back_button"
+        <LinearLayout
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             app:layout_constraintStart_toStartOf="@id/guideline_title_v"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:src="@drawable/back_button" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/screen_bar_title"
@@ -104,15 +108,22 @@
             app:layout_constraintStart_toStartOf="@id/guideline_title_v"
             app:layout_constraintTop_toBottomOf="@id/signup_agree_title" />
 
-        <ImageView
-            android:id="@+id/checkbox_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <LinearLayout
+            android:id="@+id/checkbox1_layout"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
             android:layout_marginTop="90dp"
-            android:src="@drawable/checkbox_uncheck"
-            android:clickable="true"
-            app:layout_constraintStart_toStartOf="@id/guideline_title_v"
-            app:layout_constraintTop_toBottomOf="@id/signup_agree_title" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/signup_agree_title">
+
+            <ImageView
+                android:id="@+id/checkbox_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/checkbox_uncheck"
+                android:layout_marginStart="19dp"
+                android:clickable="true" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/signup_agree_select_1"
@@ -134,14 +145,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/signup_agree_select_1" />
 
-        <ImageView
-            android:id="@+id/checkbox_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:src="@drawable/checkbox_uncheck"
-            app:layout_constraintStart_toStartOf="@id/guideline_title_v"
-            app:layout_constraintTop_toBottomOf="@id/seperator_agree" />
+        <LinearLayout
+            android:id="@+id/checkbox2_layout"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/seperator_agree">
+
+            <ImageView
+                android:id="@+id/checkbox_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="19dp"
+                android:src="@drawable/checkbox_uncheck" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/signup_agree_select_2"
@@ -166,15 +184,21 @@
             app:layout_constraintStart_toEndOf="@+id/signup_agree_select_2"
             app:layout_constraintTop_toTopOf="@+id/signup_agree_select_2" />
 
+        <LinearLayout
+            android:id="@+id/checkbox3_layout"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="57dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/seperator_agree">
 
-        <ImageView
-            android:id="@+id/checkbox_3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="54dp"
-            android:src="@drawable/checkbox_uncheck"
-            app:layout_constraintStart_toStartOf="@id/guideline_title_v"
-            app:layout_constraintTop_toBottomOf="@id/seperator_agree" />
+            <ImageView
+                android:id="@+id/checkbox_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="19dp"
+                android:src="@drawable/checkbox_uncheck" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/signup_agree_select_3"
@@ -207,14 +231,21 @@
             app:layout_constraintStart_toEndOf="@+id/signup_agree_details_3"
             app:layout_constraintTop_toTopOf="@+id/signup_agree_select_3" />
 
-        <ImageView
-            android:id="@+id/checkbox_4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="94dp"
-            android:src="@drawable/checkbox_uncheck"
-            app:layout_constraintStart_toStartOf="@id/guideline_title_v"
-            app:layout_constraintTop_toBottomOf="@id/seperator_agree" />
+        <LinearLayout
+            android:id="@+id/checkbox4_layout"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="98dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/seperator_agree">
+
+            <ImageView
+                android:id="@+id/checkbox_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="19dp"
+                android:src="@drawable/checkbox_uncheck" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/signup_agree_select_4"
@@ -247,14 +278,21 @@
             app:layout_constraintStart_toEndOf="@+id/signup_agree_details_4"
             app:layout_constraintTop_toTopOf="@+id/signup_agree_select_4" />
 
-        <ImageView
-            android:id="@+id/checkbox_5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="134dp"
-            android:src="@drawable/checkbox_uncheck"
-            app:layout_constraintStart_toStartOf="@id/guideline_title_v"
-            app:layout_constraintTop_toBottomOf="@id/seperator_agree" />
+        <LinearLayout
+            android:id="@+id/checkbox5_layout"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="140dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/seperator_agree">
+
+            <ImageView
+                android:id="@+id/checkbox_5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="19dp"
+                android:src="@drawable/checkbox_uncheck" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/signup_agree_select_5"
@@ -291,6 +329,7 @@
             android:id="@+id/signupagree_next_btn"
             android:layout_width="360dp"
             android:layout_height="40dp"
+            android:stateListAnimator="@null"
             android:enabled="@{viewModel.isNextButtonEnabled}"
             android:setBackground="@{viewModel.nextButtonBackground}"
             android:text="@string/next_button"

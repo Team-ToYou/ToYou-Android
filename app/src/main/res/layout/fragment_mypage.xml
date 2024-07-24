@@ -5,6 +5,9 @@
             name="viewModel"
             type="com.toyou.toyouandroid.presentation.fragment.mypage.MypageViewModel" />
         <variable
+            name="homeViewModel"
+            type="com.toyou.toyouandroid.presentation.viewmodel.HomeViewModel" />
+        <variable
             name="nicknameViewModel"
             type="com.toyou.toyouandroid.presentation.fragment.onboarding.SignupNicknameViewModel" />
     </data>
@@ -67,8 +70,9 @@
             app:layout_constraintTop_toBottomOf="@+id/mypage_title" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/mypage_emotion_stamp"
+            android:layout_width="31dp"
+            android:layout_height="34dp"
             android:src="@drawable/mypage_profile_default"
             app:layout_constraintStart_toStartOf="@+id/mypage_profile_background"
             app:layout_constraintEnd_toEndOf="@+id/mypage_profile_background"
@@ -92,7 +96,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="24dp"
             android:text="@string/mypage_friend_count"
             android:textColor="@color/black"
             style="@style/gangwon16"
@@ -242,22 +246,11 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="220dp"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_marginTop="30dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/mypage_version">
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/mypage_logout_btn"
-                android:layout_width="92dp"
-                android:layout_height="33dp"
-                android:text="@string/mypage_logout"
-                android:textColor="@color/black"
-                style="@style/gangwon15"
-                android:background="@drawable/next_button"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/mypage_signout_btn"
@@ -266,7 +259,18 @@
                 android:text="@string/mypage_signout"
                 android:textColor="@color/black"
                 style="@style/gangwon15"
-                android:background="@drawable/next_button"
+                android:background="@drawable/next_button_roundly"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/mypage_logout_btn"
+                android:layout_width="92dp"
+                android:layout_height="33dp"
+                android:text="@string/mypage_logout"
+                android:textColor="@color/black"
+                style="@style/gangwon15"
+                android:background="@drawable/next_button_roundly"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
 

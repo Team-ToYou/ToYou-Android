@@ -42,6 +42,14 @@ class SignupAgreeFragment : Fragment() {
 
         navController = findNavController()
 
+        val checkboxLayouts = listOf(
+            binding.checkbox1Layout,
+            binding.checkbox2Layout,
+            binding.checkbox3Layout,
+            binding.checkbox4Layout,
+            binding.checkbox5Layout
+        )
+
         val imageViews = listOf(
             binding.checkbox1,
             binding.checkbox2,
@@ -50,8 +58,13 @@ class SignupAgreeFragment : Fragment() {
             binding.checkbox5
         )
 
-        imageViews.forEachIndexed { index, imageView ->
-            imageView.setOnClickListener {
+        imageViews.forEachIndexed { _, imageView ->
+            imageView.tag = R.drawable.checkbox_uncheck
+        }
+
+        checkboxLayouts.forEachIndexed { index, layout ->
+            layout.setOnClickListener {
+                val imageView = imageViews[index]
                 val currentImageResId = imageView.tag as? Int ?: R.drawable.checkbox_uncheck
                 val newImageResId = if (currentImageResId == R.drawable.checkbox_uncheck) {
                     R.drawable.checkbox_checked

@@ -1,7 +1,5 @@
 package com.toyou.toyouandroid.presentation.fragment.onboarding
 
-import android.app.Application
-import android.content.res.Resources
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -75,10 +73,31 @@ class SignupNicknameViewModel : ViewModel() {
         _duplicateCheckButtonBackground.value = R.drawable.signupnickname_doublecheck_activate
     }
 
+    fun updateLength15(length: Int) {
+        if (length >= 15) {
+            _duplicateCheckMessage.value = "15자 이내로 입력해주세요."
+            _duplicateCheckMessageColor.value = 0xFF000000.toInt()
+        } else {
+            _duplicateCheckMessage.value = "중복된 닉네임인지 확인해주세요"
+            _duplicateCheckMessageColor.value = 0xFF000000.toInt()
+        }
+    }
+
     private val _nickname = MutableLiveData<String>()
     val nickname: LiveData<String> get() = _nickname
 
     fun setNickname(newNickname: String) {
         _nickname.value = newNickname
+    }
+
+    fun resetState() {
+        _duplicateCheckMessage.value = "중복된 닉네임인지 확인해주세요"
+        _duplicateCheckMessageColor.value = 0xFF000000.toInt()
+        _isNextButtonEnabled.value = false
+        _nextButtonTextColor.value = 0xFFA6A6A6.toInt()
+        _nextButtonBackground.value = R.drawable.next_button
+        _nickname.value = ""
+        _duplicateCheckButtonTextColor.value = 0xFFA6A6A6.toInt()
+        _duplicateCheckButtonBackground.value = R.drawable.next_button
     }
 }
