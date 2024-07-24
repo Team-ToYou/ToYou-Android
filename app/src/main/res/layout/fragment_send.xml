@@ -28,6 +28,7 @@
         style="@style/sc_l12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
         android:text="익명으로 질문을 보낼 수 있어요"
         app:layout_constraintTop_toBottomOf="@id/title_tv"
         app:layout_constraintStart_toStartOf="@id/guideline19"
