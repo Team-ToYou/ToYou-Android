@@ -85,7 +85,8 @@
         <action
             android:id="@+id/action_navigation_signup_status_to_home_fragment"
             app:destination="@id/navigation_home"
-            app:popUpToInclusive="false"
+            app:popUpTo="@id/navigation_home"
+            app:popUpToInclusive="true"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out"/>
         <action
@@ -143,11 +144,10 @@
         android:label="fragment_mypage"
         tools:layout="@layout/fragment_mypage">
         <action
-            android:id="@+id/action_navigation_mypage_to_home_fragment"
-            app:destination="@id/navigation_home"
-            app:popUpTo="@id/navigation_home"
-            app:enterAnim="@anim/fade_in"
-            app:exitAnim="@anim/fade_out"/>
+            android:id="@+id/action_navigation_mypage_to_login_fragment"
+            app:destination="@id/navigation_login"
+            app:popUpTo="@id/navigation_login"
+            app:popUpToInclusive="true"/>
         <action
             android:id="@+id/action_navigation_mypage_to_opinion_fragment"
             app:destination="@id/navigation_opinion"

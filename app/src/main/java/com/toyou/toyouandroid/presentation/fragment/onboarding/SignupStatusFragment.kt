@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentSignupstatusBinding
@@ -19,6 +20,12 @@ class SignupStatusFragment : Fragment() {
     private val binding: FragmentSignupstatusBinding
         get() = requireNotNull(_binding){"FragmentSignupstatusBinding -> null"}
     private val viewModel: SignupStatusViewModel by viewModels()
+
+    private val navOptions by lazy {
+        NavOptions.Builder()
+            .setPopUpTo(R.id.navigation_home, true)
+            .build()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -69,7 +76,7 @@ class SignupStatusFragment : Fragment() {
         }
 
         binding.signupStatusCompleteBtn.setOnClickListener {
-            navController.navigate(R.id.action_navigation_signup_status_to_home_fragment)
+            navController.navigate(R.id.action_navigation_signup_status_to_home_fragment, null, navOptions)
         }
     }
 

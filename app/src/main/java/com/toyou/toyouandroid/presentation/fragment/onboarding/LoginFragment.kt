@@ -1,16 +1,21 @@
 package com.toyou.toyouandroid.presentation.fragment.onboarding
 
+import android.annotation.SuppressLint
+import android.content.ContentValues.TAG
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.Navigation
+import com.kakao.sdk.user.UserApiClient
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentLoginBinding
 import com.toyou.toyouandroid.presentation.base.MainActivity
+import timber.log.Timber
 
 class LoginFragment : Fragment() {
 
@@ -22,7 +27,7 @@ class LoginFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
 
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
@@ -30,6 +35,7 @@ class LoginFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("LogNotTimber")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -37,7 +43,8 @@ class LoginFragment : Fragment() {
         (requireActivity() as MainActivity).hideBottomNavigation(true)
 
         // navController 초기화
-        navController = findNavController()
+//        navController = findNavController()
+        navController = Navigation.findNavController(view)
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -46,6 +53,15 @@ class LoginFragment : Fragment() {
         })
 
         binding.kakaoLoginBtn.setOnClickListener{
+            context?.let { it1 ->
+                UserApiClient.instance.loginWithKakaoTalk(it1) { token, error ->
+                    if (error != null) {
+                        Timber.tag(TAG).e(error, "로그인 실패")
+                    } else if (token != null) {
+                        Log.i(TAG, "로그인 성공 ${token.accessToken}")
+                    }
+                }
+            }
             navController.navigate(R.id.action_navigation_login_to_signup_agree_fragment)
         }
     }

@@ -13,114 +13,174 @@
             type="com.toyou.toyouandroid.utils.BindingAdaptersKt" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_home"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background_white"
         tools:context=".presentation.fragment.home.HomeFragment">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline_home_logo_v_begin"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_home"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/background_white">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_home_logo_v_begin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="25dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_home_logo_v_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="25dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_home_logo_h"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="18dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_title_h"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="150dp" />
+
+            <TextView
+                android:id="@+id/home_logo_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/gangwon30"
+                android:text="@string/ToYou_hanguel"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="@id/guideline_home_logo_v_begin"
+                app:layout_constraintTop_toTopOf="@id/guideline_home_logo_h" />
+
+            <ImageView
+                android:id="@+id/home_notice_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/home_notice"
+                app:layout_constraintEnd_toEndOf="@+id/guideline_home_logo_v_end"
+                app:layout_constraintTop_toTopOf="@+id/guideline_home_logo_h" />
+
+            <ImageView
+                android:id="@+id/home_notice_new"
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:src="@drawable/home_notice_new"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toEndOf="@+id/home_notice_iv"
+                app:layout_constraintTop_toTopOf="@+id/home_notice_iv" />
+
+            <TextView
+                android:id="@+id/home_date_tv"
+                android:layout_width="151dp"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/black"
+                android:background="@color/g00"
+                android:gravity="center"
+                style="@style/gangwon25"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/guideline_title_h" />
+
+            <TextView
+                android:id="@+id/home_emotion_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/home_emotion_tv"
+                android:textColor="@color/black"
+                style="@style/gangwon25"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/home_date_tv" />
+
+            <ImageView
+                android:id="@+id/home_emotion_iv"
+                android:layout_width="60dp"
+                android:layout_height="70dp"
+                android:src="@drawable/home_emotion_none"
+                android:layout_marginTop="18dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/home_emotion_tv" />
+
+            <ImageView
+                android:id="@+id/home_mailbox_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/home_mailbox_multiple"
+                android:layout_marginTop="24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/home_emotion_iv" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/home_bottom_sheet"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/background_bottom_sheet"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="25dp" />
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+            
+            <View
+                android:id="@+id/home_bottom_sheet_touch_bar"
+                android:layout_width="50dp"
+                android:layout_height="4dp"
+                android:background="@drawable/next_button"
+                android:layout_marginTop="3dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline_home_logo_v_end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_end="25dp" />
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="50dp"
+                android:src="@drawable/send_card"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="30dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline_home_logo_h"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="18dp" />
+            <TextView
+                android:id="@+id/home_bottom_sheet_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/home_bottom_sheet_title"
+                android:textColor="@color/black"
+                style="@style/gangwon18"
+                android:layout_marginTop="17dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline_title_h"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="150dp" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/home_bottom_sheet_rv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constrainedHeight="true"
+                android:background="@android:color/white"
+                android:scrollbars="vertical"
+                android:layout_marginTop="24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/home_bottom_sheet_title" />
 
-        <TextView
-            android:id="@+id/home_logo_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/gangwon30"
-            android:text="@string/ToYou_hanguel"
-            android:textColor="@color/black"
-            app:layout_constraintStart_toStartOf="@id/guideline_home_logo_v_begin"
-            app:layout_constraintTop_toTopOf="@id/guideline_home_logo_h" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <ImageView
-            android:id="@+id/home_notice_iv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/home_notice"
-            app:layout_constraintEnd_toEndOf="@+id/guideline_home_logo_v_end"
-            app:layout_constraintTop_toTopOf="@+id/guideline_home_logo_h" />
-
-        <ImageView
-            android:id="@+id/home_notice_new"
-            android:layout_width="6dp"
-            android:layout_height="6dp"
-            android:src="@drawable/home_notice_new"
-            android:layout_marginTop="2dp"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toEndOf="@+id/home_notice_iv"
-            app:layout_constraintTop_toTopOf="@+id/home_notice_iv" />
-
-        <TextView
-            android:id="@+id/home_date_tv"
-            android:layout_width="151dp"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textColor="@color/black"
-            android:background="@color/g00"
-            android:gravity="center"
-            style="@style/gangwon25"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline_title_h" />
-
-        <TextView
-            android:id="@+id/home_emotion_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/home_emotion_tv"
-            android:textColor="@color/black"
-            style="@style/gangwon25"
-            android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/home_date_tv" />
-
-        <ImageView
-            android:id="@+id/home_emotion_iv"
-            android:layout_width="60dp"
-            android:layout_height="70dp"
-            android:src="@drawable/home_emotion_none"
-            android:layout_marginTop="18dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/home_emotion_tv" />
-
-        <ImageView
-            android:id="@+id/home_mailbox_iv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/home_mailbox_multiple"
-            android:layout_marginTop="24dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/home_emotion_iv" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

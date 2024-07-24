@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="서비스 이용약관 화면"
+        android:text="약관 및 정책 화면"
         android:textColor="@color/black"
         style="@style/gangwon30"
         app:layout_constraintStart_toStartOf="parent"

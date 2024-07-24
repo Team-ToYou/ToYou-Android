@@ -2,7 +2,6 @@ package com.toyou.toyouandroid.presentation.base
 
 import android.os.Bundle
 import android.view.View
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -27,19 +26,34 @@ class MainActivity : AppCompatActivity() {
 
         val navController = navHostFragment.navController
 
-//        findViewById<BottomNavigationView>(R.id.bottom_navi)
-//            .setupWithNavController(navController)
-
         // BottomNavigationView 설정
         binding.bottomNavi.setupWithNavController(navController)
+
+        // BottomNavigationView 아이템 선택 리스너 설정
+        binding.bottomNavi.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_home -> {
+                    navController.navigate(R.id.navigation_home)
+                    true
+                }
+                R.id.navigation_social -> {
+                    navController.navigate(R.id.navigation_social)
+                    true
+                }
+                R.id.navigation_calendar -> {
+                    navController.navigate(R.id.navigation_calendar)
+                    true
+                }
+                R.id.navigation_mypage -> {
+                    navController.navigate(R.id.navigation_mypage)
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     fun hideBottomNavigation(state:Boolean){
         if(state) binding.bottomNavi.visibility = View.GONE else binding.bottomNavi.visibility=View.VISIBLE
-    }
-
-    fun bringBottomNavigationViewToFront() {
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navi)
-        bottomNavigationView.bringToFront()
     }
 }

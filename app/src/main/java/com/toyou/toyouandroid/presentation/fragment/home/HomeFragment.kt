@@ -2,25 +2,33 @@ package com.toyou.toyouandroid.presentation.fragment.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentHomeBinding
+import com.toyou.toyouandroid.model.HomeBottomSheetItem
 import com.toyou.toyouandroid.presentation.base.MainActivity
+import com.toyou.toyouandroid.presentation.fragment.home.adapter.HomeBottomSheetAdapter
 import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModel
 
 class HomeFragment : Fragment() {
 
-    lateinit var navController: NavController
+    private lateinit var navController: NavController
     private var _binding: FragmentHomeBinding? = null
     private val binding: FragmentHomeBinding
         get() = requireNotNull(_binding){"FragmentHomeBinding -> null"}
     private val viewModel: HomeViewModel by activityViewModels()
+
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,12 +54,59 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
 
-//        viewModel.selectedStamp.observe(viewLifecycleOwner) { stamp ->
-//            (activity as MainActivity).setSelectedStamp(stamp)
-//        }
-
-        // MainActivity의 메소드를 호출하여 바텀 네비게이션 뷰 숨기기
         (requireActivity() as MainActivity).hideBottomNavigation(false)
+
+        val bottomSheet: ConstraintLayout = binding.homeBottomSheet
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        bottomSheetBehavior.peekHeight = resources.getDimensionPixelSize(R.dimen.bottom_sheet_peek_height)
+
+        val items = listOf(
+            HomeBottomSheetItem(R.drawable.home_bottom_sheet_card, "테디"),
+            HomeBottomSheetItem(R.drawable.home_bottom_sheet_card, "승원"),
+            HomeBottomSheetItem(R.drawable.home_bottom_sheet_card, "현정"),
+            HomeBottomSheetItem(R.drawable.home_bottom_sheet_card, "유은"),
+            HomeBottomSheetItem(R.drawable.home_bottom_sheet_card, "테디"),
+            HomeBottomSheetItem(R.drawable.home_bottom_sheet_card, "승원"),
+            HomeBottomSheetItem(R.drawable.home_bottom_sheet_card, "현정"),
+            HomeBottomSheetItem(R.drawable.home_bottom_sheet_card, "유은")
+        )
+
+        val adapter = HomeBottomSheetAdapter(items)
+        binding.homeBottomSheetRv.layoutManager = GridLayoutManager(context, 2)
+        binding.homeBottomSheetRv.adapter = adapter
+
+        val verticalSpaceHeight = resources.getDimensionPixelSize(R.dimen.recycler_item_spacing)
+        val horizontalSpaceHeight = verticalSpaceHeight / 2
+        binding.homeBottomSheetRv.addItemDecoration(
+            HomeBottomSheetItemDecoration(
+                horizontalSpaceHeight,
+                verticalSpaceHeight
+            )
+        )
+
+        binding.homeBottomSheet.apply {
+            setOnTouchListener { v, event ->
+                when (event.action) {
+                    MotionEvent.ACTION_UP, MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
+                        // 터치 시작 시 색깔 변경
+                        binding.homeBottomSheetTouchBar.setBackgroundResource(R.drawable.next_button_enabled_roundly)
+                        true
+                    }
+                    MotionEvent.ACTION_CANCEL -> {
+                        // 터치 종료 시 원래 색깔로 변경
+                        binding.homeBottomSheetTouchBar.setBackgroundResource(R.drawable.next_button_roundly)
+                        v.performClick() // performClick 호출
+                        true
+                    }
+                    else -> false
+                }
+            }
+
+            setOnClickListener {
+                // performClick 시 수행할 작업
+            }
+        }
 
         viewModel.currentDate.observe(viewLifecycleOwner) { date ->
             binding.homeDateTv.text = date
@@ -70,9 +125,6 @@ class HomeFragment : Fragment() {
             navController.navigate(R.id.action_navigation_home_to_home_option_fragment)
         }
 
-//        val bottomSheetFragment = HomeBottomSheetFragment()
-//        bottomSheetFragment.show(parentFragmentManager, bottomSheetFragment.tag)
-
         viewModel.homeEmotion.observe(viewLifecycleOwner) { emotion ->
             binding.homeEmotionIv.setImageResource(emotion)
         }
@@ -88,6 +140,10 @@ class HomeFragment : Fragment() {
         viewModel.homeBackground.observe(viewLifecycleOwner) { background ->
             binding.layoutHome.setBackgroundResource(background)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
     }
 
     override fun onDestroyView() {
