@@ -253,6 +253,9 @@
         <action
             android:id="@+id/action_questionTypeFragment_to_questionContentFragment"
             app:destination="@id/questionContentFragment" />
+        <action
+            android:id="@+id/action_questionTypeFragment_to_questionContentLongFragment"
+            app:destination="@id/questionContentLongFragment" />
     </fragment>
     <fragment
         android:id="@+id/questionContentFragment"
@@ -289,5 +292,14 @@
         <action
             android:id="@+id/action_modifyFragment_to_create_fragment"
             app:destination="@id/create_fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/questionContentLongFragment"
+        android:name="com.toyou.toyouandroid.ui.social.QuestionContentLongFragment"
+        android:label="QuestionContentLongFragment"
+        tools:layout="@layout/fragment_content_long">
+        <action
+            android:id="@+id/action_questionContentLongFragment_to_sendFragment"
+            app:destination="@id/sendFragment" />
     </fragment>
 </navigation>
