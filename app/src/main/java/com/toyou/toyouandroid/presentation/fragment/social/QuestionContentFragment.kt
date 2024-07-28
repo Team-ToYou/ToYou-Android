@@ -8,10 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentQuestionContentBinding
+import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
 
 class QuestionContentFragment : Fragment() {
     private var _binding : FragmentQuestionContentBinding? = null
@@ -19,9 +22,12 @@ class QuestionContentFragment : Fragment() {
 
     private lateinit var navController: NavController
     private var questionEt : String = ""
+    private lateinit var socialViewModel : SocialViewModel
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        socialViewModel = ViewModelProvider(requireActivity()).get(SocialViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -69,34 +75,27 @@ class QuestionContentFragment : Fragment() {
             }
         })
 
+        socialViewModel.plusBoxVisibility.observe(viewLifecycleOwner, Observer { visibility ->
+            binding.plusBox2Iv.visibility = if (visibility[0]) View.VISIBLE else View.GONE
+            binding.plusDelete2Btn.visibility = if (visibility[0]) View.VISIBLE else View.GONE
+            binding.plusBox3Iv.visibility = if (visibility[1]) View.VISIBLE else View.GONE
+            binding.plusDelete3Btn.visibility = if (visibility[1]) View.VISIBLE else View.GONE
+            binding.plusBox4Iv.visibility = if (visibility[2]) View.VISIBLE else View.GONE
+            binding.plusDelete4Btn.visibility = if (visibility[2]) View.VISIBLE else View.GONE
+        })
+
         binding.plusBtn.setOnClickListener {
-            if (binding.plusBox2Iv.visibility == View.GONE)
-            {
-                binding.plusBox2Iv.visibility = View.VISIBLE
-                binding.plusDelete2Btn.visibility = View.VISIBLE
-            } else if (binding.plusBox2Iv.visibility == View.VISIBLE && binding.plusBox3Iv.visibility ==View.GONE)
-        {
-            binding.plusBox3Iv.visibility = View.VISIBLE
-            binding.plusDelete3Btn.visibility = View.VISIBLE
-        } else if (binding.plusBox2Iv.visibility == View.VISIBLE && binding.plusBox3Iv.visibility ==View.VISIBLE
-                && binding.plusBox4Iv.visibility ==View.GONE)
-            {
-                binding.plusBox4Iv.visibility = View.VISIBLE
-                binding.plusDelete4Btn.visibility = View.VISIBLE
-            }
+            socialViewModel.togglePlusBoxVisibility()
         }
 
         binding.plusDelete2Btn.setOnClickListener {
-            binding.plusBox2Iv.visibility = View.GONE
-            binding.plusDelete2Btn.visibility = View.GONE
+            socialViewModel.hidePlusBox(0)
         }
         binding.plusDelete3Btn.setOnClickListener {
-            binding.plusBox3Iv.visibility = View.GONE
-            binding.plusDelete3Btn.visibility = View.GONE
+            socialViewModel.hidePlusBox(1)
         }
         binding.plusDelete4Btn.setOnClickListener {
-            binding.plusBox4Iv.visibility = View.GONE
-            binding.plusDelete4Btn.visibility = View.GONE
+            socialViewModel.hidePlusBox(2)
         }
     }
 }

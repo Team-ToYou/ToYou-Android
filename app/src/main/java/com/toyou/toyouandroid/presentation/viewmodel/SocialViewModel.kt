@@ -18,6 +18,9 @@ class SocialViewModel : ViewModel() {
     private val _nextBtnEnabled = MutableLiveData<Boolean>()
     val nextBtnEnabled : LiveData<Boolean> get() = _nextBtnEnabled
 
+    private val _plusBoxVisibility = MutableLiveData<List<Boolean>>()
+    val plusBoxVisibility : MutableLiveData<List<Boolean>> get() = _plusBoxVisibility
+
     init {
         loadFriendData()
         loadInitQuestionType()
@@ -56,5 +59,25 @@ class SocialViewModel : ViewModel() {
         _nextBtnEnabled.value = _selectedChar.value != -1
     }
 
+    fun togglePlusBoxVisibility() {
+        val visibility = _plusBoxVisibility.value ?: listOf(false, false, false)
+        val newVisibility = visibility.toMutableList()
+
+        //조건에 맞는게 나타나면 그 뒤로 실행x
+        when {
+            !newVisibility[0] -> newVisibility[0] = true
+            !newVisibility[1] -> newVisibility[1] = true
+            !newVisibility[2] -> newVisibility[2] = true
+        }
+
+        _plusBoxVisibility.value = newVisibility
+    }
+
+    fun hidePlusBox(index: Int) {
+        val visibility = _plusBoxVisibility.value ?: listOf(false, false, false)
+        val newVisibility = visibility.toMutableList()
+        newVisibility[index] = false
+        _plusBoxVisibility.value = newVisibility
+    }
 
 }
