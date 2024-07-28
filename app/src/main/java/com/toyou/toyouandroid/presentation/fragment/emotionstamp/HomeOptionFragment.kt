@@ -53,7 +53,7 @@ class HomeOptionFragment : Fragment() {
             homeViewModel.updateHomeEmotion(
                 R.drawable.home_emotion_anxiety,
                 getString(R.string.home_emotion_anxiety_title),
-                R.color.g01,
+                R.color.g02,
                 R.drawable.background_green)
 
             homeViewModel.updateMypageEmotion(R.drawable.home_stamp_option_anxiety)
