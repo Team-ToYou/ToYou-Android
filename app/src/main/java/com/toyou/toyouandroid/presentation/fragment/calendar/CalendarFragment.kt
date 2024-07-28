@@ -64,11 +64,11 @@ class CalendarFragment : Fragment() {
         )
 
         val adapter = CalendarAdapter(items)
-        binding.calendarRv.layoutManager = GridLayoutManager(context, 6)
+        binding.calendarRv.layoutManager = GridLayoutManager(context, 5)
         binding.calendarRv.adapter = adapter
 
         val verticalSpaceHeight = resources.getDimensionPixelSize(R.dimen.recycler_item_spacing)
-        val horizontalSpaceHeight = verticalSpaceHeight / 2
+        val horizontalSpaceHeight = resources.getDimensionPixelSize(R.dimen.recycler_item_spacing_side)
         binding.calendarRv.addItemDecoration(CalendarItemDecoration(horizontalSpaceHeight, verticalSpaceHeight))
     }
 
