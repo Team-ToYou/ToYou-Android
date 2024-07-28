@@ -3,6 +3,7 @@ package com.toyou.toyouandroid.presentation.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.model.FriendListModel
 import com.toyou.toyouandroid.model.QuestionTypeModel
 
@@ -54,7 +55,6 @@ class SocialViewModel : ViewModel() {
         _selectedChar.value = if (_selectedChar.value == position) -1 else position
         _nextBtnEnabled.value = _selectedChar.value != -1
     }
-
 
 
 }

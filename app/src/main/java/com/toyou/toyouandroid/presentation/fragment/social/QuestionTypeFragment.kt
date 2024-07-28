@@ -43,13 +43,13 @@ class QuestionTypeFragment : Fragment(){
         navController = Navigation.findNavController(view)
 
 
-        binding.nextBtn.setOnClickListener {
-            navController.navigate(R.id.action_questionTypeFragment_to_questionContentFragment)
-        }
 
         socialViewModel.selectedChar.observe(viewLifecycleOwner, Observer { charIndex ->
             updateSelection(charIndex)
-
+            binding.nextBtn.setOnClickListener {
+                if (charIndex ==1 ) navController.navigate(R.id.action_questionTypeFragment_to_questionContentFragment)
+                else navController.navigate(R.id.action_questionTypeFragment_to_questionContentLongFragment)
+            }
         })
 
         socialViewModel.nextBtnEnabled.observe(viewLifecycleOwner, Observer { isEnabled ->
@@ -57,8 +57,10 @@ class QuestionTypeFragment : Fragment(){
         })
 
         binding.char1Iv.setOnClickListener { socialViewModel.onCharSelected(1) }
-        binding.char1Iv.setOnClickListener { socialViewModel.onCharSelected(2) }
-        binding.char1Iv.setOnClickListener { socialViewModel.onCharSelected(3) }
+        binding.char2Iv.setOnClickListener { socialViewModel.onCharSelected(2) }
+        binding.char3Iv.setOnClickListener { socialViewModel.onCharSelected(3) }
+
+
 
         binding.backBtn.setOnClickListener {
             val mainActivity = activity as MainActivity
