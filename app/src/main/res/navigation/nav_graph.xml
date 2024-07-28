@@ -161,12 +161,6 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_in_left"/>
         <action
-            android:id="@+id/action_navigation_mypage_to_version_fragment"
-            app:destination="@+id/navigation_version"
-            app:popUpTo="@id/navigation_version"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_in_left"/>
-        <action
             android:id="@+id/action_navigation_mypage_to_profile_fragment"
             app:destination="@+id/navigation_profile"
             app:popUpTo="@id/navigation_profile"
@@ -195,11 +189,6 @@
         android:name="com.toyou.toyouandroid.presentation.fragment.mypage.NoticeSettingFragment"
         android:label="NoticeSettingFragment"
         tools:layout="@layout/fragment_notice_setting"/>
-    <fragment
-        android:id="@+id/navigation_version"
-        android:name="com.toyou.toyouandroid.presentation.fragment.mypage.VersionFragment"
-        android:label="VersionFragment"
-        tools:layout="@layout/fragment_version"/>
     <fragment
         android:id="@+id/navigation_profile"
         android:name="com.toyou.toyouandroid.presentation.fragment.mypage.ProfileFragment"

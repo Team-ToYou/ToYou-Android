@@ -68,10 +68,6 @@ class MypageFragment : Fragment() {
             navController.navigate(R.id.action_navigation_mypage_to_terms_of_use_fragment)
         }
 
-        binding.mypageVersion.setOnClickListener {
-            navController.navigate(R.id.action_navigation_mypage_to_version_fragment)
-        }
-
         binding.mypageLogoutBtn.setOnClickListener {
             UserApiClient.instance.logout { error ->
                 if (error != null) {
@@ -82,7 +78,6 @@ class MypageFragment : Fragment() {
                 }
             }
             viewModelManager.resetAllViewModels()
-//            resetApp()
             navController.navigate(R.id.action_navigation_mypage_to_login_fragment)
         }
 
@@ -98,11 +93,6 @@ class MypageFragment : Fragment() {
         homeViewModel.mypageEmotionStamp.observe(viewLifecycleOwner) { emotion ->
             binding.mypageEmotionStamp.setImageResource(emotion)
         }
-    }
-
-    private fun resetApp() {
-        val navGraph = navController.navInflater.inflate(R.navigation.nav_graph)
-        navController.graph = navGraph
     }
 
     override fun onDestroyView() {
