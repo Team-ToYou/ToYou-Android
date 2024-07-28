@@ -30,6 +30,7 @@ class CustomDialogFragment : DialogFragment() {
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
 
+        initDialog()
 
         return binding.root
     }

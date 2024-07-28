@@ -12,9 +12,16 @@ class SocialViewModel : ViewModel() {
     private val _clickedPosition = MutableLiveData<Map<Int, Boolean>>()
     val clickedPosition : LiveData<Map<Int, Boolean>> get() = _clickedPosition
 
+    private val _selectedChar = MutableLiveData<Int>()
+    val selectedChar : LiveData<Int> get() = _selectedChar
+    private val _nextBtnEnabled = MutableLiveData<Boolean>()
+    val nextBtnEnabled : LiveData<Boolean> get() = _nextBtnEnabled
+
     init {
         loadFriendData()
         loadInitQuestionType()
+        _selectedChar.value = -1
+        _nextBtnEnabled.value = false
     }
 
     fun loadFriendData(){
@@ -41,6 +48,11 @@ class SocialViewModel : ViewModel() {
 
 
         _clickedPosition.value = currentMap
+    }
+
+    fun onCharSelected(position : Int){
+        _selectedChar.value = if (_selectedChar.value == position) -1 else position
+        _nextBtnEnabled.value = _selectedChar.value != -1
     }
 
 

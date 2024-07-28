@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -46,55 +47,18 @@ class QuestionTypeFragment : Fragment(){
             navController.navigate(R.id.action_questionTypeFragment_to_questionContentFragment)
         }
 
+        socialViewModel.selectedChar.observe(viewLifecycleOwner, Observer { charIndex ->
+            updateSelection(charIndex)
 
-        binding.char1Iv.setOnClickListener {
-            if (binding.char2Iv.isSelected){
-                binding.char2Iv.isSelected = !binding.char2Iv.isSelected
-                binding.shortTv.isSelected = !binding.shortTv.isSelected
-                binding.detail2Tv.isSelected =!binding.detail2Tv.isSelected
-            } else if (binding.char3Iv.isSelected){
-                binding.char3Iv.isSelected = !binding.char3Iv.isSelected
-                binding.longTv.isSelected = !binding.longTv.isSelected
-                binding.detail3Tv.isSelected =!binding.detail3Tv.isSelected
-            }
-            binding.char1Iv.isSelected = !binding.char1Iv.isSelected
-            binding.chooseTv.isSelected = !binding.chooseTv.isSelected
-            binding.detail1Tv.isSelected = !binding.detail1Tv.isSelected
-            binding.nextBtn.isEnabled = binding.char1Iv.isSelected || binding.char2Iv.isSelected || binding.char3Iv.isSelected
+        })
 
-        }
-        binding.char2Iv.setOnClickListener {
-            if (binding.char1Iv.isSelected){
-                binding.char1Iv.isSelected = !binding.char1Iv.isSelected
-                binding.chooseTv.isSelected = !binding.chooseTv.isSelected
-                binding.detail1Tv.isSelected = !binding.detail1Tv.isSelected
-            } else if (binding.char3Iv.isSelected){
-                binding.char3Iv.isSelected = !binding.char3Iv.isSelected
-                binding.longTv.isSelected = !binding.longTv.isSelected
-                binding.detail3Tv.isSelected =!binding.detail3Tv.isSelected
-            }
-            binding.char2Iv.isSelected = !binding.char2Iv.isSelected
-            binding.shortTv.isSelected = !binding.shortTv.isSelected
-            binding.detail2Tv.isSelected =!binding.detail2Tv.isSelected
-            binding.nextBtn.isEnabled = binding.char1Iv.isSelected || binding.char2Iv.isSelected || binding.char3Iv.isSelected
+        socialViewModel.nextBtnEnabled.observe(viewLifecycleOwner, Observer { isEnabled ->
+            binding.nextBtn.isEnabled = isEnabled
+        })
 
-        }
-        binding.char3Iv.setOnClickListener {
-            if (binding.char1Iv.isSelected){
-                binding.char1Iv.isSelected = !binding.char1Iv.isSelected
-                binding.chooseTv.isSelected = !binding.chooseTv.isSelected
-                binding.detail1Tv.isSelected = !binding.detail1Tv.isSelected
-            } else if (binding.char2Iv.isSelected){
-                binding.char2Iv.isSelected = !binding.char2Iv.isSelected
-                binding.shortTv.isSelected = !binding.shortTv.isSelected
-                binding.detail2Tv.isSelected =!binding.detail2Tv.isSelected
-            }
-            binding.char3Iv.isSelected = !binding.char3Iv.isSelected
-            binding.longTv.isSelected = !binding.longTv.isSelected
-            binding.detail3Tv.isSelected =!binding.detail3Tv.isSelected
-            binding.nextBtn.isEnabled = binding.char1Iv.isSelected || binding.char2Iv.isSelected || binding.char3Iv.isSelected
-
-        }
+        binding.char1Iv.setOnClickListener { socialViewModel.onCharSelected(1) }
+        binding.char1Iv.setOnClickListener { socialViewModel.onCharSelected(2) }
+        binding.char1Iv.setOnClickListener { socialViewModel.onCharSelected(3) }
 
         binding.backBtn.setOnClickListener {
             val mainActivity = activity as MainActivity
@@ -110,6 +74,18 @@ class QuestionTypeFragment : Fragment(){
         _binding = null
     }
 
+    private fun updateSelection(charIndex: Int) {
+        binding.char1Iv.isSelected = charIndex == 1
+        binding.char2Iv.isSelected = charIndex == 2
+        binding.char3Iv.isSelected = charIndex == 3
 
+        binding.chooseTv.isSelected = charIndex == 1
+        binding.shortTv.isSelected = charIndex == 2
+        binding.longTv.isSelected = charIndex == 3
+
+        binding.detail1Tv.isSelected = charIndex == 1
+        binding.detail2Tv.isSelected = charIndex == 2
+        binding.detail3Tv.isSelected = charIndex == 3
+    }
 
 }
