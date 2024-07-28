@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -66,6 +67,25 @@ class SocialFragment : Fragment() {
             socialAdapter.setFriendData(friends)
             socialAdapter.notifyDataSetChanged()
         })
+
+        //다이얼로그 띄우기
+        val dialog = CustomDialogFragment()
+        val btn = arrayOf("취소", "확인")
+        dialog.arguments= bundleOf(
+            "dialogTitle" to "선택한 친구를\n삭제하시겠습니까?"
+            "btnText" to btn
+        )
+        dialog.setButtonClickListener(object : CustomDialogFragment.OnButtonClickListener{
+            override fun onButton1Clicked() {
+                //아무것도
+            }
+
+            override fun onButton2Clicked() {
+                //삭제로직
+            }
+
+        })
+
 
 
         return binding.root

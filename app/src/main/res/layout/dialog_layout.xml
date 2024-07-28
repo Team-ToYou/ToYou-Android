@@ -12,8 +12,9 @@
         android:id="@+id/dialog_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="   선택한 친구를\n삭제하시겠습니까?"
+        android:text="선택한 친구를\n삭제하시겠습니까?"
         android:textColor="@color/black"
+        android:gravity="center"
         style="@style/sc_m15"/>
     
     <LinearLayout

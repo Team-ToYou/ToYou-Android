@@ -46,8 +46,7 @@ class CustomDialogFragment : DialogFragment() {
 
         binding.okBtn.setOnClickListener {
             buttonClickListener.onButton2Clicked()
-            //로직
-            //dismiss()
+            dismiss()
         }
     }
 
