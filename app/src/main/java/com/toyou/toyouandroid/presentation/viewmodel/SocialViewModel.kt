@@ -69,7 +69,6 @@ class SocialViewModel : ViewModel() {
             !newVisibility[1] -> newVisibility[1] = true
             !newVisibility[2] -> newVisibility[2] = true
         }
-
         _plusBoxVisibility.value = newVisibility
     }
 
