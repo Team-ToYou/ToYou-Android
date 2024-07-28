@@ -1,4 +1,4 @@
-package com.toyou.toyouandroid.ui.social
+package com.toyou.toyouandroid.presentation.fragment.social
 
 import android.os.Bundle
 import android.util.DisplayMetrics
@@ -17,7 +17,7 @@ import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentSocialBinding
 import com.toyou.toyouandroid.presentation.fragment.home.RVMarginItemDecoration
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
-import com.toyou.toyouandroid.ui.social.adapter.SocialRVAdapter
+import com.toyou.toyouandroid.presentation.fragment.social.adapter.SocialRVAdapter
 
 class SocialFragment : Fragment() {
 
@@ -72,10 +72,10 @@ class SocialFragment : Fragment() {
         val dialog = CustomDialogFragment()
         val btn = arrayOf("취소", "확인")
         dialog.arguments= bundleOf(
-            "dialogTitle" to "선택한 친구를\n삭제하시겠습니까?"
+            "dialogTitle" to "선택한 친구를\n삭제하시겠습니까?",
             "btnText" to btn
         )
-        dialog.setButtonClickListener(object : CustomDialogFragment.OnButtonClickListener{
+        dialog.setButtonClickListener(object : CustomDialogFragment.OnButtonClickListener {
             override fun onButton1Clicked() {
                 //아무것도
             }

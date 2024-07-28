@@ -1,4 +1,4 @@
-package com.toyou.toyouandroid.ui.social
+package com.toyou.toyouandroid.presentation.fragment.social
 
 import android.os.Bundle
 import android.text.Editable
@@ -12,7 +12,6 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentQuestionContentBinding
-import com.toyou.toyouandroid.presentation.base.MainActivity
 
 class QuestionContentFragment : Fragment() {
     private var _binding : FragmentQuestionContentBinding? = null

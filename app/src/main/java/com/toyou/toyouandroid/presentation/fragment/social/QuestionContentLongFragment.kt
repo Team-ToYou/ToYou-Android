@@ -1,4 +1,4 @@
-package com.toyou.toyouandroid.ui.social
+package com.toyou.toyouandroid.presentation.fragment.social
 
 import android.os.Bundle
 import android.text.Editable

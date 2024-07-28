@@ -1,4 +1,4 @@
-package com.toyou.toyouandroid.ui.social
+package com.toyou.toyouandroid.presentation.fragment.social
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -11,7 +11,6 @@ import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.NavController
 import com.toyou.toyouandroid.databinding.DialogLayoutBinding
-import com.toyou.toyouandroid.databinding.FragmentQuestionContentBinding
 
 class CustomDialogFragment : DialogFragment() {
 

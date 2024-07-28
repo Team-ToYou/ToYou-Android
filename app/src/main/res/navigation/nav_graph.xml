@@ -126,7 +126,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_social"
-        android:name="com.toyou.toyouandroid.ui.social.SocialFragment"
+        android:name="com.toyou.toyouandroid.presentation.fragment.social.SocialFragment"
         android:label="fragment_social"
         tools:layout="@layout/fragment_social" >
         <action
@@ -247,7 +247,7 @@
     </fragment>
     <fragment
         android:id="@+id/questionTypeFragment"
-        android:name="com.toyou.toyouandroid.ui.social.QuestionTypeFragment"
+        android:name="com.toyou.toyouandroid.presentation.fragment.social.QuestionTypeFragment"
         android:label="QuestionTypeFragment"
         tools:layout="@layout/fragment_question_type">
         <action
@@ -259,7 +259,7 @@
     </fragment>
     <fragment
         android:id="@+id/questionContentFragment"
-        android:name="com.toyou.toyouandroid.ui.social.QuestionContentFragment"
+        android:name="com.toyou.toyouandroid.presentation.fragment.social.QuestionContentFragment"
         android:label="QuestionContentFragment"
         tools:layout="@layout/fragment_question_content">
         <action
@@ -268,7 +268,7 @@
     </fragment>
     <fragment
         android:id="@+id/sendFragment"
-        android:name="com.toyou.toyouandroid.ui.social.SendFragment"
+        android:name="com.toyou.toyouandroid.presentation.fragment.social.SendFragment"
         android:label="SendFragment"
         tools:layout="@layout/fragment_send">
         <action
@@ -277,7 +277,7 @@
     </fragment>
     <fragment
         android:id="@+id/sendFinalFragment"
-        android:name="com.toyou.toyouandroid.ui.social.SendFinalFragment"
+        android:name="com.toyou.toyouandroid.presentation.fragment.social.SendFinalFragment"
         android:label="SendFinalFragment"
         tools:layout="@layout/fragment_send_final">
         <action
@@ -295,7 +295,7 @@
     </fragment>
     <fragment
         android:id="@+id/questionContentLongFragment"
-        android:name="com.toyou.toyouandroid.ui.social.QuestionContentLongFragment"
+        android:name="com.toyou.toyouandroid.presentation.fragment.social.QuestionContentLongFragment"
         android:label="QuestionContentLongFragment"
         tools:layout="@layout/fragment_content_long">
         <action
