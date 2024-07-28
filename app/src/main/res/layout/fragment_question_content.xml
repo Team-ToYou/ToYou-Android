@@ -244,6 +244,7 @@
         android:layout_width="0dp"
         android:layout_height="40dp"
         style="@style/sc_r10"
+        android:gravity="center"
         app:layout_constraintStart_toStartOf="@id/plus_box3_iv"
         app:layout_constraintEnd_toEndOf="@id/plus_box3_iv"
         app:layout_constraintTop_toTopOf="@id/plus_box3_iv"

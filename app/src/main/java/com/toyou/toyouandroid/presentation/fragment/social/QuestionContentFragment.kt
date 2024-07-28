@@ -84,6 +84,7 @@ class QuestionContentFragment : Fragment() {
             binding.plusDelete4Btn.visibility = if (visibility[2]) View.VISIBLE else View.GONE
         })
 
+
         binding.plusBtn.setOnClickListener {
             socialViewModel.togglePlusBoxVisibility()
         }
