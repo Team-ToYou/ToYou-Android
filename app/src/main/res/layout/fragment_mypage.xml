@@ -40,15 +40,6 @@
             android:orientation="vertical"
             app:layout_constraintGuide_begin="36dp" />
 
-        <ImageView
-            android:id="@+id/mypage_back_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/back_button"
-            android:layout_marginTop="15dp"
-            app:layout_constraintStart_toStartOf="@+id/guideline_back_btn_v"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <TextView
             android:id="@+id/mypage_title"
             android:layout_width="wrap_content"
@@ -56,9 +47,10 @@
             android:text="@string/mypage_title"
             android:textColor="@color/black"
             style="@style/sc_r15"
-            android:layout_marginTop="24dp"
-            app:layout_constraintStart_toStartOf="@+id/guideline_title_v"
-            app:layout_constraintTop_toBottomOf="@+id/mypage_back_btn" />
+            android:layout_marginTop="27dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/mypage_profile_background"
