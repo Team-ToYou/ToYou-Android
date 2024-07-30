@@ -61,7 +61,7 @@ class NoticeFragment : Fragment() {
         val verticalSpaceHeight = resources.getDimensionPixelSize(R.dimen.recycler_item_spacing)
         binding.noticeRv.addItemDecoration(NoticeItemDecoration(verticalSpaceHeight))
 
-        val swipeToDeleteNotice = SwipeToDeleteNotice(adapter).apply {
+        val swipeToDeleteNotice = SwipeToDeleteNotice().apply {
             setClamp(resources.displayMetrics.widthPixels.toFloat() / 5)
         }
         ItemTouchHelper(swipeToDeleteNotice).attachToRecyclerView(binding.noticeRv)
@@ -74,7 +74,6 @@ class NoticeFragment : Fragment() {
             }
 
             setOnClickListener {
-                // Perform any additional click actions if needed
             }
         }
 
