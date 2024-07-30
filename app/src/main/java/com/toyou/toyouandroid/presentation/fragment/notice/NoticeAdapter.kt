@@ -85,6 +85,11 @@ class NoticeAdapter(private val items: MutableList<NoticeItem>) :
             binding.noticeCardCheckDelete.setOnClickListener {
                 removeItem(this.layoutPosition)
             }
+
+            val layoutParams = binding.root.layoutParams
+            layoutParams.width = (binding.root.context.resources.displayMetrics.widthPixels * 5 / 6)
+            binding.root.layoutParams = layoutParams
+
             binding.executePendingBindings()
         }
     }
