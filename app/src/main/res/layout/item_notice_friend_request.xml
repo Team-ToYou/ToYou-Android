@@ -62,6 +62,7 @@
                 android:id="@+id/notice_friend_request_btn"
                 android:layout_width="44dp"
                 android:layout_height="18dp"
+                android:stateListAnimator="@null"
                 android:background="@drawable/notice_activated_btn"
                 android:text="@string/notice_friend_request_btn"
                 android:textColor="@color/black"
