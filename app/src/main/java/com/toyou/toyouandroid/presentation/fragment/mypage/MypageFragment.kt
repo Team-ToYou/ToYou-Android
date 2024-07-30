@@ -77,10 +77,6 @@ class MypageFragment : Fragment() {
             binding.profileNickname.text = nickname
         }
 
-        homeViewModel.mypageEmotionStamp.observe(viewLifecycleOwner) { emotion ->
-            binding.mypageEmotionStamp.setImageResource(emotion)
-        }
-
         binding.mypageSignoutBtn.setOnClickListener {
             mypageDialogViewModel.setDialogData(
                 title = "정말 탈퇴하시겠어요?",
