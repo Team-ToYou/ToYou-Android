@@ -69,23 +69,32 @@ class NoticeAdapter(private val items: MutableList<NoticeItem>) :
 
     override fun getItemCount(): Int = items.size
 
-    class FriendRequestViewHolder(private val binding: ItemNoticeFriendRequestBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class FriendRequestViewHolder(private val binding: ItemNoticeFriendRequestBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: NoticeItem.NoticeFriendRequestItem) {
             binding.itemFriendRequest = item
+            binding.noticeCardCheckDelete.setOnClickListener {
+                removeItem(this.layoutPosition)
+            }
             binding.executePendingBindings()
         }
     }
 
-    class FriendRequestAcceptedViewHolder(private val binding: ItemNoticeFriendRequestAcceptedBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class FriendRequestAcceptedViewHolder(private val binding: ItemNoticeFriendRequestAcceptedBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: NoticeItem.NoticeFriendRequestAcceptedItem) {
             binding.itemFriendRequestAccepted = item
+            binding.noticeCardCheckDelete.setOnClickListener {
+                removeItem(this.layoutPosition)
+            }
             binding.executePendingBindings()
         }
     }
 
-    class CardCheckViewHolder(private val binding: ItemNoticeCardCheckBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class CardCheckViewHolder(private val binding: ItemNoticeCardCheckBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: NoticeItem.NoticeCardCheckItem) {
             binding.itemCardCheck = item
+            binding.noticeCardCheckDelete.setOnClickListener {
+                removeItem(this.layoutPosition)
+            }
             binding.executePendingBindings()
         }
     }
@@ -94,6 +103,7 @@ class NoticeAdapter(private val items: MutableList<NoticeItem>) :
         if (position >= 0 && position < items.size) {
             items.removeAt(position)
             notifyItemRemoved(position)
+            notifyItemRangeChanged(position, items.size) // 아이템을 제거한 이후의 아이템들에 대해 포지션 업데이트
         }
     }
 }
