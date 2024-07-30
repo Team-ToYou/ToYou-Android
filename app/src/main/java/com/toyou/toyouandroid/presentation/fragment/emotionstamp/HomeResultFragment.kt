@@ -46,7 +46,7 @@ class HomeResultFragment : Fragment() {
         binding.homeResultTv.text = text
 
         ObjectAnimator.ofFloat(binding.homeResultTv, "alpha", 0f, 1f).apply {
-            duration = 3000
+            duration = 2000
             interpolator = DecelerateInterpolator()
             start()
         }
