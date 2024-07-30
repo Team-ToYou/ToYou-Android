@@ -8,32 +8,66 @@
             type="com.toyou.toyouandroid.model.NoticeItem.NoticeCardCheckItem" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/notice_mypage_box">
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/notice_box"
+        <LinearLayout
             android:layout_width="340dp"
             android:layout_height="60dp"
-            android:text="@{String.format(@string/notice_card_check, item_card_check.nickname)}"
-            android:textColor="@color/black"
-            style="@style/sc_r10"
-            android:gravity="center_vertical"
-            android:paddingStart="17dp"
-            android:paddingEnd="0dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:weightSum="5">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/notice_next_btn"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:background="@drawable/social_arrow"
-            android:layout_marginTop="18dp"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintEnd_toEndOf="@+id/notice_box"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="4">
+                <ImageView
+                    android:id="@+id/notice_card_check_delete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/notice_delete_ic"
+                    android:background="@color/transparent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/notice_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/notice_mypage_box">
+
+            <TextView
+                android:id="@+id/notice_box"
+                android:layout_width="340dp"
+                android:layout_height="60dp"
+                android:text="@{String.format(@string/notice_card_check, item_card_check.nickname)}"
+                android:textColor="@color/black"
+                style="@style/sc_r10"
+                android:gravity="center_vertical"
+                android:paddingStart="17dp"
+                android:paddingEnd="0dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/notice_next_btn"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@drawable/social_arrow"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="@+id/notice_box"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </FrameLayout>
 </layout>
