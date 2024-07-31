@@ -14,6 +14,7 @@ import androidx.navigation.Navigation
 import com.kakao.sdk.user.UserApiClient
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentMypageBinding
+import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.presentation.fragment.onboarding.SignupNicknameViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.ViewModelManager
@@ -50,6 +51,9 @@ class MypageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
+
+        (requireActivity() as MainActivity).hideBottomNavigation(false)
+
         viewModelManager = ViewModelManager(nicknameViewModel, homeViewModel)
 
         binding.mypageProfileBtn.setOnClickListener {
