@@ -40,7 +40,7 @@ class HomeOptionFragment : Fragment() {
 
         (requireActivity() as MainActivity).hideBottomNavigation(true)
 
-        binding.homeOptionBackBtn.setOnClickListener {
+        binding.homeOptionBackLayout.setOnClickListener {
             navController.navigate(R.id.action_navigation_home_option_to_home_fragment)
         }
 

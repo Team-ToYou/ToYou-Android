@@ -77,7 +77,7 @@ class NoticeFragment : Fragment() {
             }
         }
 
-        binding.noticeBackBtn.setOnClickListener {
+        binding.noticeBackLayout.setOnClickListener {
             navController.navigate(R.id.action_navigation_notice_to_home_fragment)
         }
     }

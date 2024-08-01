@@ -51,7 +51,7 @@ class SignupNicknameFragment : Fragment() {
         // navController 초기화
         navController = findNavController()
 
-        binding.signupNicknameBackBtn.setOnClickListener {
+        binding.signupNicknameBackLayout.setOnClickListener {
             navController.navigate(R.id.action_navigation_signup_nickname_to_signup_agree_fragment)
         }
 
