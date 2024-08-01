@@ -1,4 +1,4 @@
-package com.toyou.toyouandroid.presentation.fragment.calendar.month
+package com.toyou.toyouandroid.presentation.fragment.record
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

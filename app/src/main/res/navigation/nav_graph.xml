@@ -135,7 +135,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_record"
-        android:name="com.toyou.toyouandroid.presentation.fragment.calendar.RecordFragment"
+        android:name="com.toyou.toyouandroid.presentation.fragment.record.RecordFragment"
         android:label="fragment_record"
         tools:layout="@layout/fragment_record"/>
     <fragment

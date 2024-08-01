@@ -1,4 +1,4 @@
-package com.toyou.toyouandroid.presentation.fragment.calendar
+package com.toyou.toyouandroid.presentation.fragment.record
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +11,8 @@ import androidx.navigation.Navigation
 import com.google.android.material.tabs.TabLayout
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentRecordBinding
+import com.toyou.toyouandroid.presentation.fragment.record.friend.CalendarFriendRecordFragment
+import com.toyou.toyouandroid.presentation.fragment.record.my.CalendarMyRecordFragment
 
 class RecordFragment : Fragment() {
 

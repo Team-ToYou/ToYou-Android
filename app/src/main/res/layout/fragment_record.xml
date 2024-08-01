@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/background_white"
     android:orientation="vertical"
-    tools:context=".presentation.fragment.calendar.RecordFragment">
+    tools:context=".presentation.fragment.record.RecordFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
