@@ -17,7 +17,7 @@
         android:layout_width="360dp"
         android:layout_height="wrap_content"
         android:padding="8dp"
-        android:background="@color/white"
+        android:background="@drawable/signupnickname_input"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
