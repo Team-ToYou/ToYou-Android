@@ -53,7 +53,7 @@
         android:id="@+id/friend_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/social_arrow"
+        android:background="@drawable/send_btn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/linearLayout3"
         app:layout_constraintTop_toTopOf="parent"

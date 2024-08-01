@@ -1,4 +1,4 @@
-package com.toyou.toyouandroid.ui.social
+package com.toyou.toyouandroid.presentation.fragment.social
 
 import android.os.Bundle
 import android.text.Editable
@@ -11,12 +11,12 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.toyou.toyouandroid.R
-import com.toyou.toyouandroid.databinding.FragmentQuestionContentBinding
-import com.toyou.toyouandroid.presentation.base.MainActivity
+import com.toyou.toyouandroid.databinding.FragmentContentLongBinding
 
-class QuestionContentFragment : Fragment() {
-    private var _binding : FragmentQuestionContentBinding? = null
-    private val binding : FragmentQuestionContentBinding get() = requireNotNull(_binding){"널"}
+class QuestionContentLongFragment: Fragment() {
+
+    private var _binding : FragmentContentLongBinding? = null
+    private val binding : FragmentContentLongBinding get() = requireNotNull(_binding){"널"}
 
     private lateinit var navController: NavController
     private var questionEt : String = ""
@@ -30,7 +30,7 @@ class QuestionContentFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentQuestionContentBinding.inflate(inflater, container, false)
+        _binding = FragmentContentLongBinding.inflate(inflater, container, false)
 
 
         return binding.root
@@ -69,35 +69,6 @@ class QuestionContentFragment : Fragment() {
                 wordCount.text = "${questionEt.length} / 50"
             }
         })
-
-        binding.plusBtn.setOnClickListener {
-            if (binding.plusBox2Iv.visibility == View.GONE)
-            {
-                binding.plusBox2Iv.visibility = View.VISIBLE
-                binding.plusDelete2Btn.visibility = View.VISIBLE
-            } else if (binding.plusBox2Iv.visibility == View.VISIBLE && binding.plusBox3Iv.visibility ==View.GONE)
-        {
-            binding.plusBox3Iv.visibility = View.VISIBLE
-            binding.plusDelete3Btn.visibility = View.VISIBLE
-        } else if (binding.plusBox2Iv.visibility == View.VISIBLE && binding.plusBox3Iv.visibility ==View.VISIBLE
-                && binding.plusBox4Iv.visibility ==View.GONE)
-            {
-                binding.plusBox4Iv.visibility = View.VISIBLE
-                binding.plusDelete4Btn.visibility = View.VISIBLE
-            }
-        }
-
-        binding.plusDelete2Btn.setOnClickListener {
-            binding.plusBox2Iv.visibility = View.GONE
-            binding.plusDelete2Btn.visibility = View.GONE
-        }
-        binding.plusDelete3Btn.setOnClickListener {
-            binding.plusBox3Iv.visibility = View.GONE
-            binding.plusDelete3Btn.visibility = View.GONE
-        }
-        binding.plusDelete4Btn.setOnClickListener {
-            binding.plusBox4Iv.visibility = View.GONE
-            binding.plusDelete4Btn.visibility = View.GONE
-        }
     }
+
 }

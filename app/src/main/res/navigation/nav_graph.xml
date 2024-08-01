@@ -126,7 +126,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_social"
-        android:name="com.toyou.toyouandroid.ui.social.SocialFragment"
+        android:name="com.toyou.toyouandroid.presentation.fragment.social.SocialFragment"
         android:label="fragment_social"
         tools:layout="@layout/fragment_social" >
         <action
@@ -247,16 +247,19 @@
     </fragment>
     <fragment
         android:id="@+id/questionTypeFragment"
-        android:name="com.toyou.toyouandroid.ui.social.QuestionTypeFragment"
+        android:name="com.toyou.toyouandroid.presentation.fragment.social.QuestionTypeFragment"
         android:label="QuestionTypeFragment"
         tools:layout="@layout/fragment_question_type">
         <action
             android:id="@+id/action_questionTypeFragment_to_questionContentFragment"
             app:destination="@id/questionContentFragment" />
+        <action
+            android:id="@+id/action_questionTypeFragment_to_questionContentLongFragment"
+            app:destination="@id/questionContentLongFragment" />
     </fragment>
     <fragment
         android:id="@+id/questionContentFragment"
-        android:name="com.toyou.toyouandroid.ui.social.QuestionContentFragment"
+        android:name="com.toyou.toyouandroid.presentation.fragment.social.QuestionContentFragment"
         android:label="QuestionContentFragment"
         tools:layout="@layout/fragment_question_content">
         <action
@@ -265,7 +268,7 @@
     </fragment>
     <fragment
         android:id="@+id/sendFragment"
-        android:name="com.toyou.toyouandroid.ui.social.SendFragment"
+        android:name="com.toyou.toyouandroid.presentation.fragment.social.SendFragment"
         android:label="SendFragment"
         tools:layout="@layout/fragment_send">
         <action
@@ -274,7 +277,7 @@
     </fragment>
     <fragment
         android:id="@+id/sendFinalFragment"
-        android:name="com.toyou.toyouandroid.ui.social.SendFinalFragment"
+        android:name="com.toyou.toyouandroid.presentation.fragment.social.SendFinalFragment"
         android:label="SendFinalFragment"
         tools:layout="@layout/fragment_send_final">
         <action
@@ -289,5 +292,14 @@
         <action
             android:id="@+id/action_modifyFragment_to_create_fragment"
             app:destination="@id/create_fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/questionContentLongFragment"
+        android:name="com.toyou.toyouandroid.presentation.fragment.social.QuestionContentLongFragment"
+        android:label="QuestionContentLongFragment"
+        tools:layout="@layout/fragment_content_long">
+        <action
+            android:id="@+id/action_questionContentLongFragment_to_sendFragment"
+            app:destination="@id/sendFragment" />
     </fragment>
 </navigation>
