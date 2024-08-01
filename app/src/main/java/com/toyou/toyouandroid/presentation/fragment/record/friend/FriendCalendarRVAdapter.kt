@@ -49,13 +49,13 @@ class FriendCalendarRVAdapter(
             }
 
             // 이미지 설정
-            if (people != null) {
+            if (people == "0") {
+                binding.friendrecordImageView.visibility = View.GONE
+                binding.friendrecordPeople.visibility = View.GONE
+            } else {
                 binding.friendrecordPeople.text = people
                 binding.friendrecordImageView.visibility = View.VISIBLE
                 binding.friendrecordPeople.visibility = View.VISIBLE
-            } else {
-                binding.friendrecordImageView.visibility = View.GONE
-                binding.friendrecordPeople.visibility = View.GONE
             }
 
             binding.dayText.text = SimpleDateFormat("d", Locale.getDefault()).format(date)
