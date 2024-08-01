@@ -1,4 +1,4 @@
-package com.toyou.toyouandroid.presentation.fragment.calendar
+package com.toyou.toyouandroid.presentation.fragment.record.friend
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,17 +11,18 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentCalendarFriendrecordBinding
-import com.toyou.toyouandroid.model.CalendarItem
-import com.toyou.toyouandroid.utils.Dates.generateDatesForMonths
-import com.toyou.toyouandroid.presentation.fragment.calendar.month.CalendarPagerAdapter
-import com.toyou.toyouandroid.presentation.fragment.calendar.month.CalendarRVAdapter
-import com.toyou.toyouandroid.utils.Dates
+import com.toyou.toyouandroid.model.FriendDate
+import com.toyou.toyouandroid.presentation.fragment.record.CalendarAdapter
+import com.toyou.toyouandroid.presentation.fragment.record.CalendarItemDecoration
+import com.toyou.toyouandroid.utils.FriendDates
+import com.toyou.toyouandroid.utils.FriendDates.generateFriendDatesForMonths
+import com.toyou.toyouandroid.utils.FriendRecordData
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
-class CalendarFriendRecordFragment : Fragment(), CalendarRVAdapter.OnDateClickListener {
+class CalendarFriendRecordFragment : Fragment(), FriendCalendarRVAdapter.OnDateClickListener {
 
     lateinit var navController: NavController
     private var _binding: FragmentCalendarFriendrecordBinding? = null
@@ -32,7 +33,9 @@ class CalendarFriendRecordFragment : Fragment(), CalendarRVAdapter.OnDateClickLi
     private val startCalendar: Calendar = Calendar.getInstance().apply {
         time = Date()
     }
-    private var monthDates = generateDatesForMonths(calendar, 12, 12)
+    private var monthDates = generateFriendDatesForMonths(calendar, 12, 12)
+
+    private lateinit var calendarAdapter: CalendarAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -69,7 +72,7 @@ class CalendarFriendRecordFragment : Fragment(), CalendarRVAdapter.OnDateClickLi
         binding.btnTodayDate.setOnClickListener {
             calendar = Calendar.getInstance()
             startCalendar.time = calendar.time
-            monthDates = generateDatesForMonths(calendar, 12, 12) // 이전 달과 다음 달을 포함
+            monthDates = generateFriendDatesForMonths(calendar, 12, 12) // 이전 달과 다음 달을 포함
             updateCalendar()
             onDateClick(today)
         }
@@ -77,30 +80,12 @@ class CalendarFriendRecordFragment : Fragment(), CalendarRVAdapter.OnDateClickLi
         updateCalendar() // 초기 달력 업데이트
         dayTextView()
 
-        val items = listOf(
-            CalendarItem(R.drawable.home_stamp_option_normal, "태연"),
-            CalendarItem(R.drawable.home_stamp_option_exciting, "승원"),
-            CalendarItem(R.drawable.home_stamp_option_happy, "현정"),
-            CalendarItem(R.drawable.home_stamp_option_anxiety, "유은"),
-            CalendarItem(R.drawable.home_stamp_option_anxiety, "태연"),
-            CalendarItem(R.drawable.home_stamp_option_normal, "태연킹왕짱"),
-            CalendarItem(R.drawable.home_stamp_option_exciting, "승원킹왕짱"),
-            CalendarItem(R.drawable.home_stamp_option_happy, "현정킹왕짱"),
-            CalendarItem(R.drawable.home_stamp_option_anxiety, "유은킹왕짱"),
-            CalendarItem(R.drawable.home_stamp_option_normal, "태연"),
-            CalendarItem(R.drawable.home_stamp_option_upset, "승원"),
-            CalendarItem(R.drawable.home_stamp_option_exciting, "현정"),
-            CalendarItem(R.drawable.home_stamp_option_normal, "유은"),
-            CalendarItem(R.drawable.home_stamp_option_anxiety, "태연킹"),
-            CalendarItem(R.drawable.home_stamp_option_happy, "승원킹"),
-            CalendarItem(R.drawable.home_stamp_option_normal, "현정킹"),
-            CalendarItem(R.drawable.home_stamp_option_anxiety, "유은킹"),
-            CalendarItem(R.drawable.home_stamp_option_exciting, "태연"),
-        )
+        // 오늘 날짜에 해당하는 아이템 가져오기
+        val items = FriendRecordData.getItemsForDate(SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(today))
 
-        val adapter = CalendarAdapter(items)
+        calendarAdapter = CalendarAdapter(items)
         binding.calendarRv.layoutManager = GridLayoutManager(context, 5)
-        binding.calendarRv.adapter = adapter
+        binding.calendarRv.adapter = calendarAdapter
 
         val verticalSpaceHeight = resources.getDimensionPixelSize(R.dimen.recycler_item_spacing)
         val horizontalSpaceHeight = resources.getDimensionPixelSize(R.dimen.recycler_item_spacing_side)
@@ -127,19 +112,19 @@ class CalendarFriendRecordFragment : Fragment(), CalendarRVAdapter.OnDateClickLi
         binding.yearMonthTextView.text = "${year}년 ${month + 1}월"
 
         val months = generateMonths(calendar)
-        val pagerAdapter = CalendarPagerAdapter(months, month, this)
+        val pagerAdapter = FriendCalendarPagerAdapter(months, month, this)
         binding.calendarViewPager.adapter = pagerAdapter
         binding.calendarViewPager.setCurrentItem(months.size / 2, false)
     }
 
-    private fun generateMonths(calendar: Calendar): List<List<Date>> {
+    private fun generateMonths(calendar: Calendar): List<List<FriendDate>> {
 
-        val months = mutableListOf<List<Date>>()
+        val months = mutableListOf<List<FriendDate>>()
 
         for (i in -12..12) {
             val cal = calendar.clone() as Calendar
             cal.add(Calendar.MONTH, i)
-            months.add(Dates.generateDates(cal))
+            months.add(FriendDates.generateFriendDates(cal))
         }
 
         return months
@@ -147,8 +132,10 @@ class CalendarFriendRecordFragment : Fragment(), CalendarRVAdapter.OnDateClickLi
 
     override fun onDateClick(date: Date) {
         // 여기서 record_title의 텍스트를 클릭한 날짜로 설정할 수 있습니다.
-        val formattedDate = SimpleDateFormat("yyyyMMdd 나의 기록", Locale.getDefault()).format(date)
-        binding.recordTitle.text = formattedDate
+        val formattedDate = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(date)
+        val items = FriendRecordData.getItemsForDate(formattedDate)
+        calendarAdapter.updateData(items)
+        binding.recordTitle.text = SimpleDateFormat("yyyyMMdd 친구 기록", Locale.getDefault()).format(date)
     }
 
     override fun onDestroyView() {
