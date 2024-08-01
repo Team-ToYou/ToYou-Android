@@ -1,14 +1,22 @@
 package com.toyou.toyouandroid.utils
 
+import com.toyou.toyouandroid.model.FriendDate
 import java.util.Calendar
-import java.util.Date
 
-object Dates {
+object FriendDates {
 
-    fun generateDates(calendar: Calendar): List<Date> {
-        val dates = mutableListOf<Date>()
+    fun generateFriendDates(calendar: Calendar): List<FriendDate> {
+        val dates = mutableListOf<FriendDate>()
         val cal = calendar.clone() as Calendar
         cal.set(Calendar.DAY_OF_MONTH, 1)
+
+        // 더미 이미지 데이터 매핑
+        val peopleMap = mapOf(
+            Pair(2024, Calendar.JULY) to mapOf(
+                1 to "3",
+                2 to "4"
+            )
+        )
 
         // 달의 첫 번째 날의 요일 계산 (월요일이 시작일인 경우)
         val firstDayOfWeek = (cal.get(Calendar.DAY_OF_WEEK) + 5) % 7
@@ -16,14 +24,20 @@ object Dates {
         // 전월의 마지막 일로 채우기
         cal.add(Calendar.DAY_OF_MONTH, -firstDayOfWeek)
         for (i in 0 until firstDayOfWeek) {
-            dates.add(cal.time)
+            dates.add(FriendDate(cal.time, null))
             cal.add(Calendar.DAY_OF_MONTH, 1)
         }
 
         // 현재 달의 일자 추가
         val daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH)
         for (i in 0 until daysInMonth) {
-            dates.add(cal.time)
+
+            val year = cal.get(Calendar.YEAR)
+            val month = cal.get(Calendar.MONTH)
+            val day = cal.get(Calendar.DAY_OF_MONTH)
+
+            val people = peopleMap[Pair(year, month)]?.get(day)
+            dates.add(FriendDate(cal.time, people))
             cal.add(Calendar.DAY_OF_MONTH, 1)
         }
 
@@ -34,7 +48,7 @@ object Dates {
         // 마지막 날이 일요일이 아니거나, 마지막 날이 일요일이지만 다음 달 1일이 월요일이 아닌 경우에만 채우기
         if (lastDayOfWeek != 6 || (remainingDays == 0 && cal.get(Calendar.DAY_OF_MONTH) != 1)) {
             for (i in 0 until remainingDays) {
-                dates.add(cal.time)
+                dates.add(FriendDate(cal.time, null))
                 cal.add(Calendar.DAY_OF_MONTH, 1)
             }
         }
@@ -42,12 +56,12 @@ object Dates {
         return dates
     }
 
-    fun generateDatesForMonths(calendar: Calendar, monthsBefore: Int, monthsAfter: Int): List<Date> {
-        val dates = mutableListOf<Date>()
+    fun generateFriendDatesForMonths(calendar: Calendar, monthsBefore: Int, monthsAfter: Int): List<FriendDate> {
+        val dates = mutableListOf<FriendDate>()
         for (i in -monthsBefore..monthsAfter) {
             val cal = calendar.clone() as Calendar
             cal.add(Calendar.MONTH, i)
-            dates.addAll(generateDates(cal))
+            dates.addAll(generateFriendDates(cal))
         }
         return dates
     }

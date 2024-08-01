@@ -1,17 +1,18 @@
-package com.toyou.toyouandroid.presentation.fragment.calendar.month
+package com.toyou.toyouandroid.presentation.fragment.record.friend
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.databinding.CalendarPageBinding
-import java.util.Date
+import com.toyou.toyouandroid.model.FriendDate
+import com.toyou.toyouandroid.presentation.fragment.record.DayOfTheWeekAdapter
 
-class CalendarPagerAdapter(
-    private val datesList: List<List<Date>>,
+class FriendCalendarPagerAdapter(
+    private val datesList: List<List<FriendDate>>,
     private val currentMonth: Int,
-    private val onDateClickListener: CalendarRVAdapter.OnDateClickListener
-) : RecyclerView.Adapter<CalendarPagerAdapter.ViewHolder>() {
+    private val onDateClickListener: FriendCalendarRVAdapter.OnDateClickListener
+) : RecyclerView.Adapter<FriendCalendarPagerAdapter.ViewHolder>() {
 
     inner class ViewHolder(val binding: CalendarPageBinding) : RecyclerView.ViewHolder(binding.root) {
         val calendarRecyclerView: RecyclerView = binding.calendarViewPager
@@ -23,12 +24,12 @@ class CalendarPagerAdapter(
         return ViewHolder(binding)
     }
 
-    //각 페이지의 RecyclerView에 CalendarAdapter를 설정하고, 해당 월의 날짜 데이터를 연결
+    // 각 페이지의 RecyclerView에 CalendarAdapter를 설정하고, 해당 월의 날짜 데이터를 연결
     // GridLayoutManager를 사용하여 달력을 그리드 형식으로 표시
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         val dates = datesList[position]
-        val adapter = CalendarRVAdapter(dates, currentMonth, onDateClickListener)
+        val adapter = FriendCalendarRVAdapter(dates, currentMonth, onDateClickListener)
 
         holder.calendarRecyclerView.adapter = adapter
         holder.calendarRecyclerView.layoutManager = GridLayoutManager(holder.itemView.context, 7)

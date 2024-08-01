@@ -1,4 +1,4 @@
-package com.toyou.toyouandroid.presentation.fragment.calendar
+package com.toyou.toyouandroid.presentation.fragment.record.my
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,14 +9,13 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.viewpager2.widget.ViewPager2
 import com.toyou.toyouandroid.databinding.FragmentCalendarMyrecordBinding
-import com.toyou.toyouandroid.utils.Dates.generateDatesForMonths
-import com.toyou.toyouandroid.presentation.fragment.calendar.month.CalendarPagerAdapter
-import com.toyou.toyouandroid.presentation.fragment.calendar.month.CalendarRVAdapter
-import com.toyou.toyouandroid.utils.Dates
+import com.toyou.toyouandroid.model.MyDate
+import com.toyou.toyouandroid.utils.MyDates.generateDatesForMonths
+import com.toyou.toyouandroid.utils.MyDates
 import java.util.Calendar
 import java.util.Date
 
-class CalendarMyRecordFragment : Fragment(), CalendarRVAdapter.OnDateClickListener {
+class CalendarMyRecordFragment : Fragment(), MyRecordCalendarRVAdapter.OnDateClickListener {
 
     lateinit var navController: NavController
     private var _binding: FragmentCalendarMyrecordBinding? = null
@@ -87,19 +86,19 @@ class CalendarMyRecordFragment : Fragment(), CalendarRVAdapter.OnDateClickListen
         binding.yearMonthTextView.text = "${year}년 ${month + 1}월"
 
         val months = generateMonths(calendar)
-        val pagerAdapter = CalendarPagerAdapter(months, month, this)
+        val pagerAdapter = MyrecordCalendarPagerAdapter(months, month, this)
         binding.calendarViewPager.adapter = pagerAdapter
         binding.calendarViewPager.setCurrentItem(months.size / 2, false)
     }
 
-    private fun generateMonths(calendar: Calendar): List<List<Date>> {
+    private fun generateMonths(calendar: Calendar): List<List<MyDate>> {
 
-        val months = mutableListOf<List<Date>>()
+        val months = mutableListOf<List<MyDate>>()
 
         for (i in -12..12) {
             val cal = calendar.clone() as Calendar
             cal.add(Calendar.MONTH, i)
-            months.add(Dates.generateDates(cal))
+            months.add(MyDates.generateDates(cal))
         }
 
         return months

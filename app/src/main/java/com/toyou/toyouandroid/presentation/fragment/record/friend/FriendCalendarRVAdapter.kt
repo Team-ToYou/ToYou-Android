@@ -1,28 +1,32 @@
-package com.toyou.toyouandroid.presentation.fragment.calendar.month
+package com.toyou.toyouandroid.presentation.fragment.record.friend
 
 import android.graphics.Color
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.toyou.toyouandroid.databinding.CalendarItemBinding
+import com.toyou.toyouandroid.databinding.CalendarFriendrecordItemBinding
+import com.toyou.toyouandroid.model.FriendDate
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
-class CalendarRVAdapter(
-    private val dates: List<Date?>,
+class FriendCalendarRVAdapter(
+    private val dates: List<FriendDate>,
     currentMonth: Int,
     private val onDateClickListener: OnDateClickListener
-) : RecyclerView.Adapter<CalendarRVAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<FriendCalendarRVAdapter.ViewHolder>() {
 
     private val thisMonth = currentMonth
 
-    inner class ViewHolder(private val binding: CalendarItemBinding) :
+    inner class ViewHolder(private val binding: CalendarFriendrecordItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(date: Date) {
+        fun bind(friendDate: FriendDate) {
+            val date = friendDate.date
+            val people = friendDate.people
             val calendar = Calendar.getInstance()
             calendar.time = date
             val month = calendar.get(Calendar.MONTH)
@@ -44,6 +48,16 @@ class CalendarRVAdapter(
                 }
             }
 
+            // 이미지 설정
+            if (people != null) {
+                binding.friendrecordPeople.text = people
+                binding.friendrecordImageView.visibility = View.VISIBLE
+                binding.friendrecordPeople.visibility = View.VISIBLE
+            } else {
+                binding.friendrecordImageView.visibility = View.GONE
+                binding.friendrecordPeople.visibility = View.GONE
+            }
+
             binding.dayText.text = SimpleDateFormat("d", Locale.getDefault()).format(date)
             binding.root.setOnClickListener {
                 Timber.tag("CalendarRVAdapter").d("Date clicked: $date")
@@ -55,13 +69,12 @@ class CalendarRVAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding =
-            CalendarItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = CalendarFriendrecordItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(dates[position]!!)
+        holder.bind(dates[position])
     }
 
     override fun getItemCount(): Int {
