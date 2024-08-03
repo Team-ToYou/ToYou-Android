@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.toyou.toyouandroid.model.CardModel
+import com.toyou.toyouandroid.model.ChooseModel
 import com.toyou.toyouandroid.model.PreviewCardModel
 
 class CardViewModel : ViewModel(){
@@ -14,6 +15,8 @@ class CardViewModel : ViewModel(){
 
     private val _previewCards = MutableLiveData<List<PreviewCardModel>>()
     val previewCards : LiveData<List<PreviewCardModel>> get() = _previewCards
+    private val _chooseCards = MutableLiveData<List<ChooseModel>>()
+    val chooseCards : LiveData<List<ChooseModel>> get() = _chooseCards
 
 
     fun isLockSelected(lock : ImageView){
@@ -34,15 +37,32 @@ class CardViewModel : ViewModel(){
             CardModel("오늘 몇시에 잘거야?", "From. 현정",3),
             CardModel("오늘 커피 몇잔 마셨어?", "From. 현정",4),
             CardModel("오늘 물 몇잔 마셨어?", "From. 현정",5),
-
         )
-        Log.d("CardViewModel", "Loading cards: $sampleCards") // 디버그 로그 추가
+        val sampleChoose = listOf(
+            ChooseModel("짜장면 vs 짬뽕", "From. 현정", listOf("짜장", "짬뽕"), 1),
+            ChooseModel("짜장면 vs 짬뽕 vs 탕수육", "From. 현정", listOf("짜장", "짬뽕", "탕수육"), 2),
+            ChooseModel("짜장면 vs 짬뽕 vs 탕수육", "From. 현정", listOf("짜장", "짬뽕", "탕수육"), 2),
+            ChooseModel("짜장면 vs 짬뽕", "From. 현정", listOf("짜장", "짬뽕", ), 1),
+
+            )
 
         _cards.value = sampleCards
+        _chooseCards.value = sampleChoose
     }
 
     fun updateButtonState(position : Int, isSelected : Boolean){
         _cards.value = _cards.value?.mapIndexed { index, card ->
+            if (index == position) {
+                card.copy(isButtonSelected = isSelected)
+            } else {
+                card
+            }
+        }
+
+    }
+
+    fun updateChooseButton(position: Int, isSelected: Boolean){
+        _chooseCards.value = _chooseCards.value?.mapIndexed { index, card ->
             if (index == position) {
                 card.copy(isButtonSelected = isSelected)
             } else {

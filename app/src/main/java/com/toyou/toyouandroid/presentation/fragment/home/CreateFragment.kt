@@ -16,6 +16,7 @@ import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.databinding.FragmentCreateBinding
 import com.toyou.toyouandroid.presentation.fragment.home.adapter.CardAdapter
+import com.toyou.toyouandroid.presentation.fragment.home.adapter.CardChooseAdapter
 import com.toyou.toyouandroid.presentation.fragment.home.adapter.CardShortAdapter
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 import timber.log.Timber
@@ -27,6 +28,7 @@ class CreateFragment : Fragment(){
 
     private lateinit var cardAdapter : CardAdapter
     private lateinit var cardShortAdapter : CardShortAdapter
+    private lateinit var cardChooseAdapter: CardChooseAdapter
     private lateinit var cardViewModel: CardViewModel
 
     lateinit var navController: NavController
@@ -68,6 +70,24 @@ class CreateFragment : Fragment(){
 
         })
 
+        cardViewModel.chooseCards.observe(viewLifecycleOwner, Observer { cards ->
+            cardChooseAdapter.setCards(cards)
+
+            cards?.let {
+                for (card in it) {
+                    if (card.isButtonSelected) {
+                        count = 1
+                        binding.nextBtn.isEnabled = true
+                    }
+                }
+                if (count == 0)
+                    binding.nextBtn.isEnabled = false
+                count = 0
+            }
+
+
+        })
+
         cardAdapter = CardAdapter { position, isSelected ->
             cardViewModel.updateButtonState(position, isSelected)
             Log.d("버튼", position.toString())
@@ -75,6 +95,9 @@ class CreateFragment : Fragment(){
         }
         cardShortAdapter = CardShortAdapter{ position, isSelected ->
             cardViewModel.updateButtonState(position, isSelected)
+        }
+        cardChooseAdapter = CardChooseAdapter{ position, isSelected ->
+            cardViewModel.updateChooseButton(position, isSelected)
         }
 
 
@@ -97,6 +120,19 @@ class CreateFragment : Fragment(){
         binding.cardShortRv.apply {
             layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL, false)
             adapter = cardShortAdapter
+
+            val displayMetrics = DisplayMetrics()
+            requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
+            val screenWidth = displayMetrics.widthPixels
+            val margin = (screenWidth * 0.05).toInt() // 화면 너비의 5%를 마진으로 사용
+
+            // 아이템 데코레이션 추가
+            addItemDecoration(RVMarginItemDecoration(margin, true))
+        }
+
+        binding.cardChooseRv.apply {
+            layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL, false)
+            adapter = cardChooseAdapter
 
             val displayMetrics = DisplayMetrics()
             requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
