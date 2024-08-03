@@ -7,6 +7,12 @@ import com.toyou.toyouandroid.R
 
 class SignupNicknameViewModel : ViewModel() {
 
+    private val _title = MutableLiveData<String>()
+    val title: LiveData<String> get() = _title
+
+    private val _backButtonAction = MutableLiveData<() -> Unit>()
+    val backButtonAction: LiveData<() -> Unit> get() = _backButtonAction
+
     private val _textCount = MutableLiveData("0/15")
     val textCount: LiveData<String> get() = _textCount
 
@@ -53,10 +59,15 @@ class SignupNicknameViewModel : ViewModel() {
     }
     val nextButtonBackground: LiveData<Int> = _nextButtonBackground
 
+    private val _nickname = MutableLiveData<String>()
+    val nickname: LiveData<String> get() = _nickname
+
     init {
         inputText.observeForever { text ->
             _isDuplicateCheckEnabled.value = !text.isNullOrEmpty()
         }
+        _title.value = "회원가입"
+//        _backButtonAction.value = { /* 회원가입 화면에서의 back 버튼 로직 */ }
     }
 
     fun checkDuplicate() {
@@ -83,11 +94,17 @@ class SignupNicknameViewModel : ViewModel() {
         }
     }
 
-    private val _nickname = MutableLiveData<String>()
-    val nickname: LiveData<String> get() = _nickname
-
     fun setNickname(newNickname: String) {
         _nickname.value = newNickname
+    }
+
+    fun setForEditNickname() {
+        _title.value = "프로필 수정"
+        _backButtonAction.value = { /* 닉네임 수정 화면에서의 back 버튼 로직 */ }
+    }
+
+    fun onBackButtonClicked() {
+        _backButtonAction.value?.invoke()
     }
 
     fun resetState() {
@@ -97,6 +114,16 @@ class SignupNicknameViewModel : ViewModel() {
         _nextButtonTextColor.value = 0xFFA6A6A6.toInt()
         _nextButtonBackground.value = R.drawable.next_button
         _nickname.value = ""
+        _duplicateCheckButtonTextColor.value = 0xFFA6A6A6.toInt()
+        _duplicateCheckButtonBackground.value = R.drawable.next_button
+    }
+
+    fun resetNicknameEditState() {
+        _duplicateCheckMessage.value = "중복된 닉네임인지 확인해주세요"
+        _duplicateCheckMessageColor.value = 0xFF000000.toInt()
+        _isNextButtonEnabled.value = false
+        _nextButtonTextColor.value = 0xFFA6A6A6.toInt()
+        _nextButtonBackground.value = R.drawable.next_button
         _duplicateCheckButtonTextColor.value = 0xFFA6A6A6.toInt()
         _duplicateCheckButtonBackground.value = R.drawable.next_button
     }

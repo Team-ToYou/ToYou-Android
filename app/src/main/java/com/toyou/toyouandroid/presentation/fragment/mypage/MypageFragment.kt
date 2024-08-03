@@ -1,6 +1,7 @@
 package com.toyou.toyouandroid.presentation.fragment.mypage
 
 import android.content.ContentValues.TAG
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import androidx.navigation.Navigation
 import com.kakao.sdk.user.UserApiClient
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentMypageBinding
+import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.presentation.fragment.onboarding.SignupNicknameViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.ViewModelManager
@@ -28,7 +30,9 @@ class MypageFragment : Fragment() {
     private val nicknameViewModel: SignupNicknameViewModel by activityViewModels()
     private val homeViewModel: HomeViewModel by activityViewModels()
     private val viewModel: MypageViewModel by viewModels()
+    private val mypageDialogViewModel: MypageDialogViewModel by activityViewModels()
     private lateinit var viewModelManager: ViewModelManager
+    private var mypageDialog: MypageDialog? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,6 +41,7 @@ class MypageFragment : Fragment() {
     ): View {
 
         _binding = FragmentMypageBinding.inflate(inflater, container, false)
+
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
 
@@ -46,6 +51,9 @@ class MypageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
+
+        (requireActivity() as MainActivity).hideBottomNavigation(false)
+
         viewModelManager = ViewModelManager(nicknameViewModel, homeViewModel)
 
         binding.mypageProfileBtn.setOnClickListener {
@@ -68,41 +76,66 @@ class MypageFragment : Fragment() {
             navController.navigate(R.id.action_navigation_mypage_to_terms_of_use_fragment)
         }
 
-        binding.mypageVersion.setOnClickListener {
-            navController.navigate(R.id.action_navigation_mypage_to_version_fragment)
-        }
-
-        binding.mypageLogoutBtn.setOnClickListener {
-            UserApiClient.instance.logout { error ->
-                if (error != null) {
-                    Timber.tag(TAG).e(error, "로그아웃 실패. SDK에서 토큰 삭제됨")
-                }
-                else {
-                    Timber.tag(TAG).i("로그아웃 성공. SDK에서 토큰 삭제됨")
-                }
-            }
-            viewModelManager.resetAllViewModels()
-//            resetApp()
-            navController.navigate(R.id.action_navigation_mypage_to_login_fragment)
-        }
-
-        binding.mypageSignoutBtn.setOnClickListener {
-            activity?.finishAffinity()
-        }
-
         // ViewModel에서 닉네임을 가져와서 TextView에 설정
         nicknameViewModel.nickname.observe(viewLifecycleOwner) { nickname ->
             binding.profileNickname.text = nickname
         }
 
-        homeViewModel.mypageEmotionStamp.observe(viewLifecycleOwner) { emotion ->
-            binding.mypageEmotionStamp.setImageResource(emotion)
+        binding.mypageSignoutBtn.setOnClickListener {
+            mypageDialogViewModel.setDialogData(
+                title = "정말 탈퇴하시겠어요?",
+                subTitle = "탈퇴 시, 모든 정보가 사라집니다",
+                leftButtonText = "탈퇴하기",
+                rightButtonText = "취소",
+                leftButtonTextColor = Color.RED,
+                rightButtonTextColor = R.color.black,
+                leftButtonClickAction = { handleSignout() },
+                rightButtonClickAction = { dismissDialog() }
+            )
+            mypageDialog = MypageDialog()
+            mypageDialog?.show(parentFragmentManager, "CustomDialog")
+        }
+
+        binding.mypageLogoutBtn.setOnClickListener {
+            mypageDialogViewModel.setDialogData(
+                title = "정말 로그아웃하시겠어요?",
+                subTitle = "",
+                leftButtonText = "취소",
+                rightButtonText = "로그아웃",
+                leftButtonTextColor = R.color.black,
+                rightButtonTextColor = Color.RED,
+                leftButtonClickAction = { dismissDialog() },
+                rightButtonClickAction = { handleLogout() }
+            )
+            mypageDialog = MypageDialog()
+            mypageDialog?.show(parentFragmentManager, "CustomDialog")
         }
     }
 
-    private fun resetApp() {
-        val navGraph = navController.navInflater.inflate(R.navigation.nav_graph)
-        navController.graph = navGraph
+    private fun handleSignout() {
+        Timber.tag("handleSignout").d("handleSignout")
+        activity?.finishAffinity()
+    }
+
+    private fun handleLogout() {
+        Timber.tag("handleLogout").d("handleWithdraw")
+
+        UserApiClient.instance.logout { error ->
+            if (error != null) {
+                Timber.tag(TAG).e(error, "로그아웃 실패. SDK에서 토큰 삭제됨")
+            }
+            else {
+                Timber.tag(TAG).i("로그아웃 성공. SDK에서 토큰 삭제됨")
+            }
+        }
+        viewModelManager.resetAllViewModels()
+        navController.navigate(R.id.action_navigation_mypage_to_login_fragment)
+        mypageDialog?.dismiss()
+    }
+
+    private fun dismissDialog() {
+        Timber.tag("dismissDialog").d("dismissDialog")
+        mypageDialog?.dismiss()
     }
 
     override fun onDestroyView() {

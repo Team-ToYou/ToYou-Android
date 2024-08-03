@@ -24,10 +24,13 @@
 
         <TextView
             android:id="@+id/calendar_friend_nickname"
-            android:layout_width="wrap_content"
+            android:layout_width="45dp"
             android:layout_height="wrap_content"
-            android:text="@{item.nickname}"
+            formattedNickname="@{item.nickname}"
+            android:textAlignment="center"
             android:textColor="@color/black"
+            android:maxLines="1"
+            android:ellipsize="end"
             style="@style/sc_el10"
             android:layout_marginTop="4dp"
             app:layout_constraintStart_toStartOf="parent"

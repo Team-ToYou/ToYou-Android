@@ -104,25 +104,25 @@
             android:layout_marginTop="10dp"
             android:text="@string/signup_agree_sub_title"
             android:textColor="@color/bl02"
-            style="@style/sc_r18"
+            style="@style/sc_r15"
+            android:lineSpacingExtra="2sp"
             app:layout_constraintStart_toStartOf="@id/guideline_title_v"
             app:layout_constraintTop_toBottomOf="@id/signup_agree_title" />
 
         <LinearLayout
             android:id="@+id/checkbox1_layout"
-            android:layout_width="50dp"
+            android:layout_width="120dp"
             android:layout_height="30dp"
-            android:layout_marginTop="90dp"
+            android:layout_marginTop="85dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/signup_agree_title">
 
             <ImageView
                 android:id="@+id/checkbox_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:src="@drawable/checkbox_uncheck"
-                android:layout_marginStart="19dp"
-                android:clickable="true" />
+                android:layout_marginStart="11dp" />
         </LinearLayout>
 
         <TextView
@@ -147,17 +147,17 @@
 
         <LinearLayout
             android:id="@+id/checkbox2_layout"
-            android:layout_width="50dp"
+            android:layout_width="180dp"
             android:layout_height="30dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="14dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/seperator_agree">
 
             <ImageView
                 android:id="@+id/checkbox_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="19dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="15dp"
                 android:src="@drawable/checkbox_uncheck" />
         </LinearLayout>
 
@@ -167,6 +167,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:layout_marginTop="14dp"
+            android:layout_marginStart="6dp"
             android:text="@string/signup_agree_select_2"
             style="@style/sc_r15"
             app:layout_constraintStart_toStartOf="@+id/guideline_agree_select"
@@ -180,13 +181,14 @@
             android:textColor="@color/white"
             style="@style/sc_r10"
             android:background="@drawable/signupagree_essential"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="2dp"
             app:layout_constraintStart_toEndOf="@+id/signup_agree_select_2"
             app:layout_constraintTop_toTopOf="@+id/signup_agree_select_2" />
 
         <LinearLayout
             android:id="@+id/checkbox3_layout"
-            android:layout_width="50dp"
+            android:layout_width="150dp"
             android:layout_height="30dp"
             android:layout_marginTop="57dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -194,9 +196,9 @@
 
             <ImageView
                 android:id="@+id/checkbox_3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="19dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="15dp"
                 android:src="@drawable/checkbox_uncheck" />
         </LinearLayout>
 
@@ -204,7 +206,8 @@
             android:id="@+id/signup_agree_select_3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="19dp"
+            android:layout_marginTop="21dp"
+            android:layout_marginStart="6dp"
             android:text="@string/signup_agree_select_3"
             android:textColor="@color/black"
             style="@style/sc_r15"
@@ -219,7 +222,8 @@
             android:textColor="@color/white"
             style="@style/sc_r10"
             android:background="@drawable/signupagree_essential"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="2dp"
             app:layout_constraintStart_toEndOf="@+id/signup_agree_select_3"
             app:layout_constraintTop_toTopOf="@+id/signup_agree_select_3" />
 
@@ -233,7 +237,7 @@
 
         <LinearLayout
             android:id="@+id/checkbox4_layout"
-            android:layout_width="50dp"
+            android:layout_width="240dp"
             android:layout_height="30dp"
             android:layout_marginTop="98dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -241,9 +245,9 @@
 
             <ImageView
                 android:id="@+id/checkbox_4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="19dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="15dp"
                 android:src="@drawable/checkbox_uncheck" />
         </LinearLayout>
 
@@ -252,6 +256,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="19dp"
+            android:layout_marginStart="6dp"
             android:text="@string/signup_agree_select_4"
             android:textColor="@color/black"
             style="@style/sc_r15"
@@ -266,7 +271,8 @@
             android:textColor="@color/white"
             style="@style/sc_r10"
             android:background="@drawable/signupagree_essential"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="2dp"
             app:layout_constraintStart_toEndOf="@+id/signup_agree_select_4"
             app:layout_constraintTop_toTopOf="@+id/signup_agree_select_4" />
 
@@ -280,7 +286,7 @@
 
         <LinearLayout
             android:id="@+id/checkbox5_layout"
-            android:layout_width="50dp"
+            android:layout_width="300dp"
             android:layout_height="30dp"
             android:layout_marginTop="140dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -288,9 +294,9 @@
 
             <ImageView
                 android:id="@+id/checkbox_5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="19dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="15dp"
                 android:src="@drawable/checkbox_uncheck" />
         </LinearLayout>
 
@@ -299,6 +305,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="19dp"
+            android:layout_marginStart="6dp"
             android:text="@string/signup_agree_select_5"
             android:textColor="@color/black"
             style="@style/sc_r15"
@@ -313,7 +320,8 @@
             android:textColor="@color/r01"
             style="@style/sc_r10"
             android:background="@drawable/signupagree_choose"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="2dp"
             app:layout_constraintStart_toEndOf="@+id/signup_agree_select_5"
             app:layout_constraintTop_toTopOf="@+id/signup_agree_select_5" />
 

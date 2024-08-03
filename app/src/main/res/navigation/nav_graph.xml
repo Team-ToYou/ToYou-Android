@@ -16,7 +16,7 @@
             app:popUpTo="@id/navigation_home"/>
         <action
             android:id="@+id/action_navigation_home_to_notice_fragment"
-            app:destination="@id/naviagation_notice"
+            app:destination="@id/navigation_notice"
             app:popUpTo="@id/navigation_home"/>
         <action
             android:id="@+id/action_navigation_home_to_home_option_fragment"
@@ -161,12 +161,6 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_in_left"/>
         <action
-            android:id="@+id/action_navigation_mypage_to_version_fragment"
-            app:destination="@+id/navigation_version"
-            app:popUpTo="@id/navigation_version"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_in_left"/>
-        <action
             android:id="@+id/action_navigation_mypage_to_profile_fragment"
             app:destination="@+id/navigation_profile"
             app:popUpTo="@id/navigation_profile"
@@ -196,15 +190,15 @@
         android:label="NoticeSettingFragment"
         tools:layout="@layout/fragment_notice_setting"/>
     <fragment
-        android:id="@+id/navigation_version"
-        android:name="com.toyou.toyouandroid.presentation.fragment.mypage.VersionFragment"
-        android:label="VersionFragment"
-        tools:layout="@layout/fragment_version"/>
-    <fragment
         android:id="@+id/navigation_profile"
         android:name="com.toyou.toyouandroid.presentation.fragment.mypage.ProfileFragment"
         android:label="ProfileFragment"
-        tools:layout="@layout/fragment_profile"/>
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_navigation_profile_to_mypage_fragment"
+            app:destination="@+id/navigation_mypage"
+            app:popUpTo="@id/navigation_mypage" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_terms_of_use"
         android:name="com.toyou.toyouandroid.presentation.fragment.mypage.TermsOfUseFragment"
@@ -234,7 +228,7 @@
             app:destination="@id/modifyFragment" />
     </fragment>
     <fragment
-        android:id="@+id/naviagation_notice"
+        android:id="@+id/navigation_notice"
         android:name="com.toyou.toyouandroid.presentation.fragment.notice.NoticeFragment"
         android:label="NoticeFragment"
         tools:layout="@layout/fragment_notice">
