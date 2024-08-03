@@ -2,35 +2,38 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     >
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button"
-        android:layout_width="10dp"
-        android:layout_height="10dp"
-        android:background="@drawable/create_clicked_btn"
-        app:layout_constraintBottom_toBottomOf="@+id/textMessage"
-        app:layout_constraintTop_toTopOf="@+id/textMessage" />
+        android:layout_width="21dp"
+        android:layout_height="21dp"
+        android:background="@drawable/create_selector"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/textMessage"
-        style="@style/sc_l10"
+        style="@style/sc_l12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="3dp"
+        android:layout_marginTop="12dp"
         android:text="요즘 어떻게 지내?"
         android:textColor="@color/black"
-        app:layout_constraintStart_toEndOf="@+id/button" />
+        app:layout_constraintTop_toBottomOf="@id/button"/>
 
     <TextView
         android:id="@+id/fromWho_tv"
-        style="@style/sc_l10"
+        style="@style/sc_l12"
+        android:layout_marginTop="4dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="From."
-        app:layout_constraintEnd_toStartOf="@+id/guideline9" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textMessage" />
 
     <EditText
         android:id="@+id/memo_et"
