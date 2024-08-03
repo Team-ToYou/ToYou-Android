@@ -68,7 +68,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:text="답하고 싶은 질문을 선택해주세요"
+        android:text="선택한 질문에 대한 답변을 입력하세요"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -97,11 +97,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:background="@drawable/r50_box"
+        android:background="@drawable/r50_black"
         android:paddingHorizontal="15dp"
         android:paddingVertical="5dp"
         android:text="장문형"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="@id/guideline"
         app:layout_constraintTop_toBottomOf="@id/create_title_bottom" />
 
@@ -115,7 +115,7 @@
         app:layout_constraintBottom_toTopOf="@id/guideline16"
         app:layout_constraintEnd_toEndOf="@id/guideline8"
         app:layout_constraintStart_toStartOf="@id/guideline"
-        app:layout_constraintTop_toBottomOf="@id/type1_tv"/>
+        app:layout_constraintTop_toBottomOf="@id/type1_tv" />
 
     <TextView
         android:id="@+id/type2_tv"
@@ -123,11 +123,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:background="@drawable/r50_box"
+        android:background="@drawable/r50_black"
         android:paddingHorizontal="15dp"
         android:paddingVertical="5dp"
         android:text="단답형"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="@id/guideline"
         app:layout_constraintTop_toBottomOf="@id/card_rv" />
 
@@ -149,11 +149,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:background="@drawable/r50_box"
+        android:background="@drawable/r50_black"
         android:paddingHorizontal="15dp"
         android:paddingVertical="5dp"
         android:text="선택형"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="@id/guideline"
         app:layout_constraintTop_toBottomOf="@id/cardShort_rv" />
 
@@ -163,10 +163,11 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="15dp"
-        app:layout_constraintBottom_toTopOf="@id/guideline18"
+        app:layout_constraintBottom_toTopOf="@id/guideline4"
         app:layout_constraintEnd_toEndOf="@id/guideline8"
         app:layout_constraintStart_toStartOf="@id/guideline"
-        app:layout_constraintTop_toBottomOf="@id/type3_tv" />
+        app:layout_constraintTop_toBottomOf="@id/type3_tv"
+        android:layout_marginBottom="30dp"/>
 
 
     <androidx.appcompat.widget.AppCompatButton
@@ -202,21 +203,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.325" />
+        app:layout_constraintGuide_percent="0.43" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline17"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline18"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.75" />
+        app:layout_constraintGuide_percent="0.605" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
