@@ -76,13 +76,13 @@ class CreateFragment : Fragment(){
 
 
         binding.cardRv.apply {
-            layoutManager = LinearLayoutManager(requireContext())
+            layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL, false)
             adapter = cardAdapter
 
             val displayMetrics = DisplayMetrics()
             requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
             val screenWidth = displayMetrics.widthPixels
-            val margin = (screenWidth * 0.02).toInt() // 화면 너비의 5%를 마진으로 사용
+            val margin = (screenWidth * 0.05).toInt() // 화면 너비의 5%를 마진으로 사용
 
             // 아이템 데코레이션 추가
             addItemDecoration(RVMarginItemDecoration(margin, true))

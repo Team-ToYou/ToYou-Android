@@ -28,7 +28,7 @@ class CardViewModel : ViewModel(){
 
     fun loadCardData(){
         val sampleCards = listOf(
-            CardModel("요즘 어떻게 지내?", "From. 현정",1),
+            //CardModel("요즘 어떻게 지내?", "From. 현정",1),
             //CardModel("요즘 즐겨하는 취미는?", "From. 현정"),
             CardModel("짜장면 vs 짬뽕", "From. 현정",2),
             CardModel("오늘 몇시에 잘거야?", "From. 현정",3),
