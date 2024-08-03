@@ -134,10 +134,10 @@
             app:destination="@id/questionTypeFragment" />
     </fragment>
     <fragment
-        android:id="@+id/navigation_calendar"
-        android:name="com.toyou.toyouandroid.presentation.fragment.calendar.CalendarFragment"
-        android:label="fragment_calendar"
-        tools:layout="@layout/fragment_calendar"/>
+        android:id="@+id/navigation_record"
+        android:name="com.toyou.toyouandroid.presentation.fragment.record.RecordFragment"
+        android:label="fragment_record"
+        tools:layout="@layout/fragment_record"/>
     <fragment
         android:id="@+id/navigation_mypage"
         android:name="com.toyou.toyouandroid.presentation.fragment.mypage.MypageFragment"

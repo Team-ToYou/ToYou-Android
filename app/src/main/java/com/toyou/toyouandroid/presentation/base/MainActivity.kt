@@ -40,8 +40,8 @@ class MainActivity : AppCompatActivity() {
                     navController.navigate(R.id.navigation_social)
                     true
                 }
-                R.id.navigation_calendar -> {
-                    navController.navigate(R.id.navigation_calendar)
+                R.id.navigation_record -> {
+                    navController.navigate(R.id.navigation_record)
                     true
                 }
                 R.id.navigation_mypage -> {

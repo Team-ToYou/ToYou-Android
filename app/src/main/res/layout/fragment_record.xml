@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/background_white"
     android:orientation="vertical"
-    tools:context=".presentation.fragment.calendar.CalendarFragment">
+    tools:context=".presentation.fragment.record.RecordFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -48,44 +48,13 @@
             app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/fragment_calendar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/record_fragment_Container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tabLayout">
-
-            <ImageView
-                android:id="@+id/calendar_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/calendar_raw"
-                android:layout_marginTop="20dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-
-            <TextView
-                android:id="@+id/record_title"
-                style="@style/gangwon22"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="@string/calendar_my_record_date"
-                android:textColor="@color/black"
-                app:layout_constraintStart_toStartOf="@+id/calendar_view"
-                app:layout_constraintTop_toBottomOf="@+id/calendar_view" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/calendar_rv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/record_title" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintTop_toBottomOf="@+id/seperator_screen_bar" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.core.widget.NestedScrollView>

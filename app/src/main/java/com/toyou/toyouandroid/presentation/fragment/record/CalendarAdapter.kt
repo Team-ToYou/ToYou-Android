@@ -1,4 +1,4 @@
-package com.toyou.toyouandroid.presentation.fragment.calendar
+package com.toyou.toyouandroid.presentation.fragment.record
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.databinding.ItemCalendarFriendStampBinding
 import com.toyou.toyouandroid.model.CalendarItem
 
-class CalendarAdapter(private val items: List<CalendarItem>) : RecyclerView.Adapter<CalendarAdapter.ViewHolder>() {
+class CalendarAdapter(private var items: List<CalendarItem>) : RecyclerView.Adapter<CalendarAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -21,6 +21,11 @@ class CalendarAdapter(private val items: List<CalendarItem>) : RecyclerView.Adap
 
     override fun getItemCount(): Int {
         return items.size
+    }
+
+    fun updateData(newItems: List<CalendarItem>) {
+        items = newItems
+        notifyDataSetChanged()
     }
 
     inner class ViewHolder(private val binding: ItemCalendarFriendStampBinding) : RecyclerView.ViewHolder(binding.root) {

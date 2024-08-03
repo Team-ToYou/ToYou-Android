@@ -1,4 +1,4 @@
-package com.toyou.toyouandroid.presentation.fragment.calendar
+package com.toyou.toyouandroid.presentation.fragment.record
 
 import android.graphics.Rect
 import android.view.View
