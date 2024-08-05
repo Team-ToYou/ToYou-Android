@@ -94,9 +94,11 @@ class CreateFragment : Fragment(){
 
         }
         cardShortAdapter = CardShortAdapter{ position, isSelected ->
+            Log.d("선택2", position.toString()+isSelected.toString())
             cardViewModel.updateButtonState(position, isSelected)
         }
         cardChooseAdapter = CardChooseAdapter{ position, isSelected ->
+            Log.d("선택1", position.toString()+isSelected.toString())
             cardViewModel.updateChooseButton(position, isSelected)
         }
 

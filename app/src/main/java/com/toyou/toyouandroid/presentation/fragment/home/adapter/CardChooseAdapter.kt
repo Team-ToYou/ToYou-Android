@@ -74,7 +74,8 @@ class CardChooseAdapter(private val onItemClick: (Int, Boolean) -> Unit) : Recyc
 
         init {
             button.setOnClickListener {
-                isSelected = !isSelected
+                val isSelected = !button.isSelected
+                button.isSelected = isSelected
                 updateButtonBackground(isSelected)
                 Log.d("클릭", isSelected.toString())
                 onItemClick(adapterPosition, isSelected)
@@ -87,10 +88,13 @@ class CardChooseAdapter(private val onItemClick: (Int, Boolean) -> Unit) : Recyc
             txtOption1.text = item.options[0]
             txtOption2.text = item.options[1]
             fromWho.text = item.fromWho
+
+            val isSelected = item.isButtonSelected
+            button.isSelected = isSelected
+            updateButtonBackground(isSelected)
         }
         private fun updateButtonBackground(isSelected: Boolean) {
-            val backgroundRes =
-                if (isSelected) R.drawable.create_check else R.drawable.create_uncheck
+            val backgroundRes = if (isSelected) R.drawable.create_check else R.drawable.create_uncheck
             button.setBackgroundResource(backgroundRes)
         }
     }
@@ -101,11 +105,11 @@ class CardChooseAdapter(private val onItemClick: (Int, Boolean) -> Unit) : Recyc
         private val txtOption2: TextView = view.findViewById(R.id.choose_option2)
         private val txtOption3: TextView = view.findViewById(R.id.choose_option3)
         private val fromWho : TextView = view.findViewById(R.id.fromWho_tv)
-        private var isSelected: Boolean = false
         private val button: Button = itemView.findViewById(R.id.button)
         init {
             button.setOnClickListener {
-                isSelected = !isSelected
+                val isSelected = !button.isSelected
+                button.isSelected = isSelected
                 updateButtonBackground(isSelected)
                 onItemClick(adapterPosition, isSelected)
                 Log.d("클릭", isSelected.toString())
@@ -113,8 +117,7 @@ class CardChooseAdapter(private val onItemClick: (Int, Boolean) -> Unit) : Recyc
 
         }
         private fun updateButtonBackground(isSelected: Boolean) {
-            val backgroundRes =
-                if (isSelected) R.drawable.create_check else R.drawable.create_uncheck
+            val backgroundRes = if (isSelected) R.drawable.create_check else R.drawable.create_uncheck
             button.setBackgroundResource(backgroundRes)
         }
 
@@ -124,6 +127,9 @@ class CardChooseAdapter(private val onItemClick: (Int, Boolean) -> Unit) : Recyc
             txtOption2.text = item.options[1]
             txtOption3.text = item.options[2]
             fromWho.text = item.fromWho
+            val isSelected = item.isButtonSelected
+            button.isSelected = isSelected
+            updateButtonBackground(isSelected)
 
         }
     }
