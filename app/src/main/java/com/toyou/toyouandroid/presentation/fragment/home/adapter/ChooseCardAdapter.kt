@@ -11,7 +11,7 @@ import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.model.ChooseModel
 import com.toyou.toyouandroid.model.multi_type1
 
-class CardChooseAdapter(private val onItemClick: (Int, Boolean) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ChooseCardAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var cardList: List<ChooseModel> = emptyList()
 
     fun setCards(cards: List<ChooseModel>) {
@@ -31,20 +31,20 @@ class CardChooseAdapter(private val onItemClick: (Int, Boolean) -> Unit) : Recyc
         return when (viewType) {
             multi_type1 -> {
                 view = LayoutInflater.from(parent.context).inflate(
-                    R.layout.item_rv_choose_two_card,
+                    R.layout.item_rv_edit_two,
                     parent,
                     false
                 )
-                MultiViewHolder1(view, onItemClick)
+                MultiViewHolder1(view)
             }
 
             else -> {
                 view = LayoutInflater.from(parent.context).inflate(
-                    R.layout.item_rv_choose_card,
+                    R.layout.item_rv_edit_three,
                     parent,
                     false
                 )
-                MultiViewHolder2(view, onItemClick)
+                MultiViewHolder2(view)
             }
         }
     }
@@ -63,23 +63,27 @@ class CardChooseAdapter(private val onItemClick: (Int, Boolean) -> Unit) : Recyc
         }
     }
 
-    inner class MultiViewHolder1(view: View, onItemClick: (Int, Boolean) -> Unit) : RecyclerView.ViewHolder(view) {
+    inner class MultiViewHolder1(view: View) : RecyclerView.ViewHolder(view){
         private val question: TextView = view.findViewById(R.id.textMessage)
         private val txtOption1: TextView = view.findViewById(R.id.choose_option1)
         private val txtOption2: TextView = view.findViewById(R.id.choose_option2)
         private val fromWho : TextView = view.findViewById(R.id.fromWho_tv)
-        private val button: Button = itemView.findViewById(R.id.button)
-        private var isSelected: Boolean = false
+        private var selectedOption: TextView? = null
 
 
         init {
-            button.setOnClickListener {
-                isSelected = !isSelected
-                updateButtonBackground(isSelected)
-                Log.d("클릭", isSelected.toString())
-                onItemClick(adapterPosition, isSelected)
+            txtOption1.setOnClickListener {
+                handleOptionSelection(txtOption1)
             }
+            txtOption2.setOnClickListener {
+                handleOptionSelection(txtOption2)
+            }
+        }
 
+        private fun handleOptionSelection(selected: TextView) {
+            selectedOption?.isSelected = false
+            selected.isSelected = true
+            selectedOption = selected
         }
 
         fun bind(item: ChooseModel) {
@@ -88,36 +92,33 @@ class CardChooseAdapter(private val onItemClick: (Int, Boolean) -> Unit) : Recyc
             txtOption2.text = item.options[1]
             fromWho.text = item.fromWho
         }
-        private fun updateButtonBackground(isSelected: Boolean) {
-            val backgroundRes =
-                if (isSelected) R.drawable.create_check else R.drawable.create_uncheck
-            button.setBackgroundResource(backgroundRes)
-        }
     }
 
-    inner class MultiViewHolder2(view: View, onItemClick: (Int, Boolean) -> Unit) : RecyclerView.ViewHolder(view) {
+    inner class MultiViewHolder2(view: View) : RecyclerView.ViewHolder(view){
         private val question: TextView = view.findViewById(R.id.textMessage)
         private val txtOption1: TextView = view.findViewById(R.id.choose_option1)
         private val txtOption2: TextView = view.findViewById(R.id.choose_option2)
         private val txtOption3: TextView = view.findViewById(R.id.choose_option3)
         private val fromWho : TextView = view.findViewById(R.id.fromWho_tv)
-        private var isSelected: Boolean = false
-        private val button: Button = itemView.findViewById(R.id.button)
+        private var selectedOption: TextView? = null
+
         init {
-            button.setOnClickListener {
-                isSelected = !isSelected
-                updateButtonBackground(isSelected)
-                onItemClick(adapterPosition, isSelected)
-                Log.d("클릭", isSelected.toString())
+            txtOption1.setOnClickListener {
+                handleOptionSelection(txtOption1)
             }
-
+            txtOption2.setOnClickListener {
+                handleOptionSelection(txtOption2)
+            }
+            txtOption3.setOnClickListener {
+                handleOptionSelection(txtOption3)
+            }
         }
-        private fun updateButtonBackground(isSelected: Boolean) {
-            val backgroundRes =
-                if (isSelected) R.drawable.create_check else R.drawable.create_uncheck
-            button.setBackgroundResource(backgroundRes)
-        }
 
+        private fun handleOptionSelection(selected: TextView) {
+            selectedOption?.isSelected = false
+            selected.isSelected = true
+            selectedOption = selected
+        }
         fun bind(item: ChooseModel) {
             question.text = item.message
             txtOption1.text = item.options[0]

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentCreateWriteBinding
 import com.toyou.toyouandroid.presentation.fragment.home.adapter.CardChooseAdapter
+import com.toyou.toyouandroid.presentation.fragment.home.adapter.ChooseCardAdapter
 import com.toyou.toyouandroid.presentation.fragment.home.adapter.ShortCardAdapter
 import com.toyou.toyouandroid.presentation.fragment.home.adapter.WriteCardAdapter
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
@@ -27,7 +28,7 @@ class CreateWriteFragment: Fragment() {
     lateinit var navController: NavController
     private lateinit var longAdapter : WriteCardAdapter
     private lateinit var shortAdapter: ShortCardAdapter
-
+    private lateinit var chooseAdapter : ChooseCardAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,8 +50,14 @@ class CreateWriteFragment: Fragment() {
             shortAdapter.setCards(cards)
         })
 
+        cardViewModel.chooseCards.observe(viewLifecycleOwner, Observer { cards ->
+            chooseAdapter.setCards(cards)
+        })
+
         longAdapter = WriteCardAdapter()
         shortAdapter = ShortCardAdapter()
+        chooseAdapter = ChooseCardAdapter()
+
 
         binding.cardRv.apply {
             layoutManager = LinearLayoutManager(requireContext(),
@@ -70,6 +77,19 @@ class CreateWriteFragment: Fragment() {
             layoutManager = LinearLayoutManager(requireContext(),
                 LinearLayoutManager.HORIZONTAL, false)
             adapter = shortAdapter
+
+            val displayMetrics = DisplayMetrics()
+            requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
+            val screenWidth = displayMetrics.widthPixels
+            val margin = (screenWidth * 0.05).toInt() // 화면 너비의 5%를 마진으로 사용
+
+            // 아이템 데코레이션 추가
+            addItemDecoration(RVMarginItemDecoration(margin, true))
+        }
+        binding.cardChooseRv.apply {
+            layoutManager = LinearLayoutManager(requireContext(),
+                LinearLayoutManager.HORIZONTAL, false)
+            adapter = chooseAdapter
 
             val displayMetrics = DisplayMetrics()
             requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
