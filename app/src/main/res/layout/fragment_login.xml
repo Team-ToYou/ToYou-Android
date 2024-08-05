@@ -29,7 +29,7 @@
         android:text="@string/login_title"
         android:textColor="@color/black"
         style="@style/sc_l12"
-        android:layout_marginTop="24dp"
+        android:layout_marginBottom="100dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -55,7 +55,7 @@
         android:textColor="@color/black"
         style="@style/sc_m13"
         android:background="@drawable/kakao_btn"
-        android:layout_marginBottom="62dp"
+        android:layout_marginBottom="120dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />

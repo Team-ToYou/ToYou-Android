@@ -51,30 +51,33 @@ class NoticeFragment : Fragment() {
             NoticeItem.NoticeFriendRequestItem("테디"),
             NoticeItem.NoticeCardCheckItem("현정"),
             NoticeItem.NoticeFriendRequestItem("테디"),
-            NoticeItem.NoticeCardCheckItem("승원"),
-            NoticeItem.NoticeFriendRequestAcceptedItem("테디"),
-            NoticeItem.NoticeCardCheckItem("유은"),
-            NoticeItem.NoticeFriendRequestItem("테디"),
-            NoticeItem.NoticeCardCheckItem("현정"),
-            NoticeItem.NoticeFriendRequestItem("테디"),
-            NoticeItem.NoticeCardCheckItem("승원"),
-            NoticeItem.NoticeFriendRequestAcceptedItem("테디"),
-            NoticeItem.NoticeCardCheckItem("유은"),
-            NoticeItem.NoticeFriendRequestItem("테디"),
-            NoticeItem.NoticeFriendRequestAcceptedItem("현정")
+            NoticeItem.NoticeCardCheckItem("승원")
         )
 
         val adapter = NoticeAdapter(items)
         binding.noticeRv.layoutManager = GridLayoutManager(context, 1)
         binding.noticeRv.adapter = adapter
 
-        val itemTouchHelper = ItemTouchHelper(SwipeToDeleteNotice(adapter))
-        itemTouchHelper.attachToRecyclerView(binding.noticeRv)
-
         val verticalSpaceHeight = resources.getDimensionPixelSize(R.dimen.recycler_item_spacing)
         binding.noticeRv.addItemDecoration(NoticeItemDecoration(verticalSpaceHeight))
 
-        binding.noticeBackBtn.setOnClickListener {
+        val swipeToDeleteNotice = SwipeToDeleteNotice().apply {
+            setClamp(resources.displayMetrics.widthPixels.toFloat() / 5)
+        }
+        ItemTouchHelper(swipeToDeleteNotice).attachToRecyclerView(binding.noticeRv)
+
+        binding.noticeRv.apply {
+            setOnTouchListener { v, _ ->
+                swipeToDeleteNotice.removePreviousClamp(this)
+                v.performClick()
+                false
+            }
+
+            setOnClickListener {
+            }
+        }
+
+        binding.noticeBackLayout.setOnClickListener {
             navController.navigate(R.id.action_navigation_notice_to_home_fragment)
         }
     }

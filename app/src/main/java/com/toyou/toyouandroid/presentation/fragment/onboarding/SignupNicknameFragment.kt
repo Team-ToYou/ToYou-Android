@@ -15,6 +15,8 @@ import androidx.navigation.fragment.findNavController
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentSignupnicknameBinding
 import com.toyou.toyouandroid.presentation.base.MainActivity
+import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.ViewModelManager
 
 class SignupNicknameFragment : Fragment() {
 
@@ -23,6 +25,9 @@ class SignupNicknameFragment : Fragment() {
     private val binding: FragmentSignupnicknameBinding
         get() = requireNotNull(_binding){"FragmentSignupnicknameBinding -> null"}
     private val viewModel: SignupNicknameViewModel by activityViewModels()
+    private val nicknameViewModel: SignupNicknameViewModel by activityViewModels()
+    private val homeViewModel: HomeViewModel by activityViewModels()
+    private lateinit var viewModelManager: ViewModelManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,13 +44,14 @@ class SignupNicknameFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModelManager = ViewModelManager(nicknameViewModel, homeViewModel)
 
         (requireActivity() as MainActivity).hideBottomNavigation(true)
 
         // navController 초기화
         navController = findNavController()
 
-        binding.signupNicknameBackBtn.setOnClickListener {
+        binding.signupNicknameBackLayout.setOnClickListener {
             navController.navigate(R.id.action_navigation_signup_nickname_to_signup_agree_fragment)
         }
 
