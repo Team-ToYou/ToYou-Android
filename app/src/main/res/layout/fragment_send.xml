@@ -54,6 +54,7 @@
         app:layout_constraintTop_toTopOf="parent" />
     
     <CheckBox
+        android:id="@+id/checkbox_btn"
         android:layout_width="20dp"
         android:layout_height="20dp"
         app:layout_constraintBottom_toTopOf="@id/next_btn"
