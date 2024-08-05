@@ -166,7 +166,7 @@ class CreateFragment : Fragment(){
                     Timber.tag("카드3").d(previewCards[0].question)
                 }
             }
-            navController.navigate(R.id.action_create_fragment_to_previewFragment)
+            navController.navigate(R.id.action_create_fragment_to_createWriteFragment)
         }
 
 
