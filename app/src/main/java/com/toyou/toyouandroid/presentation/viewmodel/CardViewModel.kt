@@ -19,6 +19,13 @@ class CardViewModel : ViewModel(){
     val chooseCards : LiveData<List<ChooseModel>> get() = _chooseCards
     private val _previewChoose = MutableLiveData<List<PreviewChooseModel>>()
     val previewChoose : LiveData<List<PreviewChooseModel>> get() = _previewChoose
+    private val _isAnyEditTextFilled = MutableLiveData(false)
+    val isAnyEditTextFilled: LiveData<Boolean> get() = _isAnyEditTextFilled
+
+    fun setEditTextFilled(isFilled: Boolean) {
+        _isAnyEditTextFilled.value = isFilled
+    }
+
 
     fun isLockSelected(lock : ImageView){
         lock.isSelected = !lock.isSelected
@@ -81,7 +88,6 @@ class CardViewModel : ViewModel(){
         _previewChoose.value = _chooseCards.value?.filter { it.isButtonSelected }?.map {
             PreviewChooseModel(message = it.message, fromWho = it.fromWho, options = it.options, type = it.type, answer = "")
         }
-        Log.d("선택3", _chooseCards.value.toString())
     }
 
 }

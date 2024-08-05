@@ -11,8 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.R.id.limit_200
 import com.toyou.toyouandroid.model.PreviewCardModel
+import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 
-class WriteCardAdapter : RecyclerView.Adapter<WriteCardAdapter.ViewHolder>() {
+class WriteCardAdapter(private val cardViewModel: CardViewModel) : RecyclerView.Adapter<WriteCardAdapter.ViewHolder>() {
 
     private var cardList : List<PreviewCardModel> = emptyList()
 
@@ -22,7 +23,7 @@ class WriteCardAdapter : RecyclerView.Adapter<WriteCardAdapter.ViewHolder>() {
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WriteCardAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_rv_long_edit, parent, false)
-        return WriteCardAdapter.ViewHolder(view)
+        return WriteCardAdapter.ViewHolder(view, cardViewModel)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -33,7 +34,7 @@ class WriteCardAdapter : RecyclerView.Adapter<WriteCardAdapter.ViewHolder>() {
         return cardList.size
     }
 
-    class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
+    class ViewHolder(itemView : View, private val cardViewModel: CardViewModel) : RecyclerView.ViewHolder(itemView){
         private val cardMessageTextView: TextView = itemView.findViewById(R.id.textMessage)
         private val fromWho: TextView = itemView.findViewById(R.id.fromWho_tv)
         private val answerEdit : EditText = itemView.findViewById(R.id.memo_et)
@@ -54,6 +55,7 @@ class WriteCardAdapter : RecyclerView.Adapter<WriteCardAdapter.ViewHolder>() {
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     message = s.toString()
                     wordCount.text = "${message.length} / 200"
+                    cardViewModel.setEditTextFilled(message.isNotEmpty())
                 }
 
                 override fun afterTextChanged(s: Editable?) {

@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentCreateWriteBinding
 import com.toyou.toyouandroid.model.ChooseModel
@@ -56,51 +57,13 @@ class CreateWriteFragment: Fragment() {
             chooseAdapter.setCards(cards)
         })
 
-        longAdapter = WriteCardAdapter()
-        shortAdapter = ShortCardAdapter()
+        longAdapter = WriteCardAdapter(cardViewModel)
+        shortAdapter = ShortCardAdapter(cardViewModel)
         chooseAdapter = ChooseCardAdapter()
 
-
-        binding.cardRv.apply {
-            layoutManager = LinearLayoutManager(requireContext(),
-                LinearLayoutManager.HORIZONTAL, false)
-            adapter = longAdapter
-
-            val displayMetrics = DisplayMetrics()
-            requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
-            val screenWidth = displayMetrics.widthPixels
-            val margin = (screenWidth * 0.05).toInt() // 화면 너비의 5%를 마진으로 사용
-
-            // 아이템 데코레이션 추가
-            addItemDecoration(RVMarginItemDecoration(margin, true))
-        }
-
-        binding.cardShortRv.apply {
-            layoutManager = LinearLayoutManager(requireContext(),
-                LinearLayoutManager.HORIZONTAL, false)
-            adapter = shortAdapter
-
-            val displayMetrics = DisplayMetrics()
-            requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
-            val screenWidth = displayMetrics.widthPixels
-            val margin = (screenWidth * 0.05).toInt() // 화면 너비의 5%를 마진으로 사용
-
-            // 아이템 데코레이션 추가
-            addItemDecoration(RVMarginItemDecoration(margin, true))
-        }
-        binding.cardChooseRv.apply {
-            layoutManager = LinearLayoutManager(requireContext(),
-                LinearLayoutManager.HORIZONTAL, false)
-            adapter = chooseAdapter
-
-            val displayMetrics = DisplayMetrics()
-            requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
-            val screenWidth = displayMetrics.widthPixels
-            val margin = (screenWidth * 0.05).toInt() // 화면 너비의 5%를 마진으로 사용
-
-            // 아이템 데코레이션 추가
-            addItemDecoration(RVMarginItemDecoration(margin, true))
-        }
+        setupRecyclerView(binding.cardRv, longAdapter)
+        setupRecyclerView(binding.cardShortRv, shortAdapter)
+        setupRecyclerView(binding.cardChooseRv, chooseAdapter)
 
         return binding.root
     }
@@ -113,6 +76,25 @@ class CreateWriteFragment: Fragment() {
         }
         binding.nextBtn.setOnClickListener {
             navController.navigate(R.id.action_createWriteFragment_to_previewFragment)
+        }
+
+        cardViewModel.isAnyEditTextFilled.observe(viewLifecycleOwner, Observer { isFilled ->
+            binding.nextBtn.isEnabled = isFilled
+        })
+    }
+
+    private fun setupRecyclerView(recyclerView: RecyclerView, adapter: RecyclerView.Adapter<*>) {
+        recyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            this.adapter = adapter
+
+            val displayMetrics = DisplayMetrics()
+            requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
+            val screenWidth = displayMetrics.widthPixels
+            val margin = (screenWidth * 0.05).toInt() // 화면 너비의 5%를 마진으로 사용
+
+            // 아이템 데코레이션 추가
+            addItemDecoration(RVMarginItemDecoration(margin, true))
         }
     }
 }

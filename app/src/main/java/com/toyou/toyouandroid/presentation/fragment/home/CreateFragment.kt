@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.databinding.FragmentCreateBinding
@@ -105,45 +106,9 @@ class CreateFragment : Fragment(){
 
         cardViewModel.loadCardData()
 
-
-        binding.cardRv.apply {
-            layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL, false)
-            adapter = cardAdapter
-
-            val displayMetrics = DisplayMetrics()
-            requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
-            val screenWidth = displayMetrics.widthPixels
-            val margin = (screenWidth * 0.05).toInt() // 화면 너비의 5%를 마진으로 사용
-
-            // 아이템 데코레이션 추가
-            addItemDecoration(RVMarginItemDecoration(margin, true))
-        }
-
-        binding.cardShortRv.apply {
-            layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL, false)
-            adapter = cardShortAdapter
-
-            val displayMetrics = DisplayMetrics()
-            requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
-            val screenWidth = displayMetrics.widthPixels
-            val margin = (screenWidth * 0.05).toInt() // 화면 너비의 5%를 마진으로 사용
-
-            // 아이템 데코레이션 추가
-            addItemDecoration(RVMarginItemDecoration(margin, true))
-        }
-
-        binding.cardChooseRv.apply {
-            layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL, false)
-            adapter = cardChooseAdapter
-
-            val displayMetrics = DisplayMetrics()
-            requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
-            val screenWidth = displayMetrics.widthPixels
-            val margin = (screenWidth * 0.05).toInt() // 화면 너비의 5%를 마진으로 사용
-
-            // 아이템 데코레이션 추가
-            addItemDecoration(RVMarginItemDecoration(margin, true))
-        }
+        setupRecyclerView(binding.cardRv, cardAdapter)
+        setupRecyclerView(binding.cardShortRv, cardShortAdapter)
+        setupRecyclerView(binding.cardChooseRv, cardChooseAdapter)
 
         val mainActivity = activity as MainActivity // casting
         mainActivity.hideBottomNavigation(true)
@@ -170,6 +135,21 @@ class CreateFragment : Fragment(){
                 }
             }
             navController.navigate(R.id.action_create_fragment_to_createWriteFragment)
+        }
+    }
+
+    private fun setupRecyclerView(recyclerView: RecyclerView, adapter: RecyclerView.Adapter<*>) {
+        recyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            this.adapter = adapter
+
+            val displayMetrics = DisplayMetrics()
+            requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
+            val screenWidth = displayMetrics.widthPixels
+            val margin = (screenWidth * 0.05).toInt() // 화면 너비의 5%를 마진으로 사용
+
+            // 아이템 데코레이션 추가
+            addItemDecoration(RVMarginItemDecoration(margin, true))
         }
     }
 
