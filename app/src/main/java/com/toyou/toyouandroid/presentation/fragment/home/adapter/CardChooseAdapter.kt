@@ -119,8 +119,6 @@ class CardChooseAdapter(private val onItemClick: (Int, Boolean) -> Unit) : Recyc
             button.setBackgroundResource(backgroundRes)
         }
 
-
-
         fun bind(item: ChooseModel) {
             question.text = item.message
             txtOption1.text = item.options[0]

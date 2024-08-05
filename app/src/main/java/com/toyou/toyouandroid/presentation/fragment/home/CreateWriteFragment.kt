@@ -1,14 +1,21 @@
 package com.toyou.toyouandroid.presentation.fragment.home
 
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentCreateWriteBinding
+import com.toyou.toyouandroid.presentation.fragment.home.adapter.CardChooseAdapter
+import com.toyou.toyouandroid.presentation.fragment.home.adapter.ShortCardAdapter
+import com.toyou.toyouandroid.presentation.fragment.home.adapter.WriteCardAdapter
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 
 class CreateWriteFragment: Fragment() {
@@ -18,6 +25,17 @@ class CreateWriteFragment: Fragment() {
     private lateinit var cardViewModel: CardViewModel
 
     lateinit var navController: NavController
+    private lateinit var longAdapter : WriteCardAdapter
+    private lateinit var shortAdapter: ShortCardAdapter
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        cardViewModel = ViewModelProvider(requireActivity()).get(CardViewModel::class.java)
+
+        cardViewModel.loadCardData()
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,6 +43,42 @@ class CreateWriteFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentCreateWriteBinding.inflate(inflater, container, false)
+
+        cardViewModel.previewCards.observe(viewLifecycleOwner, Observer { cards ->
+            longAdapter.setCards(cards)
+            shortAdapter.setCards(cards)
+        })
+
+        longAdapter = WriteCardAdapter()
+        shortAdapter = ShortCardAdapter()
+
+        binding.cardRv.apply {
+            layoutManager = LinearLayoutManager(requireContext(),
+                LinearLayoutManager.HORIZONTAL, false)
+            adapter = longAdapter
+
+            val displayMetrics = DisplayMetrics()
+            requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
+            val screenWidth = displayMetrics.widthPixels
+            val margin = (screenWidth * 0.05).toInt() // 화면 너비의 5%를 마진으로 사용
+
+            // 아이템 데코레이션 추가
+            addItemDecoration(RVMarginItemDecoration(margin, true))
+        }
+
+        binding.cardShortRv.apply {
+            layoutManager = LinearLayoutManager(requireContext(),
+                LinearLayoutManager.HORIZONTAL, false)
+            adapter = shortAdapter
+
+            val displayMetrics = DisplayMetrics()
+            requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
+            val screenWidth = displayMetrics.widthPixels
+            val margin = (screenWidth * 0.05).toInt() // 화면 너비의 5%를 마진으로 사용
+
+            // 아이템 데코레이션 추가
+            addItemDecoration(RVMarginItemDecoration(margin, true))
+        }
 
         return binding.root
     }
