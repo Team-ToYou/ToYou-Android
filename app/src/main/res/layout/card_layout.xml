@@ -41,6 +41,7 @@
                 android:layout_toRightOf="@id/item_image"
                 android:text="240509"
                 style="@style/gangwon25"
+                android:layout_marginTop="-5dp"
                 android:textColor="@color/black"/>
 e
             <TextView
@@ -52,6 +53,7 @@ e
                 android:layout_toRightOf="@+id/item_image"
                 android:text="To.xxx"
                 style="@style/gangwon20"
+                android:layout_marginTop="-7dp"
                 android:textColor="@color/black"/>
 
             <ImageView
