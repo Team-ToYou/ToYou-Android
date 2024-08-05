@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.model.PreviewCardModel
+import com.toyou.toyouandroid.model.PreviewChooseModel
 import timber.log.Timber
 
 class CardPreviewListAdapter(private var cardList: List<PreviewCardModel>) : BaseAdapter() {
@@ -43,8 +44,6 @@ class CardPreviewListAdapter(private var cardList: List<PreviewCardModel>) : Bas
         questionText!!.text = cardList[position].question
         val  answerText = view?.findViewById<TextView>(R.id.answer)
         answerText!!.text = cardList[position].answer
-
-
 
         return view!!
     }

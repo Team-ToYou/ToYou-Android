@@ -45,11 +45,11 @@ class CardFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        listAdapter = CardPreviewListAdapter(emptyList())
+        listAdapter = CardPreviewListAdapter(emptyList(), emptyList())
         binding.cardList.adapter = listAdapter
 
         cardViewModel.previewCards.observe(viewLifecycleOwner, Observer { previewCards ->
-            listAdapter.setCards(previewCards)
+            listAdapter.setCards(previewCards )
             Timber.tag("카드2").d(previewCards.toString())
 
         })
