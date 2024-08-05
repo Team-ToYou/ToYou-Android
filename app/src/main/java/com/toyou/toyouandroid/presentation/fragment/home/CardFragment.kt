@@ -45,7 +45,7 @@ class CardFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        listAdapter = CardPreviewListAdapter(emptyList(), emptyList())
+        listAdapter = CardPreviewListAdapter(emptyList())
         binding.cardList.adapter = listAdapter
 
         cardViewModel.previewCards.observe(viewLifecycleOwner, Observer { previewCards ->
