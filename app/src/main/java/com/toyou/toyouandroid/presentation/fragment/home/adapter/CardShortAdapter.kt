@@ -1,6 +1,5 @@
 package com.toyou.toyouandroid.presentation.fragment.home.adapter
 
-
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.model.CardModel
 
-class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit) : RecyclerView.Adapter<CardAdapter.CardViewHolder>() {
+class CardShortAdapter (private val onItemClick: (Int, Boolean) -> Unit) : RecyclerView.Adapter<CardShortAdapter.CardViewHolder>() {
     private var cardList: List<CardModel> = emptyList()
 
     fun setCards(cards: List<CardModel>) {
@@ -21,11 +20,11 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit) : RecyclerVie
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_rv_card, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_rv_short_card, parent, false)
         return CardViewHolder(view, onItemClick)
     }
 
-    override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CardShortAdapter.CardViewHolder, position: Int) {
         holder.bind(cardList[position])
     }
 

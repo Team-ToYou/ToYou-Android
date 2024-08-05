@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/navigation_splash">
+    app:startDestination="@id/navigation_home">
 
     <fragment
         android:id="@+id/navigation_home"
@@ -215,8 +215,8 @@
         android:label="CreateFragment"
         tools:layout="@layout/fragment_create">
         <action
-            android:id="@+id/action_create_fragment_to_previewFragment"
-            app:destination="@id/previewFragment" />
+            android:id="@+id/action_create_fragment_to_createWriteFragment"
+            app:destination="@id/createWriteFragment" />
     </fragment>
     <fragment
         android:id="@+id/previewFragment"
@@ -295,5 +295,14 @@
         <action
             android:id="@+id/action_questionContentLongFragment_to_sendFragment"
             app:destination="@id/sendFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createWriteFragment"
+        android:name="com.toyou.toyouandroid.presentation.fragment.home.CreateWriteFragment"
+        android:label="CreateWriteFragment"
+        tools:layout="@layout/fragment_create_write">
+        <action
+            android:id="@+id/action_createWriteFragment_to_previewFragment"
+            app:destination="@id/previewFragment" />
     </fragment>
 </navigation>

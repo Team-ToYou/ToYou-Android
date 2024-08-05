@@ -8,7 +8,7 @@
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="5dp"
+        android:layout_margin="15dp"
         card_view:cardBackgroundColor="@color/gr00"
         card_view:cardCornerRadius="5dp"
         card_view:cardElevation="3dp"
@@ -41,6 +41,7 @@
                 android:layout_toRightOf="@id/item_image"
                 android:text="240509"
                 style="@style/gangwon25"
+                android:layout_marginTop="-7dp"
                 android:textColor="@color/black"/>
 e
             <TextView
@@ -52,6 +53,7 @@ e
                 android:layout_toRightOf="@+id/item_image"
                 android:text="To.xxx"
                 style="@style/gangwon20"
+                android:layout_marginTop="-7dp"
                 android:textColor="@color/black"/>
 
             <ImageView

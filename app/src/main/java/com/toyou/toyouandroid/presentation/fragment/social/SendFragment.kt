@@ -45,5 +45,7 @@ class SendFragment: Fragment() {
             navController.popBackStack()
 
         }
+
+
     }
 }
