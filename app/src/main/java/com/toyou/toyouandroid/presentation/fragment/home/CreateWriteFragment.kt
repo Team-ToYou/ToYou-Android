@@ -2,6 +2,7 @@ package com.toyou.toyouandroid.presentation.fragment.home
 
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentCreateWriteBinding
+import com.toyou.toyouandroid.model.ChooseModel
 import com.toyou.toyouandroid.presentation.fragment.home.adapter.CardChooseAdapter
 import com.toyou.toyouandroid.presentation.fragment.home.adapter.ChooseCardAdapter
 import com.toyou.toyouandroid.presentation.fragment.home.adapter.ShortCardAdapter
@@ -50,7 +52,7 @@ class CreateWriteFragment: Fragment() {
             shortAdapter.setCards(cards)
         })
 
-        cardViewModel.chooseCards.observe(viewLifecycleOwner, Observer { cards ->
+        cardViewModel.previewChoose.observe(viewLifecycleOwner, Observer { cards ->
             chooseAdapter.setCards(cards)
         })
 

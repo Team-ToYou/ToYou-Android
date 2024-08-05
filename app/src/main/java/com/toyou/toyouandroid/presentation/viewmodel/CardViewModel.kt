@@ -8,21 +8,21 @@ import androidx.lifecycle.ViewModel
 import com.toyou.toyouandroid.model.CardModel
 import com.toyou.toyouandroid.model.ChooseModel
 import com.toyou.toyouandroid.model.PreviewCardModel
+import com.toyou.toyouandroid.model.PreviewChooseModel
 
 class CardViewModel : ViewModel(){
     private val _cards = MutableLiveData<List<CardModel>>()
     val cards: LiveData<List<CardModel>> get() = _cards
-
     private val _previewCards = MutableLiveData<List<PreviewCardModel>>()
     val previewCards : LiveData<List<PreviewCardModel>> get() = _previewCards
     private val _chooseCards = MutableLiveData<List<ChooseModel>>()
     val chooseCards : LiveData<List<ChooseModel>> get() = _chooseCards
-
+    private val _previewChoose = MutableLiveData<List<PreviewChooseModel>>()
+    val previewChoose : LiveData<List<PreviewChooseModel>> get() = _previewChoose
 
     fun isLockSelected(lock : ImageView){
         lock.isSelected = !lock.isSelected
     }
-
 
     //뷰모델이 생성될때 초기값 설정
     init {
@@ -77,5 +77,11 @@ class CardViewModel : ViewModel(){
         }
     }
 
+    fun updateChooseCard() {
+        _previewChoose.value = _chooseCards.value?.filter { it.isButtonSelected }?.map {
+            PreviewChooseModel(message = it.message, fromWho = it.fromWho, options = it.options, type = it.type, answer = "")
+        }
+        Log.d("선택3", _chooseCards.value.toString())
+    }
 
 }

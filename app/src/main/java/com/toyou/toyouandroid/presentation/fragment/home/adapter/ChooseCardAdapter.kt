@@ -9,13 +9,15 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.model.ChooseModel
+import com.toyou.toyouandroid.model.PreviewChooseModel
 import com.toyou.toyouandroid.model.multi_type1
 
 class ChooseCardAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private var cardList: List<ChooseModel> = emptyList()
+    private var cardList: List<PreviewChooseModel> = emptyList()
 
-    fun setCards(cards: List<ChooseModel>) {
+    fun setCards(cards: List<PreviewChooseModel>) {
         this.cardList = cards
+        Log.d("선택4", cards.toString())
         notifyDataSetChanged()
     }
 
@@ -86,7 +88,7 @@ class ChooseCardAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             selectedOption = selected
         }
 
-        fun bind(item: ChooseModel) {
+        fun bind(item: PreviewChooseModel) {
             question.text = item.message
             txtOption1.text = item.options[0]
             txtOption2.text = item.options[1]
@@ -119,7 +121,7 @@ class ChooseCardAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             selected.isSelected = true
             selectedOption = selected
         }
-        fun bind(item: ChooseModel) {
+        fun bind(item: PreviewChooseModel) {
             question.text = item.message
             txtOption1.text = item.options[0]
             txtOption2.text = item.options[1]

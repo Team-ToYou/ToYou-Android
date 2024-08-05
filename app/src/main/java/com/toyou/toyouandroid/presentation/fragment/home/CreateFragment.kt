@@ -157,10 +157,11 @@ class CreateFragment : Fragment(){
         binding.backBtn.setOnClickListener {
             val mainActivity = activity as MainActivity
             mainActivity.hideBottomNavigation(false)
-                navController.popBackStack()
-
+            navController.popBackStack()
         }
+
         binding.nextBtn.setOnClickListener {
+            cardViewModel.updateChooseCard()
             cardViewModel.updatePreviewCard()
 
             cardViewModel.previewCards.value?.let { previewCards ->
@@ -170,9 +171,6 @@ class CreateFragment : Fragment(){
             }
             navController.navigate(R.id.action_create_fragment_to_createWriteFragment)
         }
-
-
-
     }
 
 }
