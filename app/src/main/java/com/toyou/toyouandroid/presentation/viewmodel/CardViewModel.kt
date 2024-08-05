@@ -22,20 +22,13 @@ class CardViewModel : ViewModel(){
     private val _isAnyEditTextFilled = MutableLiveData(false)
     val isAnyEditTextFilled: LiveData<Boolean> get() = _isAnyEditTextFilled
 
-    private val _answers = MutableLiveData<MutableMap<Int, String>>()
-    val answers: LiveData<MutableMap<Int, String>> get() = _answers
 
-    fun updateAnswer(position: Int, answer: String) {
-        _answers.value?.put(position, answer)
-        _answers.value = _answers.value
-    }
-
-    fun saveAnswersToCards() {
-        _previewCards.value?.let { cards ->
-            val updatedCards = cards.mapIndexed { index, card ->
-                card.copy(answer = _answers.value?.get(index) ?: "")
-            }
-            _previewCards.value = updatedCards
+    fun updateCardAnswer(position: Int, answer: String) {
+        val updatedCards = _previewCards.value?.toMutableList()
+        updatedCards?.let {
+            val card = it[position]
+            it[position] = card.copy(answer = answer)
+            _previewCards.value = it
         }
     }
 

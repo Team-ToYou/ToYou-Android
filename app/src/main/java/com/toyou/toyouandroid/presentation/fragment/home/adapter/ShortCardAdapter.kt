@@ -2,6 +2,7 @@ package com.toyou.toyouandroid.presentation.fragment.home.adapter
 
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,22 +56,23 @@ class ShortCardAdapter(private val cardViewModel: CardViewModel) : RecyclerView.
                     message = s.toString()
                     wordCount.text = "${message.length} / 50"
                     cardViewModel.setEditTextFilled(message.isNotEmpty())
-                    cardViewModel.updateAnswer(adapterPosition, message)
+                   // cardViewModel.updateCardAnswer(adapterPosition, message)
 
                 }
 
                 override fun afterTextChanged(s: Editable?) {
                     wordCount.text = "${message.length} / 50"
-
                 }
             })
         }
         fun bind(card: PreviewCardModel) {
             cardMessageTextView.text = card.question
             fromWho.text = card.fromWho
-            answerEdit.setText(cardViewModel.answers.value?.get(position) ?: "")
+            answerEdit.setText(card.answer)
+
         }
 
-
     }
+
+
 }

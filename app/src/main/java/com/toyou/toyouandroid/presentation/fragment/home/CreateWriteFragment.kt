@@ -75,7 +75,6 @@ class CreateWriteFragment: Fragment() {
             navController.popBackStack()
         }
         binding.nextBtn.setOnClickListener {
-            cardViewModel.saveAnswersToCards()
             navController.navigate(R.id.action_createWriteFragment_to_previewFragment)
         }
 
