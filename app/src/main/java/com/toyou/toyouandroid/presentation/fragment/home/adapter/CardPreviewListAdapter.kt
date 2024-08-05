@@ -64,7 +64,8 @@ class CardPreviewListAdapter(private var cardList: List<PreviewCardModel>) : Bas
             5-> {
                 val answerContainer = view?.findViewById<LinearLayout>(R.id.choose_five_linear)
                 answerContainer?.visibility = View.VISIBLE
-            }        }
+            }
+        }
 
         return view!!
     }
