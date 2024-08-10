@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.model.PreviewCardModel
+import com.toyou.toyouandroid.model.PreviewChooseModel
 import timber.log.Timber
 
 class CardPreviewListAdapter(private var cardList: List<PreviewCardModel>) : BaseAdapter() {
@@ -43,28 +44,6 @@ class CardPreviewListAdapter(private var cardList: List<PreviewCardModel>) : Bas
         questionText!!.text = cardList[position].question
         val  answerText = view?.findViewById<TextView>(R.id.answer)
         answerText!!.text = cardList[position].answer
-
-        when(cardList[position].type){
-            1-> {
-                   val answerContainer = view?.findViewById<LinearLayout>(R.id.answer_container)
-                   answerContainer?.visibility = View.VISIBLE
-               }
-            2-> {
-                val answerContainer = view?.findViewById<LinearLayout>(R.id.choose_two_linear)
-                answerContainer?.visibility = View.VISIBLE
-            }
-            3-> {
-                val answerContainer = view?.findViewById<LinearLayout>(R.id.choose_three_linear)
-                answerContainer?.visibility = View.VISIBLE
-            }
-            4-> {
-                val answerContainer = view?.findViewById<LinearLayout>(R.id.choose_forth_linear)
-                answerContainer?.visibility = View.VISIBLE
-            }
-            5-> {
-                val answerContainer = view?.findViewById<LinearLayout>(R.id.choose_five_linear)
-                answerContainer?.visibility = View.VISIBLE
-            }        }
 
         return view!!
     }
