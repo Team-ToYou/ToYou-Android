@@ -10,7 +10,6 @@ import com.toyou.toyouandroid.data.create.dto.response.QuestionsDto
 
 import com.toyou.toyouandroid.domain.create.repository.CreateRepository
 import com.toyou.toyouandroid.model.CardModel
-import com.toyou.toyouandroid.model.CardShortModel
 import com.toyou.toyouandroid.model.ChooseModel
 import com.toyou.toyouandroid.model.PreviewCardModel
 import com.toyou.toyouandroid.model.PreviewChooseModel
@@ -20,8 +19,6 @@ import kotlinx.coroutines.launch
 class CardViewModel : ViewModel(){
     private val _cards = MutableLiveData<List<CardModel>>()
     val cards: LiveData<List<CardModel>> get() = _cards
-    private val _shortCards = MutableLiveData<List<CardShortModel>>()
-    val shortCards: LiveData<List<CardShortModel>> get() = _shortCards
     private val _previewCards = MutableLiveData<List<PreviewCardModel>>()
     val previewCards : LiveData<List<PreviewCardModel>> get() = _previewCards
     private val _chooseCards = MutableLiveData<List<ChooseModel>>()
@@ -66,18 +63,6 @@ class CardViewModel : ViewModel(){
                             fromWho = question.questioner,
                             options = question.options ?: emptyList(),
                             type = question.options.size
-                        )
-                    )
-                }
-                "LONG_ANSWER" -> {
-                    cardModels.add(
-                        CardModel(
-                            message = question.content,
-                            fromWho = question.questioner,
-                            questionType = when (question.type) {
-                                "LONG_ANSWER" -> 2
-                                else -> 0
-                            }
                         )
                     )
                 }
@@ -126,7 +111,7 @@ class CardViewModel : ViewModel(){
     fun isLockSelected(lock : ImageView){
         lock.isSelected = !lock.isSelected
     }
-    
+
     fun updateButtonState(position : Int, isSelected : Boolean){
         _cards.value = _cards.value?.mapIndexed { index, card ->
             if (index == position) {

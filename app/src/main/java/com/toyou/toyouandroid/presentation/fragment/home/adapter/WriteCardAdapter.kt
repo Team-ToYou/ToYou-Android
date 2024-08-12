@@ -17,8 +17,8 @@ class WriteCardAdapter(private val cardViewModel: CardViewModel) : RecyclerView.
 
     private var cardList : List<PreviewCardModel> = emptyList()
 
-    fun setCards(card: List<PreviewCardModel>){
-        this.cardList = card
+    fun setCards(cards: List<PreviewCardModel>) {
+        this.cardList = cards.filter { it.type == 2 }
         notifyDataSetChanged()
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WriteCardAdapter.ViewHolder {

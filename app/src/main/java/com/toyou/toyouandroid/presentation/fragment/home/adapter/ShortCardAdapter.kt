@@ -17,10 +17,11 @@ class ShortCardAdapter(private val cardViewModel: CardViewModel) : RecyclerView.
 
     private var cardList : List<PreviewCardModel> = emptyList()
 
-    fun setCards(card: List<PreviewCardModel>){
-        this.cardList = card
+    fun setCards(cards: List<PreviewCardModel>) {
+        this.cardList = cards.filter { it.type == 0 }
         notifyDataSetChanged()
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShortCardAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_rv_short_edit, parent, false)
         return ShortCardAdapter.ViewHolder(view, cardViewModel)
