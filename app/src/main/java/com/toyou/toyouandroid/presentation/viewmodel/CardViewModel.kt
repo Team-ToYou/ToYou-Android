@@ -35,9 +35,59 @@ class CardViewModel : ViewModel(){
         get() = _result
 
     fun getAllData() = viewModelScope.launch {
-        Log.d("질문 조회", repository.getAllData().toString())
-        _result.value = repository.getAllData()
+        try {
+            val response = repository.getAllData()
+            if (response.isSuccess) {
+                val questionsDto = response.result // response.getOrNull() 대신 직접 접근
+                questionsDto?.let { mapToModels(it) }
+            } else {
+                // 오류 처리
+                Log.e("CardViewModel", "API 호출 실패: ${response.message}")
+            }
+        } catch (e: Exception) {
+            Log.e("CardViewModel", "예외 발생: ${e.message}")
+        }
     }
+
+    // 응답 데이터 매핑
+    private fun mapToModels(questionsDto: QuestionsDto) {
+        val cardModels = mutableListOf<CardModel>()
+        val chooseModels = mutableListOf<ChooseModel>()
+
+        for (question in questionsDto.questions) {
+            when (question.type) {
+                "OPTIONAL" -> {
+                    chooseModels.add(
+                        ChooseModel(
+                            message = question.content,
+                            fromWho = question.questioner,
+                            options = question.options ?: emptyList(),
+                            type = 1 // "OPTIONAL" 타입을 1로 매핑
+                        )
+                    )
+                }
+                // 다른 타입의 질문 처리 (예: LONG_ANSWER 등)
+                else -> {
+                    cardModels.add(
+                        CardModel(
+                            message = question.content,
+                            fromWho = question.questioner,
+                            questionType = when (question.type) {
+                                "LONG_ANSWER" -> 2
+                                else -> 0
+                            }
+                        )
+                    )
+                }
+            }
+        }
+        Log.d("질문 조회2", cardModels.toString())
+        Log.d("질문 조회3", chooseModels.toString())
+
+        _cards.value = cardModels
+        _chooseCards.value = chooseModels
+    }
+
 
 
 

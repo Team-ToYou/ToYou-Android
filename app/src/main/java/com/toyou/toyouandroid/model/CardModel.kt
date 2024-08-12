@@ -5,5 +5,4 @@ data class CardModel(
     val fromWho : String,
     val questionType : Int,
     var isButtonSelected : Boolean = false,
-
     )
