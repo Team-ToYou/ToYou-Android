@@ -9,11 +9,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.model.CardModel
+import com.toyou.toyouandroid.model.CardShortModel
 
 class CardShortAdapter (private val onItemClick: (Int, Boolean) -> Unit) : RecyclerView.Adapter<CardShortAdapter.CardViewHolder>() {
-    private var cardList: List<CardModel> = emptyList()
+    private var cardList: List<CardShortModel> = emptyList()
 
-    fun setCards(cards: List<CardModel>) {
+    fun setCards(cards: List<CardShortModel>) {
         this.cardList = cards
         Log.d("CardAdapter", "setCards called with: $cards")
         notifyDataSetChanged()
@@ -45,7 +46,7 @@ class CardShortAdapter (private val onItemClick: (Int, Boolean) -> Unit) : Recyc
 
         }
 
-        fun bind(card: CardModel) {
+        fun bind(card: CardShortModel) {
             cardMessageTextView.text = card.message
             fromWho.text = card.fromWho
         }

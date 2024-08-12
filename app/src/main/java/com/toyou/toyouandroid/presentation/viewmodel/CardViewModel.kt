@@ -10,6 +10,7 @@ import com.toyou.toyouandroid.data.create.dto.response.QuestionsDto
 
 import com.toyou.toyouandroid.domain.create.repository.CreateRepository
 import com.toyou.toyouandroid.model.CardModel
+import com.toyou.toyouandroid.model.CardShortModel
 import com.toyou.toyouandroid.model.ChooseModel
 import com.toyou.toyouandroid.model.PreviewCardModel
 import com.toyou.toyouandroid.model.PreviewChooseModel
@@ -19,6 +20,8 @@ import kotlinx.coroutines.launch
 class CardViewModel : ViewModel(){
     private val _cards = MutableLiveData<List<CardModel>>()
     val cards: LiveData<List<CardModel>> get() = _cards
+    private val _shortCards = MutableLiveData<List<CardShortModel>>()
+    val shortCards: LiveData<List<CardShortModel>> get() = _shortCards
     private val _previewCards = MutableLiveData<List<PreviewCardModel>>()
     val previewCards : LiveData<List<PreviewCardModel>> get() = _previewCards
     private val _chooseCards = MutableLiveData<List<ChooseModel>>()
@@ -63,6 +66,18 @@ class CardViewModel : ViewModel(){
                             fromWho = question.questioner,
                             options = question.options ?: emptyList(),
                             type = question.options.size
+                        )
+                    )
+                }
+                "LONG_ANSWER" -> {
+                    cardModels.add(
+                        CardModel(
+                            message = question.content,
+                            fromWho = question.questioner,
+                            questionType = when (question.type) {
+                                "LONG_ANSWER" -> 2
+                                else -> 0
+                            }
                         )
                     )
                 }
@@ -111,33 +126,7 @@ class CardViewModel : ViewModel(){
     fun isLockSelected(lock : ImageView){
         lock.isSelected = !lock.isSelected
     }
-
-    //뷰모델이 생성될때 초기값 설정
-    init {
-        //fetchQuestions(1)
-    }
-
-    fun loadCardData(){
-        val sampleCards = listOf(
-            //CardModel("요즘 어떻게 지내?", "From. 현정",1),
-            //CardModel("요즘 즐겨하는 취미는?", "From. 현정"),
-            CardModel("짜장면 vs 짬뽕", "From. 현정",2),
-            CardModel("오늘 몇시에 잘거야?", "From. 현정",3),
-            CardModel("오늘 커피 몇잔 마셨어?", "From. 현정",4),
-            CardModel("오늘 물 몇잔 마셨어?", "From. 현정",5),
-        )
-        val sampleChoose = listOf(
-            ChooseModel("짜장면 vs 짬뽕", "From. 현정", listOf("짜장", "짬뽕"), 1),
-            ChooseModel("짜장면 vs 짬뽕 vs 탕수육", "From. 현정", listOf("짜장", "짬뽕", "탕수육"), 2),
-            ChooseModel("짜장면 vs 짬뽕 vs 탕수육", "From. 현정", listOf("짜장", "짬뽕", "탕수육"), 2),
-            ChooseModel("짜장면 vs 짬뽕", "From. 현정", listOf("짜장", "짬뽕", ), 1),
-
-            )
-
-        _cards.value = sampleCards
-        _chooseCards.value = sampleChoose
-    }
-
+    
     fun updateButtonState(position : Int, isSelected : Boolean){
         _cards.value = _cards.value?.mapIndexed { index, card ->
             if (index == position) {
