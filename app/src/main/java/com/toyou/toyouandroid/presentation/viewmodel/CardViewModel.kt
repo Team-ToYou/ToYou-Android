@@ -38,7 +38,7 @@ class CardViewModel : ViewModel(){
         try {
             val response = repository.getAllData()
             if (response.isSuccess) {
-                val questionsDto = response.result // response.getOrNull() 대신 직접 접근
+                val questionsDto = response.result
                 questionsDto?.let { mapToModels(it) }
             } else {
                 // 오류 처리
@@ -62,11 +62,10 @@ class CardViewModel : ViewModel(){
                             message = question.content,
                             fromWho = question.questioner,
                             options = question.options ?: emptyList(),
-                            type = 1 // "OPTIONAL" 타입을 1로 매핑
+                            type = question.options.size
                         )
                     )
                 }
-                // 다른 타입의 질문 처리 (예: LONG_ANSWER 등)
                 else -> {
                     cardModels.add(
                         CardModel(
@@ -81,8 +80,6 @@ class CardViewModel : ViewModel(){
                 }
             }
         }
-        Log.d("질문 조회2", cardModels.toString())
-        Log.d("질문 조회3", chooseModels.toString())
 
         _cards.value = cardModels
         _chooseCards.value = chooseModels
