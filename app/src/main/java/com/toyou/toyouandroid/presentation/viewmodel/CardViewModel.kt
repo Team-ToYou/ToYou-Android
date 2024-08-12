@@ -5,10 +5,16 @@ import android.widget.ImageView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.toyou.toyouandroid.data.create.dto.response.QuestionsDto
+
+import com.toyou.toyouandroid.domain.create.repository.CreateRepository
 import com.toyou.toyouandroid.model.CardModel
 import com.toyou.toyouandroid.model.ChooseModel
 import com.toyou.toyouandroid.model.PreviewCardModel
 import com.toyou.toyouandroid.model.PreviewChooseModel
+import com.toyou.toyouandroid.network.BaseResponse
+import kotlinx.coroutines.launch
 
 class CardViewModel : ViewModel(){
     private val _cards = MutableLiveData<List<CardModel>>()
@@ -21,6 +27,23 @@ class CardViewModel : ViewModel(){
     val previewChoose : LiveData<List<PreviewChooseModel>> get() = _previewChoose
     private val _isAnyEditTextFilled = MutableLiveData(false)
     val isAnyEditTextFilled: LiveData<Boolean> get() = _isAnyEditTextFilled
+
+    private val repository = CreateRepository()
+
+    private val _result = MutableLiveData<BaseResponse<QuestionsDto>>()
+    val result: LiveData<BaseResponse<QuestionsDto>>
+        get() = _result
+
+    fun getAllData() = viewModelScope.launch {
+        Log.d("질문 조회", repository.getAllData().toString())
+        _result.value = repository.getAllData()
+    }
+
+
+
+    init {
+        getAllData()
+    }
 
 
     fun updateCardAnswer(position: Int, answer: String) {
@@ -44,7 +67,7 @@ class CardViewModel : ViewModel(){
 
     //뷰모델이 생성될때 초기값 설정
     init {
-        loadCardData()
+        //fetchQuestions(1)
     }
 
     fun loadCardData(){

@@ -40,7 +40,8 @@ class CreateFragment : Fragment(){
         super.onCreate(savedInstanceState)
         cardViewModel = ViewModelProvider(requireActivity()).get(CardViewModel::class.java)
 
-        cardViewModel.loadCardData()
+
+        //cardViewModel.loadCardData()
 
     }
 
@@ -104,7 +105,6 @@ class CreateFragment : Fragment(){
         }
 
 
-        cardViewModel.loadCardData()
 
         setupRecyclerView(binding.cardRv, cardAdapter)
         setupRecyclerView(binding.cardShortRv, cardShortAdapter)

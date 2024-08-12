@@ -1,4 +1,4 @@
-package com.toyou.toyouandroid.data.network
+package com.toyou.toyouandroid.network
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

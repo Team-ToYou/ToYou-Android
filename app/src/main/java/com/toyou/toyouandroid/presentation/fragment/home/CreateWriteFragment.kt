@@ -37,8 +37,7 @@ class CreateWriteFragment: Fragment() {
         super.onCreate(savedInstanceState)
         cardViewModel = ViewModelProvider(requireActivity()).get(CardViewModel::class.java)
 
-        cardViewModel.loadCardData()
-
+        cardViewModel.getAllData()
     }
 
     override fun onCreateView(
