@@ -4,6 +4,7 @@ import com.toyou.toyouandroid.data.create.dto.response.QuestionsDto
 import com.toyou.toyouandroid.network.BaseResponse
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface CreateService {
@@ -12,4 +13,9 @@ interface CreateService {
     suspend fun getQuestions(
         @Header("userId") id : Long
     ) : BaseResponse<QuestionsDto>
+
+    @POST("/diarycards")
+    suspend fun postCard(
+        @Header("userId") id : Long
+    )
 }
