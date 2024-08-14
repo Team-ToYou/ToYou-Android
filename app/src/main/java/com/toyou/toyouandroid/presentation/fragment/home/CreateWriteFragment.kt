@@ -1,5 +1,6 @@
 package com.toyou.toyouandroid.presentation.fragment.home
 
+import ShortCardAdapter
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
@@ -18,7 +19,6 @@ import com.toyou.toyouandroid.databinding.FragmentCreateWriteBinding
 import com.toyou.toyouandroid.model.ChooseModel
 import com.toyou.toyouandroid.presentation.fragment.home.adapter.CardChooseAdapter
 import com.toyou.toyouandroid.presentation.fragment.home.adapter.ChooseCardAdapter
-import com.toyou.toyouandroid.presentation.fragment.home.adapter.ShortCardAdapter
 import com.toyou.toyouandroid.presentation.fragment.home.adapter.WriteCardAdapter
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 
@@ -74,6 +74,7 @@ class CreateWriteFragment: Fragment() {
             navController.popBackStack()
         }
         binding.nextBtn.setOnClickListener {
+            Log.d("답변", cardViewModel.previewCards.value!![1].answer.toString())
             navController.navigate(R.id.action_createWriteFragment_to_previewFragment)
         }
 

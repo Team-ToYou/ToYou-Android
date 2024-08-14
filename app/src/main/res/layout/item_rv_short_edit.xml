@@ -1,52 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:id="@+id/textMessage"
-        style="@style/sc_l12"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="요즘 어떻게 지내?"
-        android:textColor="@color/black"
-        />
+    <data>
+        <variable
+            name="viewModel"
+            type="com.toyou.toyouandroid.presentation.viewmodel.CardViewModel" />
+        <variable
+            name="card"
+            type="com.toyou.toyouandroid.model.PreviewCardModel" />
+    </data>
 
-    <TextView
-        android:id="@+id/fromWho_tv"
-        style="@style/sc_l12"
-        android:layout_marginTop="4dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="From."
-        android:textColor="@color/black"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/textMessage"
+            style="@style/sc_l12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{card.question}"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+        <EditText
+            android:id="@+id/memo_et"
+            android:layout_width="160dp"
+            android:layout_height="61dp"
+            style="@style/sc_l10"
+            android:hint="답변을 입력해주세요."
+            android:gravity="top"
+            android:padding="5dp"
+            android:background="@drawable/card_edit_border"
+            android:text="@={viewModel.answer}"
+        app:layout_constraintTop_toBottomOf="@id/textMessage"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/memo_et" />
-
-    <EditText
-        android:id="@+id/memo_et"
-        android:layout_width="160dp"
-        android:layout_height="61dp"
-        style="@style/sc_l10"
-        android:hint="답변을 입력해주세요."
-        android:gravity="top"
-        android:padding="5dp"
-        android:background="@drawable/card_edit_border"
-        app:layout_constraintTop_toBottomOf="@+id/textMessage"
         android:maxLength="200"
         android:layout_marginTop="6dp"/>
 
-    <TextView
-        android:id="@+id/limit_200"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="(0/50)"
-        style="@style/sc_l8"
-        android:layout_marginBottom="5dp"
-        android:layout_marginRight="5dp"
-        app:layout_constraintBottom_toBottomOf="@id/memo_et"
-        app:layout_constraintEnd_toEndOf="@+id/memo_et" />
+        <TextView
+            android:id="@+id/fromWho_tv"
+            style="@style/sc_l12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{card.fromWho}"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/memo_et"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            />
 
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/limit_200"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{String.format("(%d/50)", viewModel.getAnswerLength(card.answer))}'
+            style="@style/sc_l8"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="5dp"
+            app:layout_constraintBottom_toBottomOf="@id/memo_et"
+            app:layout_constraintEnd_toEndOf="@id/memo_et" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

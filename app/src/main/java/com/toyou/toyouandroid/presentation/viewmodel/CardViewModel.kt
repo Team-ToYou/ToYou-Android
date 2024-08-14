@@ -21,6 +21,8 @@ class CardViewModel : ViewModel(){
     val cards: LiveData<List<CardModel>> get() = _cards
     private val _previewCards = MutableLiveData<List<PreviewCardModel>>()
     val previewCards : LiveData<List<PreviewCardModel>> get() = _previewCards
+
+    val answer = MutableLiveData<String>()
     private val _chooseCards = MutableLiveData<List<ChooseModel>>()
     val chooseCards : LiveData<List<ChooseModel>> get() = _chooseCards
     private val _previewChoose = MutableLiveData<List<PreviewChooseModel>>()
@@ -33,6 +35,7 @@ class CardViewModel : ViewModel(){
     private val _result = MutableLiveData<BaseResponse<QuestionsDto>>()
     val result: LiveData<BaseResponse<QuestionsDto>>
         get() = _result
+
 
     fun getAllData() = viewModelScope.launch {
         try {
@@ -86,8 +89,6 @@ class CardViewModel : ViewModel(){
     }
 
 
-
-
     init {
         getAllData()
     }
@@ -100,6 +101,9 @@ class CardViewModel : ViewModel(){
             it[position] = card.copy(answer = answer)
             _previewCards.value = it
         }
+    }
+    fun getAnswerLength(answer: String): Int {
+        return answer.length
     }
 
 
