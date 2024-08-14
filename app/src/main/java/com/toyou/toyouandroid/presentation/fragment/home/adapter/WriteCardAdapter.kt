@@ -37,9 +37,9 @@ class WriteCardAdapter(private val cardViewModel: CardViewModel) : RecyclerView.
         return cardList.size
     }
 
-    inner class ViewHolder(private val binding : ItemRvLongEditBinding) : RecyclerView.ViewHolder(binding.root){
+    inner class ViewHolder(private val binding: ItemRvLongEditBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(card : PreviewCardModel){
+        fun bind(card: PreviewCardModel) {
             binding.card = card
             binding.viewModel = cardViewModel
 
@@ -48,8 +48,8 @@ class WriteCardAdapter(private val cardViewModel: CardViewModel) : RecyclerView.
             binding.memoEt.doAfterTextChanged { text ->
                 cardViewModel.updateCardAnswer(adapterPosition, text.toString())
             }
-            binding.executePendingBindings()
 
+            binding.executePendingBindings()
         }
     }
 

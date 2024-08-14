@@ -25,7 +25,8 @@ class CardViewModel : ViewModel(){
     private val _previewCards = MutableLiveData<List<PreviewCardModel>>()
     val previewCards : LiveData<List<PreviewCardModel>> get() = _previewCards
 
-    val answer = MutableLiveData<String>()
+    private val _answersMap = MutableLiveData<MutableMap<Int, String>>(mutableMapOf())
+    val answersMap: LiveData<MutableMap<Int, String>> get() = _answersMap
     private val _chooseCards = MutableLiveData<List<ChooseModel>>()
     val chooseCards : LiveData<List<ChooseModel>> get() = _chooseCards
     private val _previewChoose = MutableLiveData<List<PreviewChooseModel>>()
@@ -36,6 +37,7 @@ class CardViewModel : ViewModel(){
     private val repository = CreateRepository()
 
     private val _result = MutableLiveData<BaseResponse<QuestionsDto>>()
+    val answer = MutableLiveData<String>()
     val result: LiveData<BaseResponse<QuestionsDto>>
         get() = _result
 
@@ -106,17 +108,16 @@ class CardViewModel : ViewModel(){
 
 
     fun updateCardAnswer(position: Int, answer: String) {
-        val updatedCards = _previewCards.value?.toMutableList()
-        updatedCards?.let {
-            val card = it[position]
-            it[position] = card.copy(answer = answer)
-            _previewCards.value = it
-        }
-        Log.d("답변", previewCards.value.toString())
+        val updatedAnswersMap = _answersMap.value?.toMutableMap() ?: mutableMapOf()
+        updatedAnswersMap[position] = answer
+        _answersMap.value = updatedAnswersMap
+        Log.d("답변", _answersMap.value.toString())
     }
+
     fun getAnswerLength(answer: String): Int {
         return answer.length
     }
+
 
 
     fun setEditTextFilled(isFilled: Boolean) {
