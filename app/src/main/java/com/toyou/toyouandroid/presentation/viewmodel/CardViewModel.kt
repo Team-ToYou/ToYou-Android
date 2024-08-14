@@ -10,6 +10,7 @@ import com.toyou.toyouandroid.data.create.dto.response.QuestionsDto
 
 import com.toyou.toyouandroid.domain.create.repository.CreateRepository
 import com.toyou.toyouandroid.model.CardModel
+import com.toyou.toyouandroid.model.CardShortModel
 import com.toyou.toyouandroid.model.ChooseModel
 import com.toyou.toyouandroid.model.PreviewCardModel
 import com.toyou.toyouandroid.model.PreviewChooseModel
@@ -19,6 +20,8 @@ import kotlinx.coroutines.launch
 class CardViewModel : ViewModel(){
     private val _cards = MutableLiveData<List<CardModel>>()
     val cards: LiveData<List<CardModel>> get() = _cards
+    private val _shortCards = MutableLiveData<List<CardShortModel>>()
+    val shortCards: LiveData<List<CardShortModel>> get() = _shortCards
     private val _previewCards = MutableLiveData<List<PreviewCardModel>>()
     val previewCards : LiveData<List<PreviewCardModel>> get() = _previewCards
 
@@ -56,6 +59,7 @@ class CardViewModel : ViewModel(){
     private fun mapToModels(questionsDto: QuestionsDto) {
         val cardModels = mutableListOf<CardModel>()
         val chooseModels = mutableListOf<ChooseModel>()
+        val cardShortModel = mutableListOf<CardShortModel>()
 
         for (question in questionsDto.questions) {
             when (question.type) {
@@ -69,15 +73,21 @@ class CardViewModel : ViewModel(){
                         )
                     )
                 }
-                else -> {
+                "LONG_ANSWER" -> {
                     cardModels.add(
                         CardModel(
                             message = question.content,
                             fromWho = question.questioner,
-                            questionType = when (question.type) {
-                                "LONG_ANSWER" -> 2
-                                else -> 0
-                            }
+                            questionType = 2
+                        )
+                    )
+                }
+                else ->{
+                    cardShortModel.add(
+                        CardShortModel(
+                            message = question.content,
+                            fromWho = question.questioner,
+                            questionType = 0
                         )
                     )
                 }
@@ -86,6 +96,7 @@ class CardViewModel : ViewModel(){
 
         _cards.value = cardModels
         _chooseCards.value = chooseModels
+        _shortCards.value = cardShortModel
     }
 
 
@@ -127,6 +138,17 @@ class CardViewModel : ViewModel(){
 
     }
 
+    fun updateShortButtonState(position : Int, isSelected : Boolean){
+        _shortCards.value = _shortCards.value?.mapIndexed { index, card ->
+            if (index == position) {
+                card.copy(isButtonSelected = isSelected)
+            } else {
+                card
+            }
+        }
+
+    }
+
     fun updateChooseButton(position: Int, isSelected: Boolean){
         _chooseCards.value = _chooseCards.value?.mapIndexed { index, card ->
             if (index == position) {
@@ -141,6 +163,15 @@ class CardViewModel : ViewModel(){
         _previewCards.value = _cards.value?.filter {it.isButtonSelected}?.map {
             PreviewCardModel(answer = "", question = it.message, type = it.questionType, fromWho = it.fromWho)
         }
+        Log.d("미리보기", _previewCards.value.toString())
+
+    }
+
+    fun updatePreviewShortCard(){
+        _previewCards.value = _shortCards.value?.filter {it.isButtonSelected}?.map {
+            PreviewCardModel(answer = "", question = it.message, type = it.questionType, fromWho = it.fromWho)
+        }
+
     }
 
     fun updateChooseCard() {

@@ -1,15 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.toyou.toyouandroid.presentation.viewmodel.CardViewModel" />
+        <variable
+            name="card"
+            type="com.toyou.toyouandroid.model.PreviewCardModel" />
+    </data>
+
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    >
 
     <TextView
         android:id="@+id/textMessage"
         style="@style/sc_l12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="요즘 어떻게 지내?"
+        android:text="@{card.question}"
         android:textColor="@color/black"
         />
 
@@ -19,7 +32,7 @@
         android:layout_marginTop="4dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="From."
+        android:text="@{card.fromWho}"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/memo_et" />
@@ -33,6 +46,7 @@
         android:gravity="top"
         android:padding="5dp"
         android:background="@drawable/card_edit_border"
+        android:text="@={viewModel.answer}"
         app:layout_constraintTop_toBottomOf="@+id/textMessage"
         android:maxLength="200"
         android:layout_marginTop="6dp"/>
@@ -41,7 +55,7 @@
         android:id="@+id/limit_200"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="(0/200)"
+        android:text='@{String.format("(%d/50)", viewModel.getAnswerLength(card.answer))}'
         style="@style/sc_l8"
         android:layout_marginBottom="5dp"
         android:layout_marginRight="5dp"
@@ -50,3 +64,4 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

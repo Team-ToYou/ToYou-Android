@@ -74,7 +74,6 @@ class CreateWriteFragment: Fragment() {
             navController.popBackStack()
         }
         binding.nextBtn.setOnClickListener {
-            Log.d("답변", cardViewModel.previewCards.value!![1].answer.toString())
             navController.navigate(R.id.action_createWriteFragment_to_previewFragment)
         }
 
