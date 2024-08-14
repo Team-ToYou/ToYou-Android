@@ -145,8 +145,8 @@ class CreateFragment : Fragment(){
 
         binding.nextBtn.setOnClickListener {
             cardViewModel.updateChooseCard()
-            cardViewModel.updatePreviewCard()
-            cardViewModel.updatePreviewShortCard()
+            cardViewModel.updateAllPreviews()
+            //cardViewModel.updatePreviewShortCard()
 
             cardViewModel.previewCards.value?.let { previewCards ->
                 if (previewCards.isNotEmpty()) {

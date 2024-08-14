@@ -112,6 +112,7 @@ class CardViewModel : ViewModel(){
             it[position] = card.copy(answer = answer)
             _previewCards.value = it
         }
+        Log.d("답변", previewCards.value.toString())
     }
     fun getAnswerLength(answer: String): Int {
         return answer.length
@@ -159,19 +160,22 @@ class CardViewModel : ViewModel(){
         }
     }
 
-    fun updatePreviewCard(){
-        _previewCards.value = _cards.value?.filter {it.isButtonSelected}?.map {
+    fun updateAllPreviews() {
+        val existingCards = _previewCards.value?.toMutableList() ?: mutableListOf()
+
+        val newCards = _cards.value?.filter { it.isButtonSelected }?.map {
             PreviewCardModel(answer = "", question = it.message, type = it.questionType, fromWho = it.fromWho)
-        }
+        } ?: emptyList()
+
+        val newShortCards = _shortCards.value?.filter { it.isButtonSelected }?.map {
+            PreviewCardModel(answer = "", question = it.message, type = it.questionType, fromWho = it.fromWho)
+        } ?: emptyList()
+
+        existingCards.addAll(newCards)
+        existingCards.addAll(newShortCards)
+
+        _previewCards.value = existingCards.distinct()
         Log.d("미리보기", _previewCards.value.toString())
-
-    }
-
-    fun updatePreviewShortCard(){
-        _previewCards.value = _shortCards.value?.filter {it.isButtonSelected}?.map {
-            PreviewCardModel(answer = "", question = it.message, type = it.questionType, fromWho = it.fromWho)
-        }
-
     }
 
     fun updateChooseCard() {

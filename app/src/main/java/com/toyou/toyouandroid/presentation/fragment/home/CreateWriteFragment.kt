@@ -78,7 +78,7 @@ class CreateWriteFragment: Fragment() {
         }
 
         cardViewModel.isAnyEditTextFilled.observe(viewLifecycleOwner, Observer { isFilled ->
-            binding.nextBtn.isEnabled = isFilled
+            //binding.nextBtn.isEnabled = isFilled
         })
     }
 
