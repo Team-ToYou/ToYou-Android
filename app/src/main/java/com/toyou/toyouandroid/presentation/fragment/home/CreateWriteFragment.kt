@@ -71,6 +71,7 @@ class CreateWriteFragment: Fragment() {
         navController = Navigation.findNavController(view)
 
         binding.backBtn.setOnClickListener {
+            cardViewModel.clearAllData()
             navController.popBackStack()
         }
         binding.nextBtn.setOnClickListener {

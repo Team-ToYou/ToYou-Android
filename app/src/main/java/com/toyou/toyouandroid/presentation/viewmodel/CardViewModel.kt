@@ -144,16 +144,6 @@ class CardViewModel : ViewModel(){
 
     }
 
-    fun updateAnswer(position: Int, answer: String) {
-        _previewCards.value = _previewCards.value?.mapIndexed { index, card ->
-            if (index == position) {
-                card.copy(answer = answer)
-            } else {
-                card
-            }
-        }
-    }
-
     fun updateChooseButton(position: Int, isSelected: Boolean){
         _chooseCards.value = _chooseCards.value?.mapIndexed { index, card ->
             if (index == position) {
@@ -187,10 +177,10 @@ class CardViewModel : ViewModel(){
         Log.d("미리보기", _previewCards.value.toString())
     }
 
-    /*fun updateChooseCard() {
-        _previewChoose.value = _chooseCards.value?.filter { it.isButtonSelected }?.map {
-            PreviewChooseModel(message = it.message, fromWho = it.fromWho, options = it.options, type = it.type, answer = "")
-        }
-    }*/
+    fun clearAllData() {
+        _previewCards.value = emptyList()
+        _previewChoose.value = emptyList()
+    }
+
 
 }
