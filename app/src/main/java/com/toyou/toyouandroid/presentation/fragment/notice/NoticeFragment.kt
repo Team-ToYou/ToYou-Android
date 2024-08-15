@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
@@ -12,6 +14,10 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentNoticeBinding
 import com.toyou.toyouandroid.model.NoticeItem
+import com.toyou.toyouandroid.presentation.fragment.notice.network.NetworkModule
+import com.toyou.toyouandroid.presentation.fragment.notice.network.NoticeRepository
+import com.toyou.toyouandroid.presentation.fragment.notice.network.NoticeService
+import com.toyou.toyouandroid.presentation.fragment.notice.network.NoticeViewModelFactory
 import com.toyou.toyouandroid.utils.SwipeToDeleteNotice
 
 class NoticeFragment : Fragment() {
@@ -22,6 +28,10 @@ class NoticeFragment : Fragment() {
 
     private val binding: FragmentNoticeBinding
         get() = requireNotNull(_binding){"FragmentNoticeBinding -> null"}
+
+    private val viewModel: NoticeViewModel by viewModels {
+        NoticeViewModelFactory(NoticeRepository(NetworkModule.getClient().create(NoticeService::class.java)))
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,24 +47,19 @@ class NoticeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
 
-        val items = mutableListOf(
-            NoticeItem.NoticeFriendRequestItem("테디"),
-            NoticeItem.NoticeCardCheckItem("승원"),
-            NoticeItem.NoticeFriendRequestItem("테디"),
-            NoticeItem.NoticeFriendRequestAcceptedItem("유은"),
-            NoticeItem.NoticeFriendRequestItem("테디"),
-            NoticeItem.NoticeCardCheckItem("현정"),
-            NoticeItem.NoticeFriendRequestItem("테디"),
-            NoticeItem.NoticeFriendRequestAcceptedItem("승원"),
-            NoticeItem.NoticeFriendRequestAcceptedItem("테디"),
-            NoticeItem.NoticeCardCheckItem("유은"),
-            NoticeItem.NoticeFriendRequestItem("테디"),
-            NoticeItem.NoticeCardCheckItem("현정"),
-            NoticeItem.NoticeFriendRequestItem("테디"),
-            NoticeItem.NoticeCardCheckItem("승원")
-        )
+        viewModel.noticeItems.observe(viewLifecycleOwner, Observer { items ->
+            setupRecyclerView(items)
+        })
 
-        val adapter = NoticeAdapter(items)
+        viewModel.fetchNotices(userId = 1)
+
+        binding.noticeBackLayout.setOnClickListener {
+            navController.navigate(R.id.action_navigation_notice_to_home_fragment)
+        }
+    }
+
+    private fun setupRecyclerView(items: List<NoticeItem>) {
+        val adapter = NoticeAdapter(items.toMutableList())
         binding.noticeRv.layoutManager = GridLayoutManager(context, 1)
         binding.noticeRv.adapter = adapter
 
@@ -75,10 +80,6 @@ class NoticeFragment : Fragment() {
 
             setOnClickListener {
             }
-        }
-
-        binding.noticeBackLayout.setOnClickListener {
-            navController.navigate(R.id.action_navigation_notice_to_home_fragment)
         }
     }
 
