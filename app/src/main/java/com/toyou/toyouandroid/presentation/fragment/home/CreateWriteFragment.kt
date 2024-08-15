@@ -52,7 +52,7 @@ class CreateWriteFragment: Fragment() {
             shortAdapter.setCards(cards)
         })
 
-        cardViewModel.previewChoose.observe(viewLifecycleOwner, Observer { cards ->
+        cardViewModel.previewCards.observe(viewLifecycleOwner, Observer { cards ->
             chooseAdapter.setCards(cards)
         })
 

@@ -46,7 +46,7 @@
         android:gravity="top"
         android:padding="5dp"
         android:background="@drawable/card_edit_border"
-        android:text="@={viewModel.answer}"
+        android:text="@={card.answer}"
         app:layout_constraintTop_toBottomOf="@+id/textMessage"
         android:maxLength="200"
         android:layout_marginTop="6dp"/>

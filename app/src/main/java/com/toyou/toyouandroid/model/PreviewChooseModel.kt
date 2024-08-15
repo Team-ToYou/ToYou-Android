@@ -5,5 +5,5 @@ data class PreviewChooseModel(
     val fromWho : String,
     val options : List<String>,
     val type : Int,
-    val answer : String
+    var answer : String
 )

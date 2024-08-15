@@ -9,14 +9,17 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.model.ChooseModel
+import com.toyou.toyouandroid.model.PreviewCardModel
 import com.toyou.toyouandroid.model.PreviewChooseModel
 import com.toyou.toyouandroid.model.multi_type1
+import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 
-class ChooseCardAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private var cardList: List<PreviewChooseModel> = emptyList()
+class ChooseCardAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private var cardList: List<PreviewCardModel> = emptyList()
 
-    fun setCards(cards: List<PreviewChooseModel>) {
-        this.cardList = cards
+
+    fun setCards(cards: List<PreviewCardModel>) {
+        this.cardList = cards.filter { it.type == 2 || it.type == 3 }
         Log.d("선택4", cards.toString())
         notifyDataSetChanged()
     }
@@ -88,10 +91,10 @@ class ChooseCardAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             selectedOption = selected
         }
 
-        fun bind(item: PreviewChooseModel) {
-            question.text = item.message
-            txtOption1.text = item.options[0]
-            txtOption2.text = item.options[1]
+        fun bind(item: PreviewCardModel) {
+            question.text = item.question
+            txtOption1.text = item.options!![0]
+            txtOption2.text = item.options!![1]
             fromWho.text = item.fromWho
         }
     }
@@ -121,12 +124,15 @@ class ChooseCardAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             selected.isSelected = true
             selectedOption = selected
         }
-        fun bind(item: PreviewChooseModel) {
-            question.text = item.message
-            txtOption1.text = item.options[0]
-            txtOption2.text = item.options[1]
-            txtOption3.text = item.options[2]
+        fun bind(item: PreviewCardModel) {
+            question.text = item.question
+            txtOption1.text = item.options!![0]
+            txtOption2.text = item.options!![1]
+            txtOption3.text = item.options!![2]
             fromWho.text = item.fromWho
+            if (selectedOption != null){
+                item.answer = selectedOption.toString()
+            }
 
         }
     }

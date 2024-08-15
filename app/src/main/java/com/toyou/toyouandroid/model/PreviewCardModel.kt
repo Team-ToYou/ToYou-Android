@@ -4,5 +4,7 @@ data class PreviewCardModel(
     val question : String,
     var answer : String,
     val type : Int,
-    val fromWho : String
-)
+    val fromWho : String,
+    val options : List<String>?,
+
+    )

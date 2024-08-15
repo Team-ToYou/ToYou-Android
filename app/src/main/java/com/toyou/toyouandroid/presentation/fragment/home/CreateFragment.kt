@@ -144,7 +144,7 @@ class CreateFragment : Fragment(){
         }
 
         binding.nextBtn.setOnClickListener {
-            cardViewModel.updateChooseCard()
+            //cardViewModel.updateChooseCard()
             cardViewModel.updateAllPreviews()
             //cardViewModel.updatePreviewShortCard()
 

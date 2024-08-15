@@ -21,7 +21,7 @@ class WriteCardAdapter(private val cardViewModel: CardViewModel) : RecyclerView.
     private var cardList : List<PreviewCardModel> = emptyList()
 
     fun setCards(cards: List<PreviewCardModel>) {
-        this.cardList = cards.filter { it.type == 2 }
+        this.cardList = cards.filter { it.type == 1 }
         //notifyDataSetChanged()
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -51,7 +51,7 @@ class WriteCardAdapter(private val cardViewModel: CardViewModel) : RecyclerView.
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     card.answer = s.toString()  // 변경된 텍스트를 PreviewCardModel의 answer에 저장
-                    binding.limit200.text = String.format("(%d/50)", s?.length ?: 0)  // 글자 수 업데이트
+                    binding.limit200.text = String.format("(%d/200)", s?.length ?: 0)  // 글자 수 업데이트
                 }
 
                 override fun afterTextChanged(s: Editable?) {}

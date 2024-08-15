@@ -56,6 +56,7 @@ class CardFragment : Fragment() {
 
         binding.lockFreeIv.setOnClickListener {
             cardViewModel.isLockSelected(binding.lockFreeIv)
+            Log.d("답변3", cardViewModel.previewChoose.value.toString())
         }
     }
 

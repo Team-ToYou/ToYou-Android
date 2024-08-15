@@ -80,7 +80,7 @@ class CardViewModel : ViewModel(){
                         CardModel(
                             message = question.content,
                             fromWho = question.questioner,
-                            questionType = 2
+                            questionType = 1
                         )
                     )
                 }
@@ -158,24 +158,29 @@ class CardViewModel : ViewModel(){
         val existingCards = _previewCards.value?.toMutableList() ?: mutableListOf()
 
         val newCards = _cards.value?.filter { it.isButtonSelected }?.map {
-            PreviewCardModel(answer = "", question = it.message, type = it.questionType, fromWho = it.fromWho)
+            PreviewCardModel(answer = "", question = it.message, type = it.questionType, fromWho = it.fromWho, options = null)
         } ?: emptyList()
 
         val newShortCards = _shortCards.value?.filter { it.isButtonSelected }?.map {
-            PreviewCardModel(answer = "", question = it.message, type = it.questionType, fromWho = it.fromWho)
+            PreviewCardModel(answer = "", question = it.message, type = it.questionType, fromWho = it.fromWho, options = null)
+        } ?: emptyList()
+
+        val newChooseCards =_chooseCards.value?.filter { it.isButtonSelected }?.map {
+            PreviewCardModel(question = it.message, fromWho = it.fromWho, options = it.options, type = it.type, answer = "")
         } ?: emptyList()
 
         existingCards.addAll(newCards)
         existingCards.addAll(newShortCards)
+        existingCards.addAll(newChooseCards)
 
         _previewCards.value = existingCards.distinct()
         Log.d("미리보기", _previewCards.value.toString())
     }
 
-    fun updateChooseCard() {
+    /*fun updateChooseCard() {
         _previewChoose.value = _chooseCards.value?.filter { it.isButtonSelected }?.map {
             PreviewChooseModel(message = it.message, fromWho = it.fromWho, options = it.options, type = it.type, answer = "")
         }
-    }
+    }*/
 
 }
