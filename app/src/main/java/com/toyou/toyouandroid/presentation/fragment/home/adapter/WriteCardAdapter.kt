@@ -45,9 +45,18 @@ class WriteCardAdapter(private val cardViewModel: CardViewModel) : RecyclerView.
 
             binding.memoEt.setText(card.answer)
 
-            binding.memoEt.doAfterTextChanged { text ->
-                cardViewModel.updateCardAnswer(adapterPosition, text.toString())
-            }
+
+            binding.memoEt.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    card.answer = s.toString()  // 변경된 텍스트를 PreviewCardModel의 answer에 저장
+                    binding.limit200.text = String.format("(%d/50)", s?.length ?: 0)  // 글자 수 업데이트
+                }
+
+                override fun afterTextChanged(s: Editable?) {}
+            })
+
 
             binding.executePendingBindings()
         }

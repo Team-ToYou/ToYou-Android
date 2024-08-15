@@ -107,12 +107,13 @@ class CardViewModel : ViewModel(){
     }
 
 
-    fun updateCardAnswer(position: Int, answer: String) {
+    /*fun updateCardAnswer(position: Int, answer: String) {
         val updatedAnswersMap = _answersMap.value?.toMutableMap() ?: mutableMapOf()
         updatedAnswersMap[position] = answer
         _answersMap.value = updatedAnswersMap
         Log.d("답변", _answersMap.value.toString())
-    }
+        Log.d("답변2", previewCards.value.toString())
+    }*/
 
     fun getAnswerLength(answer: String): Int {
         return answer.length
