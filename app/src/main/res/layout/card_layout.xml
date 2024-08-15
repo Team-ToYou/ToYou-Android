@@ -63,7 +63,7 @@ e
                 android:layout_alignParentEnd="true"
                 android:src="@drawable/lock_selector" />
 
-            <ListView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/card_list"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

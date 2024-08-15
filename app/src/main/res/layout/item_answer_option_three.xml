@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingVertical="10dp"
+    >
+
+    <TextView
+        android:id="@+id/question"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="요즘 어떻게 지내?"
+        style="@style/gangwon16"
+        android:textColor="@color/black"
+        android:layout_marginTop="30dp"/>
+
+
+    <LinearLayout
+        android:id="@+id/choose_three_linear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/question"
+        android:weightSum="3"
+        android:layout_marginTop="10dp"
+        >
+
+        <TextView
+            android:text="1"
+            style="@style/sc_l10"
+            android:id="@+id/choose_three_first_tv"
+            android:layout_width="80dp"
+            android:layout_height="35dp"
+            android:background="@drawable/search_container"
+            android:gravity="center"/>
+
+
+        <TextView
+            android:text="2"
+            style="@style/sc_l10"
+            android:id="@+id/choose_three_second_tv"
+            android:layout_width="80dp"
+            android:layout_height="35dp"
+            android:background="@drawable/search_container"
+            android:gravity="center"
+            android:layout_marginLeft="10dp"/>
+
+        <TextView
+            android:text="3"
+            style="@style/sc_l10"
+            android:id="@+id/choose_three_third_tv"
+            android:layout_width="80dp"
+            android:layout_height="35dp"
+            android:background="@drawable/search_container"
+            android:gravity="center"
+            android:layout_marginLeft="10dp"/>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
