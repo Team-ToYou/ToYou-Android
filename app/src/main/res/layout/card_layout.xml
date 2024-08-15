@@ -70,7 +70,8 @@ e
                 android:layout_below="@+id/item_detail"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginTop="20dp"/>
+                android:layout_marginTop="20dp"
+                android:divider="#00000000"/>
 
         </RelativeLayout>
 
