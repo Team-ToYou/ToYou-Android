@@ -5,4 +5,5 @@ data class CardShortModel(
     val fromWho : String,
     val questionType : Int,
     var isButtonSelected : Boolean = false,
+    val id : Long
 )

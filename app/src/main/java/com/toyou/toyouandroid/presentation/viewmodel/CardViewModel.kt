@@ -36,10 +36,19 @@ class CardViewModel : ViewModel(){
 
     private val repository = CreateRepository()
 
+    val exposure : LiveData<Boolean> get() = _exposure
+    private val _exposure = MutableLiveData(false)
+
     private val _result = MutableLiveData<BaseResponse<QuestionsDto>>()
     val answer = MutableLiveData<String>()
     val result: LiveData<BaseResponse<QuestionsDto>>
         get() = _result
+
+    fun sendData(previewCardModels: List<PreviewCardModel>, exposure: Boolean) {
+        viewModelScope.launch {
+            repository.postCardData(previewCardModels, exposure)
+        }
+    }
 
 
     fun getAllData() = viewModelScope.launch {
@@ -57,6 +66,7 @@ class CardViewModel : ViewModel(){
         }
     }
 
+
     // 응답 데이터 매핑
     private fun mapToModels(questionsDto: QuestionsDto) {
         val cardModels = mutableListOf<CardModel>()
@@ -71,7 +81,9 @@ class CardViewModel : ViewModel(){
                             message = question.content,
                             fromWho = question.questioner,
                             options = question.options ?: emptyList(),
-                            type = question.options.size
+                            type = question.options.size,
+                            id = question.id
+
                         )
                     )
                 }
@@ -80,7 +92,9 @@ class CardViewModel : ViewModel(){
                         CardModel(
                             message = question.content,
                             fromWho = question.questioner,
-                            questionType = 1
+                            questionType = 1,
+                            id = question.id
+
                         )
                     )
                 }
@@ -89,7 +103,9 @@ class CardViewModel : ViewModel(){
                         CardShortModel(
                             message = question.content,
                             fromWho = question.questioner,
-                            questionType = 0
+                            questionType = 0,
+                            id = question.id
+
                         )
                     )
                 }
@@ -120,6 +136,7 @@ class CardViewModel : ViewModel(){
 
     fun isLockSelected(lock : ImageView){
         lock.isSelected = !lock.isSelected
+        _exposure.value = lock.isSelected
     }
 
     fun updateButtonState(position : Int, isSelected : Boolean){
@@ -158,15 +175,15 @@ class CardViewModel : ViewModel(){
         val existingCards = _previewCards.value?.toMutableList() ?: mutableListOf()
 
         val newCards = _cards.value?.filter { it.isButtonSelected }?.map {
-            PreviewCardModel(answer = "", question = it.message, type = it.questionType, fromWho = it.fromWho, options = null)
+            PreviewCardModel(answer = "", question = it.message, type = it.questionType, fromWho = it.fromWho, options = null, id = it.id)
         } ?: emptyList()
 
         val newShortCards = _shortCards.value?.filter { it.isButtonSelected }?.map {
-            PreviewCardModel(answer = "", question = it.message, type = it.questionType, fromWho = it.fromWho, options = null)
+            PreviewCardModel(answer = "", question = it.message, type = it.questionType, fromWho = it.fromWho, options = null, id = it.id)
         } ?: emptyList()
 
         val newChooseCards =_chooseCards.value?.filter { it.isButtonSelected }?.map {
-            PreviewCardModel(question = it.message, fromWho = it.fromWho, options = it.options, type = it.type, answer = "")
+            PreviewCardModel(question = it.message, fromWho = it.fromWho, options = it.options, type = it.type, answer = "", id = it.id)
         } ?: emptyList()
 
         existingCards.addAll(newCards)

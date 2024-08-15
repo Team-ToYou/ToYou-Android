@@ -63,6 +63,8 @@ class CardFragment : Fragment() {
             cardViewModel.isLockSelected(binding.lockFreeIv)
             Log.d("답변3", cardViewModel.previewCards.value.toString())
         }
+
+
     }
 
     override fun onDestroyView() {

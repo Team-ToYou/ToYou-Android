@@ -15,7 +15,6 @@ import com.toyou.toyouandroid.model.PreviewCardModel
 class CardShortAdapter (private val onItemClick: (Int, Boolean) -> Unit) : RecyclerView.Adapter<CardShortAdapter.CardViewHolder>() {
     private var cardList: List<CardShortModel> = emptyList()
 
-
     fun setCards(cards: List<CardShortModel>) {
         this.cardList = cards.filter { it.questionType == 0 }
         Log.d("CardAdapter", "setCards called with: $cards")
