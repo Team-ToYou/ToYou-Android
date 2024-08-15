@@ -144,6 +144,16 @@ class CardViewModel : ViewModel(){
 
     }
 
+    fun updateAnswer(position: Int, answer: String) {
+        _previewCards.value = _previewCards.value?.mapIndexed { index, card ->
+            if (index == position) {
+                card.copy(answer = answer)
+            } else {
+                card
+            }
+        }
+    }
+
     fun updateChooseButton(position: Int, isSelected: Boolean){
         _chooseCards.value = _chooseCards.value?.mapIndexed { index, card ->
             if (index == position) {

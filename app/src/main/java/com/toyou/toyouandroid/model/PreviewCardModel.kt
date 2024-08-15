@@ -6,5 +6,4 @@ data class PreviewCardModel(
     val type : Int,
     val fromWho : String,
     val options : List<String>?,
-
     )

@@ -68,20 +68,21 @@ class ChooseCardAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
-    inner class MultiViewHolder1(view: View) : RecyclerView.ViewHolder(view){
+    inner class MultiViewHolder1(view: View) : RecyclerView.ViewHolder(view) {
         private val question: TextView = view.findViewById(R.id.textMessage)
         private val txtOption1: TextView = view.findViewById(R.id.choose_option1)
         private val txtOption2: TextView = view.findViewById(R.id.choose_option2)
-        private val fromWho : TextView = view.findViewById(R.id.fromWho_tv)
+        private val fromWho: TextView = view.findViewById(R.id.fromWho_tv)
         private var selectedOption: TextView? = null
-
 
         init {
             txtOption1.setOnClickListener {
                 handleOptionSelection(txtOption1)
+                cardList[adapterPosition].answer = txtOption1.text.toString()
             }
             txtOption2.setOnClickListener {
                 handleOptionSelection(txtOption2)
+                cardList[adapterPosition].answer = txtOption2.text.toString()
             }
         }
 
@@ -96,26 +97,35 @@ class ChooseCardAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             txtOption1.text = item.options!![0]
             txtOption2.text = item.options!![1]
             fromWho.text = item.fromWho
+
+            // 이전에 선택된 옵션이 있으면 다시 표시
+            when (item.answer) {
+                txtOption1.text.toString() -> handleOptionSelection(txtOption1)
+                txtOption2.text.toString() -> handleOptionSelection(txtOption2)
+            }
         }
     }
 
-    inner class MultiViewHolder2(view: View) : RecyclerView.ViewHolder(view){
+    inner class MultiViewHolder2(view: View) : RecyclerView.ViewHolder(view) {
         private val question: TextView = view.findViewById(R.id.textMessage)
         private val txtOption1: TextView = view.findViewById(R.id.choose_option1)
         private val txtOption2: TextView = view.findViewById(R.id.choose_option2)
         private val txtOption3: TextView = view.findViewById(R.id.choose_option3)
-        private val fromWho : TextView = view.findViewById(R.id.fromWho_tv)
+        private val fromWho: TextView = view.findViewById(R.id.fromWho_tv)
         private var selectedOption: TextView? = null
 
         init {
             txtOption1.setOnClickListener {
                 handleOptionSelection(txtOption1)
+                cardList[adapterPosition].answer = txtOption1.text.toString()
             }
             txtOption2.setOnClickListener {
                 handleOptionSelection(txtOption2)
+                cardList[adapterPosition].answer = txtOption2.text.toString()
             }
             txtOption3.setOnClickListener {
                 handleOptionSelection(txtOption3)
+                cardList[adapterPosition].answer = txtOption3.text.toString()
             }
         }
 
@@ -124,18 +134,23 @@ class ChooseCardAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             selected.isSelected = true
             selectedOption = selected
         }
+
         fun bind(item: PreviewCardModel) {
             question.text = item.question
             txtOption1.text = item.options!![0]
             txtOption2.text = item.options!![1]
             txtOption3.text = item.options!![2]
             fromWho.text = item.fromWho
-            if (selectedOption != null){
-                item.answer = selectedOption.toString()
-            }
 
+            // 이전에 선택된 옵션이 있으면 다시 표시
+            when (item.answer) {
+                txtOption1.text.toString() -> handleOptionSelection(txtOption1)
+                txtOption2.text.toString() -> handleOptionSelection(txtOption2)
+                txtOption3.text.toString() -> handleOptionSelection(txtOption3)
+            }
         }
     }
+
 
     override fun getItemCount(): Int {
         return cardList.size
