@@ -117,6 +117,18 @@ class CardPreviewListAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>()
             question.text = item.question
             txtOption1.text = item.options!![0]
             txtOption2.text = item.options!![1]
+
+            if (item.answer == item.options[0]) {
+                txtOption1.setBackgroundResource(itemView.context.getColor(R.drawable.selected_option_container))
+            } else {
+                txtOption1.setBackgroundResource(itemView.context.getColor(R.drawable.search_container))
+            }
+
+            if (item.answer == item.options[1]) {
+                txtOption2.setBackgroundResource(itemView.context.getColor(R.drawable.selected_option_container))
+            } else {
+                txtOption2.setBackgroundResource(itemView.context.getColor(R.drawable.search_container))
+            }
         }
     }
 
@@ -132,6 +144,24 @@ class CardPreviewListAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>()
             txtOption1.text = item.options!![0]
             txtOption2.text = item.options!![1]
             txtOption3.text = item.options!![2]
+
+            if (item.answer == item.options[0]) {
+                txtOption1.setBackgroundResource(itemView.context.getColor(R.drawable.selected_option_container))
+            } else {
+                txtOption1.setBackgroundResource(itemView.context.getColor(R.drawable.search_container))
+            }
+
+            if (item.answer == item.options[1]) {
+                txtOption2.setBackgroundResource(itemView.context.getColor(R.drawable.selected_option_container))
+            } else {
+                txtOption2.setBackgroundResource(itemView.context.getColor(R.drawable.search_container))
+            }
+
+            if (item.answer == item.options[2]) {
+                txtOption3.setBackgroundResource(itemView.context.getColor(R.drawable.selected_option_container))
+            } else {
+                txtOption3.setBackgroundResource(itemView.context.getColor(R.drawable.search_container))
+            }
         }
     }
 

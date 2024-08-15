@@ -98,7 +98,6 @@ class ChooseCardAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             txtOption2.text = item.options!![1]
             fromWho.text = item.fromWho
 
-            // 이전에 선택된 옵션이 있으면 다시 표시
             when (item.answer) {
                 txtOption1.text.toString() -> handleOptionSelection(txtOption1)
                 txtOption2.text.toString() -> handleOptionSelection(txtOption2)
@@ -142,7 +141,6 @@ class ChooseCardAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             txtOption3.text = item.options!![2]
             fromWho.text = item.fromWho
 
-            // 이전에 선택된 옵션이 있으면 다시 표시
             when (item.answer) {
                 txtOption1.text.toString() -> handleOptionSelection(txtOption1)
                 txtOption2.text.toString() -> handleOptionSelection(txtOption2)
