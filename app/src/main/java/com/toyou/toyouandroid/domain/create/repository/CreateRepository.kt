@@ -12,7 +12,6 @@ class CreateRepository {
 
     suspend fun getAllData() = client.getQuestions(1)
 
-    // PreviewCardModel 리스트를 AnswerDto로 변환하는 함수
     private fun convertPreviewCardModelsToAnswerDto(
         previewCardModels: List<PreviewCardModel>,
         exposure: Boolean
@@ -35,11 +34,9 @@ class CreateRepository {
         previewCardModels: List<PreviewCardModel>,
         exposure: Boolean
     ) {
-        // AnswerDto로 변환
         val answerDto = convertPreviewCardModelsToAnswerDto(previewCardModels, exposure)
 
         try {
-            // 서버에 POST 요청
             val response = client.postCard(1, request = answerDto)
             // 응답 처리
             if (response.isSuccess) {
