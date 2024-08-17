@@ -92,8 +92,6 @@ class QuestionContentFragment : Fragment() {
         })
 
 
-
-
     }
 
     private fun addOption() {

@@ -3,15 +3,18 @@ package com.toyou.toyouandroid.presentation.fragment.social
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentContentLongBinding
+import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
 
 class QuestionContentLongFragment: Fragment() {
 
@@ -19,10 +22,13 @@ class QuestionContentLongFragment: Fragment() {
     private val binding : FragmentContentLongBinding get() = requireNotNull(_binding){"널"}
 
     private lateinit var navController: NavController
-    private var questionEt : String = ""
+    private lateinit var socialViewModel : SocialViewModel
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        socialViewModel = ViewModelProvider(requireActivity()).get(SocialViewModel::class.java)
+
     }
 
     override fun onCreateView(
@@ -31,7 +37,8 @@ class QuestionContentLongFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentContentLongBinding.inflate(inflater, container, false)
-
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = socialViewModel
 
         return binding.root
 
@@ -57,16 +64,15 @@ class QuestionContentLongFragment: Fragment() {
                 count: Int,
                 after: Int
             ) {
-                wordCount.text = "(0/50)"
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                questionEt = s.toString()
-                wordCount.text = "${questionEt.length} / 50"
+                socialViewModel.questionDto.value?.content = s.toString()
+                binding.limit200.text = String.format("(%d/50)", s?.length ?: 0)
+                Log.d("질문", socialViewModel.questionDto.value.toString())
             }
 
             override fun afterTextChanged(s: Editable?) {
-                wordCount.text = "${questionEt.length} / 50"
             }
         })
     }
