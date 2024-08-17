@@ -43,12 +43,23 @@ class QuestionTypeFragment : Fragment(){
         navController = Navigation.findNavController(view)
 
 
-
         socialViewModel.selectedChar.observe(viewLifecycleOwner, Observer { charIndex ->
             updateSelection(charIndex)
             binding.nextBtn.setOnClickListener {
-                if (charIndex ==1 ) navController.navigate(R.id.action_questionTypeFragment_to_questionContentFragment)
-                else navController.navigate(R.id.action_questionTypeFragment_to_questionContentLongFragment)
+                when(charIndex){
+                    1 -> {
+                        socialViewModel.setTypeFriend("OPTIONAL")
+                        navController.navigate(R.id.action_questionTypeFragment_to_questionContentFragment)
+                    }
+                    2 -> {
+                        socialViewModel.setTypeFriend("SHORT_ANSWER")
+                        navController.navigate(R.id.action_questionTypeFragment_to_questionContentLongFragment)
+                    }
+                    else -> {
+                        socialViewModel.setTypeFriend("LONG_ANSWER")
+                        navController.navigate(R.id.action_questionTypeFragment_to_questionContentLongFragment)
+                    }
+                }
             }
         })
 

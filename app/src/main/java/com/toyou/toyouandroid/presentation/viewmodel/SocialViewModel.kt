@@ -41,6 +41,11 @@ class SocialViewModel : ViewModel() {
         Log.d("타겟", _selectedEmotion.value.toString())
     }
 
+    fun setTypeFriend(type : String){
+        _questionDto.value = _questionDto.value!!.copy(type = type)
+        Log.d("타겟2", _questionDto.value.toString())
+    }
+
     init {
         loadInitQuestionType()
         _selectedChar.value = -1
