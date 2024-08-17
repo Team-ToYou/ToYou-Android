@@ -1,13 +1,19 @@
 package com.toyou.toyouandroid.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.toyou.toyouandroid.R
+import com.toyou.toyouandroid.data.social.dto.response.FriendsDto
+import com.toyou.toyouandroid.domain.social.repostitory.SocialRepository
 import com.toyou.toyouandroid.model.FriendListModel
 import com.toyou.toyouandroid.model.QuestionTypeModel
+import kotlinx.coroutines.launch
 
 class SocialViewModel : ViewModel() {
+    private val repository = SocialRepository()
     private val _friends = MutableLiveData<List<FriendListModel>>()
     val friends : LiveData<List<FriendListModel>> get () = _friends
     private val _clickedPosition = MutableLiveData<Map<Int, Boolean>>()
@@ -22,19 +28,49 @@ class SocialViewModel : ViewModel() {
     val plusBoxVisibility : MutableLiveData<List<Boolean>> get() = _plusBoxVisibility
 
     init {
-        loadFriendData()
         loadInitQuestionType()
         _selectedChar.value = -1
         _nextBtnEnabled.value = false
     }
 
-    fun loadFriendData(){
-        val sampleData = listOf(
-            FriendListModel("jjeong", "평범한 하루였어요"),
-            FriendListModel("jjeong", "평범한 하루였어요"),
-            FriendListModel("jjeong", "평범한 하루였어요"),
-        )
-        _friends.value = sampleData
+    fun getFriendsData() = viewModelScope.launch {
+        try {
+            val response = repository.getFriendsData()
+            if (response.isSuccess){
+                val friendsDto = response.result
+                friendsDto?.let { mapToFriendModels(it) }
+            } else{
+                Log.e("CardViewModel", "API 호출 실패: ${response.message}")
+            }
+        } catch (e: Exception) {
+            Log.e("CardViewModel", "예외 발생: ${e.message}")
+        }
+    }
+
+    private fun mapToFriendModels(friendsDto: FriendsDto){
+        val friendListModel = mutableListOf<FriendListModel>()
+
+        for (friend in friendsDto.friends){
+            friendListModel.add(
+                FriendListModel(
+                    name = friend.nickname,
+                    message = friend.ment ?: "",
+                    emotion = emotionType(friend.emotion)
+                )
+            )
+        }
+        _friends.value = friendListModel
+    }
+
+    private fun emotionType(type: String?): Int? {
+        return when (type) {
+            "HAPPY" -> 1
+            "EXCITED" -> 2
+            "NORMAL" -> 3
+            "NERVOUS" -> 4
+            "ANGRY" -> 5
+            else -> null
+        }
     }
 
     fun loadInitQuestionType(){
