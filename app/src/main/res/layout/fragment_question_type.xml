@@ -76,6 +76,7 @@
         app:layout_constraintTop_toTopOf="@+id/balloon_tv" />
 
     <ImageView
+        android:id="@+id/imoge_iv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/social_imoge"
