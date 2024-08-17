@@ -118,9 +118,9 @@ class CardViewModel : ViewModel(){
     }
 
 
-    init {
+   /* init {
         getAllData()
-    }
+    }*/
 
 
     fun getAnswerLength(answer: String): Int {

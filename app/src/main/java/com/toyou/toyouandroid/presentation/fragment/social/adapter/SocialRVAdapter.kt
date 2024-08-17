@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.R
@@ -38,6 +39,8 @@ class SocialRVAdapter(private val onItemClick: (Int) -> Unit) : RecyclerView.Ada
         private val friendName : TextView = itemView.findViewById(R.id.friendName_tv)
         private val friendMessage : TextView = itemView.findViewById(R.id.friendMessage_tv)
         private val friendDetailBtn : ImageButton = itemView.findViewById(R.id.friend_btn)
+        private val friendEmotionIcon: ImageView = itemView.findViewById(R.id.imageView)
+
 
         init {
             friendDetailBtn.setOnClickListener {
@@ -48,6 +51,13 @@ class SocialRVAdapter(private val onItemClick: (Int) -> Unit) : RecyclerView.Ada
         fun bind(friend : FriendListModel){
             friendName.text = friend.name
             friendMessage.text = friend.message
+
+            val emotionIconRes = when (friend.emotion) {
+                3 -> R.drawable.friend_normal
+                else -> R.drawable.social_char
+            }
+            friendEmotionIcon.setImageResource(emotionIconRes)
+
         }
     }
 

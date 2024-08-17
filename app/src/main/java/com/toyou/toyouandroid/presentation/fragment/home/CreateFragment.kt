@@ -42,6 +42,7 @@ class CreateFragment : Fragment(){
 
 
         //cardViewModel.loadCardData()
+        cardViewModel.getAllData()
 
     }
 
