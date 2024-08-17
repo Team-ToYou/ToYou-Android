@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.toyou.toyouandroid.R
+import com.toyou.toyouandroid.data.social.dto.request.QuestionDto
 import com.toyou.toyouandroid.data.social.dto.response.FriendsDto
 import com.toyou.toyouandroid.domain.social.repostitory.SocialRepository
 import com.toyou.toyouandroid.model.FriendListModel
@@ -26,6 +27,19 @@ class SocialViewModel : ViewModel() {
 
     private val _plusBoxVisibility = MutableLiveData<List<Boolean>>()
     val plusBoxVisibility : MutableLiveData<List<Boolean>> get() = _plusBoxVisibility
+
+    private val _questionDto = MutableLiveData<QuestionDto>()
+    val questionDto: LiveData<QuestionDto> get() = _questionDto
+    private val _selectedEmotion = MutableLiveData<Int>()
+    val selectedEmotion : LiveData<Int> get() = _selectedEmotion
+
+    fun setTargetFriend(friendName: String, emotion : Int?) {
+        val currentQuestionDto = _questionDto.value ?: QuestionDto("", "", "", false, null)
+        _questionDto.value = currentQuestionDto.copy(target = friendName)
+        _selectedEmotion.value = emotion
+        Log.d("타겟", _questionDto.value.toString())
+        Log.d("타겟", _selectedEmotion.value.toString())
+    }
 
     init {
         loadInitQuestionType()

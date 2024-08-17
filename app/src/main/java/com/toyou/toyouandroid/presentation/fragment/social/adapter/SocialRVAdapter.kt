@@ -9,8 +9,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.model.FriendListModel
+import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
 
-class SocialRVAdapter(private val onItemClick: (Int) -> Unit) : RecyclerView.Adapter<SocialRVAdapter.SocialViewHolder>() {
+class SocialRVAdapter(private val viewModel: SocialViewModel, private val onItemClick: (Int) -> Unit) : RecyclerView.Adapter<SocialRVAdapter.SocialViewHolder>() {
 
     private var friendList : List<FriendListModel> = emptyList()
 
@@ -23,7 +24,7 @@ class SocialRVAdapter(private val onItemClick: (Int) -> Unit) : RecyclerView.Ada
         viewType: Int
     ): SocialViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_friend_rv, parent, false)
-        return SocialViewHolder(view, onItemClick)
+        return SocialViewHolder(viewModel, view, onItemClick)
     }
 
     override fun onBindViewHolder(holder: SocialViewHolder, position: Int) {
@@ -34,23 +35,26 @@ class SocialRVAdapter(private val onItemClick: (Int) -> Unit) : RecyclerView.Ada
         return friendList.size
     }
 
-    class SocialViewHolder(itemView: View, onItemClick : (Int) -> Unit) : RecyclerView.ViewHolder(itemView) {
+    class SocialViewHolder(private val viewModel: SocialViewModel,itemView: View, onItemClick : (Int) -> Unit) : RecyclerView.ViewHolder(itemView) {
 
         private val friendName : TextView = itemView.findViewById(R.id.friendName_tv)
         private val friendMessage : TextView = itemView.findViewById(R.id.friendMessage_tv)
         private val friendDetailBtn : ImageButton = itemView.findViewById(R.id.friend_btn)
         private val friendEmotionIcon: ImageView = itemView.findViewById(R.id.imageView)
-
+        private var emotion : Int? = null
 
         init {
             friendDetailBtn.setOnClickListener {
                 onItemClick(adapterPosition)
+                val friend = friendName.text.toString()
+                viewModel.setTargetFriend(friend, emotion)
             }
         }
 
         fun bind(friend : FriendListModel){
             friendName.text = friend.name
             friendMessage.text = friend.message
+            emotion = friend.emotion
 
             val emotionIconRes = when (friend.emotion) {
                 3 -> R.drawable.friend_normal

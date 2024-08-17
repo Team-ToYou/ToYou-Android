@@ -46,7 +46,7 @@ class SocialFragment : Fragment() {
         _binding = FragmentSocialBinding.inflate(inflater, container, false)
 
         //어탭터 초기화 후 뷰모델 데이터 관찰
-        socialAdapter = SocialRVAdapter { position ->
+        socialAdapter = SocialRVAdapter(socialViewModel) { position ->
             navController.navigate(R.id.action_navigation_social_to_questionTypeFragment)
             Log.d("아이템", position.toString())
         }
