@@ -40,7 +40,8 @@ class CreateFragment : Fragment(){
         super.onCreate(savedInstanceState)
         cardViewModel = ViewModelProvider(requireActivity()).get(CardViewModel::class.java)
 
-        cardViewModel.loadCardData()
+
+        //cardViewModel.loadCardData()
 
     }
 
@@ -54,6 +55,23 @@ class CreateFragment : Fragment(){
         cardViewModel.cards.observe(viewLifecycleOwner, Observer { cards ->
             Log.d("CreateFragment", "Loading cards: ${cardViewModel.cards.value}") // 디버그 로그 추가
             cardAdapter.setCards(cards)
+
+            cards?.let {
+                for (card in it) {
+                    if (card.isButtonSelected) {
+                        count = 1
+                        binding.nextBtn.isEnabled = true
+                    }
+                }
+                if (count == 0)
+                    binding.nextBtn.isEnabled = false
+                count = 0
+            }
+
+        })
+
+        cardViewModel.shortCards.observe(viewLifecycleOwner, Observer { cards ->
+            Log.d("CreateFragment", "Loading cards: ${cardViewModel.cards.value}") // 디버그 로그 추가
             cardShortAdapter.setCards(cards)
 
             cards?.let {
@@ -70,6 +88,7 @@ class CreateFragment : Fragment(){
 
 
         })
+
 
         cardViewModel.chooseCards.observe(viewLifecycleOwner, Observer { cards ->
             cardChooseAdapter.setCards(cards)
@@ -96,7 +115,7 @@ class CreateFragment : Fragment(){
         }
         cardShortAdapter = CardShortAdapter{ position, isSelected ->
             Log.d("선택2", position.toString()+isSelected.toString())
-            cardViewModel.updateButtonState(position, isSelected)
+            cardViewModel.updateShortButtonState(position, isSelected)
         }
         cardChooseAdapter = CardChooseAdapter{ position, isSelected ->
             Log.d("선택1", position.toString()+isSelected.toString())
@@ -104,7 +123,6 @@ class CreateFragment : Fragment(){
         }
 
 
-        cardViewModel.loadCardData()
 
         setupRecyclerView(binding.cardRv, cardAdapter)
         setupRecyclerView(binding.cardShortRv, cardShortAdapter)
@@ -126,8 +144,9 @@ class CreateFragment : Fragment(){
         }
 
         binding.nextBtn.setOnClickListener {
-            cardViewModel.updateChooseCard()
-            cardViewModel.updatePreviewCard()
+            //cardViewModel.updateChooseCard()
+            cardViewModel.updateAllPreviews()
+            //cardViewModel.updatePreviewShortCard()
 
             cardViewModel.previewCards.value?.let { previewCards ->
                 if (previewCards.isNotEmpty()) {
