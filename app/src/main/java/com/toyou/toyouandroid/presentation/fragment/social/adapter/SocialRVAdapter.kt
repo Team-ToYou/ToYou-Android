@@ -42,12 +42,13 @@ class SocialRVAdapter(private val viewModel: SocialViewModel, private val onItem
         private val friendDetailBtn : ImageButton = itemView.findViewById(R.id.friend_btn)
         private val friendEmotionIcon: ImageView = itemView.findViewById(R.id.imageView)
         private var emotion : Int? = null
+        private var ment : String? = null
 
         init {
             friendDetailBtn.setOnClickListener {
                 onItemClick(adapterPosition)
                 val friend = friendName.text.toString()
-                viewModel.setTargetFriend(friend, emotion)
+                viewModel.setTargetFriend(friend, emotion, ment)
             }
         }
 
@@ -55,6 +56,7 @@ class SocialRVAdapter(private val viewModel: SocialViewModel, private val onItem
             friendName.text = friend.name
             friendMessage.text = friend.message
             emotion = friend.emotion
+            ment = friend.message
 
             val emotionIconRes = when (friend.emotion) {
                 3 -> R.drawable.friend_normal

@@ -32,11 +32,14 @@ class SocialViewModel : ViewModel() {
     val questionDto: LiveData<QuestionDto> get() = _questionDto
     private val _selectedEmotion = MutableLiveData<Int>()
     val selectedEmotion : LiveData<Int> get() = _selectedEmotion
+    private val _selectedEmotionMent = MutableLiveData<String>()
+    val selectedEmotionMent : LiveData<String> get() = _selectedEmotionMent
 
-    fun setTargetFriend(friendName: String, emotion : Int?) {
+    fun setTargetFriend(friendName: String, emotion : Int?, ment : String?) {
         val currentQuestionDto = _questionDto.value ?: QuestionDto("", "", "", false, null)
         _questionDto.value = currentQuestionDto.copy(target = friendName)
         _selectedEmotion.value = emotion
+        _selectedEmotionMent.value = ment
         Log.d("타겟", _questionDto.value.toString())
         Log.d("타겟", _selectedEmotion.value.toString())
     }
@@ -133,5 +136,7 @@ class SocialViewModel : ViewModel() {
         newVisibility[index] = false
         _plusBoxVisibility.value = newVisibility
     }
+
+
 
 }

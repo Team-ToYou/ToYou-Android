@@ -63,6 +63,8 @@ class QuestionTypeFragment : Fragment(){
             }
         })
 
+
+
         socialViewModel.nextBtnEnabled.observe(viewLifecycleOwner, Observer { isEnabled ->
             binding.nextBtn.isEnabled = isEnabled
         })
@@ -78,6 +80,39 @@ class QuestionTypeFragment : Fragment(){
             mainActivity.hideBottomNavigation(false)
             navController.popBackStack()
 
+        }
+
+        socialViewModel.selectedEmotion.observe(viewLifecycleOwner) { emotion,  ->
+            when (emotion) {
+                1 -> {
+                    binding.balloonTv.setBackgroundResource(R.drawable.balloon_happy)
+                    binding.imogeIv.setBackgroundResource(R.drawable.imoge_happy)
+                }
+                2 -> {
+                    binding.balloonTv.setBackgroundResource(R.drawable.balloon_excited)
+                    binding.imogeIv.setBackgroundResource(R.drawable.imoge_excited)
+                }
+                3 -> {
+                    binding.balloonTv.setBackgroundResource(R.drawable.social_ballon)
+                    binding.imogeIv.setBackgroundResource(R.drawable.social_imoge)
+                }
+                4 -> {
+                    binding.balloonTv.setBackgroundResource(R.drawable.balloon_anxiety)
+                    binding.imogeIv.setBackgroundResource(R.drawable.imoge_anxiety)
+                }
+                5 -> {
+                    binding.balloonTv.setBackgroundResource(R.drawable.balloon_angry)
+                    binding.imogeIv.setBackgroundResource(R.drawable.imoge_angry)
+                }
+                else -> {
+                    binding.balloonTv.setBackgroundResource(R.drawable.social_ballon)
+                    binding.imogeIv.setBackgroundResource(R.drawable.social_imoge)
+                }
+            }
+        }
+
+        socialViewModel.selectedEmotionMent.observe(viewLifecycleOwner) { ment,  ->
+            binding.normalTv.text = ment
         }
 
     }
