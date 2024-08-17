@@ -137,6 +137,14 @@ class SocialViewModel : ViewModel() {
         _plusBoxVisibility.value = newVisibility
     }
 
+    fun getAnswerLength(answer: String): Int {
+        return answer.length
+    }
+
+    fun updateQuestionOptions(newOptions: List<String>) {
+        _questionDto.value =  _questionDto.value!!.copy(options = newOptions)
+        Log.d("옵션", _questionDto.value.toString())
+    }
 
 
 }
