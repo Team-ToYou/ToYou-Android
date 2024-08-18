@@ -10,8 +10,10 @@ import com.toyou.toyouandroid.databinding.ItemNoticeFriendRequestAcceptedBinding
 import com.toyou.toyouandroid.databinding.ItemNoticeFriendRequestBinding
 import com.toyou.toyouandroid.model.NoticeItem
 
-class NoticeAdapter(private val items: MutableList<NoticeItem>) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class NoticeAdapter(
+    private val items: MutableList<NoticeItem>,
+    private val viewModel: NoticeViewModel
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     companion object {
         private const val TYPE_FRIEND_REQUEST = 1
         private const val TYPE_CARD_CHECK = 2
@@ -73,7 +75,9 @@ class NoticeAdapter(private val items: MutableList<NoticeItem>) :
         fun bind(item: NoticeItem.NoticeFriendRequestItem) {
             binding.itemFriendRequest = item
             binding.noticeCardCheckDelete.setOnClickListener {
-                removeItem(this.layoutPosition)
+//                removeItem(this.layoutPosition)
+                // 삭제 API 호출
+                viewModel.deleteNotice(userId = 1, item.alarmId, this.layoutPosition)
             }
             binding.executePendingBindings()
         }
@@ -83,7 +87,9 @@ class NoticeAdapter(private val items: MutableList<NoticeItem>) :
         fun bind(item: NoticeItem.NoticeFriendRequestAcceptedItem) {
             binding.itemFriendRequestAccepted = item
             binding.noticeCardCheckDelete.setOnClickListener {
-                removeItem(this.layoutPosition)
+//                removeItem(this.layoutPosition)
+                // 삭제 API 호출
+                viewModel.deleteNotice(userId = 1, item.alarmId, this.layoutPosition)
             }
 
             val layoutParams = binding.root.layoutParams
@@ -98,7 +104,9 @@ class NoticeAdapter(private val items: MutableList<NoticeItem>) :
         fun bind(item: NoticeItem.NoticeCardCheckItem) {
             binding.itemCardCheck = item
             binding.noticeCardCheckDelete.setOnClickListener {
-                removeItem(this.layoutPosition)
+//                removeItem(this.layoutPosition)
+                // 삭제 API 호출
+                viewModel.deleteNotice(userId = 1, item.alarmId, this.layoutPosition)
             }
             binding.executePendingBindings()
         }
