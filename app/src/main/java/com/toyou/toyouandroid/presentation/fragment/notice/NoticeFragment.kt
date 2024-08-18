@@ -48,7 +48,9 @@ class NoticeFragment : Fragment() {
         navController = Navigation.findNavController(view)
 
         viewModel.noticeItems.observe(viewLifecycleOwner, Observer { items ->
-            setupRecyclerView(items)
+            if (items != null) {
+                setupRecyclerView(items)
+            }
         })
 
         viewModel.fetchNotices(userId = 1)
@@ -59,7 +61,7 @@ class NoticeFragment : Fragment() {
     }
 
     private fun setupRecyclerView(items: List<NoticeItem>) {
-        val adapter = NoticeAdapter(items.toMutableList())
+        val adapter = NoticeAdapter(items.toMutableList(), viewModel)
         binding.noticeRv.layoutManager = GridLayoutManager(context, 1)
         binding.noticeRv.adapter = adapter
 
