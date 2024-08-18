@@ -34,3 +34,14 @@ data class Alarm(
     @SerializedName("alarmType")
     val alarmType: String
 )
+
+data class AlarmDeleteResponse(
+    @SerializedName("isSuccess")
+    val isSuccess: Boolean,
+
+    @SerializedName("code")
+    val code: String,
+
+    @SerializedName("message")
+    val message: String
+)
