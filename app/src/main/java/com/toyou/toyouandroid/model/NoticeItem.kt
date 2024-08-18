@@ -1,7 +1,7 @@
 package com.toyou.toyouandroid.model
 
-sealed class NoticeItem {
-    data class NoticeFriendRequestItem(val nickname: String) : NoticeItem()
-    data class NoticeFriendRequestAcceptedItem(val nickname: String) : NoticeItem()
-    data class NoticeCardCheckItem(val nickname: String) : NoticeItem()
+sealed class NoticeItem(open val alarmId: Int) {
+    data class NoticeFriendRequestItem(val nickname: String, override val alarmId: Int) : NoticeItem(alarmId)
+    data class NoticeFriendRequestAcceptedItem(val nickname: String, override val alarmId: Int) : NoticeItem(alarmId)
+    data class NoticeCardCheckItem(val nickname: String, override val alarmId: Int) : NoticeItem(alarmId)
 }
