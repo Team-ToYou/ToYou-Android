@@ -9,6 +9,7 @@ import com.toyou.toyouandroid.data.social.dto.request.QuestionDto
 import com.toyou.toyouandroid.data.social.dto.response.FriendsDto
 import com.toyou.toyouandroid.domain.social.repostitory.SocialRepository
 import com.toyou.toyouandroid.model.FriendListModel
+import com.toyou.toyouandroid.model.PreviewCardModel
 import kotlinx.coroutines.launch
 
 class SocialViewModel : ViewModel() {
@@ -16,15 +17,11 @@ class SocialViewModel : ViewModel() {
     private val _friends = MutableLiveData<List<FriendListModel>>()
     val friends: LiveData<List<FriendListModel>> get() = _friends
     private val _clickedPosition = MutableLiveData<Map<Int, Boolean>>()
-    val clickedPosition: LiveData<Map<Int, Boolean>> get() = _clickedPosition
 
     private val _selectedChar = MutableLiveData<Int>()
     val selectedChar: LiveData<Int> get() = _selectedChar
     private val _nextBtnEnabled = MutableLiveData<Boolean>()
     val nextBtnEnabled: LiveData<Boolean> get() = _nextBtnEnabled
-
-    private val _plusBoxVisibility = MutableLiveData<List<Boolean>>()
-    val plusBoxVisibility: LiveData<List<Boolean>> get() = _plusBoxVisibility
 
     private val _questionDto = MutableLiveData<QuestionDto>()
     val questionDto: LiveData<QuestionDto> get() = _questionDto
@@ -109,13 +106,6 @@ class SocialViewModel : ViewModel() {
         _clickedPosition.value = initialMap
     }
 
-    fun updateClickState(key: Int) {
-        val currentMap = _clickedPosition.value?.toMutableMap() ?: mutableMapOf()
-        currentMap[key] = !(currentMap[key] ?: false)
-
-        _clickedPosition.value = currentMap
-    }
-
     fun onCharSelected(position: Int) {
         _selectedChar.value = if (_selectedChar.value == position) -1 else position
         _nextBtnEnabled.value = _selectedChar.value != -1
@@ -132,7 +122,7 @@ class SocialViewModel : ViewModel() {
         }
     }
 
-    fun updateOption(newOptions: List<String>?) {
+    fun updateOption() {
         _optionList.value = _questionDto.value!!.options!!
     }
 
@@ -147,6 +137,17 @@ class SocialViewModel : ViewModel() {
     fun isAnonymous(isChecked : Boolean){
         if (isChecked) _questionDto.value?.anonymous = true
         else _questionDto.value?.anonymous = false
-        Log.d("체크박스", questionDto.value.toString())
+    }
+
+    fun sendQuestion() {
+        viewModelScope.launch {
+            // Access the value of questionDto safely with let
+            _questionDto.value?.let { currentQuestionDto ->
+                repository.postQuestionData(currentQuestionDto)
+            } ?: run {
+                Log.e("api 실패!", "널")
+            }
+            Log.d("api 성공!", "성공")
+        }
     }
 }

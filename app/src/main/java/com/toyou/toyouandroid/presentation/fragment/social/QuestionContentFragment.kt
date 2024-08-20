@@ -74,7 +74,7 @@ class QuestionContentFragment : Fragment() {
         })
 
         binding.nextBtn.setOnClickListener {
-            socialViewModel.updateOption(socialViewModel.questionDto.value!!.options)
+            socialViewModel.updateOption()
             navController.navigate(R.id.action_questionContentFragment_to_sendFragment)
         }
         binding.backBtn.setOnClickListener {

@@ -45,6 +45,7 @@ class SendFragment: Fragment() {
         navController = Navigation.findNavController(view)
 
         binding.nextBtn.setOnClickListener {
+            socialViewModel.sendQuestion()
             navController.navigate(R.id.action_sendFragment_to_sendFinalFragment)
         }
 
