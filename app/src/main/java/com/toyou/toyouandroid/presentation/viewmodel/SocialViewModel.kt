@@ -71,6 +71,19 @@ class SocialViewModel : ViewModel() {
         }
     }
 
+    fun getSearchData(name : String) = viewModelScope.launch {
+        try {
+            val response = repository.getSearchData(name)
+            if (response.isSuccess) {
+                Log.d("search API 성공", response.message)
+            } else {
+                Log.e("search API 실패", "API 호출 실패: ${response.message}")
+            }
+        } catch (e: Exception) {
+            Log.e("search API 실패", "예외 발생: ${e.message}")
+        }
+    }
+
     private fun mapToFriendModels(friendsDto: FriendsDto) {
         val friendListModel = mutableListOf<FriendListModel>()
 

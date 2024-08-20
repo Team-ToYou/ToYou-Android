@@ -11,6 +11,10 @@ class SocialRepository {
 
     suspend fun getFriendsData() = client.getFriends(1)
 
+    suspend fun getSearchData(
+        name : String,
+    ) = client.getSearchFriend(1, name)
+
     suspend fun postQuestionData(
         questionDto: QuestionDto,
     ) {
