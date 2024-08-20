@@ -50,9 +50,10 @@ class QuestionContentLongFragment: Fragment() {
         val wordCount: TextView = binding.limit200
 
         binding.nextBtn.setOnClickListener {
-            navController.navigate(R.id.action_questionContentFragment_to_sendFragment)
+            navController.navigate(R.id.action_questionContentLongFragment_to_sendFragment)
         }
         binding.backBtn.setOnClickListener {
+            socialViewModel.removeContent()
             navController.popBackStack()
 
         }

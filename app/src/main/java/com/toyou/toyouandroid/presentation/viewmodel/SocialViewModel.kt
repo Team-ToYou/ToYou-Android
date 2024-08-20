@@ -121,26 +121,6 @@ class SocialViewModel : ViewModel() {
         _nextBtnEnabled.value = _selectedChar.value != -1
     }
 
-    fun togglePlusBoxVisibility() {
-        val visibility = _plusBoxVisibility.value ?: listOf(false, false, false)
-        val newVisibility = visibility.toMutableList()
-
-        // 조건에 맞는게 나타나면 그 뒤로 실행x
-        when {
-            !newVisibility[0] -> newVisibility[0] = true
-            !newVisibility[1] -> newVisibility[1] = true
-            !newVisibility[2] -> newVisibility[2] = true
-        }
-        _plusBoxVisibility.value = newVisibility
-    }
-
-    fun hidePlusBox(index: Int) {
-        val visibility = _plusBoxVisibility.value ?: listOf(false, false, false)
-        val newVisibility = visibility.toMutableList()
-        newVisibility[index] = false
-        _plusBoxVisibility.value = newVisibility
-    }
-
     fun getAnswerLength(answer: String): Int {
         return answer.length
     }
@@ -154,5 +134,19 @@ class SocialViewModel : ViewModel() {
 
     fun updateOption(newOptions: List<String>?) {
         _optionList.value = _questionDto.value!!.options!!
+    }
+
+    fun removeOptions(){
+        _questionDto.value?.options = null
+    }
+
+    fun removeContent(){
+        _questionDto.value?.content = ""
+    }
+
+    fun isAnonymous(isChecked : Boolean){
+        if (isChecked) _questionDto.value?.anonymous = true
+        else _questionDto.value?.anonymous = false
+        Log.d("체크박스", questionDto.value.toString())
     }
 }

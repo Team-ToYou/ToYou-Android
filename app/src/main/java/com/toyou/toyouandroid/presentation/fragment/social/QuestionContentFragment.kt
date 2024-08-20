@@ -67,7 +67,6 @@ class QuestionContentFragment : Fragment() {
 
 
         socialViewModel.optionList.observe(viewLifecycleOwner, Observer { options ->
-            //optionsContainer.removeAllViews()
             optionCount = 0
             options?.forEach { optionText ->
                 addOption(optionText)
@@ -79,6 +78,8 @@ class QuestionContentFragment : Fragment() {
             navController.navigate(R.id.action_questionContentFragment_to_sendFragment)
         }
         binding.backBtn.setOnClickListener {
+            socialViewModel.removeOptions()
+            socialViewModel.removeContent()
             navController.popBackStack()
         }
 

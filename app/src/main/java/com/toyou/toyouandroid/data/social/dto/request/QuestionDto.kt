@@ -6,6 +6,6 @@ data class QuestionDto(
     @SerializedName("target") val target : String,
     @SerializedName("content") var content : String,
     @SerializedName("questionType") val type : String,
-    @SerializedName("anonymous") val anonymous : Boolean = false,
+    @SerializedName("anonymous") var anonymous : Boolean = false,
     @SerializedName("answerOptionList") var options : List<String>?,
 )
