@@ -5,63 +5,68 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.data.social.dto.request.QuestionDto
 import com.toyou.toyouandroid.data.social.dto.response.FriendsDto
 import com.toyou.toyouandroid.domain.social.repostitory.SocialRepository
 import com.toyou.toyouandroid.model.FriendListModel
-import com.toyou.toyouandroid.model.QuestionTypeModel
 import kotlinx.coroutines.launch
 
 class SocialViewModel : ViewModel() {
     private val repository = SocialRepository()
     private val _friends = MutableLiveData<List<FriendListModel>>()
-    val friends : LiveData<List<FriendListModel>> get () = _friends
+    val friends: LiveData<List<FriendListModel>> get() = _friends
     private val _clickedPosition = MutableLiveData<Map<Int, Boolean>>()
-    val clickedPosition : LiveData<Map<Int, Boolean>> get() = _clickedPosition
+    val clickedPosition: LiveData<Map<Int, Boolean>> get() = _clickedPosition
 
     private val _selectedChar = MutableLiveData<Int>()
-    val selectedChar : LiveData<Int> get() = _selectedChar
+    val selectedChar: LiveData<Int> get() = _selectedChar
     private val _nextBtnEnabled = MutableLiveData<Boolean>()
-    val nextBtnEnabled : LiveData<Boolean> get() = _nextBtnEnabled
+    val nextBtnEnabled: LiveData<Boolean> get() = _nextBtnEnabled
 
     private val _plusBoxVisibility = MutableLiveData<List<Boolean>>()
-    val plusBoxVisibility : MutableLiveData<List<Boolean>> get() = _plusBoxVisibility
+    val plusBoxVisibility: LiveData<List<Boolean>> get() = _plusBoxVisibility
 
     private val _questionDto = MutableLiveData<QuestionDto>()
     val questionDto: LiveData<QuestionDto> get() = _questionDto
     private val _selectedEmotion = MutableLiveData<Int>()
-    val selectedEmotion : LiveData<Int> get() = _selectedEmotion
+    val selectedEmotion: LiveData<Int> get() = _selectedEmotion
     private val _selectedEmotionMent = MutableLiveData<String>()
-    val selectedEmotionMent : LiveData<String> get() = _selectedEmotionMent
+    val selectedEmotionMent: LiveData<String> get() = _selectedEmotionMent
 
-    fun setTargetFriend(friendName: String, emotion : Int?, ment : String?) {
-        val currentQuestionDto = _questionDto.value ?: QuestionDto("", "", "", false, null)
-        _questionDto.value = currentQuestionDto.copy(target = friendName)
-        _selectedEmotion.value = emotion
-        _selectedEmotionMent.value = ment
-        Log.d("타겟", _questionDto.value.toString())
-        Log.d("타겟", _selectedEmotion.value.toString())
-    }
-
-    fun setTypeFriend(type : String){
-        _questionDto.value = _questionDto.value!!.copy(type = type)
-        Log.d("타겟2", _questionDto.value.toString())
-    }
+    private val _optionList = MutableLiveData<List<String>>()
+    val optionList: LiveData<List<String>> get() = _optionList
 
     init {
         loadInitQuestionType()
         _selectedChar.value = -1
         _nextBtnEnabled.value = false
+        _questionDto.value = QuestionDto("", "", "", false, null) // 초기화
+    }
+
+    fun setTargetFriend(friendName: String, emotion: Int?, ment: String?) {
+        val currentQuestionDto = _questionDto.value ?: QuestionDto("", "", "", false, null)
+        _questionDto.value = currentQuestionDto.copy(target = friendName)
+        _selectedEmotion!!.value = emotion
+        _selectedEmotionMent!!.value = ment
+        Log.d("타겟", _questionDto.value.toString())
+        Log.d("타겟", _selectedEmotion.value.toString())
+    }
+
+    fun setTypeFriend(type: String) {
+        _questionDto.value?.let { currentQuestionDto ->
+            _questionDto.value = currentQuestionDto.copy(type = type)
+            Log.d("타겟2", _questionDto.value.toString())
+        }
     }
 
     fun getFriendsData() = viewModelScope.launch {
         try {
             val response = repository.getFriendsData()
-            if (response.isSuccess){
+            if (response.isSuccess) {
+                Log.d("API 호출 성공", response.message)
                 val friendsDto = response.result
                 friendsDto?.let { mapToFriendModels(it) }
-            } else{
+            } else {
                 Log.e("CardViewModel", "API 호출 실패: ${response.message}")
             }
         } catch (e: Exception) {
@@ -69,10 +74,10 @@ class SocialViewModel : ViewModel() {
         }
     }
 
-    private fun mapToFriendModels(friendsDto: FriendsDto){
+    private fun mapToFriendModels(friendsDto: FriendsDto) {
         val friendListModel = mutableListOf<FriendListModel>()
 
-        for (friend in friendsDto.friends){
+        for (friend in friendsDto.friends) {
             friendListModel.add(
                 FriendListModel(
                     name = friend.nickname,
@@ -95,7 +100,7 @@ class SocialViewModel : ViewModel() {
         }
     }
 
-    fun loadInitQuestionType(){
+    fun loadInitQuestionType() {
         val initialMap = mapOf(
             1 to false,
             2 to false,
@@ -108,11 +113,10 @@ class SocialViewModel : ViewModel() {
         val currentMap = _clickedPosition.value?.toMutableMap() ?: mutableMapOf()
         currentMap[key] = !(currentMap[key] ?: false)
 
-
         _clickedPosition.value = currentMap
     }
 
-    fun onCharSelected(position : Int){
+    fun onCharSelected(position: Int) {
         _selectedChar.value = if (_selectedChar.value == position) -1 else position
         _nextBtnEnabled.value = _selectedChar.value != -1
     }
@@ -121,7 +125,7 @@ class SocialViewModel : ViewModel() {
         val visibility = _plusBoxVisibility.value ?: listOf(false, false, false)
         val newVisibility = visibility.toMutableList()
 
-        //조건에 맞는게 나타나면 그 뒤로 실행x
+        // 조건에 맞는게 나타나면 그 뒤로 실행x
         when {
             !newVisibility[0] -> newVisibility[0] = true
             !newVisibility[1] -> newVisibility[1] = true
@@ -142,9 +146,13 @@ class SocialViewModel : ViewModel() {
     }
 
     fun updateQuestionOptions(newOptions: List<String>) {
-        _questionDto.value =  _questionDto.value!!.copy(options = newOptions)
-        Log.d("옵션", _questionDto.value.toString())
+        _questionDto.value?.let { currentQuestionDto ->
+            _questionDto.value = currentQuestionDto.copy(options = newOptions)
+            Log.d("옵션", _questionDto.value.toString())
+        }
     }
 
-
+    fun updateOption(newOptions: List<String>?) {
+        _optionList.value = _questionDto.value!!.options!!
+    }
 }

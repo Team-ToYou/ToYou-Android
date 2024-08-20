@@ -63,9 +63,19 @@ class QuestionContentFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
-        val wordCount: TextView = binding.limit200
+
+
+
+        socialViewModel.optionList.observe(viewLifecycleOwner, Observer { options ->
+            //optionsContainer.removeAllViews()
+            optionCount = 0
+            options?.forEach { optionText ->
+                addOption(optionText)
+            }
+        })
 
         binding.nextBtn.setOnClickListener {
+            socialViewModel.updateOption(socialViewModel.questionDto.value!!.options)
             navController.navigate(R.id.action_questionContentFragment_to_sendFragment)
         }
         binding.backBtn.setOnClickListener {
@@ -94,22 +104,22 @@ class QuestionContentFragment : Fragment() {
 
     }
 
-    private fun addOption() {
+    private fun addOption(optionText: String? = null) {
         if (optionCount < 3) {
             optionCount++
 
-            val newOption = EditText(requireContext()).apply {
-                layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                ).apply {
-                    setMargins(0, 10, 0, 10)
-                }
+            val optionView = LayoutInflater.from(requireContext()).inflate(R.layout.edittext_with_delete, optionsContainer, false)
+
+            val newOption = optionView.findViewById<EditText>(R.id.edit_text)
+            val deleteButton = optionView.findViewById<ImageView>(R.id.delete_button)
+
+            newOption.apply {
                 setPadding(10, 30, 5, 30)
                 setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
                 textSize = 12f
-                background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.search_container)
+                optionText?.let {
+                    setText(it)
+                }
             }
 
             newOption.addTextChangedListener(object : TextWatcher {
@@ -135,12 +145,31 @@ class QuestionContentFragment : Fragment() {
                 override fun afterTextChanged(s: Editable?) {}
             })
 
-            optionsContainer.addView(newOption)
+
+            deleteButton.setOnClickListener {
+                val optionsList = socialViewModel.questionDto.value?.options?.toMutableList()
+                    ?: mutableListOf()
+
+                val optionText = newOption.text.toString()
+                optionsList.remove(optionText)
+
+                socialViewModel.updateQuestionOptions(optionsList)
+
+                optionsContainer.removeView(optionView)
+                optionCount--
+
+                if (optionCount < 3) {
+                    addOptionButton.isEnabled = true
+                }
+            }
+
+            optionsContainer.addView(optionView)
 
             if (optionCount == 3) {
                 addOptionButton.isEnabled = false
             }
         }
     }
+
 
 }
