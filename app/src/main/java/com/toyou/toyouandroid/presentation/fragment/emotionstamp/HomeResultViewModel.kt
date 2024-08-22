@@ -1,4 +1,4 @@
-package com.toyou.toyouandroid.presentation.viewmodel
+package com.toyou.toyouandroid.presentation.fragment.emotionstamp
 
 import androidx.lifecycle.ViewModel
 

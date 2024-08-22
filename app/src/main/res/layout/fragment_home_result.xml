@@ -7,7 +7,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.toyou.toyouandroid.presentation.viewmodel.HomeResultViewModel" />
+            type="com.toyou.toyouandroid.presentation.fragment.emotionstamp.HomeResultViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
