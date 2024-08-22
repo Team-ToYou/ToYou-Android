@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.toyou.toyouandroid.data.social.dto.request.QuestionDto
 import com.toyou.toyouandroid.data.social.dto.response.FriendsDto
+import com.toyou.toyouandroid.data.social.dto.response.SearchFriendDto
 import com.toyou.toyouandroid.domain.social.repostitory.SocialRepository
 import com.toyou.toyouandroid.model.FriendListModel
 import com.toyou.toyouandroid.model.PreviewCardModel
@@ -32,6 +33,13 @@ class SocialViewModel : ViewModel() {
 
     private val _optionList = MutableLiveData<List<String>>()
     val optionList: LiveData<List<String>> get() = _optionList
+
+    private val _isFriend = MutableLiveData<String>()
+    val isFriend : LiveData<String> get() = _isFriend
+
+    private val _searchName = MutableLiveData<String>()
+    val searchName : LiveData<String> get() = _searchName
+
 
     init {
         loadInitQuestionType()
@@ -75,7 +83,9 @@ class SocialViewModel : ViewModel() {
         try {
             val response = repository.getSearchData(name)
             if (response.isSuccess) {
-                Log.d("search API 성공", response.message)
+                _isFriend.value = response.result.status
+                _searchName.value = response.result.name
+                Log.d("search API 성공", isFriend.value.toString())
             } else {
                 Log.e("search API 실패", "API 호출 실패: ${response.message}")
             }
