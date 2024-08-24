@@ -55,8 +55,9 @@ class CardViewModel : ViewModel(){
     fun sendData(previewCardModels: List<PreviewCardModel>, exposure: Boolean) {
         viewModelScope.launch {
             _cardId.value = repository.postCardData(previewCardModels, exposure)
+            Log.d("카드 아이디", _cardId.value.toString())  // LiveData 업데이트 후 로그 출력
+
         }
-        Log.d("카드 아이디", _cardId.value.toString())
     }
 
 
