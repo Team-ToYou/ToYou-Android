@@ -1,6 +1,7 @@
 package com.toyou.toyouandroid.data.social.service
 
 import com.toyou.toyouandroid.data.social.dto.request.QuestionDto
+import com.toyou.toyouandroid.data.social.dto.request.RequestFriend
 import com.toyou.toyouandroid.data.social.dto.response.FriendsDto
 import com.toyou.toyouandroid.data.social.dto.response.SearchFriendDto
 import com.toyou.toyouandroid.network.BaseResponse
@@ -28,4 +29,10 @@ interface SocialService {
         @Header("userId") id: Int,
         @Query("keyword") name: String
     ): BaseResponse<SearchFriendDto>
+
+    @POST("/friends/requests")
+    suspend fun postFriendRequest(
+        @Header("userId") id: Int,
+        @Body friend : RequestFriend
+    ) : BaseResponse<Unit>
 }

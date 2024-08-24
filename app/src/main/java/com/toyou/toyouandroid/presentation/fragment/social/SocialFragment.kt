@@ -8,6 +8,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -30,10 +33,10 @@ class SocialFragment : Fragment() {
 
     private lateinit var socialAdapter: SocialRVAdapter
     private lateinit var socialViewModel : SocialViewModel
+    private lateinit var addFriendLinearLayout: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
 
         socialViewModel = ViewModelProvider(requireActivity()).get(SocialViewModel::class.java)
         socialViewModel.getFriendsData()
@@ -46,6 +49,9 @@ class SocialFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentSocialBinding.inflate(inflater, container, false)
+
+        addFriendLinearLayout = binding.addFriendLinear
+
 
         //어탭터 초기화 후 뷰모델 데이터 관찰
         socialAdapter = SocialRVAdapter(socialViewModel) { position ->
@@ -74,6 +80,11 @@ class SocialFragment : Fragment() {
         binding.searchBtn.setOnClickListener {
             var searchName = binding.searchEt.text.toString()
             socialViewModel.getSearchData(searchName)
+            socialViewModel.isFriend.value?.let { isFriend ->
+                addFriendView(isFriend, searchName)
+            } ?: run {
+                Log.e("SocialFragment", "isFriend 값이 null입니다.")
+            }
         }
 
 
@@ -110,6 +121,36 @@ class SocialFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    private fun addFriendView(isFriend : String, name : String){
+        val addFriendView = LayoutInflater.from(requireContext()).inflate(R.layout.item_add_friend, addFriendLinearLayout,false)
+        val friendName = addFriendView.findViewById<TextView>(R.id.friendName_tv)
+        val stateBtn = addFriendView.findViewById<Button>(R.id.state_btn)
+
+        friendName.apply {
+            friendName?.setText(name)
+        }
+
+        stateBtn.apply {
+            when(isFriend) {
+                "REQUEST_SENT" -> {
+                    stateBtn.setText("취소하기")
+                    stateBtn.setBackgroundResource(R.drawable.r10_red_container)
+                }
+                "REQUEST_RECEIVED" -> {
+                    stateBtn.setText("친구 요청 받음")
+                }
+                "FRIEND" -> {
+                    stateBtn.setText("친구")
+                }
+                "NOT_FRIEND" -> {
+                    stateBtn.setText("친구 요청")
+                }
+            }
+        }
+        addFriendLinearLayout.addView(addFriendView)
+
     }
 
 }

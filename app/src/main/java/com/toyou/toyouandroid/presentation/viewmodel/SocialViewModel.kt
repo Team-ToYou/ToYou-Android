@@ -6,11 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.toyou.toyouandroid.data.social.dto.request.QuestionDto
+import com.toyou.toyouandroid.data.social.dto.request.RequestFriend
 import com.toyou.toyouandroid.data.social.dto.response.FriendsDto
-import com.toyou.toyouandroid.data.social.dto.response.SearchFriendDto
 import com.toyou.toyouandroid.domain.social.repostitory.SocialRepository
 import com.toyou.toyouandroid.model.FriendListModel
-import com.toyou.toyouandroid.model.PreviewCardModel
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
@@ -36,10 +35,13 @@ class SocialViewModel : ViewModel() {
     val optionList: LiveData<List<String>> get() = _optionList
 
     private val _isFriend = MutableLiveData<String>()
-    val isFriend : LiveData<String> get() = _isFriend
+    val isFriend: LiveData<String> get() = _isFriend
 
     private val _searchName = MutableLiveData<String>()
-    val searchName : LiveData<String> get() = _searchName
+    val searchName: LiveData<String> get() = _searchName
+
+    private val _friendRequest = MutableLiveData<RequestFriend>()
+    val friendRequest: LiveData<RequestFriend> get() = _friendRequest
 
 
     init {
@@ -84,17 +86,41 @@ class SocialViewModel : ViewModel() {
         try {
             val response = repository.getSearchData(name)
             if (response.isSuccess) {
-                _isFriend.value = response.result.status
-                _searchName.value = response.result.name
-                Log.d("search API 성공", _isFriend.value.toString())
+                // 성공 시에만 result에 접근하도록 수정
+                response.result?.let { result ->
+                    _isFriend.value = result.status
+                    _searchName.value = result.name
+                    Log.d("search API 성공", _isFriend.value.toString())
+                } ?: run {
+                    // result가 null일 경우 처리
+                    Log.e("search API 실패", "결과가 null입니다.")
+                    _isFriend.value = "결과를 가져오지 못했습니다."
+                }
             } else {
+                // 실패 시 기본값 설정
                 Log.e("search API 실패", "API 호출 실패: ${response.message}")
+                _isFriend.value = "해당 사용자를 찾을 수 없습니다."
             }
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
             Log.e("search API 실패", "서버 응답 메시지: $errorBody")
+
+            when {
+                e.code() == 400 && errorBody?.contains("USER400") == true -> {
+                    _isFriend.value = "찾으시는 닉네임이 존재하지 않아요. 다시 입력해주세요"
+                }
+
+                e.code() == 400 && errorBody?.contains("USER401") == true -> {
+                    _isFriend.value = "스스로에게 요청할 수 없습니다. 다시 입력해주세요"
+                }
+
+                else -> {
+                    _isFriend.value = "알 수 없는 에러가 발생했습니다."
+                }
+            }
         } catch (e: Exception) {
             Log.e("search API 실패", "예외 발생: ${e.message}")
+            _isFriend.value = "예상치 못한 오류가 발생했습니다."
             e.printStackTrace()
         }
     }
@@ -154,22 +180,21 @@ class SocialViewModel : ViewModel() {
         _optionList.value = _questionDto.value!!.options!!
     }
 
-    fun removeOptions(){
+    fun removeOptions() {
         _questionDto.value?.options = null
     }
 
-    fun removeContent(){
+    fun removeContent() {
         _questionDto.value?.content = ""
     }
 
-    fun isAnonymous(isChecked : Boolean){
+    fun isAnonymous(isChecked: Boolean) {
         if (isChecked) _questionDto.value?.anonymous = true
         else _questionDto.value?.anonymous = false
     }
 
     fun sendQuestion() {
         viewModelScope.launch {
-            // Access the value of questionDto safely with let
             _questionDto.value?.let { currentQuestionDto ->
                 repository.postQuestionData(currentQuestionDto)
             } ?: run {
@@ -178,4 +203,18 @@ class SocialViewModel : ViewModel() {
             Log.d("api 성공!", "성공")
         }
     }
+
+    fun sendFriendRequest(name: String) {
+        _friendRequest.value = RequestFriend(name = name)
+        viewModelScope.launch {
+            _friendRequest.value?.let { name ->
+                repository.postRequest(name)
+            } ?: run {
+                Log.e("api 실패!", "널")
+            }
+            Log.d("api 성공!", "성공")
+        }
+
+    }
 }
+
