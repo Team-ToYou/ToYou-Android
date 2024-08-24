@@ -12,6 +12,25 @@ class CreateRepository {
 
     suspend fun getAllData() = client.getQuestions(1)
 
+    suspend fun patchCardData(
+        card : AnswerDto,
+        cardId : Int
+    ) {
+        try {
+            val response = client.patchCard(1, card = cardId, request = card)
+            // 응답 처리
+            if (response.isSuccess) {
+                Log.d("카드수정 성공!", response.message)
+            } else {
+                Log.d("카드수정 실패!", response.message)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Log.d("카드수정 실패!", e.message.toString())
+
+        }
+    }
+
     private fun convertPreviewCardModelsToAnswerDto(
         previewCardModels: List<PreviewCardModel>,
         exposure: Boolean
