@@ -12,6 +12,7 @@ import com.toyou.toyouandroid.domain.social.repostitory.SocialRepository
 import com.toyou.toyouandroid.model.FriendListModel
 import com.toyou.toyouandroid.model.PreviewCardModel
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 
 class SocialViewModel : ViewModel() {
     private val repository = SocialRepository()
@@ -79,18 +80,22 @@ class SocialViewModel : ViewModel() {
         }
     }
 
-    fun getSearchData(name : String) = viewModelScope.launch {
+    fun getSearchData(name: String) = viewModelScope.launch {
         try {
             val response = repository.getSearchData(name)
             if (response.isSuccess) {
                 _isFriend.value = response.result.status
                 _searchName.value = response.result.name
-                Log.d("search API 성공", isFriend.value.toString())
+                Log.d("search API 성공", _isFriend.value.toString())
             } else {
                 Log.e("search API 실패", "API 호출 실패: ${response.message}")
             }
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            Log.e("search API 실패", "서버 응답 메시지: $errorBody")
         } catch (e: Exception) {
             Log.e("search API 실패", "예외 발생: ${e.message}")
+            e.printStackTrace()
         }
     }
 

@@ -14,18 +14,18 @@ interface SocialService {
 
     @POST("/questions")
     suspend fun postQuestion(
-        @Header("userId") id : Long,
+        @Header("userId") id : Int,
         @Body request : QuestionDto
     ) : BaseResponse<Unit>
 
     @GET("/friends")
     suspend fun getFriends(
-        @Header("userId") id : Long
+        @Header("userId") id : Int
     ) : BaseResponse<FriendsDto>
 
     @GET("/friends/search")
     suspend fun getSearchFriend(
-        @Header("userId") id: Long,
+        @Header("userId") id: Int,
         @Query("keyword") name: String
     ): BaseResponse<SearchFriendDto>
 }
