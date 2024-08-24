@@ -70,7 +70,7 @@ class PreviewFragment : Fragment(){
 
             cardViewModel.sendData(previewCards, exposure)
 
-            navController.navigate(R.id.action_previewFragment_to_modifyFragment)
+            navController.navigate(R.id.action_previewFragment_to_navigation_home)
         }
     }
 

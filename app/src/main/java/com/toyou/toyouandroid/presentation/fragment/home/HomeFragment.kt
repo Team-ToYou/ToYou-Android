@@ -9,6 +9,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
@@ -18,6 +19,7 @@ import com.toyou.toyouandroid.databinding.FragmentHomeBinding
 import com.toyou.toyouandroid.model.HomeBottomSheetItem
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.presentation.fragment.home.adapter.HomeBottomSheetAdapter
+import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModel
 
 class HomeFragment : Fragment() {
@@ -29,6 +31,8 @@ class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by activityViewModels()
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
+
+    private lateinit var cardViewModel : CardViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,6 +50,8 @@ class HomeFragment : Fragment() {
                 requireActivity().finish()
             }
         })
+
+        cardViewModel = ViewModelProvider(requireActivity()).get(CardViewModel::class.java)
 
         return binding.root
     }
@@ -114,7 +120,10 @@ class HomeFragment : Fragment() {
 
         // 우체통 클릭시 일기카드 생성 화면으로 전환(임시)
         binding.homeMailboxIv.setOnClickListener {
-            navController.navigate(R.id.action_navigation_home_to_create_fragment)
+            if (cardViewModel.cardId.value == 0)
+                navController.navigate(R.id.action_navigation_home_to_create_fragment)
+            else
+                navController.navigate(R.id.action_navigation_home_to_modifyFragment)
         }
 
         binding.homeNoticeIv.setOnClickListener {

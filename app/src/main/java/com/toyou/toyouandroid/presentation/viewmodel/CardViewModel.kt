@@ -6,7 +6,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.toyou.toyouandroid.data.create.dto.request.AnswerDto
 import com.toyou.toyouandroid.data.create.dto.response.QuestionsDto
+import com.toyou.toyouandroid.data.social.dto.request.RequestFriend
 
 import com.toyou.toyouandroid.domain.create.repository.CreateRepository
 import com.toyou.toyouandroid.model.CardModel
@@ -45,10 +47,16 @@ class CardViewModel : ViewModel(){
     val result: LiveData<BaseResponse<QuestionsDto>>
         get() = _result
 
+    private val _patchAnswer = MutableLiveData<AnswerDto>()
+    val patchAnswer : LiveData<AnswerDto> get() = _patchAnswer
+    private val _cardId = MutableLiveData<Int>().apply { value = 0 }
+    val cardId: LiveData<Int> get() = _cardId
+
     fun sendData(previewCardModels: List<PreviewCardModel>, exposure: Boolean) {
         viewModelScope.launch {
-            repository.postCardData(previewCardModels, exposure)
+            _cardId.value = repository.postCardData(previewCardModels, exposure)
         }
+        Log.d("카드 아이디", _cardId.value.toString())
     }
 
 
@@ -117,11 +125,6 @@ class CardViewModel : ViewModel(){
         _chooseCards.value = chooseModels
         _shortCards.value = cardShortModel
     }
-
-
-   /* init {
-        getAllData()
-    }*/
 
 
     fun getAnswerLength(answer: String): Int {
@@ -198,6 +201,12 @@ class CardViewModel : ViewModel(){
     fun clearAllData() {
         _previewCards.value = emptyList()
         _previewChoose.value = emptyList()
+    }
+
+   fun patchCard(){
+        viewModelScope.launch {
+
+        }
     }
 
 }

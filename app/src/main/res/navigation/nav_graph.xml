@@ -22,6 +22,9 @@
             android:id="@+id/action_navigation_home_to_home_option_fragment"
             app:destination="@id/navigation_home_option"
             app:popUpTo="@id/navigation_home"/>
+        <action
+            android:id="@+id/action_navigation_home_to_modifyFragment"
+            app:destination="@id/modifyFragment" />
     </fragment>
     <fragment
         android:id="@+id/navigation_splash"
@@ -224,8 +227,8 @@
         android:label="PreviewFragment"
         tools:layout="@layout/fragment_preview">
         <action
-            android:id="@+id/action_previewFragment_to_modifyFragment"
-            app:destination="@id/modifyFragment" />
+            android:id="@+id/action_previewFragment_to_navigation_home"
+            app:destination="@id/navigation_home" />
     </fragment>
     <fragment
         android:id="@+id/navigation_notice"

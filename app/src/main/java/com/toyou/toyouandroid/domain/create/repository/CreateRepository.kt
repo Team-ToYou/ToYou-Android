@@ -49,10 +49,10 @@ class CreateRepository {
     }
 
     // 데이터 전송 함수
-    suspend fun postCardData(
+    suspend fun postCardData (
         previewCardModels: List<PreviewCardModel>,
         exposure: Boolean
-    ) {
+    ) : Int {
         val answerDto = convertPreviewCardModelsToAnswerDto(previewCardModels, exposure)
 
         try {
@@ -60,12 +60,16 @@ class CreateRepository {
             // 응답 처리
             if (response.isSuccess) {
                 Log.d("post성공", response.message)
+                return response.result.id
             } else {
                Log.d("post실패", response.message)
+                return 0
             }
         } catch (e: Exception) {
             e.printStackTrace()
             Log.d("post실패", e.message.toString())
+            return 0
+
 
         }
     }
