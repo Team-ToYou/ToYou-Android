@@ -47,8 +47,6 @@ class CardViewModel : ViewModel(){
     val result: LiveData<BaseResponse<QuestionsDto>>
         get() = _result
 
-    private val _patchAnswer = MutableLiveData<AnswerDto>()
-    val patchAnswer : LiveData<AnswerDto> get() = _patchAnswer
     private val _cardId = MutableLiveData<Int>().apply { value = 0 }
     val cardId: LiveData<Int> get() = _cardId
 
@@ -204,10 +202,11 @@ class CardViewModel : ViewModel(){
         _previewChoose.value = emptyList()
     }
 
-   fun patchCard(){
-        viewModelScope.launch {
-
+   fun patchCard(previewCardModels: List<PreviewCardModel>, exposure: Boolean){
+            viewModelScope.launch {
+                repository.patchCardData(previewCardModels, exposure, cardId = _cardId.value!!)
         }
+
     }
 
 }

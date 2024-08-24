@@ -68,7 +68,10 @@ class PreviewFragment : Fragment(){
             val previewCards = cardViewModel.previewCards.value ?: emptyList()
             val exposure = cardViewModel.exposure.value ?: false
 
-            cardViewModel.sendData(previewCards, exposure)
+            if (cardViewModel.cardId.value == 0)
+                cardViewModel.sendData(previewCards, exposure)
+            else(cardViewModel.cardId.value)
+                cardViewModel.patchCard(previewCards, exposure)
 
             navController.navigate(R.id.action_previewFragment_to_navigation_home)
         }
