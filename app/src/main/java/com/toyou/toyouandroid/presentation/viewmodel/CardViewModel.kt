@@ -16,6 +16,7 @@ import com.toyou.toyouandroid.model.PreviewCardModel
 import com.toyou.toyouandroid.model.PreviewChooseModel
 import com.toyou.toyouandroid.network.BaseResponse
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 class CardViewModel : ViewModel(){
     private val _cards = MutableLiveData<List<CardModel>>()
@@ -198,6 +199,5 @@ class CardViewModel : ViewModel(){
         _previewCards.value = emptyList()
         _previewChoose.value = emptyList()
     }
-
 
 }

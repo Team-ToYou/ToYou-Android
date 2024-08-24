@@ -19,6 +19,7 @@ import com.toyou.toyouandroid.presentation.fragment.home.RVMarginItemDecoration
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 import com.toyou.toyouandroid.ui.home.adapter.CardPreviewListAdapter
 import timber.log.Timber
+import java.time.LocalDate
 
 class CardFragment : Fragment() {
 
@@ -64,7 +65,7 @@ class CardFragment : Fragment() {
             Log.d("답변3", cardViewModel.previewCards.value.toString())
         }
 
-
+        binding.itemTitle.text = LocalDate.now().toString().replace("-", "")
     }
 
     override fun onDestroyView() {
