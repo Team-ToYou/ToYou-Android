@@ -6,12 +6,16 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.model.FriendListModel
+import com.toyou.toyouandroid.presentation.fragment.social.CustomDialogFragment
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
 
-class SocialRVAdapter(private val viewModel: SocialViewModel, private val onItemClick: (Int) -> Unit) : RecyclerView.Adapter<SocialRVAdapter.SocialViewHolder>() {
+class SocialRVAdapter(private val viewModel: SocialViewModel, private val onItemClick: (Int) -> Unit,
+                      private val showDeleteDialog: (String) -> Unit
+) : RecyclerView.Adapter<SocialRVAdapter.SocialViewHolder>() {
 
     private var friendList : List<FriendListModel> = emptyList()
 
@@ -24,7 +28,7 @@ class SocialRVAdapter(private val viewModel: SocialViewModel, private val onItem
         viewType: Int
     ): SocialViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_friend_rv, parent, false)
-        return SocialViewHolder(viewModel, view, onItemClick)
+        return SocialViewHolder(viewModel, view, onItemClick, showDeleteDialog)
     }
 
     override fun onBindViewHolder(holder: SocialViewHolder, position: Int) {
@@ -35,7 +39,8 @@ class SocialRVAdapter(private val viewModel: SocialViewModel, private val onItem
         return friendList.size
     }
 
-    class SocialViewHolder(private val viewModel: SocialViewModel,itemView: View, onItemClick : (Int) -> Unit) : RecyclerView.ViewHolder(itemView) {
+    class SocialViewHolder(private val viewModel: SocialViewModel,itemView: View, onItemClick : (Int) -> Unit,
+                           private val showDeleteDialog: (String) -> Unit) : RecyclerView.ViewHolder(itemView) {
 
         private val friendName : TextView = itemView.findViewById(R.id.friendName_tv)
         private val friendMessage : TextView = itemView.findViewById(R.id.friendMessage_tv)
@@ -49,6 +54,12 @@ class SocialRVAdapter(private val viewModel: SocialViewModel, private val onItem
                 onItemClick(adapterPosition)
                 val friend = friendName.text.toString()
                 viewModel.setTargetFriend(friend, emotion, ment)
+            }
+
+            itemView.setOnLongClickListener {
+                val friend = friendName.text.toString()
+                showDeleteDialog(friend) // 다이얼로그 호출
+                true
             }
         }
 

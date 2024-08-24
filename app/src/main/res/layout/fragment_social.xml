@@ -19,7 +19,7 @@
         android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/search_container"
         app:layout_constraintBottom_toTopOf="@id/guideline14"
         app:layout_constraintEnd_toStartOf="@+id/guideline15"
@@ -58,14 +58,14 @@
         app:layout_constraintTop_toBottomOf="@id/linearLayout"
         android:layout_marginTop="16dp"
         app:layout_constraintBottom_toTopOf="@id/title2_tv"
-        android:layout_marginBottom="30dp"/>
+        android:layout_marginBottom="20dp"/>
 
     <TextView
         android:id="@+id/title2_tv"
         style="@style/sc_r15"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="120dp"
         android:text="친구 목록"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="@id/guideline13"

@@ -11,6 +11,24 @@ class SocialRepository {
     private val client = RetrofitInstance.getInstance().create(SocialService::class.java)
 
     suspend fun getFriendsData() = client.getFriends(1)
+
+    suspend fun deleteFriendData(
+        request: RequestFriend
+    ){
+        try {
+            val response = client.deleteFriend(1, friend = request)
+            // 응답 처리
+            if (response.isSuccess) {
+                Log.d("친구삭제 성공!", response.message)
+            } else {
+                Log.d("친구삭제 실패!", response.message)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Log.d("친구삭제 실패!", e.message.toString())
+
+        }
+    }
     suspend fun postRequest(
         request : RequestFriend
     ){

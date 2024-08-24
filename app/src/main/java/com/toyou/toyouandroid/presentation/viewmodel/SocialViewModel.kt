@@ -216,5 +216,17 @@ class SocialViewModel : ViewModel() {
         }
 
     }
+
+    fun deleteFriend(name: String){
+        _friendRequest.value = RequestFriend(name = name)
+        viewModelScope.launch {
+            _friendRequest.value?.let { name ->
+                repository.deleteFriendData(name)
+            } ?: run {
+                Log.e("api 실패!", "널")
+            }
+            Log.d("api 성공!", "성공")
+        }
+    }
 }
 

@@ -54,9 +54,11 @@ class SocialFragment : Fragment() {
 
 
         //어탭터 초기화 후 뷰모델 데이터 관찰
-        socialAdapter = SocialRVAdapter(socialViewModel) { position ->
+        socialAdapter = SocialRVAdapter(socialViewModel, { position ->
             navController.navigate(R.id.action_navigation_social_to_questionTypeFragment)
             Log.d("아이템", position.toString())
+        }) { friendName ->
+            showDeleteDialog(friendName) // 다이얼로그 표시 함수 호출
         }
 
         binding.socialRv.apply {
@@ -80,6 +82,7 @@ class SocialFragment : Fragment() {
         binding.searchBtn.setOnClickListener {
             var searchName = binding.searchEt.text.toString()
             socialViewModel.getSearchData(searchName)
+            addFriendLinearLayout.removeAllViews()
             socialViewModel.isFriend.value?.let { isFriend ->
                 addFriendView(isFriend, searchName)
             } ?: run {
@@ -158,6 +161,25 @@ class SocialFragment : Fragment() {
 
         addFriendLinearLayout.addView(addFriendView)
 
+    }
+
+    private fun showDeleteDialog(friendName: String) {
+        val dialog = CustomDialogFragment()
+        val btn = arrayOf("취소", "확인")
+        dialog.arguments = bundleOf(
+            "dialogTitle" to "선택한 친구를\n삭제하시겠습니까?",
+            "btnText" to btn
+        )
+        dialog.setButtonClickListener(object : CustomDialogFragment.OnButtonClickListener {
+            override fun onButton1Clicked() {
+                dialog.dismiss()
+            }
+
+            override fun onButton2Clicked() {
+                socialViewModel.deleteFriend(friendName)
+            }
+        })
+        dialog.show(parentFragmentManager, "CustomDialogFragment")
     }
 
 }
