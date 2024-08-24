@@ -149,6 +149,13 @@ class SocialFragment : Fragment() {
                 }
             }
         }
+
+        stateBtn.setOnClickListener {
+            if (isFriend == "NOT_FRIEND"){
+                socialViewModel.sendFriendRequest(name)
+            }
+        }
+
         addFriendLinearLayout.addView(addFriendView)
 
     }
