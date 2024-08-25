@@ -228,5 +228,17 @@ class SocialViewModel : ViewModel() {
             Log.d("api 성공!", "성공")
         }
     }
+
+    fun patchApprove(name: String){
+        _friendRequest.value = RequestFriend(name = name)
+        viewModelScope.launch {
+            _friendRequest.value?.let { name ->
+                repository.patchApproveFriend(name)
+            } ?: run {
+                Log.e("api 실패!", "널")
+            }
+            Log.d("api 성공!", "성공")
+        }
+    }
 }
 

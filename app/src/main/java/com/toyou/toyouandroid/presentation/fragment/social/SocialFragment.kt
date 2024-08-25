@@ -142,7 +142,7 @@ class SocialFragment : Fragment() {
                     stateBtn.setBackgroundResource(R.drawable.r10_red_container)
                 }
                 "REQUEST_RECEIVED" -> {
-                    stateBtn.setText("친구 요청 받음")
+                    stateBtn.setText("요청 승인")
                 }
                 "FRIEND" -> {
                     stateBtn.setText("친구")
@@ -156,6 +156,12 @@ class SocialFragment : Fragment() {
         stateBtn.setOnClickListener {
             if (isFriend == "NOT_FRIEND"){
                 socialViewModel.sendFriendRequest(name)
+            }
+            else if (isFriend == "REQUEST_RECEIVED"){
+                socialViewModel.patchApprove(name)
+            }
+            else if (isFriend == "REQUEST_SENT"){
+                socialViewModel.deleteFriend(name)
             }
         }
 
