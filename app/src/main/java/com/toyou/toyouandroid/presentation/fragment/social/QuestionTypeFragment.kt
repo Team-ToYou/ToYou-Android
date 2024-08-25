@@ -79,7 +79,6 @@ class QuestionTypeFragment : Fragment(){
             val mainActivity = activity as MainActivity
             mainActivity.hideBottomNavigation(false)
             navController.popBackStack()
-
         }
 
         socialViewModel.selectedEmotionMent.observe(viewLifecycleOwner) { ment,  ->

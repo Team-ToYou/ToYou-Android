@@ -30,15 +30,15 @@
             android:layout_height="61dp"
             style="@style/sc_l10"
             android:hint="답변을 입력해주세요."
-            android:gravity="top"
             android:padding="5dp"
             android:background="@drawable/card_edit_border"
             android:text="@={card.answer}"
-        app:layout_constraintTop_toBottomOf="@id/textMessage"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:maxLength="200"
-        android:layout_marginTop="6dp"/>
+            app:layout_constraintTop_toBottomOf="@id/textMessage"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:maxLength="50"
+            android:gravity="top"
+            android:layout_marginTop="6dp"/>
 
         <TextView
             android:id="@+id/fromWho_tv"

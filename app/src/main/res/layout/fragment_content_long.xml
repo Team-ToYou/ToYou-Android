@@ -173,6 +173,8 @@
         app:layout_constraintStart_toEndOf="@id/guideline19"
         app:layout_constraintTop_toBottomOf="@id/balloon_tv"
         android:layout_marginTop="25dp"
+        android:padding="10dp"
+        android:gravity="top"
         android:text="@={viewModel.questionDto.content}"
         style="@style/sc_r10"
         android:maxLength="50"/>
