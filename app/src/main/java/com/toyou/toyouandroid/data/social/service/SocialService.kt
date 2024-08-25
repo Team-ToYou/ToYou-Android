@@ -10,6 +10,7 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.HTTP
 import retrofit2.http.Header
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Query
 
@@ -40,6 +41,12 @@ interface SocialService {
 
     @HTTP(method = "DELETE", path = "/friends", hasBody = true)
     suspend fun deleteFriend(
+        @Header("userId") id: Int,
+        @Body friend : RequestFriend
+    ) : BaseResponse<Unit>
+
+    @PATCH("/friends/requests/approve")
+    suspend fun patchApprove(
         @Header("userId") id: Int,
         @Body friend : RequestFriend
     ) : BaseResponse<Unit>
