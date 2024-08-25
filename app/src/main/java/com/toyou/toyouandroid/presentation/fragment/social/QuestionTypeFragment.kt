@@ -82,6 +82,10 @@ class QuestionTypeFragment : Fragment(){
 
         }
 
+        socialViewModel.selectedEmotionMent.observe(viewLifecycleOwner) { ment,  ->
+            binding.normalTv.text = ment
+        }
+
         socialViewModel.selectedEmotion.observe(viewLifecycleOwner) { emotion,  ->
             when (emotion) {
                 1 -> {
@@ -110,16 +114,14 @@ class QuestionTypeFragment : Fragment(){
                     binding.imageView2.setBackgroundResource(R.drawable.balloon_angry2)
                 }
                 else -> {
-                    binding.balloonTv.setBackgroundResource(R.drawable.social_ballon)
-                    binding.imogeIv.setBackgroundResource(R.drawable.social_imoge)
-                    binding.imageView2.setBackgroundResource(R.drawable.social_balloon)
+                    binding.balloonTv.setBackgroundResource(R.drawable.balloon_no)
+                    binding.imogeIv.setBackgroundResource(0)
+                    binding.imageView2.setBackgroundResource(R.drawable.balloon_no2)
+                    binding.normalTv.text = "친구가 아직 감정우표를 선택하지 않았어요"
                 }
             }
         }
 
-        socialViewModel.selectedEmotionMent.observe(viewLifecycleOwner) { ment,  ->
-            binding.normalTv.text = ment
-        }
 
     }
 

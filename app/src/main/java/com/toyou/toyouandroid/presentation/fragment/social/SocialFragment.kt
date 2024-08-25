@@ -84,13 +84,11 @@ class SocialFragment : Fragment() {
             socialViewModel.getSearchData(searchName)
             addFriendLinearLayout.removeAllViews()
             socialViewModel.isFriend.value?.let { isFriend ->
-                Log.d("친구 상태", isFriend)
                 if (isFriend == "400" || isFriend =="401")
                     addNotExist(isFriend)
                 else
                     addFriendView(isFriend, searchName)
             } ?: run {
-                Log.e("SocialFragment", "isFriend 값이 null입니다.")
             }
         }
 
@@ -143,7 +141,8 @@ class SocialFragment : Fragment() {
                     stateBtn.setBackgroundResource(R.drawable.r10_red_container)
                 }
                 "REQUEST_RECEIVED" -> {
-                    stateBtn.setText("요청 승인")
+                    stateBtn.setText("친구 수락")
+                    stateBtn.setBackgroundResource(R.drawable.r10_red_container)
                 }
                 "FRIEND" -> {
                     stateBtn.setText("친구")

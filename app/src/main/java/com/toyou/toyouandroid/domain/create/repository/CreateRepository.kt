@@ -71,8 +71,6 @@ class CreateRepository {
             e.printStackTrace()
             Log.d("post실패", e.message.toString())
             return 0
-
-
         }
     }
 }

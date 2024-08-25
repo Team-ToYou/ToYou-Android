@@ -95,19 +95,7 @@ class SocialViewModel : ViewModel() {
                     _isFriend.value = "결과를 가져오지 못했습니다."
                 }
             } else {
-                // 실패 시 코드와 메시지로 에러 분기 처리
-                when (response.code) {
-                    "USER400" -> {
-                        _isFriend.value = "400"
-                    }
-                    "USER401" -> {
-                        _isFriend.value = "401"
-                    }
-                    else -> {
-                        _isFriend.value = "400"
-                        Log.e("search API 실패", "API 호출 실패: ${response.message}")
-                    }
-                }
+                Log.e("search API 실패", "API 호출 실패: ${response.message}")
             }
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
