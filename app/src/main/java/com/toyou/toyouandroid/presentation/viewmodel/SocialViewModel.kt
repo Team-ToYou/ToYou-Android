@@ -86,36 +86,43 @@ class SocialViewModel : ViewModel() {
         try {
             val response = repository.getSearchData(name)
             if (response.isSuccess) {
-                // 성공 시에만 result에 접근하도록 수정
                 response.result?.let { result ->
                     _isFriend.value = result.status
                     _searchName.value = result.name
                     Log.d("search API 성공", _isFriend.value.toString())
                 } ?: run {
-                    // result가 null일 경우 처리
                     Log.e("search API 실패", "결과가 null입니다.")
                     _isFriend.value = "결과를 가져오지 못했습니다."
                 }
             } else {
-                // 실패 시 기본값 설정
-                Log.e("search API 실패", "API 호출 실패: ${response.message}")
-                _isFriend.value = "해당 사용자를 찾을 수 없습니다."
+                // 실패 시 코드와 메시지로 에러 분기 처리
+                when (response.code) {
+                    "USER400" -> {
+                        _isFriend.value = "찾으시는 닉네임이 존재하지 않아요. 다시 입력해주세요"
+                    }
+                    "USER401" -> {
+                        _isFriend.value = "스스로에게 요청할 수 없습니다. 다시 입력해주세요"
+                    }
+                    else -> {
+                        _isFriend.value = "해당 사용자를 찾을 수 없습니다."
+                        Log.e("search API 실패", "API 호출 실패: ${response.message}")
+                    }
+                }
             }
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
             Log.e("search API 실패", "서버 응답 메시지: $errorBody")
 
             when {
-                e.code() == 400 && errorBody?.contains("USER400") == true -> {
+                errorBody?.contains("USER400") == true -> {
                     _isFriend.value = "찾으시는 닉네임이 존재하지 않아요. 다시 입력해주세요"
                 }
-
-                e.code() == 400 && errorBody?.contains("USER401") == true -> {
-                    _isFriend.value = "스스로에게 요청할 수 없습니다. 다시 입력해주세요"
+                errorBody?.contains("USER401") == true -> {
+                    _isFriend.value = "스스로에게 요청할 수 없습니다."
                 }
 
                 else -> {
-                    _isFriend.value = "알 수 없는 에러가 발생했습니다."
+                    _isFriend.value = "찾으시는 닉네임이 존재하지 않아요. 다시 입력해주세요"
                 }
             }
         } catch (e: Exception) {

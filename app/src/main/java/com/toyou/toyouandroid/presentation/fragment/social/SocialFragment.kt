@@ -84,6 +84,7 @@ class SocialFragment : Fragment() {
             socialViewModel.getSearchData(searchName)
             addFriendLinearLayout.removeAllViews()
             socialViewModel.isFriend.value?.let { isFriend ->
+                Log.d("친구 상태", isFriend)
                 addFriendView(isFriend, searchName)
             } ?: run {
                 Log.e("SocialFragment", "isFriend 값이 null입니다.")
@@ -127,6 +128,7 @@ class SocialFragment : Fragment() {
         val addFriendView = LayoutInflater.from(requireContext()).inflate(R.layout.item_add_friend, addFriendLinearLayout,false)
         val friendName = addFriendView.findViewById<TextView>(R.id.friendName_tv)
         val stateBtn = addFriendView.findViewById<Button>(R.id.state_btn)
+        val notExistFriend = LayoutInflater.from(requireContext()).inflate(R.layout.item_not_exsist, addFriendLinearLayout, false)
 
         friendName.apply {
             friendName?.setText(name)
