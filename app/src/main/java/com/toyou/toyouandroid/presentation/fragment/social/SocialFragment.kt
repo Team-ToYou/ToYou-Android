@@ -90,9 +90,6 @@ class SocialFragment : Fragment() {
             }
         }
 
-
-
-        //다이얼로그 띄우기
         val dialog = CustomDialogFragment()
         val btn = arrayOf("취소", "확인")
         dialog.arguments= bundleOf(
