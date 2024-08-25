@@ -85,7 +85,10 @@ class SocialFragment : Fragment() {
             addFriendLinearLayout.removeAllViews()
             socialViewModel.isFriend.value?.let { isFriend ->
                 Log.d("친구 상태", isFriend)
-                addFriendView(isFriend, searchName)
+                if (isFriend == "400" || isFriend =="401")
+                    addNotExist(isFriend)
+                else
+                    addFriendView(isFriend, searchName)
             } ?: run {
                 Log.e("SocialFragment", "isFriend 값이 null입니다.")
             }
@@ -128,7 +131,6 @@ class SocialFragment : Fragment() {
         val addFriendView = LayoutInflater.from(requireContext()).inflate(R.layout.item_add_friend, addFriendLinearLayout,false)
         val friendName = addFriendView.findViewById<TextView>(R.id.friendName_tv)
         val stateBtn = addFriendView.findViewById<Button>(R.id.state_btn)
-        val notExistFriend = LayoutInflater.from(requireContext()).inflate(R.layout.item_not_exsist, addFriendLinearLayout, false)
 
         friendName.apply {
             friendName?.setText(name)
@@ -165,6 +167,25 @@ class SocialFragment : Fragment() {
         }
 
         addFriendLinearLayout.addView(addFriendView)
+
+    }
+
+    private fun addNotExist(isFriend : String){
+        val notExistFriend = LayoutInflater.from(requireContext()).inflate(R.layout.item_not_exsist, addFriendLinearLayout, false)
+        val ment = notExistFriend.findViewById<TextView>(R.id.friendName_tv)
+
+        if (isFriend == "401") {
+            ment.apply {
+                ment?.setText("스스로에게 요청할 수 없습니다. 다시 입력해주세요")
+            }
+        }
+        else{
+            ment.apply {
+                ment?.setText("찾으시는 닉네임이 존재하지 않아요. 다시 입력해주세요")
+            }
+        }
+
+        addFriendLinearLayout.addView(notExistFriend)
 
     }
 

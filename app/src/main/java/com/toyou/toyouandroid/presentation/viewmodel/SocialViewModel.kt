@@ -98,13 +98,13 @@ class SocialViewModel : ViewModel() {
                 // 실패 시 코드와 메시지로 에러 분기 처리
                 when (response.code) {
                     "USER400" -> {
-                        _isFriend.value = "찾으시는 닉네임이 존재하지 않아요. 다시 입력해주세요"
+                        _isFriend.value = "400"
                     }
                     "USER401" -> {
-                        _isFriend.value = "스스로에게 요청할 수 없습니다. 다시 입력해주세요"
+                        _isFriend.value = "401"
                     }
                     else -> {
-                        _isFriend.value = "해당 사용자를 찾을 수 없습니다."
+                        _isFriend.value = "400"
                         Log.e("search API 실패", "API 호출 실패: ${response.message}")
                     }
                 }
@@ -115,14 +115,14 @@ class SocialViewModel : ViewModel() {
 
             when {
                 errorBody?.contains("USER400") == true -> {
-                    _isFriend.value = "찾으시는 닉네임이 존재하지 않아요. 다시 입력해주세요"
+                    _isFriend.value = "400"
                 }
                 errorBody?.contains("USER401") == true -> {
-                    _isFriend.value = "스스로에게 요청할 수 없습니다."
+                    _isFriend.value = "401"
                 }
 
                 else -> {
-                    _isFriend.value = "찾으시는 닉네임이 존재하지 않아요. 다시 입력해주세요"
+                    _isFriend.value = "400"
                 }
             }
         } catch (e: Exception) {
