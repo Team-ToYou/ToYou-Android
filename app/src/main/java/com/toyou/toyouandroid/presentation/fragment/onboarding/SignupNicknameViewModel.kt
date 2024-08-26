@@ -7,6 +7,7 @@ import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.presentation.fragment.notice.network.NetworkModule
 import com.toyou.toyouandroid.presentation.fragment.onboarding.network.NicknameCheckResponse
 import com.toyou.toyouandroid.presentation.fragment.onboarding.network.OnboardingService
+import com.toyou.toyouandroid.presentation.fragment.onboarding.network.PatchNicknameResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -157,6 +158,55 @@ class SignupNicknameViewModel : ViewModel() {
 
             override fun onFailure(call: Call<NicknameCheckResponse>, t: Throwable) {
                 Timber.tag("API Failure").e(t, "Error checking nickname")
+                _duplicateCheckMessage.value = "서버에 연결할 수 없습니다."
+                _duplicateCheckMessageColor.value = 0xFFFF0000.toInt()
+            }
+        })
+    }
+
+    private val _isUpdatingNickname = MutableLiveData<Boolean>()
+    val isUpdatingNickname: LiveData<Boolean> get() = _isUpdatingNickname
+
+    fun setUpdatingNickname(isUpdating: Boolean) {
+        _isUpdatingNickname.value = isUpdating
+    }
+
+    sealed class NavigationEvent {
+        data object NavigateToMyPage : NavigationEvent()
+        data object NavigateToSignupAgree : NavigationEvent()
+    }
+
+    private val _navigationEvent = MutableLiveData<NavigationEvent>()
+    val navigationEvent: LiveData<NavigationEvent> get() = _navigationEvent
+
+
+    fun changeNickname(userId: Int) {
+        val nickname = _nickname.value ?: return
+
+        val call = apiService.patchNickname(userId, nickname)
+        call.enqueue(object : Callback<PatchNicknameResponse> {
+            override fun onResponse(call: Call<PatchNicknameResponse>, response: Response<PatchNicknameResponse>) {
+                if (response.isSuccessful) {
+                    val success = response.body()?.isSuccess ?: false
+                    if (success) {
+                        // 닉네임 변경 완료 후 로직
+                        if (_isUpdatingNickname.value == true) {
+                            _navigationEvent.value = NavigationEvent.NavigateToMyPage
+                        } else {
+                            _navigationEvent.value = NavigationEvent.NavigateToSignupAgree
+                        }
+                    } else {
+                        _duplicateCheckMessage.value = response.body()?.message.toString()
+                        _duplicateCheckMessageColor.value = 0xFFFF0000.toInt()
+                    }
+                } else {
+                    _duplicateCheckMessage.value = "닉네임 변경에 실패했습니다."
+                    _duplicateCheckMessageColor.value = 0xFFFF0000.toInt()
+                }
+            }
+
+            override fun onFailure(call: Call<PatchNicknameResponse>, t: Throwable) {
+                Timber.tag("API Failure").e(t, "Error updating nickname")
                 _duplicateCheckMessage.value = "서버에 연결할 수 없습니다."
                 _duplicateCheckMessageColor.value = 0xFFFF0000.toInt()
             }
