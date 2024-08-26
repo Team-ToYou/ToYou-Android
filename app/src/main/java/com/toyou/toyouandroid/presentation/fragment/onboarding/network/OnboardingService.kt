@@ -1,6 +1,7 @@
 package com.toyou.toyouandroid.presentation.fragment.onboarding.network
 
 import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.PATCH
@@ -16,6 +17,6 @@ interface OnboardingService {
     @PATCH("users/nickname")
     fun patchNickname(
         @Header("userId") userId: Int,
-        @Query("nickname") nickname: PatchNicknameRequest
+        @Body nickname: String
     ): Call<PatchNicknameResponse>
 }
