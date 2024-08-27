@@ -10,13 +10,13 @@ import com.toyou.toyouandroid.network.RetrofitInstance
 class SocialRepository {
     private val client = RetrofitInstance.getInstance().create(SocialService::class.java)
 
-    suspend fun getFriendsData() = client.getFriends(2)
+    suspend fun getFriendsData() = client.getFriends(1)
 
     suspend fun patchApproveFriend(
         request: RequestFriend
     ){
         try {
-            val response = client.patchApprove(2, friend = request)
+            val response = client.patchApprove(1, friend = request)
             // 응답 처리
             if (response.isSuccess) {
                 Log.d("친구승인 성공!", response.message)
@@ -34,7 +34,7 @@ class SocialRepository {
         request: RequestFriend
     ){
         try {
-            val response = client.deleteFriend(2, friend = request)
+            val response = client.deleteFriend(1, friend = request)
             // 응답 처리
             if (response.isSuccess) {
                 Log.d("친구삭제 성공!", response.message)
@@ -51,7 +51,7 @@ class SocialRepository {
         request : RequestFriend
     ){
         try {
-            val response = client.postFriendRequest(2, friend = request)
+            val response = client.postFriendRequest(1, friend = request)
             // 응답 처리
             if (response.isSuccess) {
                 Log.d("친구요청 성공!", response.message)
@@ -68,13 +68,13 @@ class SocialRepository {
 
     suspend fun getSearchData(
         name : String,
-    ) = client.getSearchFriend(2, name)
+    ) = client.getSearchFriend(1, name)
 
     suspend fun postQuestionData(
         questionDto: QuestionDto,
     ) {
         try {
-            val response = client.postQuestion(2, request = questionDto)
+            val response = client.postQuestion(1, request = questionDto)
             // 응답 처리
             if (response.isSuccess) {
                 Log.d("post성공!", response.message)

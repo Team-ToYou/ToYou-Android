@@ -10,7 +10,7 @@ import com.toyou.toyouandroid.network.RetrofitInstance
 class CreateRepository {
     private val client = RetrofitInstance.getInstance().create(CreateService::class.java)
 
-    suspend fun getAllData() = client.getQuestions(3)
+    suspend fun getAllData() = client.getQuestions(1)
 
     suspend fun patchCardData(
         previewCardModels: List<PreviewCardModel>,
@@ -19,7 +19,7 @@ class CreateRepository {
     ) {
         val answerDto = convertPreviewCardModelsToAnswerDto(previewCardModels, exposure)
         try {
-            val response = client.patchCard(3, card = cardId, request = answerDto)
+            val response = client.patchCard(1, card = cardId, request = answerDto)
             // 응답 처리
             if (response.isSuccess) {
                 Log.d("카드수정 성공!", response.message)
@@ -58,7 +58,7 @@ class CreateRepository {
         val answerDto = convertPreviewCardModelsToAnswerDto(previewCardModels, exposure)
 
         try {
-            val response = client.postCard(3, request = answerDto)
+            val response = client.postCard(1, request = answerDto)
             // 응답 처리
             if (response.isSuccess) {
                 Log.d("post성공", response.message)
