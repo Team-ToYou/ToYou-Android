@@ -37,7 +37,7 @@ class MyRecordCalendarRVAdapter(
             } else {
                 when (dayOfWeek) {
                     Calendar.SATURDAY -> {
-                        binding.dayText.setTextColor(Color.BLUE)
+                        binding.dayText.setTextColor(Color.BLACK)
                     }
                     Calendar.SUNDAY -> {
                         binding.dayText.setTextColor(Color.RED)
