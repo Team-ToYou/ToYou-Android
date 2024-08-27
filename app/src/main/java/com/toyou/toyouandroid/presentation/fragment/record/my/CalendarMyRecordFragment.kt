@@ -5,13 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.viewpager2.widget.ViewPager2
+import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentCalendarMyrecordBinding
 import com.toyou.toyouandroid.model.MyDate
-import com.toyou.toyouandroid.utils.MyDates.generateDatesForMonths
+import com.toyou.toyouandroid.presentation.fragment.notice.network.NetworkModule
+import com.toyou.toyouandroid.presentation.fragment.record.network.DiaryCard
+import com.toyou.toyouandroid.presentation.fragment.record.network.RecordRepository
+import com.toyou.toyouandroid.presentation.fragment.record.network.RecordService
+import com.toyou.toyouandroid.presentation.fragment.record.network.RecordViewModelFactory
 import com.toyou.toyouandroid.utils.MyDates
+import timber.log.Timber
 import java.util.Calendar
 import java.util.Date
 
@@ -21,12 +28,16 @@ class CalendarMyRecordFragment : Fragment(), MyRecordCalendarRVAdapter.OnDateCli
     private var _binding: FragmentCalendarMyrecordBinding? = null
     private val binding: FragmentCalendarMyrecordBinding
         get() = requireNotNull(_binding){"FragmentCalendarMyrecordBinding -> null"}
+    private val myRecordViewModel: MyRecordViewModel by viewModels {
+        RecordViewModelFactory(RecordRepository(NetworkModule.getClient().create(RecordService::class.java)))
+    }
 
     private var calendar = Calendar.getInstance()
     private val startCalendar: Calendar = Calendar.getInstance().apply {
         time = Date()
     }
-    private var monthDates = generateDatesForMonths(calendar, 12, 12)
+    private var currentYear: Int = -1
+    private var currentMonth: Int = -1
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,8 +70,15 @@ class CalendarMyRecordFragment : Fragment(), MyRecordCalendarRVAdapter.OnDateCli
         binding.btnTodayDate.setOnClickListener {
             calendar = Calendar.getInstance()
             startCalendar.time = calendar.time
-            monthDates = generateDatesForMonths(calendar, 12, 12) // 이전 달과 다음 달을 포함
-            updateCalendar()
+            myRecordViewModel.loadDiaryCards(1, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)) // userId는 예시
+        }
+
+        myRecordViewModel.diaryCards.observe(viewLifecycleOwner) { diaryCards ->
+            Timber.tag("CalendarFragment").d("DiaryCards loaded: ${diaryCards.size} items")
+            Timber.tag("CalendarFragment").d("DiaryCards loaded: $diaryCards")
+
+            val imageMap = mapDiaryCardsToImages(diaryCards)
+            updateCalendarWithImages(imageMap)
         }
 
         updateCalendar() // 초기 달력 업데이트
@@ -83,22 +101,74 @@ class CalendarMyRecordFragment : Fragment(), MyRecordCalendarRVAdapter.OnDateCli
     private fun updateCalendar() {
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
-        binding.yearMonthTextView.text = "${year}년 ${month + 1}월"
 
-        val months = generateMonths(calendar)
-        val pagerAdapter = MyrecordCalendarPagerAdapter(months, month, this)
-        binding.calendarViewPager.adapter = pagerAdapter
-        binding.calendarViewPager.setCurrentItem(months.size / 2, false)
+        // API 호출은 년, 월이 바뀔 때만 수행
+        if (year != currentYear || month != currentMonth) {
+            currentYear = year
+            currentMonth = month
+
+            binding.yearMonthTextView.text = "${year}년 ${month + 1}월"
+            Timber.tag("CalendarFragment").d("Updating calendar for: ${year}년 ${month + 1}월")
+
+            myRecordViewModel.loadDiaryCards(1, year, month + 1)
+            Timber.tag("CalendarFragment").d("loadDiaryCards called for User: 1, Year: $year, Month: ${month + 1}")
+        }
     }
 
-    private fun generateMonths(calendar: Calendar): List<List<MyDate>> {
+    private fun mapDiaryCardsToImages(diaryCards: List<DiaryCard>): Map<Pair<Int, Int>, Map<Int, Int>> {
+        Timber.tag("CalendarFragment").d("Mapping diary cards to images")
+
+        val imageMap = mutableMapOf<Pair<Int, Int>, MutableMap<Int, Int>>()
+
+        diaryCards.forEach { diaryCard ->
+            val dateParts = diaryCard.date.split("-")
+            val year = dateParts[0].toInt()
+            val month = dateParts[1].toInt() - 1 // Calendar.MONTH는 0부터 시작
+            val day = dateParts[2].toInt()
+            Timber.tag("CalendarFragment").d("$month")
+
+            val emotionImageResId = when (diaryCard.emotion) {
+                "HAPPY" -> R.drawable.home_stamp_option_happy
+                "EXCITED" -> R.drawable.home_stamp_option_exciting
+                "NORMAL" -> R.drawable.home_stamp_option_normal
+                "NERVOUS" -> R.drawable.home_stamp_option_anxiety
+                "ANGRY" -> R.drawable.home_stamp_option_upset
+                else -> null
+            }
+
+            if (emotionImageResId != null) {
+                val monthMap = imageMap.getOrPut(Pair(year, month)) { mutableMapOf() }
+                monthMap[day] = emotionImageResId
+            }
+        }
+
+        Timber.tag("CalendarFragment").d("Image mapping complete: $imageMap")
+
+        return imageMap
+    }
+
+    private fun updateCalendarWithImages(imageMap: Map<Pair<Int, Int>, Map<Int, Int>>) {
+        Timber.tag("CalendarFragment").d("Updating calendar with images")
+
+        binding.yearMonthTextView.text = "${calendar.get(Calendar.YEAR)}년 ${calendar.get(Calendar.MONTH) + 1}월"
+
+        val months = generateMonths(calendar, imageMap)
+        val pagerAdapter = MyrecordCalendarPagerAdapter(months, calendar.get(Calendar.MONTH), this)
+        binding.calendarViewPager.offscreenPageLimit = 3
+        binding.calendarViewPager.adapter = pagerAdapter
+        binding.calendarViewPager.setCurrentItem(months.size / 2, false)
+
+        Timber.tag("CalendarFragment").d("Calendar update with images complete")
+    }
+
+    private fun generateMonths(calendar: Calendar, imageMap: Map<Pair<Int, Int>, Map<Int, Int>>): List<List<MyDate>> {
 
         val months = mutableListOf<List<MyDate>>()
 
         for (i in -12..12) {
             val cal = calendar.clone() as Calendar
             cal.add(Calendar.MONTH, i)
-            months.add(MyDates.generateDates(cal))
+            months.add(MyDates.generateDates(cal, imageMap))
         }
 
         return months
