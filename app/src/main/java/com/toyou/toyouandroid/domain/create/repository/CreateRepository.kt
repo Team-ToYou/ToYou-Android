@@ -12,6 +12,9 @@ class CreateRepository {
 
     suspend fun getAllData() = client.getQuestions(1)
 
+    suspend fun getHomeEntryData() = client.getHomeEntry(1)
+
+
     suspend fun patchCardData(
         previewCardModels: List<PreviewCardModel>,
         exposure: Boolean,

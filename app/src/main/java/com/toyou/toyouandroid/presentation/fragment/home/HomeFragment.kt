@@ -1,6 +1,7 @@
 package com.toyou.toyouandroid.presentation.fragment.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -120,7 +121,9 @@ class HomeFragment : Fragment() {
 
         // 우체통 클릭시 일기카드 생성 화면으로 전환(임시)
         binding.homeMailboxIv.setOnClickListener {
-            if (cardViewModel.cardId.value == 0)
+            cardViewModel.getHomeEntry()
+            Log.d("get home", cardViewModel.cardId.value.toString())
+            if (cardViewModel.cardId.value == null)
                 navController.navigate(R.id.action_navigation_home_to_create_fragment)
             else
                 navController.navigate(R.id.action_navigation_home_to_modifyFragment)
