@@ -6,7 +6,7 @@ plugins {
     id("kotlin-kapt")
     id ("dagger.hilt.android.plugin")
     id ("org.jetbrains.kotlin.kapt")
-
+    id("com.google.gms.google-services")
 }
 
 val localProperties = Properties()
@@ -85,4 +85,7 @@ dependencies {
     annotationProcessor("androidx.room:room-compiler:2.6.1")
     implementation ("androidx.room:room-ktx:2.6.1")
     kapt ("androidx.room:room-compiler:2.6.1")
+    implementation(platform("com.google.firebase:firebase-bom:33.2.0"))
+    implementation("com.google.firebase:firebase-analytics")
+    implementation ("com.google.firebase:firebase-messaging-ktx")
 }
