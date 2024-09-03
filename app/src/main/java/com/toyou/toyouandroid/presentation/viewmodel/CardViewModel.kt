@@ -2,10 +2,13 @@ package com.toyou.toyouandroid.presentation.viewmodel
 
 import android.util.Log
 import android.widget.ImageView
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.toyou.toyouandroid.data.UserDatabase
+import com.toyou.toyouandroid.data.UserEntity
 import com.toyou.toyouandroid.data.create.dto.request.AnswerDto
 import com.toyou.toyouandroid.data.create.dto.response.QuestionsDto
 import com.toyou.toyouandroid.data.social.dto.request.RequestFriend
@@ -17,6 +20,8 @@ import com.toyou.toyouandroid.model.ChooseModel
 import com.toyou.toyouandroid.model.PreviewCardModel
 import com.toyou.toyouandroid.model.PreviewChooseModel
 import com.toyou.toyouandroid.network.BaseResponse
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
@@ -28,8 +33,6 @@ class CardViewModel : ViewModel(){
     private val _previewCards = MutableLiveData<List<PreviewCardModel>>()
     val previewCards : LiveData<List<PreviewCardModel>> get() = _previewCards
 
-    private val _answersMap = MutableLiveData<MutableMap<Int, String>>(mutableMapOf())
-    val answersMap: LiveData<MutableMap<Int, String>> get() = _answersMap
     private val _chooseCards = MutableLiveData<List<ChooseModel>>()
     val chooseCards : LiveData<List<ChooseModel>> get() = _chooseCards
     private val _previewChoose = MutableLiveData<List<PreviewChooseModel>>()
@@ -50,12 +53,24 @@ class CardViewModel : ViewModel(){
     private val _cardId = MutableLiveData<Int>().apply { value = 0 }
     val cardId: LiveData<Int> get() = _cardId
 
-    fun sendData(previewCardModels: List<PreviewCardModel>, exposure: Boolean) {
+
+    fun sendData(previewCardModels: List<PreviewCardModel>, exposure: Boolean, database: UserDatabase) {
         viewModelScope.launch {
             _cardId.value = repository.postCardData(previewCardModels, exposure)
             Log.d("카드 아이디", _cardId.value.toString())
 
         }
+    }
+
+    fun getCardId(database: UserDatabase) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val users = database.dao().getAll()
+
+            for (user in users) {
+                _cardId.postValue(user.cardId)
+            }
+        }
+        Log.d("get home","이후${_cardId.value}" )
     }
 
 

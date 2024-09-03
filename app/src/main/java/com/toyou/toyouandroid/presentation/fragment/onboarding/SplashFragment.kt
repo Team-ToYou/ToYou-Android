@@ -58,6 +58,7 @@ class SplashFragment : Fragment() {
         // navController 초기화
         navController = findNavController()
 
+
         splashViewModel.getHomeEntry {
             saveUserInfo()
         }
