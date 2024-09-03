@@ -14,6 +14,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     private fun sendTokenToServer(token: String) {
         // 이 메서드에서 서버에 토큰을 전송하는 코드를 구현
+
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
