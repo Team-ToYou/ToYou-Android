@@ -58,19 +58,6 @@ class CardViewModel : ViewModel(){
         }
     }
 
-    fun getHomeEntry() = viewModelScope.launch {
-        try {
-            val response = repository.getHomeEntryData()
-            if (response.isSuccess){
-                _cardId.value = response.result.id
-            } else {
-                Log.e("get home", "home API 호출 실패: ${response.message}")
-            }
-        } catch (e: Exception) {
-            Log.e("get home", "home API 예외 발생: ${e.message}")
-        }
-    }
-
 
     fun getAllData() = viewModelScope.launch {
         try {

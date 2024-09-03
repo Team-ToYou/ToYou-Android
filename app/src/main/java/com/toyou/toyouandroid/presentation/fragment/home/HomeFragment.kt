@@ -121,9 +121,8 @@ class HomeFragment : Fragment() {
 
         // 우체통 클릭시 일기카드 생성 화면으로 전환(임시)
         binding.homeMailboxIv.setOnClickListener {
-            cardViewModel.getHomeEntry()
             Log.d("get home", cardViewModel.cardId.value.toString())
-            if (cardViewModel.cardId.value == null)
+            if (cardViewModel.cardId.value == 0)
                 navController.navigate(R.id.action_navigation_home_to_create_fragment)
             else
                 navController.navigate(R.id.action_navigation_home_to_modifyFragment)
