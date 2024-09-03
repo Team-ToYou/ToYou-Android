@@ -54,23 +54,11 @@ class CardViewModel : ViewModel(){
     val cardId: LiveData<Int> get() = _cardId
 
 
-    fun sendData(previewCardModels: List<PreviewCardModel>, exposure: Boolean, database: UserDatabase) {
+    fun sendData(previewCardModels: List<PreviewCardModel>, exposure: Boolean,) {
         viewModelScope.launch {
             _cardId.value = repository.postCardData(previewCardModels, exposure)
             Log.d("카드 아이디", _cardId.value.toString())
-
         }
-    }
-
-    fun getCardId(database: UserDatabase) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val users = database.dao().getAll()
-
-            for (user in users) {
-                _cardId.postValue(user.cardId)
-            }
-        }
-        Log.d("get home","이후${_cardId.value}" )
     }
 
 

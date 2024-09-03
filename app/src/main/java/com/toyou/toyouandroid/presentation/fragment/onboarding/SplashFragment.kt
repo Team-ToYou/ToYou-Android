@@ -17,8 +17,7 @@ import com.toyou.toyouandroid.data.UserDatabase
 import com.toyou.toyouandroid.data.UserEntity
 import com.toyou.toyouandroid.databinding.FragmentSplashBinding
 import com.toyou.toyouandroid.presentation.base.MainActivity
-import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
-import com.toyou.toyouandroid.presentation.viewmodel.SplashViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,7 +27,7 @@ class SplashFragment : Fragment() {
     private lateinit var navController: NavController
     private var _binding: FragmentSplashBinding? = null
     private lateinit var database: UserDatabase
-    private lateinit var splashViewModel: SplashViewModel
+    private lateinit var userViewModel: UserViewModel
 
 
     private val binding: FragmentSplashBinding
@@ -41,7 +40,7 @@ class SplashFragment : Fragment() {
     ): View {
 
         _binding = FragmentSplashBinding.inflate(inflater, container, false)
-        splashViewModel = ViewModelProvider(requireActivity()).get(SplashViewModel::class.java)
+        userViewModel = ViewModelProvider(requireActivity()).get(UserViewModel::class.java)
 
 
         return binding.root
@@ -58,11 +57,13 @@ class SplashFragment : Fragment() {
         // navController 초기화
         navController = findNavController()
 
+        userViewModel.getHomeEntry()
 
-        splashViewModel.getHomeEntry {
-            saveUserInfo()
+        userViewModel.cardId.observe(viewLifecycleOwner) { cardId ->
+
+                Log.d("get home", userViewModel.cardId.value.toString())
+
         }
-
 
         // 3초 후에 다음 화면으로 이동
         Handler(Looper.getMainLooper()).postDelayed({
@@ -81,7 +82,7 @@ class SplashFragment : Fragment() {
         _binding = null
     }
 
-    private fun saveUserInfo(){
+    /*private fun saveUserInfo(){
         CoroutineScope(Dispatchers.IO).launch {
             database.dao().insert(UserEntity(cardId = splashViewModel.cardId.value, emotion = splashViewModel.emotion.value))
             val users = database.dao().getAll()
@@ -90,7 +91,7 @@ class SplashFragment : Fragment() {
                 Log.d("get home", "cardId: ${user.cardId}, emotion: ${user.emotion}")
             }
         }
-    }
+    }*/
 
 
 

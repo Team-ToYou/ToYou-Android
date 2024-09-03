@@ -24,7 +24,7 @@ import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.presentation.fragment.home.adapter.HomeBottomSheetAdapter
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModel
-import com.toyou.toyouandroid.presentation.viewmodel.SplashViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
 
 class HomeFragment : Fragment() {
 
@@ -36,7 +36,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
 
-    private lateinit var cardViewModel : CardViewModel
+    private lateinit var userViewModel: UserViewModel
     private lateinit var database: UserDatabase
 
 
@@ -57,7 +57,7 @@ class HomeFragment : Fragment() {
             }
         })
 
-        cardViewModel = ViewModelProvider(requireActivity()).get(CardViewModel::class.java)
+        userViewModel = ViewModelProvider(requireActivity()).get(UserViewModel::class.java)
 
         return binding.root
     }
@@ -128,14 +128,14 @@ class HomeFragment : Fragment() {
 
         // 우체통 클릭시 일기카드 생성 화면으로 전환(임시)
         binding.homeMailboxIv.setOnClickListener {
-            cardViewModel.getCardId(database)
 
-            cardViewModel.cardId.observe(viewLifecycleOwner, Observer { cardId ->
+            userViewModel.cardId.observe(viewLifecycleOwner, Observer { cardId ->
                 if (cardId == 0)
                     navController.navigate(R.id.action_navigation_home_to_create_fragment)
                 else
                     navController.navigate(R.id.action_navigation_home_to_modifyFragment)
             })
+            Log.d("cardID", userViewModel.cardId.value.toString())
         }
 
         binding.homeNoticeIv.setOnClickListener {

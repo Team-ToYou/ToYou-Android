@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.toyou.toyouandroid.domain.create.repository.CreateRepository
 import kotlinx.coroutines.launch
 
-class SplashViewModel : ViewModel() {
+class UserViewModel : ViewModel() {
 
     private val repository = CreateRepository()
     private val _cardId = MutableLiveData<Int>().apply { value = 0 }
@@ -16,19 +16,24 @@ class SplashViewModel : ViewModel() {
     private val _emotion = MutableLiveData<String>().apply { value = null }
     val emotion : LiveData<String> get() = _emotion
 
-    fun getHomeEntry(onSuccess: () -> Unit) = viewModelScope.launch {
+    fun getHomeEntry() = viewModelScope.launch {
         try {
             val response = repository.getHomeEntryData()
-            if (response.isSuccess){
+            if (response.isSuccess) {
                 _cardId.value = response.result.id
-                _emotion.value = response.result.emotion
-                Log.d("get home","api 성공")
-                onSuccess()  // API 성공 시 콜백 호출
+                Log.d("get home", "API 성공, 카드 ID: ${response.result.id}")
             } else {
                 Log.e("get home", "home API 호출 실패: ${response.message}")
             }
         } catch (e: Exception) {
             Log.e("get home", "home API 예외 발생: ${e.message}")
+        }
+    }
+
+
+    fun updateCardIdFromOtherViewModel(otherViewModel: CardViewModel) {
+        otherViewModel.cardId.observeForever { newCardId ->
+            _cardId.value = newCardId
         }
     }
 }
