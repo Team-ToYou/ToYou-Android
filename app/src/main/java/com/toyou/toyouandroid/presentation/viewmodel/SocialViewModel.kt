@@ -204,6 +204,8 @@ class SocialViewModel : ViewModel() {
             Log.d("api 성공!", "성공")
         }
         retrieveTokenFromServer(questionDto.value!!.target)
+
+        resetQuestionData()
     }
 
     fun sendFriendRequest(name: String) {
@@ -258,6 +260,16 @@ class SocialViewModel : ViewModel() {
 
             }
         }
+
+    private fun resetQuestionData() {
+        _selectedChar.value = -1
+        _nextBtnEnabled.value = false
+        _questionDto.value = QuestionDto("", "", "", false, null) // 초기화
+        _selectedEmotion.value = 0
+        _selectedEmotionMent.value = ""
+        _optionList.value = emptyList()
+    }
+
 
 }
 

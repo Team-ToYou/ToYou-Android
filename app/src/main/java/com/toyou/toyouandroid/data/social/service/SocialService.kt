@@ -3,6 +3,7 @@ package com.toyou.toyouandroid.data.social.service
 import com.toyou.toyouandroid.data.social.dto.request.QuestionDto
 import com.toyou.toyouandroid.data.social.dto.request.RequestFriend
 import com.toyou.toyouandroid.data.social.dto.response.FriendsDto
+import com.toyou.toyouandroid.data.social.dto.response.ResponseFriend
 import com.toyou.toyouandroid.data.social.dto.response.SearchFriendDto
 import com.toyou.toyouandroid.network.BaseResponse
 import retrofit2.http.Body
@@ -20,7 +21,7 @@ interface SocialService {
     suspend fun postQuestion(
         @Header("userId") id : Int,
         @Body request : QuestionDto
-    ) : BaseResponse<Unit>
+    ) : BaseResponse<ResponseFriend>
 
     @GET("/friends")
     suspend fun getFriends(
@@ -37,7 +38,7 @@ interface SocialService {
     suspend fun postFriendRequest(
         @Header("userId") id: Int,
         @Body friend : RequestFriend
-    ) : BaseResponse<Unit>
+    ) : BaseResponse<ResponseFriend>
 
     @HTTP(method = "DELETE", path = "/friends", hasBody = true)
     suspend fun deleteFriend(
@@ -49,6 +50,6 @@ interface SocialService {
     suspend fun patchApprove(
         @Header("userId") id: Int,
         @Body friend : RequestFriend
-    ) : BaseResponse<Unit>
+    ) : BaseResponse<ResponseFriend>
 }
 
