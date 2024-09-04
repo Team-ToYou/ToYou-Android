@@ -1,10 +1,18 @@
 package com.toyou.toyouandroid.fcm
 
 import android.util.Log
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.toyou.toyouandroid.fcm.domain.FCMRepository
+import com.toyou.toyouandroid.fcm.dto.request.Token
+import com.toyou.toyouandroid.model.PreviewCardModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
+    val fcmRepository = FCMRepository()
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
@@ -13,7 +21,17 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     private fun sendTokenToServer(token: String) {
-        // 이 메서드에서 서버에 토큰을 전송하는 코드를 구현
+
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val tokenRequest = Token(token)
+                fcmRepository.postToken(tokenRequest)
+                Log.d("sendTokenToServer", "성공")
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Log.d("sendTokenToServer", "토큰 전송 실패: ${e.message}")
+            }
+        }
 
     }
 
