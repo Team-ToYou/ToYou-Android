@@ -3,9 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable
-            name="item"
-            type="com.toyou.toyouandroid.model.CalendarItem" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,7 +15,6 @@
             android:id="@+id/calendar_stamp_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            imageResource="@{item.emotion}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -26,7 +23,6 @@
             android:id="@+id/calendar_friend_nickname"
             android:layout_width="45dp"
             android:layout_height="wrap_content"
-            formattedNickname="@{item.nickname}"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:maxLines="1"

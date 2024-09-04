@@ -37,7 +37,7 @@ class FriendCalendarRVAdapter(
             } else {
                 when (dayOfWeek) {
                     Calendar.SATURDAY -> {
-                        binding.dayText.setTextColor(Color.BLUE)
+                        binding.dayText.setTextColor(Color.BLACK)
                     }
                     Calendar.SUNDAY -> {
                         binding.dayText.setTextColor(Color.RED)
@@ -49,7 +49,10 @@ class FriendCalendarRVAdapter(
             }
 
             // 이미지 설정
-            if (people == "0") {
+            if (people == null) {
+                binding.friendrecordImageView.visibility = View.GONE
+                binding.friendrecordPeople.visibility = View.GONE
+            } else if (people == "null") {
                 binding.friendrecordImageView.visibility = View.GONE
                 binding.friendrecordPeople.visibility = View.GONE
             } else {
