@@ -15,7 +15,7 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit) : RecyclerVie
     private var cardList: List<CardModel> = emptyList()
 
     fun setCards(cards: List<CardModel>) {
-        this.cardList = cards
+        this.cardList = cards.filter { it.questionType == 1 }
         Log.d("CardAdapter", "setCards called with: $cards")
         notifyDataSetChanged()
     }

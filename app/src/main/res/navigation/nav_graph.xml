@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/navigation_home">
+    app:startDestination="@id/navigation_splash">
 
     <fragment
         android:id="@+id/navigation_home"
@@ -22,6 +22,9 @@
             android:id="@+id/action_navigation_home_to_home_option_fragment"
             app:destination="@id/navigation_home_option"
             app:popUpTo="@id/navigation_home"/>
+        <action
+            android:id="@+id/action_navigation_home_to_modifyFragment"
+            app:destination="@id/modifyFragment" />
     </fragment>
     <fragment
         android:id="@+id/navigation_splash"
@@ -230,8 +233,8 @@
         android:label="PreviewFragment"
         tools:layout="@layout/fragment_preview">
         <action
-            android:id="@+id/action_previewFragment_to_modifyFragment"
-            app:destination="@id/modifyFragment" />
+            android:id="@+id/action_previewFragment_to_navigation_home"
+            app:destination="@id/navigation_home" />
     </fragment>
     <fragment
         android:id="@+id/navigation_notice"

@@ -9,14 +9,17 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.model.ChooseModel
+import com.toyou.toyouandroid.model.PreviewCardModel
 import com.toyou.toyouandroid.model.PreviewChooseModel
 import com.toyou.toyouandroid.model.multi_type1
+import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 
-class ChooseCardAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private var cardList: List<PreviewChooseModel> = emptyList()
+class ChooseCardAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private var cardList: List<PreviewCardModel> = emptyList()
 
-    fun setCards(cards: List<PreviewChooseModel>) {
-        this.cardList = cards
+
+    fun setCards(cards: List<PreviewCardModel>) {
+        this.cardList = cards.filter { it.type == 2 || it.type == 3 }
         Log.d("선택4", cards.toString())
         notifyDataSetChanged()
     }
@@ -65,20 +68,21 @@ class ChooseCardAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
-    inner class MultiViewHolder1(view: View) : RecyclerView.ViewHolder(view){
+    inner class MultiViewHolder1(view: View) : RecyclerView.ViewHolder(view) {
         private val question: TextView = view.findViewById(R.id.textMessage)
         private val txtOption1: TextView = view.findViewById(R.id.choose_option1)
         private val txtOption2: TextView = view.findViewById(R.id.choose_option2)
-        private val fromWho : TextView = view.findViewById(R.id.fromWho_tv)
+        private val fromWho: TextView = view.findViewById(R.id.fromWho_tv)
         private var selectedOption: TextView? = null
-
 
         init {
             txtOption1.setOnClickListener {
                 handleOptionSelection(txtOption1)
+                cardList[adapterPosition].answer = txtOption1.text.toString()
             }
             txtOption2.setOnClickListener {
                 handleOptionSelection(txtOption2)
+                cardList[adapterPosition].answer = txtOption2.text.toString()
             }
         }
 
@@ -88,31 +92,39 @@ class ChooseCardAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             selectedOption = selected
         }
 
-        fun bind(item: PreviewChooseModel) {
-            question.text = item.message
-            txtOption1.text = item.options[0]
-            txtOption2.text = item.options[1]
+        fun bind(item: PreviewCardModel) {
+            question.text = item.question
+            txtOption1.text = item.options!![0]
+            txtOption2.text = item.options!![1]
             fromWho.text = item.fromWho
+
+            when (item.answer) {
+                txtOption1.text.toString() -> handleOptionSelection(txtOption1)
+                txtOption2.text.toString() -> handleOptionSelection(txtOption2)
+            }
         }
     }
 
-    inner class MultiViewHolder2(view: View) : RecyclerView.ViewHolder(view){
+    inner class MultiViewHolder2(view: View) : RecyclerView.ViewHolder(view) {
         private val question: TextView = view.findViewById(R.id.textMessage)
         private val txtOption1: TextView = view.findViewById(R.id.choose_option1)
         private val txtOption2: TextView = view.findViewById(R.id.choose_option2)
         private val txtOption3: TextView = view.findViewById(R.id.choose_option3)
-        private val fromWho : TextView = view.findViewById(R.id.fromWho_tv)
+        private val fromWho: TextView = view.findViewById(R.id.fromWho_tv)
         private var selectedOption: TextView? = null
 
         init {
             txtOption1.setOnClickListener {
                 handleOptionSelection(txtOption1)
+                cardList[adapterPosition].answer = txtOption1.text.toString()
             }
             txtOption2.setOnClickListener {
                 handleOptionSelection(txtOption2)
+                cardList[adapterPosition].answer = txtOption2.text.toString()
             }
             txtOption3.setOnClickListener {
                 handleOptionSelection(txtOption3)
+                cardList[adapterPosition].answer = txtOption3.text.toString()
             }
         }
 
@@ -121,15 +133,22 @@ class ChooseCardAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             selected.isSelected = true
             selectedOption = selected
         }
-        fun bind(item: PreviewChooseModel) {
-            question.text = item.message
-            txtOption1.text = item.options[0]
-            txtOption2.text = item.options[1]
-            txtOption3.text = item.options[2]
+
+        fun bind(item: PreviewCardModel) {
+            question.text = item.question
+            txtOption1.text = item.options!![0]
+            txtOption2.text = item.options!![1]
+            txtOption3.text = item.options!![2]
             fromWho.text = item.fromWho
 
+            when (item.answer) {
+                txtOption1.text.toString() -> handleOptionSelection(txtOption1)
+                txtOption2.text.toString() -> handleOptionSelection(txtOption2)
+                txtOption3.text.toString() -> handleOptionSelection(txtOption3)
+            }
         }
     }
+
 
     override fun getItemCount(): Int {
         return cardList.size

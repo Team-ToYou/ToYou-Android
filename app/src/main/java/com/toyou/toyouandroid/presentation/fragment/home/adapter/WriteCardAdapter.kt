@@ -7,9 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
+import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.R.id.limit_200
+import com.toyou.toyouandroid.databinding.ItemRvLongEditBinding
+import com.toyou.toyouandroid.databinding.ItemRvShortEditBinding
 import com.toyou.toyouandroid.model.PreviewCardModel
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 
@@ -17,13 +20,13 @@ class WriteCardAdapter(private val cardViewModel: CardViewModel) : RecyclerView.
 
     private var cardList : List<PreviewCardModel> = emptyList()
 
-    fun setCards(card: List<PreviewCardModel>){
-        this.cardList = card
-        notifyDataSetChanged()
+    fun setCards(cards: List<PreviewCardModel>) {
+        this.cardList = cards.filter { it.type == 1 }
+        //notifyDataSetChanged()
     }
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WriteCardAdapter.ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_rv_long_edit, parent, false)
-        return WriteCardAdapter.ViewHolder(view, cardViewModel)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val binding = ItemRvLongEditBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -34,41 +37,28 @@ class WriteCardAdapter(private val cardViewModel: CardViewModel) : RecyclerView.
         return cardList.size
     }
 
-    class ViewHolder(itemView : View, private val cardViewModel: CardViewModel) : RecyclerView.ViewHolder(itemView){
-        private val cardMessageTextView: TextView = itemView.findViewById(R.id.textMessage)
-        private val fromWho: TextView = itemView.findViewById(R.id.fromWho_tv)
-        private val answerEdit : EditText = itemView.findViewById(R.id.memo_et)
-        private val wordCount: TextView = itemView.findViewById(limit_200)
-        var message: String = ""
+    inner class ViewHolder(private val binding: ItemRvLongEditBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        init {
-            answerEdit.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-                    wordCount.text = "(0/200)"
-                }
+        fun bind(card: PreviewCardModel) {
+            binding.card = card
+            binding.viewModel = cardViewModel
+
+            binding.memoEt.setText(card.answer)
+
+            binding.memoEt.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    message = s.toString()
-                    wordCount.text = "${message.length} / 200"
-                    cardViewModel.setEditTextFilled(message.isNotEmpty())
+                    card.answer = s.toString()  // 변경된 텍스트를 PreviewCardModel의 answer에 저장
+                    binding.limit200.text = String.format("(%d/200)", s?.length ?: 0)  // 글자 수 업데이트
                 }
 
-                override fun afterTextChanged(s: Editable?) {
-                    wordCount.text = "${message.length} / 200"
-                }
+                override fun afterTextChanged(s: Editable?) {}
             })
-        }
-        fun bind(card: PreviewCardModel) {
-            cardMessageTextView.text = card.question
-            fromWho.text = card.fromWho
-        }
 
 
+            binding.executePendingBindings()
+        }
     }
 
 }

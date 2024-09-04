@@ -43,14 +43,27 @@ class QuestionTypeFragment : Fragment(){
         navController = Navigation.findNavController(view)
 
 
-
         socialViewModel.selectedChar.observe(viewLifecycleOwner, Observer { charIndex ->
             updateSelection(charIndex)
             binding.nextBtn.setOnClickListener {
-                if (charIndex ==1 ) navController.navigate(R.id.action_questionTypeFragment_to_questionContentFragment)
-                else navController.navigate(R.id.action_questionTypeFragment_to_questionContentLongFragment)
+                when(charIndex){
+                    1 -> {
+                        socialViewModel.setTypeFriend("OPTIONAL")
+                        navController.navigate(R.id.action_questionTypeFragment_to_questionContentFragment)
+                    }
+                    2 -> {
+                        socialViewModel.setTypeFriend("SHORT_ANSWER")
+                        navController.navigate(R.id.action_questionTypeFragment_to_questionContentLongFragment)
+                    }
+                    else -> {
+                        socialViewModel.setTypeFriend("LONG_ANSWER")
+                        navController.navigate(R.id.action_questionTypeFragment_to_questionContentLongFragment)
+                    }
+                }
             }
         })
+
+
 
         socialViewModel.nextBtnEnabled.observe(viewLifecycleOwner, Observer { isEnabled ->
             binding.nextBtn.isEnabled = isEnabled
@@ -66,8 +79,48 @@ class QuestionTypeFragment : Fragment(){
             val mainActivity = activity as MainActivity
             mainActivity.hideBottomNavigation(false)
             navController.popBackStack()
-
         }
+
+        socialViewModel.selectedEmotionMent.observe(viewLifecycleOwner) { ment,  ->
+            binding.normalTv.text = ment
+        }
+
+        socialViewModel.selectedEmotion.observe(viewLifecycleOwner) { emotion,  ->
+            when (emotion) {
+                1 -> {
+                    binding.balloonTv.setBackgroundResource(R.drawable.balloon_happy)
+                    binding.imogeIv.setBackgroundResource(R.drawable.imoge_happy)
+                    binding.imageView2.setBackgroundResource(R.drawable.balloon_happy2)
+                }
+                2 -> {
+                    binding.balloonTv.setBackgroundResource(R.drawable.balloon_excited)
+                    binding.imogeIv.setBackgroundResource(R.drawable.imoge_excited)
+                    binding.imageView2.setBackgroundResource(R.drawable.balloon_excited2)
+                }
+                3 -> {
+                    binding.balloonTv.setBackgroundResource(R.drawable.social_ballon)
+                    binding.imogeIv.setBackgroundResource(R.drawable.social_imoge)
+                    binding.imageView2.setBackgroundResource(R.drawable.social_balloon)
+                }
+                4 -> {
+                    binding.balloonTv.setBackgroundResource(R.drawable.balloon_anxiety)
+                    binding.imogeIv.setBackgroundResource(R.drawable.imoge_anxiety)
+                    binding.imageView2.setBackgroundResource(R.drawable.balloon_anxiety2)
+                }
+                5 -> {
+                    binding.balloonTv.setBackgroundResource(R.drawable.balloon_angry)
+                    binding.imogeIv.setBackgroundResource(R.drawable.imoge_angry)
+                    binding.imageView2.setBackgroundResource(R.drawable.balloon_angry2)
+                }
+                else -> {
+                    binding.balloonTv.setBackgroundResource(R.drawable.balloon_no)
+                    binding.imogeIv.setBackgroundResource(0)
+                    binding.imageView2.setBackgroundResource(R.drawable.balloon_no2)
+                    binding.normalTv.text = "친구가 아직 감정우표를 선택하지 않았어요"
+                }
+            }
+        }
+
 
     }
 

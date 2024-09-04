@@ -1,6 +1,7 @@
 package com.toyou.toyouandroid.ui.home
 
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,11 +11,15 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.databinding.CardLayoutBinding
 import com.toyou.toyouandroid.databinding.FragmentPreviewBinding
+import com.toyou.toyouandroid.presentation.fragment.home.RVMarginItemDecoration
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 import com.toyou.toyouandroid.ui.home.adapter.CardPreviewListAdapter
 import timber.log.Timber
+import java.time.LocalDate
 
 class CardFragment : Fragment() {
 
@@ -39,14 +44,15 @@ class CardFragment : Fragment() {
         _binding = CardLayoutBinding.inflate(inflater, container, false)
 
 
+        listAdapter = CardPreviewListAdapter()
+        setupRecyclerView(binding.cardList, listAdapter)
+
         return binding.root
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        listAdapter = CardPreviewListAdapter(emptyList())
-        binding.cardList.adapter = listAdapter
 
         cardViewModel.previewCards.observe(viewLifecycleOwner, Observer { previewCards ->
             listAdapter.setCards(previewCards )
@@ -56,13 +62,24 @@ class CardFragment : Fragment() {
 
         binding.lockFreeIv.setOnClickListener {
             cardViewModel.isLockSelected(binding.lockFreeIv)
+            Log.d("답변3", cardViewModel.previewCards.value.toString())
         }
+
+        binding.itemTitle.text = LocalDate.now().toString().replace("-", "")
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
 
+    }
+
+    private fun setupRecyclerView(recyclerView: RecyclerView, adapter: RecyclerView.Adapter<*>) {
+        recyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            this.adapter = adapter
+
+        }
     }
 
 }

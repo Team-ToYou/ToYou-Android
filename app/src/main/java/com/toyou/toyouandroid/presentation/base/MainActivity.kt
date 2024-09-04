@@ -7,6 +7,8 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {

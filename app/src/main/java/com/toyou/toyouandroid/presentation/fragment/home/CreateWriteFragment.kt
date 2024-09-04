@@ -1,5 +1,6 @@
 package com.toyou.toyouandroid.presentation.fragment.home
 
+import ShortCardAdapter
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
@@ -18,7 +19,6 @@ import com.toyou.toyouandroid.databinding.FragmentCreateWriteBinding
 import com.toyou.toyouandroid.model.ChooseModel
 import com.toyou.toyouandroid.presentation.fragment.home.adapter.CardChooseAdapter
 import com.toyou.toyouandroid.presentation.fragment.home.adapter.ChooseCardAdapter
-import com.toyou.toyouandroid.presentation.fragment.home.adapter.ShortCardAdapter
 import com.toyou.toyouandroid.presentation.fragment.home.adapter.WriteCardAdapter
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 
@@ -37,8 +37,6 @@ class CreateWriteFragment: Fragment() {
         super.onCreate(savedInstanceState)
         cardViewModel = ViewModelProvider(requireActivity()).get(CardViewModel::class.java)
 
-        cardViewModel.loadCardData()
-
     }
 
     override fun onCreateView(
@@ -53,7 +51,7 @@ class CreateWriteFragment: Fragment() {
             shortAdapter.setCards(cards)
         })
 
-        cardViewModel.previewChoose.observe(viewLifecycleOwner, Observer { cards ->
+        cardViewModel.previewCards.observe(viewLifecycleOwner, Observer { cards ->
             chooseAdapter.setCards(cards)
         })
 
@@ -72,6 +70,7 @@ class CreateWriteFragment: Fragment() {
         navController = Navigation.findNavController(view)
 
         binding.backBtn.setOnClickListener {
+            cardViewModel.clearAllData()
             navController.popBackStack()
         }
         binding.nextBtn.setOnClickListener {
@@ -79,7 +78,7 @@ class CreateWriteFragment: Fragment() {
         }
 
         cardViewModel.isAnyEditTextFilled.observe(viewLifecycleOwner, Observer { isFilled ->
-            binding.nextBtn.isEnabled = isFilled
+            //binding.nextBtn.isEnabled = isFilled
         })
     }
 

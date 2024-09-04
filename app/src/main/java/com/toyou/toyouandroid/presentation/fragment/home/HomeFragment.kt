@@ -1,6 +1,7 @@
 package com.toyou.toyouandroid.presentation.fragment.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -9,16 +10,21 @@ import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.toyou.toyouandroid.R
+import com.toyou.toyouandroid.data.UserDatabase
 import com.toyou.toyouandroid.databinding.FragmentHomeBinding
 import com.toyou.toyouandroid.model.HomeBottomSheetItem
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.presentation.fragment.home.adapter.HomeBottomSheetAdapter
+import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
 
 class HomeFragment : Fragment() {
 
@@ -29,6 +35,10 @@ class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by activityViewModels()
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
+
+    private lateinit var userViewModel: UserViewModel
+    private lateinit var database: UserDatabase
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,6 +57,8 @@ class HomeFragment : Fragment() {
             }
         })
 
+        userViewModel = ViewModelProvider(requireActivity()).get(UserViewModel::class.java)
+
         return binding.root
     }
 
@@ -55,6 +67,8 @@ class HomeFragment : Fragment() {
         navController = Navigation.findNavController(view)
 
         (requireActivity() as MainActivity).hideBottomNavigation(false)
+        database = UserDatabase.getDatabase(requireContext())
+
 
         val bottomSheet: ConstraintLayout = binding.homeBottomSheet
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
@@ -114,7 +128,14 @@ class HomeFragment : Fragment() {
 
         // 우체통 클릭시 일기카드 생성 화면으로 전환(임시)
         binding.homeMailboxIv.setOnClickListener {
-            navController.navigate(R.id.action_navigation_home_to_create_fragment)
+
+            userViewModel.cardId.observe(viewLifecycleOwner, Observer { cardId ->
+                if (cardId == 0)
+                    navController.navigate(R.id.action_navigation_home_to_create_fragment)
+                else
+                    navController.navigate(R.id.action_navigation_home_to_modifyFragment)
+            })
+            Log.d("cardID", userViewModel.cardId.value.toString())
         }
 
         binding.homeNoticeIv.setOnClickListener {

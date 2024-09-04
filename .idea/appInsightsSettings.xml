@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.toyou.toyouandroid" />
+                  <option name="mobileSdkAppId" value="1:875577597940:android:4e712bc4d1e434efb223a1" />
+                  <option name="projectId" value="toyou-c3054" />
+                  <option name="projectNumber" value="875577597940" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
