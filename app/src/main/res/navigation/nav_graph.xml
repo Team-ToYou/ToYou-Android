@@ -76,6 +76,12 @@
             app:popUpTo="@id/navigation_signup_agree"
             app:enterAnim="@anim/slide_in_left"
             app:exitAnim="@anim/slide_in_right"/>
+        <action
+            android:id="@+id/action_navigation_signup_nickname_to_mypage_fragment"
+            app:destination="@id/navigation_mypage"
+            app:popUpTo="@id/navigation_mypage"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_in_right"/>
     </fragment>
     <fragment
         android:id="@+id/navigation_signup_status"
