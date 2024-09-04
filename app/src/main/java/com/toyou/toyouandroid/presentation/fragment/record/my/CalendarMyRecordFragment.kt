@@ -70,7 +70,7 @@ class CalendarMyRecordFragment : Fragment(), MyRecordCalendarRVAdapter.OnDateCli
         binding.btnTodayDate.setOnClickListener {
             calendar = Calendar.getInstance()
             startCalendar.time = calendar.time
-            myRecordViewModel.loadDiaryCards(1, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)) // userId는 예시
+            myRecordViewModel.loadDiaryCards(4, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)) // userId 대체
         }
 
         myRecordViewModel.diaryCards.observe(viewLifecycleOwner) { diaryCards ->
@@ -110,7 +110,7 @@ class CalendarMyRecordFragment : Fragment(), MyRecordCalendarRVAdapter.OnDateCli
             binding.yearMonthTextView.text = "${year}년 ${month + 1}월"
             Timber.tag("CalendarFragment").d("Updating calendar for: ${year}년 ${month + 1}월")
 
-            myRecordViewModel.loadDiaryCards(1, year, month + 1)
+            myRecordViewModel.loadDiaryCards(4, year, month + 1) // userId 대체
             Timber.tag("CalendarFragment").d("loadDiaryCards called for User: 1, Year: $year, Month: ${month + 1}")
         }
     }
