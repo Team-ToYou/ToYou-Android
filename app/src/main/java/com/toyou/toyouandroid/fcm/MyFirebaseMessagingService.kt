@@ -53,6 +53,19 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
     }
 
+    private fun deleteToken(token : String){
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val tokenRequest = Token(token)
+                fcmRepository.deleteToken(tokenRequest)
+                Log.d("deleteToken", "성공")
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Log.d("deleteToken", "토큰 삭제 실패: ${e.message}")
+            }
+        }
+    }
+
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
         Log.d("FCM Message", "메시지 수신: ${remoteMessage.data}")
