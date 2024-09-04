@@ -37,7 +37,19 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     private fun retrieveTokenFromServer(name : String){
         CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = fcmRepository.getToken(name)
+                if (response.isSuccess) {
+                    val serverToken = response.result.tokens
+                    // 서버에서 받은 토큰을 사용해 로직을 처리
+                    Log.d("Token Retrieval", serverToken.toString())
+                } else {
+                    Log.e("Token Retrieval", "토큰 조회 실패: ${response.message}")
+                }
+            } catch (e: Exception) {
+                Log.e("Token Retrieval", "토큰 조회 중 오류 발생: ${e.message}")
 
+            }
         }
     }
 
