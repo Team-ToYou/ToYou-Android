@@ -9,12 +9,16 @@ import com.toyou.toyouandroid.data.social.dto.request.QuestionDto
 import com.toyou.toyouandroid.data.social.dto.request.RequestFriend
 import com.toyou.toyouandroid.data.social.dto.response.FriendsDto
 import com.toyou.toyouandroid.domain.social.repostitory.SocialRepository
+import com.toyou.toyouandroid.fcm.domain.FCMRepository
 import com.toyou.toyouandroid.model.FriendListModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
 class SocialViewModel : ViewModel() {
     private val repository = SocialRepository()
+    private val fcmRepository = FCMRepository()
     private val _friends = MutableLiveData<List<FriendListModel>>()
     val friends: LiveData<List<FriendListModel>> get() = _friends
     private val _clickedPosition = MutableLiveData<Map<Int, Boolean>>()
@@ -42,6 +46,8 @@ class SocialViewModel : ViewModel() {
 
     private val _friendRequest = MutableLiveData<RequestFriend>()
     val friendRequest: LiveData<RequestFriend> get() = _friendRequest
+    private val _retrieveToken = MutableLiveData<List<String>>()
+    val retrieveToken : LiveData<List<String>> get() = _retrieveToken
 
 
     init {
@@ -197,6 +203,7 @@ class SocialViewModel : ViewModel() {
             }
             Log.d("api 성공!", "성공")
         }
+        retrieveTokenFromServer(questionDto.value!!.target)
     }
 
     fun sendFriendRequest(name: String) {
@@ -209,7 +216,7 @@ class SocialViewModel : ViewModel() {
             }
             Log.d("api 성공!", "성공")
         }
-
+        retrieveTokenFromServer(name)
     }
 
     fun deleteFriend(name: String){
@@ -235,5 +242,22 @@ class SocialViewModel : ViewModel() {
             Log.d("api 성공!", "성공")
         }
     }
+
+    fun retrieveTokenFromServer(name : String) = viewModelScope.launch {
+            try {
+                val response = fcmRepository.getToken(name)
+                if (response.isSuccess) {
+                    _retrieveToken.value = response.result.tokens
+                    // 서버에서 받은 토큰을 사용해 로직을 처리
+                    Log.d("Token Retrieval", retrieveToken.value.toString())
+                } else {
+                    Log.e("Token Retrieval", "토큰 조회 실패: ${response.message}")
+                }
+            } catch (e: Exception) {
+                Log.e("Token Retrieval", "토큰 조회 중 오류 발생: ${e.message}")
+
+            }
+        }
+
 }
 
