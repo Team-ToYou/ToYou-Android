@@ -15,6 +15,7 @@ import com.toyou.toyouandroid.databinding.FragmentCreateBinding
 import com.toyou.toyouandroid.databinding.FragmentPreviewBinding
 import com.toyou.toyouandroid.model.PreviewCardModel
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
 import com.toyou.toyouandroid.ui.home.adapter.CardPreviewListAdapter
 
 class PreviewFragment : Fragment(){
@@ -24,6 +25,7 @@ class PreviewFragment : Fragment(){
 
     private lateinit var listAdapter : CardPreviewListAdapter
     private lateinit var cardViewModel : CardViewModel
+    private lateinit var userViewModel: UserViewModel
 
     lateinit var navController: NavController
 
@@ -68,9 +70,14 @@ class PreviewFragment : Fragment(){
             val previewCards = cardViewModel.previewCards.value ?: emptyList()
             val exposure = cardViewModel.exposure.value ?: false
 
-            cardViewModel.sendData(previewCards, exposure)
+            if (cardViewModel.cardId.value == 0) {
+                cardViewModel.sendData(previewCards, exposure)
+                userViewModel.updateCardIdFromOtherViewModel(cardViewModel)
+            }
+            else(cardViewModel.cardId.value)
+                cardViewModel.patchCard(previewCards, exposure)
 
-            navController.navigate(R.id.action_previewFragment_to_modifyFragment)
+            navController.navigate(R.id.action_previewFragment_to_navigation_home)
         }
     }
 

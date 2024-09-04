@@ -12,7 +12,9 @@
         card_view:cardBackgroundColor="@color/gr00"
         card_view:cardCornerRadius="5dp"
         card_view:cardElevation="3dp"
-        card_view:contentPadding="4dp">
+        card_view:contentPadding="4dp"
+        card_view:layout_constraintStart_toStartOf="@id/guideline21"
+        card_view:layout_constraintEnd_toEndOf="@id/guideline22">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -35,26 +37,27 @@
 
             <TextView
                 android:id="@+id/item_title"
+                style="@style/gangwon25"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="-7dp"
                 android:layout_toEndOf="@+id/item_image"
                 android:layout_toRightOf="@id/item_image"
                 android:text="240509"
-                style="@style/gangwon25"
-                android:layout_marginTop="-7dp"
-                android:textColor="@color/black"/>
-e
+                android:textColor="@color/black" />
+            e
+
             <TextView
                 android:id="@+id/item_detail"
+                style="@style/gangwon20"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/item_title"
+                android:layout_marginTop="-7dp"
                 android:layout_toEndOf="@+id/item_image"
                 android:layout_toRightOf="@+id/item_image"
                 android:text="To.xxx"
-                style="@style/gangwon20"
-                android:layout_marginTop="-7dp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black" />
 
             <ImageView
                 android:id="@+id/lock_free_iv"
@@ -65,16 +68,31 @@ e
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/card_list"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/item_detail"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
                 android:layout_marginTop="20dp"
-                android:divider="#00000000"/>
+                android:layout_marginEnd="10dp"
+                android:divider="#00000000" />
 
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline21"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        card_view:layout_constraintGuide_percent="0.1" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline22"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        card_view:layout_constraintGuide_percent="0.9" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -19,7 +19,7 @@
         android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/search_container"
         app:layout_constraintBottom_toTopOf="@id/guideline14"
         app:layout_constraintEnd_toStartOf="@+id/guideline15"
@@ -27,16 +27,18 @@
         app:layout_constraintTop_toBottomOf="@id/title_tv">
 
         <ImageView
+            android:id="@+id/search_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
             android:src="@drawable/tdesign_search"
+            android:layout_gravity="center_vertical"
             app:layout_constraintBottom_toTopOf="@+id/guideline14"
             app:layout_constraintStart_toStartOf="@+id/linearLayout"
             app:layout_constraintTop_toBottomOf="@+id/title_tv" />
 
         <EditText
+            android:id="@+id/search_et"
             style="@style/sc_l10"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -47,12 +49,23 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/add_friend_linear"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="@id/guideline13"
+        app:layout_constraintEnd_toEndOf="@id/guideline15"
+        app:layout_constraintTop_toBottomOf="@id/linearLayout"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toTopOf="@id/title2_tv"
+        android:layout_marginBottom="20dp"/>
+
     <TextView
         android:id="@+id/title2_tv"
         style="@style/sc_r15"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="120dp"
         android:text="친구 목록"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="@id/guideline13"
@@ -88,7 +101,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.13" />
+        app:layout_constraintGuide_percent="0.14" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline15"

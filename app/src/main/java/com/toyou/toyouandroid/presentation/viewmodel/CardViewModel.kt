@@ -2,11 +2,16 @@ package com.toyou.toyouandroid.presentation.viewmodel
 
 import android.util.Log
 import android.widget.ImageView
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.toyou.toyouandroid.data.UserDatabase
+import com.toyou.toyouandroid.data.UserEntity
+import com.toyou.toyouandroid.data.create.dto.request.AnswerDto
 import com.toyou.toyouandroid.data.create.dto.response.QuestionsDto
+import com.toyou.toyouandroid.data.social.dto.request.RequestFriend
 
 import com.toyou.toyouandroid.domain.create.repository.CreateRepository
 import com.toyou.toyouandroid.model.CardModel
@@ -15,7 +20,10 @@ import com.toyou.toyouandroid.model.ChooseModel
 import com.toyou.toyouandroid.model.PreviewCardModel
 import com.toyou.toyouandroid.model.PreviewChooseModel
 import com.toyou.toyouandroid.network.BaseResponse
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 class CardViewModel : ViewModel(){
     private val _cards = MutableLiveData<List<CardModel>>()
@@ -25,8 +33,6 @@ class CardViewModel : ViewModel(){
     private val _previewCards = MutableLiveData<List<PreviewCardModel>>()
     val previewCards : LiveData<List<PreviewCardModel>> get() = _previewCards
 
-    private val _answersMap = MutableLiveData<MutableMap<Int, String>>(mutableMapOf())
-    val answersMap: LiveData<MutableMap<Int, String>> get() = _answersMap
     private val _chooseCards = MutableLiveData<List<ChooseModel>>()
     val chooseCards : LiveData<List<ChooseModel>> get() = _chooseCards
     private val _previewChoose = MutableLiveData<List<PreviewChooseModel>>()
@@ -44,9 +50,14 @@ class CardViewModel : ViewModel(){
     val result: LiveData<BaseResponse<QuestionsDto>>
         get() = _result
 
-    fun sendData(previewCardModels: List<PreviewCardModel>, exposure: Boolean) {
+    private val _cardId = MutableLiveData<Int>().apply { value = 0 }
+    val cardId: LiveData<Int> get() = _cardId
+
+
+    fun sendData(previewCardModels: List<PreviewCardModel>, exposure: Boolean,) {
         viewModelScope.launch {
-            repository.postCardData(previewCardModels, exposure)
+            _cardId.value = repository.postCardData(previewCardModels, exposure)
+            Log.d("카드 아이디", _cardId.value.toString())
         }
     }
 
@@ -115,11 +126,6 @@ class CardViewModel : ViewModel(){
         _cards.value = cardModels
         _chooseCards.value = chooseModels
         _shortCards.value = cardShortModel
-    }
-
-
-    init {
-        getAllData()
     }
 
 
@@ -199,5 +205,11 @@ class CardViewModel : ViewModel(){
         _previewChoose.value = emptyList()
     }
 
+   fun patchCard(previewCardModels: List<PreviewCardModel>, exposure: Boolean){
+            viewModelScope.launch {
+                repository.patchCardData(previewCardModels, exposure, cardId = _cardId.value!!)
+        }
+
+    }
 
 }

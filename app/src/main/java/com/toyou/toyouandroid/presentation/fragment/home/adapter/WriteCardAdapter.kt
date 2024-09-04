@@ -45,7 +45,6 @@ class WriteCardAdapter(private val cardViewModel: CardViewModel) : RecyclerView.
 
             binding.memoEt.setText(card.answer)
 
-
             binding.memoEt.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
