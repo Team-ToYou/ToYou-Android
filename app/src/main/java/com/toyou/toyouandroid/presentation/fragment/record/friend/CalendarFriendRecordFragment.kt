@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
@@ -12,11 +13,15 @@ import androidx.viewpager2.widget.ViewPager2
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentCalendarFriendrecordBinding
 import com.toyou.toyouandroid.model.FriendDate
+import com.toyou.toyouandroid.presentation.fragment.notice.network.NetworkModule
 import com.toyou.toyouandroid.presentation.fragment.record.CalendarAdapter
 import com.toyou.toyouandroid.presentation.fragment.record.CalendarItemDecoration
+import com.toyou.toyouandroid.presentation.fragment.record.network.DiaryCardNum
+import com.toyou.toyouandroid.presentation.fragment.record.network.RecordRepository
+import com.toyou.toyouandroid.presentation.fragment.record.network.RecordService
+import com.toyou.toyouandroid.presentation.fragment.record.network.RecordViewModelFactory
 import com.toyou.toyouandroid.utils.FriendDates
-import com.toyou.toyouandroid.utils.FriendDates.generateFriendDatesForMonths
-import com.toyou.toyouandroid.utils.FriendRecordData
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -29,13 +34,19 @@ class CalendarFriendRecordFragment : Fragment(), FriendCalendarRVAdapter.OnDateC
     private val binding: FragmentCalendarFriendrecordBinding
         get() = requireNotNull(_binding){"FragmentCalendarFriendrecordBinding -> null"}
 
+    private val friendRecordViewModel: FriendRecordViewModel by viewModels {
+        RecordViewModelFactory(RecordRepository(NetworkModule.getClient().create(RecordService::class.java)))
+    }
+
     private var calendar = Calendar.getInstance()
     private val startCalendar: Calendar = Calendar.getInstance().apply {
         time = Date()
     }
-    private var monthDates = generateFriendDatesForMonths(calendar, 12, 12)
 
     private lateinit var calendarAdapter: CalendarAdapter
+
+    private var currentYear: Int = -1
+    private var currentMonth: Int = -1
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,7 +66,7 @@ class CalendarFriendRecordFragment : Fragment(), FriendCalendarRVAdapter.OnDateC
         startCalendar.time = calendar.time
 
         val today = Calendar.getInstance().time
-        val formattedToday = SimpleDateFormat("yyyyMMdd 나의 기록", Locale.getDefault()).format(today)
+        val formattedToday = SimpleDateFormat("yyyyMMdd 친구 기록", Locale.getDefault()).format(today)
         binding.recordTitle.text = formattedToday
 
         // 월 달력
@@ -68,28 +79,36 @@ class CalendarFriendRecordFragment : Fragment(), FriendCalendarRVAdapter.OnDateC
             }
         })
 
-        // 오늘로 돌아가기
-        binding.btnTodayDate.setOnClickListener {
-            calendar = Calendar.getInstance()
-            startCalendar.time = calendar.time
-            monthDates = generateFriendDatesForMonths(calendar, 12, 12) // 이전 달과 다음 달을 포함
-            updateCalendar()
-            onDateClick(today)
-        }
+        calendarAdapter = CalendarAdapter(emptyList())
 
-        updateCalendar() // 초기 달력 업데이트
-        dayTextView()
-
-        // 오늘 날짜에 해당하는 아이템 가져오기
-        val items = FriendRecordData.getItemsForDate(SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(today))
-
-        calendarAdapter = CalendarAdapter(items)
         binding.calendarRv.layoutManager = GridLayoutManager(context, 5)
         binding.calendarRv.adapter = calendarAdapter
 
         val verticalSpaceHeight = resources.getDimensionPixelSize(R.dimen.recycler_item_spacing)
         val horizontalSpaceHeight = resources.getDimensionPixelSize(R.dimen.recycler_item_spacing_side)
         binding.calendarRv.addItemDecoration(CalendarItemDecoration(horizontalSpaceHeight, verticalSpaceHeight))
+
+        // 오늘로 돌아가기
+        binding.btnTodayDate.setOnClickListener {
+            calendar = Calendar.getInstance()
+            startCalendar.time = calendar.time
+            friendRecordViewModel.loadDiaryCardsNum(1, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)) // userId 대체
+        }
+
+        friendRecordViewModel.diaryCardsNum.observe(viewLifecycleOwner) { diaryCardsNum ->
+            Timber.tag("CalendarFriendRecordFragment").d("DiaryCards loaded: ${diaryCardsNum.size} items")
+            Timber.tag("CalendarFriendRecordFragment").d("DiaryCards loaded: $diaryCardsNum")
+
+            val cardNumMap = mapDiaryCardsToCardNum(diaryCardsNum)
+            updateCalendarWithCardNum(cardNumMap)
+        }
+
+        friendRecordViewModel.diaryCardPerDay.observe(viewLifecycleOwner) { diaryCardPerDay ->
+            calendarAdapter.updateData(diaryCardPerDay)
+        }
+
+        updateCalendar() // 초기 달력 업데이트
+        dayTextView()
     }
 
     private fun dayTextView() {
@@ -105,37 +124,85 @@ class CalendarFriendRecordFragment : Fragment(), FriendCalendarRVAdapter.OnDateC
         endSunDayCalendar.add(Calendar.DATE, differenceToSunday)
     }
 
-
     private fun updateCalendar() {
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
-        binding.yearMonthTextView.text = "${year}년 ${month + 1}월"
 
-        val months = generateMonths(calendar)
-        val pagerAdapter = FriendCalendarPagerAdapter(months, month, this)
-        binding.calendarViewPager.adapter = pagerAdapter
-        binding.calendarViewPager.setCurrentItem(months.size / 2, false)
+        // API 호출은 년, 월이 바뀔 때만 수행
+        if (year != currentYear || month != currentMonth) {
+            currentYear = year
+            currentMonth = month
+
+            binding.yearMonthTextView.text = "${year}년 ${month + 1}월"
+            Timber.tag("CalendarFriendRecordFragment").d("Updating calendar for: ${year}년 ${month + 1}월")
+
+            friendRecordViewModel.loadDiaryCardsNum(1, year, month + 1) // userId 대체
+            Timber.tag("CalendarFriendRecordFragment").d("loadDiaryCards called for User: 1, Year: $year, Month: ${month + 1}")
+        }
     }
 
-    private fun generateMonths(calendar: Calendar): List<List<FriendDate>> {
+    private fun mapDiaryCardsToCardNum(diaryCardsNum: List<DiaryCardNum>): Map<Pair<Int, Int>, Map<Int, Int>> {
+        Timber.tag("CalendarFriendRecordFragment").d("Mapping diary cards to images")
+
+        val cardNumMap = mutableMapOf<Pair<Int, Int>, MutableMap<Int, Int>>()
+
+        diaryCardsNum.forEach { diaryCardNum ->
+            val dateParts = diaryCardNum.date.split("-")
+            val year = dateParts[0].toInt()
+            val month = dateParts[1].toInt() - 1 // Calendar.MONTH는 0부터 시작
+            val day = dateParts[2].toInt()
+            Timber.tag("CalendarFriendRecordFragment").d("$month")
+
+            val cardNum = diaryCardNum.cardNum
+
+            val monthMap = cardNumMap.getOrPut(Pair(year, month)) { mutableMapOf() }
+            monthMap[day] = cardNum
+        }
+
+        Timber.tag("CalendarFriendRecordFragment").d("Image mapping complete: $cardNumMap")
+
+        return cardNumMap
+    }
+
+    private fun updateCalendarWithCardNum(cardNumMap: Map<Pair<Int, Int>, Map<Int, Int>>) {
+        Timber.tag("CalendarFriendRecordFragment").d("Updating calendar with images")
+
+        binding.yearMonthTextView.text = "${calendar.get(Calendar.YEAR)}년 ${calendar.get(Calendar.MONTH) + 1}월"
+
+        val months = generateMonths(calendar, cardNumMap)
+        val pagerAdapter = FriendCalendarPagerAdapter(months, calendar.get(Calendar.MONTH), this)
+        binding.calendarViewPager.offscreenPageLimit = 3
+        binding.calendarViewPager.adapter = pagerAdapter
+        binding.calendarViewPager.setCurrentItem(months.size / 2, false)
+
+        Timber.tag("CalendarFriendRecordFragment").d("Calendar update with images complete")
+    }
+
+    private fun generateMonths(calendar: Calendar, cardNumMap: Map<Pair<Int, Int>, Map<Int, Int>>): List<List<FriendDate>> {
 
         val months = mutableListOf<List<FriendDate>>()
 
         for (i in -12..12) {
             val cal = calendar.clone() as Calendar
             cal.add(Calendar.MONTH, i)
-            months.add(FriendDates.generateFriendDates(cal))
+            months.add(FriendDates.generateFriendDates(cal, cardNumMap))
         }
 
         return months
     }
 
     override fun onDateClick(date: Date) {
-        // 여기서 record_title의 텍스트를 클릭한 날짜로 설정할 수 있습니다.
-        val formattedDate = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(date)
-        val items = FriendRecordData.getItemsForDate(formattedDate)
-        calendarAdapter.updateData(items)
-        binding.recordTitle.text = SimpleDateFormat("yyyyMMdd 친구 기록", Locale.getDefault()).format(date)
+        val calendar = Calendar.getInstance()
+        calendar.time = date
+
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH) + 1
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        val formattedDate = SimpleDateFormat("yyyyMMdd 친구 기록", Locale.getDefault()).format(date)
+        binding.recordTitle.text = formattedDate
+
+        friendRecordViewModel.loadDiaryCardPerDay(1, year, month, day) // userId 대체
     }
 
     override fun onDestroyView() {

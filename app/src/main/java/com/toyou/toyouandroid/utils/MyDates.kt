@@ -1,23 +1,14 @@
 package com.toyou.toyouandroid.utils
 
-import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.model.MyDate
 import java.util.Calendar
 
 object MyDates {
 
-    fun generateDates(calendar: Calendar): List<MyDate> {
+    fun generateDates(calendar: Calendar, imageMap: Map<Pair<Int, Int>, Map<Int, Int>>): List<MyDate> {
         val dates = mutableListOf<MyDate>()
         val cal = calendar.clone() as Calendar
         cal.set(Calendar.DAY_OF_MONTH, 1)
-
-        // 더미 이미지 데이터 매핑
-        val imageMap = mapOf(
-            Pair(2024, Calendar.AUGUST) to mapOf(
-                1 to R.drawable.home_stamp_option_exciting,
-                2 to R.drawable.home_stamp_option_happy
-            )
-        )
 
         // 달의 첫 번째 날의 요일 계산 (월요일이 시작일인 경우)
         val firstDayOfWeek = (cal.get(Calendar.DAY_OF_WEEK) + 5) % 7
@@ -54,16 +45,6 @@ object MyDates {
             }
         }
 
-        return dates
-    }
-
-    fun generateDatesForMonths(calendar: Calendar, monthsBefore: Int, monthsAfter: Int): List<MyDate> {
-        val dates = mutableListOf<MyDate>()
-        for (i in -monthsBefore..monthsAfter) {
-            val cal = calendar.clone() as Calendar
-            cal.add(Calendar.MONTH, i)
-            dates.addAll(generateDates(cal))
-        }
         return dates
     }
 }
