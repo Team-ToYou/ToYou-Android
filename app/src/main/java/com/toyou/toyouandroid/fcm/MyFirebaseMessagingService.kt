@@ -35,6 +35,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     }
 
+    private fun retrieveTokenFromServer(name : String){
+        CoroutineScope(Dispatchers.IO).launch {
+
+        }
+    }
+
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
         Log.d("FCM Message", "메시지 수신: ${remoteMessage.data}")
