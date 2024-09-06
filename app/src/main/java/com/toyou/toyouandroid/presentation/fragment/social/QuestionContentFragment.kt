@@ -186,7 +186,9 @@ class QuestionContentFragment : Fragment() {
                     checkNextButtonState()
                 }
 
-                override fun afterTextChanged(s: Editable?) {}
+                override fun afterTextChanged(s: Editable?) {
+
+                }
             })
 
 
