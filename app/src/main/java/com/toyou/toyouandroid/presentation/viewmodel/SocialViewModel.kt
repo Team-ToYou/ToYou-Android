@@ -207,6 +207,7 @@ class SocialViewModel : ViewModel() {
             Log.d("api 성공!", "성공")
         }
         retrieveTokenFromServer(questionDto.value!!.target)
+        postFCM(questionDto.value!!.target, retrieveToken.value!![0], 3)
 
         resetQuestionData()
     }
@@ -222,6 +223,8 @@ class SocialViewModel : ViewModel() {
             Log.d("api 성공!", "성공")
         }
         retrieveTokenFromServer(name)
+        postFCM(name, retrieveToken.value!![0], 1)
+
     }
 
     fun deleteFriend(name: String){
