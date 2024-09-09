@@ -87,7 +87,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         // 알림 빌더
         val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.char_selected) // 아이콘 설정 (적절한 아이콘으로 대체)
+            .setSmallIcon(R.drawable.fcm) // 아이콘 설정 (적절한 아이콘으로 대체)
             .setContentTitle(title) // 알림 제목
             .setContentText(message) // 알림 내용
             .setPriority(NotificationCompat.PRIORITY_HIGH) // 알림 우선순위
