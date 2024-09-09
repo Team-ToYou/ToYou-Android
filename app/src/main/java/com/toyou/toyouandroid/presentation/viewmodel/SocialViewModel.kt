@@ -207,7 +207,7 @@ class SocialViewModel : ViewModel() {
             Log.d("api 성공!", "성공")
         }
         retrieveTokenFromServer(questionDto.value!!.target)
-        postFCM(questionDto.value!!.target, retrieveToken.value!![0], 3)
+        postFCM(questionDto.value!!.target, "fcuEYzbjRQmBwq__i66ecD:APA91bHv4Ymy8VH2DpjkYaaMRYJG-Ej8wsUiu0uYnoclQ590pFXqRIhDBQuEL0TZrMCdJRzFZwkWK-LN1ydWFch6U_XsSPs4laDN7rOHPq62bFKNeZAhSaDYXZTybELpACm50dtZ-I3Z", 3)
 
         resetQuestionData()
     }
