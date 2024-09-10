@@ -23,18 +23,20 @@ class CreateRepository {
         val answerDto = convertPreviewCardModelsToAnswerDto(previewCardModels, exposure)
         try {
             val response = client.patchCard(1, card = cardId, request = answerDto)
+
             // 응답 처리
             if (response.isSuccess) {
                 Log.d("카드수정 성공!", response.message)
             } else {
-                Log.d("카드수정 실패!", response.message)
+                Log.d("카드수정 실패!", "Status Code: ${response.code}, Message: ${response.message}")
+                // 추가적인 오류 정보를 출력
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.d("카드수정 실패!", e.message.toString())
-
+            Log.d("카드수정 실패!", "Exception: ${e.message}")
         }
     }
+
 
     private fun convertPreviewCardModelsToAnswerDto(
         previewCardModels: List<PreviewCardModel>,

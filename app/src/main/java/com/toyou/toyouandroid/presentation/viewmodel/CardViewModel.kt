@@ -263,9 +263,16 @@ class CardViewModel : ViewModel(){
         _previewChoose.value = emptyList()
     }
 
-   fun patchCard(previewCardModels: List<PreviewCardModel>, exposure: Boolean){
+    fun clearAll(){
+        _previewCards.value = emptyList()
+        _previewChoose.value = emptyList()
+        _cards.value = emptyList()
+        _chooseCards.value = emptyList()
+        _shortCards.value = emptyList()
+    }
+   fun patchCard(previewCardModels: List<PreviewCardModel>, exposure: Boolean, id : Int){
             viewModelScope.launch {
-                repository.patchCardData(previewCardModels, exposure, cardId = _cardId.value!!)
+                repository.patchCardData(previewCardModels, exposure, id)
         }
 
     }
