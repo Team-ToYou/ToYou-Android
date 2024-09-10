@@ -1,5 +1,6 @@
 package com.toyou.toyouandroid.ui.home
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
@@ -13,10 +14,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.CardLayoutBinding
 import com.toyou.toyouandroid.databinding.FragmentPreviewBinding
 import com.toyou.toyouandroid.presentation.fragment.home.RVMarginItemDecoration
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
 import com.toyou.toyouandroid.ui.home.adapter.CardPreviewListAdapter
 import timber.log.Timber
 import java.time.LocalDate
@@ -28,11 +31,13 @@ class CardFragment : Fragment() {
 
     private lateinit var listAdapter : CardPreviewListAdapter
     private lateinit var cardViewModel: CardViewModel
+    private lateinit var userViewModel: UserViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         cardViewModel = ViewModelProvider(requireActivity()).get(CardViewModel::class.java)
+        userViewModel = ViewModelProvider(requireActivity()).get(UserViewModel::class.java)
 
     }
 
@@ -66,6 +71,37 @@ class CardFragment : Fragment() {
         }
 
         binding.itemTitle.text = LocalDate.now().toString().replace("-", "")
+
+        userViewModel.emotion.observe(viewLifecycleOwner, Observer { emotion ->
+            when(emotion){
+                "HAPPY" -> {
+                    binding.itemImage.setImageResource(R.drawable.home_stamp_option_happy)
+                    binding.cardView.setCardBackgroundColor(R.color.y01)
+                }
+                "EXCITED" -> {
+                    binding.itemImage.setImageResource(R.drawable.home_stamp_option_exciting)
+                    binding.cardView.setCardBackgroundColor(R.color.b01)
+                }
+                "NORMAL" -> {
+                    binding.itemImage.setImageResource(R.drawable.home_stamp_option_normal)
+                    binding.cardView.setCardBackgroundColor(R.color.p01)
+                }
+                "NERVOUS" -> {
+                    binding.itemImage.setImageResource(R.drawable.home_stamp_option_anxiety)
+                    binding.cardView.setCardBackgroundColor(R.color.gr00)
+
+                }
+                "ANGRY" -> {
+                    binding.itemImage.setImageResource(R.drawable.home_stamp_option_upset)
+                    binding.cardView.setCardBackgroundColor(Color.parseColor("#FFF4DDDD"))
+                }
+                //임의로 null일때..
+                else -> {
+                    binding.itemImage.setImageResource(R.drawable.home_stamp_option_upset)
+                    binding.cardView.setCardBackgroundColor(Color.parseColor("#FFF4DDDD"))
+                }
+            }
+        })
     }
 
     override fun onDestroyView() {

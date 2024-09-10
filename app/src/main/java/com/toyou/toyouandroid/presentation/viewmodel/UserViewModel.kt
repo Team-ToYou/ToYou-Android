@@ -21,7 +21,10 @@ class UserViewModel : ViewModel() {
             val response = repository.getHomeEntryData()
             if (response.isSuccess) {
                 _cardId.value = response.result.id
+                _emotion.value = response.result.emotion
                 Log.d("get home", "API 성공, 카드 ID: ${response.result.id}")
+                Log.d("get home", "API 성공, 상태: ${response.result.emotion}")
+
             } else {
                 Log.e("get home", "home API 호출 실패: ${response.message}")
             }

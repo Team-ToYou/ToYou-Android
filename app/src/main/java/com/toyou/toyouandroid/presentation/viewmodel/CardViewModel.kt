@@ -55,7 +55,6 @@ class CardViewModel : ViewModel(){
     private val _cardId = MutableLiveData<Int>().apply { value = 0 }
     val cardId: LiveData<Int> get() = _cardId
 
-
     fun sendData(previewCardModels: List<PreviewCardModel>, exposure: Boolean,) {
         viewModelScope.launch {
             _cardId.value = repository.postCardData(previewCardModels, exposure)
@@ -121,7 +120,7 @@ class CardViewModel : ViewModel(){
                             }
                         }
                         previewCardList.add(previewCard)
-                    _previewCards.value = previewCardList// 리스트에 추가
+                    _previewCards.value = previewCardList
                     }
                 }
 
