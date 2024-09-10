@@ -95,7 +95,7 @@ class CardFragment : Fragment() {
                     binding.itemImage.setImageResource(R.drawable.home_stamp_option_upset)
                     binding.cardView.setCardBackgroundColor(Color.parseColor("#FFF4DDDD"))
                 }
-                //임의로 null일때..
+                //임의로 감정이 null일때..
                 else -> {
                     binding.itemImage.setImageResource(R.drawable.home_stamp_option_upset)
                     binding.cardView.setCardBackgroundColor(Color.parseColor("#FFF4DDDD"))
