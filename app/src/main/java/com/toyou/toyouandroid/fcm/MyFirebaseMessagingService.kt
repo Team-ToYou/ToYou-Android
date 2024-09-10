@@ -77,7 +77,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         }
 
-        // Add FLAG_IMMUTABLE for Android 12 and above
         val pendingIntent = PendingIntent.getActivity(
             this,
             0,
@@ -97,7 +96,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         Log.d("MyFirebaseMessagingService", "Notification Title: $title")
         Log.d("MyFirebaseMessagingService", "Notification Message: $message")
 
-        // NotificationManager를 통해 알림을 생성
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(0, notificationBuilder.build())
     }
