@@ -9,15 +9,20 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.kakao.sdk.user.UserApiClient
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentMypageBinding
+import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.presentation.fragment.onboarding.SignupNicknameViewModel
+import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthService
+import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.ViewModelManager
+import com.toyou.toyouandroid.utils.TokenStorage
 import timber.log.Timber
 
 class MypageFragment : Fragment() {
@@ -33,6 +38,8 @@ class MypageFragment : Fragment() {
     private val mypageDialogViewModel: MypageDialogViewModel by activityViewModels()
     private lateinit var viewModelManager: ViewModelManager
     private var mypageDialog: MypageDialog? = null
+    private lateinit var mypageViewModel: MypageViewModel
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,6 +51,13 @@ class MypageFragment : Fragment() {
 
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
+
+        val tokenStorage = TokenStorage(requireContext())
+        val authService = AuthNetworkModule.getClient().create(AuthService::class.java)
+        mypageViewModel = ViewModelProvider(
+            this,
+            AuthViewModelFactory(authService, tokenStorage)
+        )[mypageViewModel::class.java]
 
         return binding.root
     }
@@ -112,11 +126,25 @@ class MypageFragment : Fragment() {
         }
     }
 
+    // 회원 탈퇴
     private fun handleSignout() {
         Timber.tag("handleSignout").d("handleSignout")
+
+        UserApiClient.instance.unlink { error ->
+            if (error != null) {
+                Timber.tag(TAG).e(error, "연결 끊기 실패")
+            }
+            else {
+                Timber.tag(TAG).i("연결 끊기 성공. SDK에서 토큰 삭제 됨")
+                mypageViewModel.kakaoSignOut()
+            }
+        }
+
+        // 탈퇴할 경우 사용자 정보 삭제 후 앱 종료
         activity?.finishAffinity()
     }
 
+    // 회원 로그아웃
     private fun handleLogout() {
         Timber.tag("handleLogout").d("handleWithdraw")
 
@@ -126,6 +154,7 @@ class MypageFragment : Fragment() {
             }
             else {
                 Timber.tag(TAG).i("로그아웃 성공. SDK에서 토큰 삭제됨")
+                mypageViewModel.kakaoLogout()
             }
         }
         viewModelManager.resetAllViewModels()
