@@ -11,7 +11,7 @@ data class CardDetail(
 )
 
 data class AnswerQuestion(
-    @SerializedName("questionId") val id : Int,
+    @SerializedName("questionId") val id : Long,
     @SerializedName("content") val content : String,
     @SerializedName("questionType") val type: String,
     @SerializedName("questioner") val questioner : String,

@@ -64,7 +64,6 @@ class CardPreviewListAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>()
                 MultiViewHolderPreview3(view)
             }
 
-
             else -> {
                 view = LayoutInflater.from(parent.context).inflate(
                     R.layout.item_answer_option_three,

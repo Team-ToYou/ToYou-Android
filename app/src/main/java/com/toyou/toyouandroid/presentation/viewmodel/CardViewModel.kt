@@ -14,6 +14,7 @@ import com.toyou.toyouandroid.data.create.dto.response.QuestionsDto
 import com.toyou.toyouandroid.data.social.dto.request.RequestFriend
 
 import com.toyou.toyouandroid.domain.create.repository.CreateRepository
+import com.toyou.toyouandroid.domain.home.repository.HomeRepository
 import com.toyou.toyouandroid.model.CardModel
 import com.toyou.toyouandroid.model.CardShortModel
 import com.toyou.toyouandroid.model.ChooseModel
@@ -41,6 +42,7 @@ class CardViewModel : ViewModel(){
     val isAnyEditTextFilled: LiveData<Boolean> get() = _isAnyEditTextFilled
 
     private val repository = CreateRepository()
+    private val homeRepository = HomeRepository()
 
     val exposure : LiveData<Boolean> get() = _exposure
     private val _exposure = MutableLiveData(false)
@@ -74,6 +76,63 @@ class CardViewModel : ViewModel(){
             }
         } catch (e: Exception) {
             Log.e("CardViewModel", "예외 발생: ${e.message}")
+        }
+    }
+
+    fun getCardDetail(id : Long) = viewModelScope.launch {
+        try {
+            val response = homeRepository.getCardDetail(id)
+            if (response.isSuccess) {
+                val detailCard = response.result
+                val previewCardList = mutableListOf<PreviewCardModel>() // 리스트 생성
+
+                detailCard?.questions?.let { questionList ->
+                    questionList.forEach { question ->
+                        val previewCard = when(question.type) {
+                            "OPTIONAL" -> {
+                                PreviewCardModel(
+                                    question = question.content,
+                                    fromWho = question.questioner,
+                                    options = question.options,
+                                    type = question.options!!.size,
+                                    answer = question.answer,
+                                    id = question.id
+                                )
+                            }
+                            "SHORT_ANSWER" -> {
+                                PreviewCardModel(
+                                    question = question.content,
+                                    fromWho = question.questioner,
+                                    options = question.options,
+                                    type = 0,
+                                    answer = question.answer,
+                                    id = question.id
+                                )
+                            }
+                            else -> {
+                                PreviewCardModel(
+                                    question = question.content,
+                                    fromWho = question.questioner,
+                                    options = question.options,
+                                    type = 1,
+                                    answer = question.answer,
+                                    id = question.id
+                                )
+                            }
+                        }
+                        previewCardList.add(previewCard)
+                    _previewCards.value = previewCardList// 리스트에 추가
+                    }
+                }
+
+                // ViewModel이나 LiveData에 리스트 전달
+                Log.d("detail", response.result.toString())
+            } else {
+                // 오류 처리
+                Log.e("CardViewModel", "detail API 호출 실패: ${response.message}")
+            }
+        } catch (e: Exception) {
+            Log.e("CardViewModel", "detail 예외 발생: ${e.message}")
         }
     }
 

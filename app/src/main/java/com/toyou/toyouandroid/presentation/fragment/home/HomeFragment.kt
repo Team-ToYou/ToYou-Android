@@ -38,6 +38,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var userViewModel: UserViewModel
     private lateinit var database: UserDatabase
+    private lateinit var cardViewModel: CardViewModel
 
 
     override fun onCreateView(
@@ -58,6 +59,7 @@ class HomeFragment : Fragment() {
         })
 
         userViewModel = ViewModelProvider(requireActivity()).get(UserViewModel::class.java)
+        cardViewModel = ViewModelProvider(requireActivity()).get(CardViewModel::class.java)
 
         return binding.root
     }
@@ -132,8 +134,10 @@ class HomeFragment : Fragment() {
             userViewModel.cardId.observe(viewLifecycleOwner, Observer { cardId ->
                 if (cardId == 0)
                     navController.navigate(R.id.action_navigation_home_to_create_fragment)
-                else
+                else {
+                    cardViewModel.getCardDetail(cardId.toLong())
                     navController.navigate(R.id.action_navigation_home_to_modifyFragment)
+                }
             })
             Log.d("cardID", userViewModel.cardId.value.toString())
         }

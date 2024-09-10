@@ -32,6 +32,7 @@ class PreviewFragment : Fragment(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         cardViewModel = ViewModelProvider(requireActivity()).get(CardViewModel::class.java)
+        userViewModel = ViewModelProvider(requireActivity()).get(UserViewModel::class.java)
 
     }
 
@@ -51,8 +52,6 @@ class PreviewFragment : Fragment(){
                 .add(R.id.card_container, fragment)
                 .commit()
         }
-
-
 
         return binding.root
 
