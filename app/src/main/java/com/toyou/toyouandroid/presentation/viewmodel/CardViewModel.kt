@@ -47,11 +47,7 @@ class CardViewModel : ViewModel(){
     val exposure : LiveData<Boolean> get() = _exposure
     private val _exposure = MutableLiveData(false)
 
-    private val _result = MutableLiveData<BaseResponse<QuestionsDto>>()
     val answer = MutableLiveData<String>()
-    val result: LiveData<BaseResponse<QuestionsDto>>
-        get() = _result
-
     private val _cardId = MutableLiveData<Int>().apply { value = 0 }
     val cardId: LiveData<Int> get() = _cardId
 
@@ -83,7 +79,7 @@ class CardViewModel : ViewModel(){
             val response = homeRepository.getCardDetail(id)
             if (response.isSuccess) {
                 val detailCard = response.result
-                val previewCardList = mutableListOf<PreviewCardModel>() // 리스트 생성
+                val previewCardList = mutableListOf<PreviewCardModel>()
 
                 detailCard?.questions?.let { questionList ->
                     questionList.forEach { question ->

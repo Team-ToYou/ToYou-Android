@@ -76,19 +76,19 @@ class CardFragment : Fragment() {
             when(emotion){
                 "HAPPY" -> {
                     binding.itemImage.setImageResource(R.drawable.home_stamp_option_happy)
-                    binding.cardView.setCardBackgroundColor(R.color.y01)
+                    binding.cardView.setCardBackgroundColor(Color.parseColor("#FFF7F3E3"))
                 }
                 "EXCITED" -> {
                     binding.itemImage.setImageResource(R.drawable.home_stamp_option_exciting)
-                    binding.cardView.setCardBackgroundColor(R.color.b01)
+                    binding.cardView.setCardBackgroundColor(Color.parseColor("#FFE0EEF6"))
                 }
                 "NORMAL" -> {
                     binding.itemImage.setImageResource(R.drawable.home_stamp_option_normal)
-                    binding.cardView.setCardBackgroundColor(R.color.p01)
+                    binding.cardView.setCardBackgroundColor(Color.parseColor("#FFDFE1F1"))
                 }
                 "NERVOUS" -> {
                     binding.itemImage.setImageResource(R.drawable.home_stamp_option_anxiety)
-                    binding.cardView.setCardBackgroundColor(R.color.gr00)
+                    binding.cardView.setCardBackgroundColor(Color.parseColor("#FFD6E4D9"))
 
                 }
                 "ANGRY" -> {
@@ -102,6 +102,7 @@ class CardFragment : Fragment() {
                 }
             }
         })
+
     }
 
     override fun onDestroyView() {

@@ -23,7 +23,6 @@ class PreviewFragment : Fragment(){
     private var _binding : FragmentPreviewBinding? = null
     private val binding: FragmentPreviewBinding get() = requireNotNull(_binding){"FragmentPreview 널"}
 
-    private lateinit var listAdapter : CardPreviewListAdapter
     private lateinit var cardViewModel : CardViewModel
     private lateinit var userViewModel: UserViewModel
 
