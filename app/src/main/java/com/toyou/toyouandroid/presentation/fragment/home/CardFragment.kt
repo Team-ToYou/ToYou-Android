@@ -88,6 +88,7 @@ class CardFragment : Fragment() {
         })
 
         userViewModel.emotion.observe(viewLifecycleOwner, Observer { emotion ->
+            listAdapter.setEmotion(emotion ?: "ANGRY")
             when(emotion){
                 "HAPPY" -> {
                     binding.itemImage.setImageResource(R.drawable.home_stamp_option_happy)

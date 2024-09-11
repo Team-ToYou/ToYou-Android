@@ -22,11 +22,16 @@ import timber.log.Timber
 class CardPreviewListAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var cardList : List<PreviewCardModel> = emptyList()
+    private lateinit var emotion: String
 
     fun setCards(newCards: List<PreviewCardModel>) {
         cardList = newCards
         notifyDataSetChanged()
         Timber.tag("카드1").d(cardList.toString())
+    }
+
+    fun setEmotion(emotion : String){
+        this.emotion = emotion
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -118,13 +123,25 @@ class CardPreviewListAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>()
             txtOption2.text = item.options!![1]
 
             if (item.answer == item.options[0]) {
-                txtOption1.setBackgroundResource(R.drawable.selected_option_container)
+                when(emotion){
+                    "HAPPY" -> txtOption1.setBackgroundResource(R.drawable.selected_option_happy)
+                    "EXCITED" -> txtOption1.setBackgroundResource(R.drawable.selected_option_excited)
+                    "NORMAL" -> txtOption1.setBackgroundResource(R.drawable.selected_option_normal)
+                    "NERVOUS" -> txtOption1.setBackgroundResource(R.drawable.selected_option_excited)
+                    "ANGRY" -> txtOption1.setBackgroundResource(R.drawable.selected_option_angry)
+                }
             } else {
                 txtOption1.setBackgroundResource(R.drawable.search_container)
             }
 
             if (item.answer == item.options[1]) {
-                txtOption2.setBackgroundResource(R.drawable.selected_option_container)
+                when(emotion){
+                    "HAPPY" -> txtOption2.setBackgroundResource(R.drawable.selected_option_happy)
+                    "EXCITED" -> txtOption2.setBackgroundResource(R.drawable.selected_option_excited)
+                    "NORMAL" -> txtOption2.setBackgroundResource(R.drawable.selected_option_normal)
+                    "NERVOUS" -> txtOption2.setBackgroundResource(R.drawable.selected_option_excited)
+                    "ANGRY" -> txtOption2.setBackgroundResource(R.drawable.selected_option_angry)
+                }
             } else {
                 txtOption2.setBackgroundResource(R.drawable.search_container)
             }
@@ -144,18 +161,36 @@ class CardPreviewListAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>()
             txtOption3.text = item.options!![2]
 
             if (item.answer == item.options[0]) {
-                txtOption1.setBackgroundResource(R.drawable.selected_option_container)
+                when(emotion){
+                    "HAPPY" -> txtOption1.setBackgroundResource(R.drawable.selected_option_happy)
+                    "EXCITED" -> txtOption1.setBackgroundResource(R.drawable.selected_option_excited)
+                    "NORMAL" -> txtOption1.setBackgroundResource(R.drawable.selected_option_normal)
+                    "NERVOUS" -> txtOption1.setBackgroundResource(R.drawable.selected_option_excited)
+                    "ANGRY" -> txtOption1.setBackgroundResource(R.drawable.selected_option_angry)
+                }
             } else {
                 txtOption1.setBackgroundResource(R.drawable.search_container)
             }
 
             if (item.answer == item.options[1]) {
-                txtOption2.setBackgroundResource(R.drawable.selected_option_container)
+                when(emotion){
+                    "HAPPY" -> txtOption2.setBackgroundResource(R.drawable.selected_option_happy)
+                    "EXCITED" -> txtOption2.setBackgroundResource(R.drawable.selected_option_excited)
+                    "NORMAL" -> txtOption2.setBackgroundResource(R.drawable.selected_option_normal)
+                    "NERVOUS" -> txtOption2.setBackgroundResource(R.drawable.selected_option_excited)
+                    "ANGRY" -> txtOption2.setBackgroundResource(R.drawable.selected_option_angry)
+                }
             } else {
                 txtOption2.setBackgroundResource(R.drawable.search_container)
             }
             if (item.answer == item.options[2]) {
-                txtOption3.setBackgroundResource(R.drawable.selected_option_container)
+                when(emotion){
+                    "HAPPY" -> txtOption3.setBackgroundResource(R.drawable.selected_option_happy)
+                    "EXCITED" -> txtOption3.setBackgroundResource(R.drawable.selected_option_excited)
+                    "NORMAL" -> txtOption3.setBackgroundResource(R.drawable.selected_option_normal)
+                    "NERVOUS" -> txtOption3.setBackgroundResource(R.drawable.selected_option_excited)
+                    "ANGRY" -> txtOption3.setBackgroundResource(R.drawable.selected_option_angry)
+                }
             } else {
                 txtOption3.setBackgroundResource(R.drawable.search_container)
             }
