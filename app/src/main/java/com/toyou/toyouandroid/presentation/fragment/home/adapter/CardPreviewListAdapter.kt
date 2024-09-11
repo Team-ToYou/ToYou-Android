@@ -137,7 +137,6 @@ class CardPreviewListAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>()
         private val txtOption2: TextView = view.findViewById(R.id.choose_three_second_tv)
         private val txtOption3: TextView = view.findViewById(R.id.choose_three_third_tv)
 
-
         fun bind(item: PreviewCardModel) {
             question.text = item.question
             txtOption1.text = item.options!![0]
