@@ -70,7 +70,6 @@ class CardFragment : Fragment() {
             if (cardId == null) {
                 binding.lockFreeIv.setOnClickListener {
                     cardViewModel.isLockSelected(binding.lockFreeIv)
-                    Log.d("답변3", cardViewModel.previewCards.value.toString())
                 }
             }
         })
