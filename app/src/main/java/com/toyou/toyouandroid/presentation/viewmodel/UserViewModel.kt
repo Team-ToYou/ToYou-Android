@@ -11,9 +11,9 @@ import kotlinx.coroutines.launch
 class UserViewModel : ViewModel() {
 
     private val repository = CreateRepository()
-    private val _cardId = MutableLiveData<Int>().apply { value = 0 }
+    private val _cardId = MutableLiveData<Int>()
     val cardId: LiveData<Int> get() = _cardId
-    private val _emotion = MutableLiveData<String>().apply { value = null }
+    private val _emotion = MutableLiveData<String>()
     val emotion : LiveData<String> get() = _emotion
 
     fun getHomeEntry() = viewModelScope.launch {

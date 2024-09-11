@@ -7,6 +7,7 @@ data class CardDetail(
     @SerializedName("date") val date : String,
     @SerializedName("receiver") val receiver: String,
     @SerializedName("emotion") val emotion : String,
+    @SerializedName("exposure") val exposure : Boolean,
     @SerializedName("questionList") val questions : List<AnswerQuestion>,
 )
 

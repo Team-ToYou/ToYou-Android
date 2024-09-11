@@ -69,7 +69,7 @@ class PreviewFragment : Fragment(){
             Log.d("수정", previewCards.toString())
             val exposure = cardViewModel.exposure.value ?: false
 
-            if (userViewModel.cardId.value == 0) {
+            if (userViewModel.cardId.value == null) {
                 cardViewModel.sendData(previewCards, exposure)
                 userViewModel.updateCardIdFromOtherViewModel(cardViewModel)
             }

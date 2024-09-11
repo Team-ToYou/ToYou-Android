@@ -132,7 +132,7 @@ class HomeFragment : Fragment() {
         binding.homeMailboxIv.setOnClickListener {
 
             userViewModel.cardId.observe(viewLifecycleOwner, Observer { cardId ->
-                if (cardId == 0)
+                if (cardId == null)
                     navController.navigate(R.id.action_navigation_home_to_create_fragment)
                 else {
                     cardViewModel.getCardDetail(cardId.toLong())
