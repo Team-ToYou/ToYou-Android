@@ -80,6 +80,7 @@ class CardViewModel : ViewModel(){
             if (response.isSuccess) {
                 val detailCard = response.result
                 val previewCardList = mutableListOf<PreviewCardModel>()
+                _exposure.value = detailCard.exposure
 
                 detailCard?.questions?.let { questionList ->
                     questionList.forEach { question ->

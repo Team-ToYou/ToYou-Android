@@ -65,12 +65,25 @@ class CardFragment : Fragment() {
 
         })
 
-        binding.lockFreeIv.setOnClickListener {
-            cardViewModel.isLockSelected(binding.lockFreeIv)
-            Log.d("답변3", cardViewModel.previewCards.value.toString())
-        }
+        userViewModel.cardId.observe(viewLifecycleOwner, Observer { cardId ->
+
+            if (cardId == null) {
+                binding.lockFreeIv.setOnClickListener {
+                    cardViewModel.isLockSelected(binding.lockFreeIv)
+                    Log.d("답변3", cardViewModel.previewCards.value.toString())
+                }
+            }
+        })
+
 
         binding.itemTitle.text = LocalDate.now().toString().replace("-", "")
+
+        cardViewModel.exposure.observe(viewLifecycleOwner, Observer { exposure ->
+            if (exposure)
+                binding.lockFreeIv.setImageResource(R.drawable.lock_btn2)
+            else
+                binding.lockFreeIv.setImageResource(R.drawable.lock_free2)
+        })
 
         userViewModel.emotion.observe(viewLifecycleOwner, Observer { emotion ->
             when(emotion){
@@ -95,7 +108,7 @@ class CardFragment : Fragment() {
                     binding.itemImage.setImageResource(R.drawable.home_stamp_option_upset)
                     binding.cardView.setCardBackgroundColor(Color.parseColor("#FFF4DDDD"))
                 }
-                //임의로 감정이 null일때..
+                //임의로 감정이 null일때..일수는 없지만
                 else -> {
                     binding.itemImage.setImageResource(R.drawable.home_stamp_option_upset)
                     binding.cardView.setCardBackgroundColor(Color.parseColor("#FFF4DDDD"))
