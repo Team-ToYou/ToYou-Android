@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
@@ -130,16 +131,21 @@ class HomeFragment : Fragment() {
 
         // 우체통 클릭시 일기카드 생성 화면으로 전환(임시)
         binding.homeMailboxIv.setOnClickListener {
-
-            userViewModel.cardId.observe(viewLifecycleOwner, Observer { cardId ->
-                if (cardId == null)
-                    navController.navigate(R.id.action_navigation_home_to_create_fragment)
-                else {
-                    cardViewModel.getCardDetail(cardId.toLong())
-                    navController.navigate(R.id.action_navigation_home_to_modifyFragment)
+            userViewModel.emotion.observe(viewLifecycleOwner, Observer { emotion ->
+                if (emotion != null){
+                    userViewModel.cardId.observe(viewLifecycleOwner, Observer { cardId ->
+                        if (cardId == null)
+                            navController.navigate(R.id.action_navigation_home_to_create_fragment)
+                        else {
+                            cardViewModel.getCardDetail(cardId.toLong())
+                            navController.navigate(R.id.action_navigation_home_to_modifyFragment)
+                        }
+                    })
+                    Log.d("cardID", userViewModel.cardId.value.toString())
+                } else{
+                    Toast.makeText(requireContext(), "감정 우표를 먼저 선택해주세요", Toast.LENGTH_SHORT).show()
                 }
             })
-            Log.d("cardID", userViewModel.cardId.value.toString())
         }
 
         binding.homeNoticeIv.setOnClickListener {
