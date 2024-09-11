@@ -74,6 +74,9 @@ class CardFragment : Fragment() {
             }
         })
 
+        userViewModel.nickname.observe(viewLifecycleOwner, Observer { name ->
+            binding.itemDetail.setText("To.${name}")
+        })
 
         binding.itemTitle.text = LocalDate.now().toString().replace("-", "")
 
