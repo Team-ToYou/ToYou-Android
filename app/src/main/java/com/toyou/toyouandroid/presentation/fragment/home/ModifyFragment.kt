@@ -19,7 +19,6 @@ class ModifyFragment: Fragment() {
     private var _binding : FragmentModifyBinding? = null
     private val binding: FragmentModifyBinding get() = requireNotNull(_binding){"FragmentPreview 널"}
 
-    private lateinit var listAdapter : CardPreviewListAdapter
     private lateinit var cardViewModel : CardViewModel
 
     lateinit var navController: NavController
@@ -62,6 +61,7 @@ class ModifyFragment: Fragment() {
         }
 
         binding.nextBtn.setOnClickListener {
+            cardViewModel.clearAll()
             navController.navigate(R.id.action_modifyFragment_to_create_fragment)
         }
 

@@ -21,7 +21,6 @@ class CardShortAdapter (private val onItemClick: (Int, Boolean) -> Unit) : Recyc
         notifyDataSetChanged()
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_rv_short_card, parent, false)
         return CardViewHolder(view, onItemClick)

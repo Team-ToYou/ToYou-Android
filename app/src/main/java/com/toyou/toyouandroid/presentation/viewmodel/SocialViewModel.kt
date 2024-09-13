@@ -10,6 +10,7 @@ import com.toyou.toyouandroid.data.social.dto.request.RequestFriend
 import com.toyou.toyouandroid.data.social.dto.response.FriendsDto
 import com.toyou.toyouandroid.domain.social.repostitory.SocialRepository
 import com.toyou.toyouandroid.fcm.domain.FCMRepository
+import com.toyou.toyouandroid.fcm.dto.request.FCM
 import com.toyou.toyouandroid.model.FriendListModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -48,6 +49,8 @@ class SocialViewModel : ViewModel() {
     val friendRequest: LiveData<RequestFriend> get() = _friendRequest
     private val _retrieveToken = MutableLiveData<List<String>>()
     val retrieveToken : LiveData<List<String>> get() = _retrieveToken
+    private val _fcm = MutableLiveData<FCM>()
+    val fcm : LiveData<FCM> get() = _fcm
 
 
     init {
@@ -204,6 +207,7 @@ class SocialViewModel : ViewModel() {
             Log.d("api 성공!", "성공")
         }
         retrieveTokenFromServer(questionDto.value!!.target)
+        postFCM(questionDto.value!!.target, "e9A7lgfbQ_etgjy2GkkI7w:APA91bH4Dn1YhJqhe34aDVWvcuE0MyHv-FaJLtdM0BYXTUqyyfrzzo1mcrEfVH4anHaKmJC2roOXibxTYgl0Kc_XoKpXJOUsufl7n5ZQ6vWcBy4dRfg7RMEse2YZa2Z7FCNy4oRmqv9c", 3)
 
         resetQuestionData()
     }
@@ -219,6 +223,8 @@ class SocialViewModel : ViewModel() {
             Log.d("api 성공!", "성공")
         }
         retrieveTokenFromServer(name)
+        postFCM(name, retrieveToken.value!![0], 1)
+
     }
 
     fun deleteFriend(name: String){
@@ -231,6 +237,23 @@ class SocialViewModel : ViewModel() {
             }
             Log.d("api 성공!", "성공")
         }
+    }
+
+    fun postFCM(name: String, token : String, type : Int){
+        when(type){
+            1 -> _fcm.value = FCM(token = token, title = "친구 요청", body = "${name}님이 친구 요청을 보냈습니다.")
+            2 -> _fcm.value = FCM(token = token, title = "친구 요청 승인", body = "${name}님이 친구 요청을 승인했습니다.")
+            3 -> _fcm.value = FCM(token = token, title = "질문 생성", body = "${name}님이 질문을 생성했습니다.")
+        }
+        viewModelScope.launch {
+            _fcm.value?.let {fcm ->
+                fcmRepository.postFCM(fcm)
+            } ?: run {
+                Log.e("fcm api 실패!", "널")
+            }
+            Log.d("fcm api 성공!", "성공")
+        }
+
     }
 
     fun patchApprove(name: String){

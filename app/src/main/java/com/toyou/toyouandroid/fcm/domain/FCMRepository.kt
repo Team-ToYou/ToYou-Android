@@ -3,6 +3,7 @@ package com.toyou.toyouandroid.fcm.domain
 import android.util.Log
 import com.toyou.toyouandroid.data.social.dto.request.QuestionDto
 import com.toyou.toyouandroid.data.social.dto.request.RequestFriend
+import com.toyou.toyouandroid.fcm.dto.request.FCM
 import com.toyou.toyouandroid.fcm.dto.request.Token
 import com.toyou.toyouandroid.fcm.service.FCMService
 import com.toyou.toyouandroid.network.RetrofitInstance
@@ -45,6 +46,24 @@ class FCMRepository {
         } catch (e: Exception) {
             e.printStackTrace()
             Log.d("토큰삭제 실패!", e.message.toString())
+
+        }
+    }
+
+    suspend fun postFCM(
+        request : FCM
+    ){
+        try {
+            val response = client.postFCM(request = request)
+            // 응답 처리
+            if (response.isSuccess) {
+                Log.d("fcm 성공!", response.message)
+            } else {
+                Log.d("fcm 실패!", response.message)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Log.d("fcm 실패!", e.message.toString())
 
         }
     }

@@ -23,7 +23,6 @@ class PreviewFragment : Fragment(){
     private var _binding : FragmentPreviewBinding? = null
     private val binding: FragmentPreviewBinding get() = requireNotNull(_binding){"FragmentPreview 널"}
 
-    private lateinit var listAdapter : CardPreviewListAdapter
     private lateinit var cardViewModel : CardViewModel
     private lateinit var userViewModel: UserViewModel
 
@@ -32,6 +31,7 @@ class PreviewFragment : Fragment(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         cardViewModel = ViewModelProvider(requireActivity()).get(CardViewModel::class.java)
+        userViewModel = ViewModelProvider(requireActivity()).get(UserViewModel::class.java)
 
     }
 
@@ -52,8 +52,6 @@ class PreviewFragment : Fragment(){
                 .commit()
         }
 
-
-
         return binding.root
 
     }
@@ -68,14 +66,15 @@ class PreviewFragment : Fragment(){
 
         binding.nextBtn.setOnClickListener {
             val previewCards = cardViewModel.previewCards.value ?: emptyList()
+            Log.d("수정", previewCards.toString())
             val exposure = cardViewModel.exposure.value ?: false
 
-            if (cardViewModel.cardId.value == 0) {
+            if (userViewModel.cardId.value == null) {
                 cardViewModel.sendData(previewCards, exposure)
                 userViewModel.updateCardIdFromOtherViewModel(cardViewModel)
             }
-            else(cardViewModel.cardId.value)
-                cardViewModel.patchCard(previewCards, exposure)
+            else
+                cardViewModel.patchCard(previewCards, exposure, userViewModel.cardId.value!!)
 
             navController.navigate(R.id.action_previewFragment_to_navigation_home)
         }
