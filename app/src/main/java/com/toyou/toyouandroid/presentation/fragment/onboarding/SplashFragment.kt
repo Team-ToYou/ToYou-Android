@@ -14,13 +14,13 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.data.UserDatabase
-import com.toyou.toyouandroid.data.UserEntity
 import com.toyou.toyouandroid.databinding.FragmentSplashBinding
 import com.toyou.toyouandroid.presentation.base.MainActivity
+import com.toyou.toyouandroid.presentation.fragment.notice.network.NetworkModule
+import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthService
+import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.toyou.toyouandroid.utils.TokenStorage
 
 class SplashFragment : Fragment() {
 
@@ -28,7 +28,7 @@ class SplashFragment : Fragment() {
     private var _binding: FragmentSplashBinding? = null
     private lateinit var database: UserDatabase
     private lateinit var userViewModel: UserViewModel
-
+    private lateinit var loginViewModel: LoginViewModel
 
     private val binding: FragmentSplashBinding
         get() = requireNotNull(_binding){"FragmentSplashBinding -> null"}
@@ -40,8 +40,14 @@ class SplashFragment : Fragment() {
     ): View {
 
         _binding = FragmentSplashBinding.inflate(inflater, container, false)
-        userViewModel = ViewModelProvider(requireActivity()).get(UserViewModel::class.java)
+        userViewModel = ViewModelProvider(requireActivity())[UserViewModel::class.java]
 
+        val tokenStorage = TokenStorage(requireContext())
+        val authService = NetworkModule.getClient().create(AuthService::class.java)
+        loginViewModel = ViewModelProvider(
+            this,
+            AuthViewModelFactory(authService, tokenStorage)
+        )[LoginViewModel::class.java]
 
         return binding.root
     }
@@ -65,10 +71,25 @@ class SplashFragment : Fragment() {
 
         }
 
-        // 3초 후에 다음 화면으로 이동
-        Handler(Looper.getMainLooper()).postDelayed({
-            findNavController().navigate(R.id.action_navigation_splash_to_login_fragment)
-        }, 3000)
+        val refreshToken = TokenStorage(requireContext()).getRefreshToken()
+        if (refreshToken != null) {
+            loginViewModel.reissueJWT(refreshToken)
+        } else {
+            // 토큰이 없으면 로그인 화면으로 이동
+            // 3초 후에 다음 화면으로 이동
+            Handler(Looper.getMainLooper()).postDelayed({
+                findNavController().navigate(R.id.action_navigation_splash_to_login_fragment)
+            }, 3000)
+        }
+
+        loginViewModel.navigationEvent.observe(viewLifecycleOwner) { isSuccess ->
+            if (isSuccess) {
+                navController.navigate(R.id.action_navigation_splash_to_home_fragment)
+            } else {
+                navController.navigate(R.id.action_navigation_splash_to_login_fragment)
+            }
+        }
+
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {

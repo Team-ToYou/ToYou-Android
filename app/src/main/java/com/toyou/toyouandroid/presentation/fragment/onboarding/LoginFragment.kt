@@ -9,12 +9,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.kakao.sdk.user.UserApiClient
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentLoginBinding
 import com.toyou.toyouandroid.presentation.base.MainActivity
+import com.toyou.toyouandroid.presentation.fragment.notice.network.NetworkModule
+import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthService
+import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthViewModelFactory
+import com.toyou.toyouandroid.utils.TokenStorage
 import timber.log.Timber
 
 class LoginFragment : Fragment() {
@@ -24,6 +29,8 @@ class LoginFragment : Fragment() {
     private val binding: FragmentLoginBinding
         get() = requireNotNull(_binding){"FragmentLoginBinding -> null"}
 
+    private lateinit var loginViewModel: LoginViewModel
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -31,6 +38,13 @@ class LoginFragment : Fragment() {
     ): View {
 
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
+
+        val tokenStorage = TokenStorage(requireContext())
+        val authService = NetworkModule.getClient().create(AuthService::class.java)
+        loginViewModel = ViewModelProvider(
+            this,
+            AuthViewModelFactory(authService, tokenStorage)
+        )[LoginViewModel::class.java]
 
         return binding.root
     }
@@ -43,7 +57,6 @@ class LoginFragment : Fragment() {
         (requireActivity() as MainActivity).hideBottomNavigation(true)
 
         // navController 초기화
-//        navController = findNavController()
         navController = Navigation.findNavController(view)
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
@@ -59,6 +72,7 @@ class LoginFragment : Fragment() {
                         Timber.tag(TAG).e(error, "로그인 실패")
                     } else if (token != null) {
                         Log.i(TAG, "로그인 성공 ${token.accessToken}")
+                        loginViewModel.kakaoLogin(token.accessToken)
                     }
                 }
             }

@@ -37,6 +37,12 @@
             app:popUpTo="@id/navigation_login"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out"/>
+        <action
+            android:id="@+id/action_navigation_splash_to_home_fragment"
+            app:destination="@id/navigation_home"
+            app:popUpTo="@id/navigation_home"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
     </fragment>
     <fragment
         android:id="@+id/navigation_login"
@@ -229,7 +235,7 @@
     </fragment>
     <fragment
         android:id="@+id/previewFragment"
-        android:name="com.toyou.toyouandroid.ui.home.PreviewFragment"
+        android:name="com.toyou.toyouandroid.presentation.fragment.home.PreviewFragment"
         android:label="PreviewFragment"
         tools:layout="@layout/fragment_preview">
         <action
