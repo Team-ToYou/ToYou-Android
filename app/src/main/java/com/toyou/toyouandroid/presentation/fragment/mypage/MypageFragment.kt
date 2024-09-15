@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -34,7 +33,6 @@ class MypageFragment : Fragment() {
         get() = requireNotNull(_binding){"FragmentMypageBinding -> null"}
     private val nicknameViewModel: SignupNicknameViewModel by activityViewModels()
     private val homeViewModel: HomeViewModel by activityViewModels()
-    private val viewModel: MypageViewModel by viewModels()
     private val mypageDialogViewModel: MypageDialogViewModel by activityViewModels()
     private lateinit var viewModelManager: ViewModelManager
     private var mypageDialog: MypageDialog? = null
@@ -49,15 +47,15 @@ class MypageFragment : Fragment() {
 
         _binding = FragmentMypageBinding.inflate(inflater, container, false)
 
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = this
-
         val tokenStorage = TokenStorage(requireContext())
         val authService = AuthNetworkModule.getClient().create(AuthService::class.java)
         mypageViewModel = ViewModelProvider(
             this,
             AuthViewModelFactory(authService, tokenStorage)
-        )[mypageViewModel::class.java]
+        )[MypageViewModel::class.java]
+
+        binding.viewModel = mypageViewModel
+        binding.lifecycleOwner = this
 
         return binding.root
     }
@@ -69,6 +67,7 @@ class MypageFragment : Fragment() {
         (requireActivity() as MainActivity).hideBottomNavigation(false)
 
         viewModelManager = ViewModelManager(nicknameViewModel, homeViewModel)
+        mypageViewModel.updateMypage(1)
 
         binding.mypageProfileBtn.setOnClickListener {
             navController.navigate(R.id.action_navigation_mypage_to_profile_fragment)
@@ -92,6 +91,19 @@ class MypageFragment : Fragment() {
 
         // ViewModel에서 닉네임을 가져와서 TextView에 설정
         nicknameViewModel.nickname.observe(viewLifecycleOwner) { nickname ->
+            binding.profileNickname.text = nickname
+        }
+
+        mypageViewModel.friendNum.observe(viewLifecycleOwner) {friendNum ->
+            val friendText = if (friendNum != null) {
+                "친구 ${friendNum}명"
+            } else {
+                "친구 0명"
+            }
+            binding.profileFriendCount.text = friendText
+        }
+
+        mypageViewModel.nickname.observe(viewLifecycleOwner) { nickname ->
             binding.profileNickname.text = nickname
         }
 
