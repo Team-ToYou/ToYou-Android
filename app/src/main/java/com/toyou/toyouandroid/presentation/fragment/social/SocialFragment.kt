@@ -23,6 +23,7 @@ import com.toyou.toyouandroid.databinding.FragmentSocialBinding
 import com.toyou.toyouandroid.presentation.fragment.home.RVMarginItemDecoration
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
 import com.toyou.toyouandroid.presentation.fragment.social.adapter.SocialRVAdapter
+import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
 
 class SocialFragment : Fragment() {
 
@@ -78,6 +79,7 @@ class SocialFragment : Fragment() {
             socialAdapter.setFriendData(friends)
             socialAdapter.notifyDataSetChanged()
         })
+
 
         binding.searchBtn.setOnClickListener {
             var searchName = binding.searchEt.text.toString()

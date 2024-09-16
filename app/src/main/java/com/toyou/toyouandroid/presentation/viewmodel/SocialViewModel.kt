@@ -214,7 +214,6 @@ class SocialViewModel : ViewModel() {
             resetToken()
 
         }
-
         resetQuestionData()
     }
 
