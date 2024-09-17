@@ -46,7 +46,6 @@
                 android:text="240509"
                 android:textColor="@color/black" />
 
-
             <TextView
                 android:id="@+id/item_detail"
                 style="@style/gangwon20"

@@ -1,21 +1,18 @@
-package com.toyou.toyouandroid.ui.home
+package com.toyou.toyouandroid.presentation.fragment.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.toyou.toyouandroid.R
-import com.toyou.toyouandroid.databinding.FragmentCreateBinding
 import com.toyou.toyouandroid.databinding.FragmentPreviewBinding
-import com.toyou.toyouandroid.model.PreviewCardModel
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
+import com.toyou.toyouandroid.ui.home.CardFragment
 import com.toyou.toyouandroid.ui.home.adapter.CardPreviewListAdapter
 
 class PreviewFragment : Fragment(){

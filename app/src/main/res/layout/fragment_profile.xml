@@ -65,7 +65,7 @@
             android:layout_marginBottom="9dp"
             android:text="프로필 수정"
             android:textColor="@color/black"
-            style="@style/sc_r18"
+            style="@style/sc_m15"
             app:layout_constraintBottom_toTopOf="@id/guideline_screen_bar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -78,15 +78,36 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guideline_screen_bar" />
 
+        <ImageView
+            android:id="@+id/mypage_profile_background"
+            android:layout_width="114dp"
+            android:layout_height="114dp"
+            android:src="@drawable/mypage_profile_background"
+            android:layout_marginTop="53dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/seperator_screen_bar" />
+
+        <ImageView
+            android:id="@+id/mypage_emotion_stamp"
+            android:layout_width="69dp"
+            android:layout_height="77dp"
+            android:src="@drawable/mypage_profile_default"
+            app:layout_constraintStart_toStartOf="@+id/mypage_profile_background"
+            app:layout_constraintEnd_toEndOf="@+id/mypage_profile_background"
+            app:layout_constraintTop_toTopOf="@+id/mypage_profile_background"
+            app:layout_constraintBottom_toBottomOf="@+id/mypage_profile_background"/>
+
         <TextView
             android:id="@+id/signup_nickname_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/signup_nickname_title"
+            android:text="@string/profile_nickname_title"
             android:textColor="@color/black"
             style="@style/sc_r15"
+            android:layout_marginTop="38dp"
             app:layout_constraintStart_toStartOf="@id/guideline_title_v"
-            app:layout_constraintTop_toTopOf="@id/guideline_title_h" />
+            app:layout_constraintTop_toBottomOf="@id/mypage_profile_background" />
 
         <EditText
             android:id="@+id/signup_nickname_input"
@@ -143,6 +164,69 @@
             app:layout_constraintStart_toStartOf="@+id/guideline_title_v"
             app:layout_constraintTop_toBottomOf="@+id/signup_nickname_input" />
 
+        <TextView
+            android:id="@+id/profile_status_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/signup_status_title"
+            android:textColor="@color/black"
+            style="@style/sc_r15"
+            android:layout_marginTop="62dp"
+            app:layout_constraintStart_toStartOf="@+id/guideline_title_v"
+            app:layout_constraintTop_toBottomOf="@id/signup_agree_nickname_doublecheck_message" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/signup_status_option_1"
+            android:layout_width="250dp"
+            android:layout_height="30dp"
+            android:background="@drawable/signupnickname_input"
+            android:text="@string/signup_status_option_1"
+            android:textColor="@color/black"
+            style="@style/sc_r10"
+            android:layout_marginTop="7dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/profile_status_title" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/signup_status_option_2"
+            android:layout_width="250dp"
+            android:layout_height="30dp"
+            android:background="@drawable/signupnickname_input"
+            android:text="@string/signup_status_option_2"
+            android:textColor="@color/black"
+            style="@style/sc_r10"
+            android:layout_marginTop="9dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/signup_status_option_1" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/signup_status_option_3"
+            android:layout_width="250dp"
+            android:layout_height="30dp"
+            android:background="@drawable/signupnickname_input"
+            android:text="@string/signup_status_option_3"
+            android:textColor="@color/black"
+            style="@style/sc_r10"
+            android:layout_marginTop="9dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/signup_status_option_2" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/signup_status_option_4"
+            android:layout_width="250dp"
+            android:layout_height="30dp"
+            android:background="@drawable/signupnickname_input"
+            android:text="@string/signup_status_option_4"
+            android:textColor="@color/black"
+            style="@style/sc_r10"
+            android:layout_marginTop="9dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/signup_status_option_3" />
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/signup_nickname_btn"
             android:layout_width="360dp"
@@ -154,7 +238,7 @@
             style="@style/sc_m13"
             android:enabled="@{viewModel.isNextButtonEnabled}"
             app:layout_constraintStart_toStartOf="@id/guideline_next_v"
-            app:layout_constraintTop_toTopOf="@id/guideline_next_h" />
+            app:layout_constraintTop_toBottomOf="@id/guideline_next_h" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

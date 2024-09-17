@@ -24,6 +24,7 @@
     <string name="signup_agree_choose">선택</string>
 
     <string name="signup_nickname_title">투유에서 사용할 닉네임을 알려주세요.</string>
+    <string name="profile_nickname_title">수정할 닉네임을 알려주세요.</string>
     <string name="signup_nickname_placeholder">닉네임을 입력해주세요.</string>
     <string name="signup_nickname_message_default">중복된 닉네임인지 확인해주세요.</string>
     <string name="signup_nickname_message_confirm">사용 가능한 닉네임입니다.</string>

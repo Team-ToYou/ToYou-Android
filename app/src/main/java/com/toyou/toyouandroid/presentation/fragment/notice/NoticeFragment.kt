@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
@@ -19,12 +18,15 @@ import com.toyou.toyouandroid.presentation.fragment.notice.network.NoticeReposit
 import com.toyou.toyouandroid.presentation.fragment.notice.network.NoticeService
 import com.toyou.toyouandroid.presentation.fragment.notice.network.NoticeViewModelFactory
 import com.toyou.toyouandroid.utils.SwipeToDeleteNotice
+import timber.log.Timber
 
-class NoticeFragment : Fragment() {
+class NoticeFragment : Fragment(), NoticeAdapterListener {
 
     lateinit var navController: NavController
 
     private var _binding: FragmentNoticeBinding? = null
+
+    private var noticeDialog: NoticeDialog? = null
 
     private val binding: FragmentNoticeBinding
         get() = requireNotNull(_binding){"FragmentNoticeBinding -> null"}
@@ -32,6 +34,12 @@ class NoticeFragment : Fragment() {
     private val viewModel: NoticeViewModel by viewModels {
         NoticeViewModelFactory(NoticeRepository(NetworkModule.getClient().create(NoticeService::class.java)))
     }
+
+    private val noticeDialogViewModel: NoticeDialogViewModel by viewModels()
+    private val listener: NoticeAdapterListener
+        get() {
+            TODO()
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,11 +55,11 @@ class NoticeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
 
-        viewModel.noticeItems.observe(viewLifecycleOwner, Observer { items ->
+        viewModel.noticeItems.observe(viewLifecycleOwner) { items ->
             if (items != null) {
                 setupRecyclerView(items)
             }
-        })
+        }
 
         viewModel.fetchNotices(userId = 1)
 
@@ -83,6 +91,36 @@ class NoticeFragment : Fragment() {
             setOnClickListener {
             }
         }
+    }
+
+    override fun onShowDialog() {
+        noticeDialogViewModel.setDialogData(
+            title = "존재하지 않는 \n 사용자입니다",
+            subTitle = "",
+            leftButtonText = "확인",
+            rightButtonText = "",
+            leftButtonTextColor = R.color.black,
+            rightButtonTextColor = R.color.black,
+            leftButtonClickAction = { checkUserNone() },
+            rightButtonClickAction = { dismissDialog() }
+        )
+        noticeDialog = NoticeDialog()
+        noticeDialog?.show(parentFragmentManager, "CustomDialog")
+    }
+
+    override fun onDeleteNotice(alarmId: Int, position: Int) {
+        viewModel.deleteNotice(userId = 1, alarmId, position)
+    }
+
+    // 회원 로그아웃
+    private fun checkUserNone() {
+        Timber.tag("handleLogout").d("handleWithdraw")
+        noticeDialog?.dismiss()
+    }
+
+    private fun dismissDialog() {
+        Timber.tag("dismissDialog").d("dismissDialog")
+        noticeDialog?.dismiss()
     }
 
     override fun onDestroyView() {

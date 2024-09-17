@@ -9,11 +9,13 @@ import com.toyou.toyouandroid.databinding.ItemNoticeCardCheckBinding
 import com.toyou.toyouandroid.databinding.ItemNoticeFriendRequestAcceptedBinding
 import com.toyou.toyouandroid.databinding.ItemNoticeFriendRequestBinding
 import com.toyou.toyouandroid.model.NoticeItem
+import com.toyou.toyouandroid.presentation.fragment.mypage.MypageDialogViewModel
 
 class NoticeAdapter(
     private val items: MutableList<NoticeItem>,
-    private val viewModel: NoticeViewModel
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private val viewModel: NoticeViewModel,
+//    private val listener: NoticeAdapterListener
+    ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     companion object {
         private const val TYPE_FRIEND_REQUEST = 1
         private const val TYPE_CARD_CHECK = 2
@@ -79,6 +81,11 @@ class NoticeAdapter(
                 // 삭제 API 호출
                 viewModel.deleteNotice(userId = 1, item.alarmId, this.layoutPosition)
             }
+
+            binding.noticeFriendRequestBtn.setOnClickListener {
+//                listener.onShowDialog()
+            }
+
             binding.executePendingBindings()
         }
     }
