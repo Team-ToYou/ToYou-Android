@@ -70,7 +70,9 @@ class QuestionContentLongFragment: Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 socialViewModel.questionDto.value?.content = s.toString()
                 binding.limit200.text = String.format("(%d/50)", s?.length ?: 0)
-                Log.d("질문", socialViewModel.questionDto.value.toString())
+
+                binding.nextBtn.isEnabled = !s.isNullOrEmpty()
+
             }
 
             override fun afterTextChanged(s: Editable?) {

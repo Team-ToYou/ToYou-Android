@@ -11,17 +11,23 @@ import kotlinx.coroutines.launch
 class UserViewModel : ViewModel() {
 
     private val repository = CreateRepository()
-    private val _cardId = MutableLiveData<Int>().apply { value = 0 }
-    val cardId: LiveData<Int> get() = _cardId
-    private val _emotion = MutableLiveData<String>().apply { value = null }
-    val emotion : LiveData<String> get() = _emotion
+    private val _cardId = MutableLiveData<Int?>()
+    val cardId: LiveData<Int?> get() = _cardId
+    private val _emotion = MutableLiveData<String?>()
+    val emotion : LiveData<String?> get() = _emotion
+    private val _nickname = MutableLiveData<String>()
+    val nickname : LiveData<String> get() = _nickname
 
     fun getHomeEntry() = viewModelScope.launch {
         try {
             val response = repository.getHomeEntryData()
             if (response.isSuccess) {
                 _cardId.value = response.result.id
+                _emotion.value = response.result.emotion
+                _nickname.value = response.result.nickname
                 Log.d("get home", "API 성공, 카드 ID: ${response.result.id}")
+                Log.d("get home", "API 성공, 상태: ${response.result.nickname}")
+
             } else {
                 Log.e("get home", "home API 호출 실패: ${response.message}")
             }

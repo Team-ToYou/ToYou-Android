@@ -7,4 +7,5 @@ data class HomeDto(
     @SerializedName("questionNum") val question : Int,
     @SerializedName("cardId") val id : Int?,
     @SerializedName("uncheckedAlarm") val alarm : Boolean,
+    @SerializedName("nickname") val nickname : String
 )

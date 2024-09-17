@@ -95,7 +95,8 @@ class QuestionContentFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 socialViewModel.questionDto.value?.content = s.toString()
                 binding.limit200.text = String.format("(%d/50)", s?.length ?: 0)
-                Log.d("질문", socialViewModel.questionDto.value.toString())
+
+                checkNextButtonState()
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -181,9 +182,13 @@ class QuestionContentFragment : Fragment() {
                         optionsList.add(s.toString())
                     }
                     socialViewModel.updateQuestionOptions(optionsList)
+
+                    checkNextButtonState()
                 }
 
-                override fun afterTextChanged(s: Editable?) {}
+                override fun afterTextChanged(s: Editable?) {
+
+                }
             })
 
 
@@ -209,8 +214,26 @@ class QuestionContentFragment : Fragment() {
             if (optionCount == 3) {
                 addOptionButton.isEnabled = false
             }
+            Log.d("AddOption", "Current optionCount: $optionCount")
+
         }
     }
 
+    private fun checkNextButtonState() {
+        // questionBoxEt가 빈 상태가 아닌지 확인
+        val isQuestionFilled = !binding.questionBoxEt.text.isNullOrEmpty()
 
+        // 모든 옵션 EditText들이 비어있지 않은지 확인
+        val allOptionsFilled = (0 until optionsContainer.childCount).all { i ->
+            val optionView = optionsContainer.getChildAt(i) // 옵션 뷰 가져오기
+            val editText = optionView?.findViewById<EditText>(R.id.edit_text) // EditText 찾기
+            val optionText = editText?.text?.toString()
+            !optionText.isNullOrEmpty() // null이 아니고 비어있지 않은지 확인
+        }
+
+        Log.d("NextButtonState", "isQuestionFilled: $isQuestionFilled, optionCount: $optionCount, allOptionsFilled: $allOptionsFilled")
+
+        // 조건: questionBoxEt가 빈 상태가 아니고, optionCount가 2 이상이며 모든 옵션이 비어있지 않을 때
+        binding.nextBtn.isEnabled = isQuestionFilled && optionCount >= 2 && allOptionsFilled
+    }
 }
