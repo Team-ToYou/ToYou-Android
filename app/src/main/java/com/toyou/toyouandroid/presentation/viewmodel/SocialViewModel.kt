@@ -12,13 +12,14 @@ import com.toyou.toyouandroid.domain.social.repostitory.SocialRepository
 import com.toyou.toyouandroid.fcm.domain.FCMRepository
 import com.toyou.toyouandroid.fcm.dto.request.FCM
 import com.toyou.toyouandroid.model.FriendListModel
+import com.toyou.toyouandroid.utils.TokenStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
-class SocialViewModel : ViewModel() {
-    private val repository = SocialRepository()
+class SocialViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
+    private val repository = SocialRepository(tokenStorage)
     private val fcmRepository = FCMRepository()
     private val _friends = MutableLiveData<List<FriendListModel>>()
     val friends: LiveData<List<FriendListModel>> get() = _friends
@@ -80,7 +81,7 @@ class SocialViewModel : ViewModel() {
         try {
             val response = repository.getFriendsData()
             if (response.isSuccess) {
-                Log.d("API 호출 성공", response.message)
+                Log.d("API 호출 성공~", response.message)
                 val friendsDto = response.result
                 friendsDto?.let { mapToFriendModels(it) }
             } else {

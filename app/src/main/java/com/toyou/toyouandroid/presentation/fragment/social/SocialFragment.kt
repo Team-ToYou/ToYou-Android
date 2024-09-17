@@ -20,10 +20,16 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentSocialBinding
+import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.presentation.fragment.home.RVMarginItemDecoration
+import com.toyou.toyouandroid.presentation.fragment.mypage.MypageViewModel
+import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthService
+import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
 import com.toyou.toyouandroid.presentation.fragment.social.adapter.SocialRVAdapter
+import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
+import com.toyou.toyouandroid.utils.TokenStorage
 
 class SocialFragment : Fragment() {
 
@@ -39,7 +45,12 @@ class SocialFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        socialViewModel = ViewModelProvider(requireActivity()).get(SocialViewModel::class.java)
+        val tokenStorage = TokenStorage(requireContext())
+        socialViewModel = ViewModelProvider(
+            this,
+            SocialViewModelFactory(tokenStorage)
+        )[SocialViewModel::class.java]
+
         socialViewModel.getFriendsData()
 
     }

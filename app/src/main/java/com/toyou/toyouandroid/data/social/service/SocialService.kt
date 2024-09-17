@@ -25,7 +25,7 @@ interface SocialService {
 
     @GET("/friends")
     suspend fun getFriends(
-        @Header("userId") id : Int
+        @Header("Authorization") id : String
     ) : BaseResponse<FriendsDto>
 
     @GET("/friends/search")

@@ -6,11 +6,12 @@ import com.toyou.toyouandroid.data.social.dto.request.RequestFriend
 import com.toyou.toyouandroid.data.social.service.SocialService
 import com.toyou.toyouandroid.model.PreviewCardModel
 import com.toyou.toyouandroid.network.RetrofitInstance
+import com.toyou.toyouandroid.utils.TokenStorage
 
-class SocialRepository {
+class SocialRepository(private val tokenStorage: TokenStorage) {
     private val client = RetrofitInstance.getInstance().create(SocialService::class.java)
 
-    suspend fun getFriendsData() = client.getFriends(1)
+    suspend fun getFriendsData() = client.getFriends("Bearer ${tokenStorage.getAccessToken().toString()}")
 
     suspend fun patchApproveFriend(
         request: RequestFriend
