@@ -207,8 +207,13 @@ class SocialViewModel : ViewModel() {
             Log.d("api 성공!", "성공")
         }
         retrieveTokenFromServer(questionDto.value!!.target)
-        postFCM(questionDto.value!!.target, "e9A7lgfbQ_etgjy2GkkI7w:APA91bH4Dn1YhJqhe34aDVWvcuE0MyHv-FaJLtdM0BYXTUqyyfrzzo1mcrEfVH4anHaKmJC2roOXibxTYgl0Kc_XoKpXJOUsufl7n5ZQ6vWcBy4dRfg7RMEse2YZa2Z7FCNy4oRmqv9c", 3)
+        _retrieveToken.value?.let { tokens ->
+            for (token in tokens) {
+                postFCM(questionDto.value!!.target, token, 3)
+            }
+            resetToken()
 
+        }
         resetQuestionData()
     }
 
@@ -223,7 +228,13 @@ class SocialViewModel : ViewModel() {
             Log.d("api 성공!", "성공")
         }
         retrieveTokenFromServer(name)
-        postFCM(name, retrieveToken.value!![0], 1)
+        _retrieveToken.value?.let { tokens ->
+            for (token in tokens) {
+                postFCM(name, token, 1)
+            }
+            resetToken()
+
+        }
 
     }
 
@@ -266,6 +277,13 @@ class SocialViewModel : ViewModel() {
             }
             Log.d("api 성공!", "성공")
         }
+        retrieveTokenFromServer(name)
+        _retrieveToken.value?.let { tokens ->
+            for (token in tokens) {
+                postFCM(name, token, 1)
+            }
+            resetToken()
+        }
     }
 
     fun retrieveTokenFromServer(name : String) = viewModelScope.launch {
@@ -291,6 +309,10 @@ class SocialViewModel : ViewModel() {
         _selectedEmotion.value = 0
         _selectedEmotionMent.value = ""
         _optionList.value = emptyList()
+    }
+
+    private fun resetToken(){
+        _retrieveToken.value = emptyList()
     }
 
 
