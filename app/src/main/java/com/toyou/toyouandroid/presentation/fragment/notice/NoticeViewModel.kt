@@ -27,14 +27,26 @@ class NoticeViewModel(private val repository: NoticeRepository) : ViewModel() {
                 ) {
                     if (response.isSuccessful) {
                         val alarmResponse = response.body()
-                        val items = alarmResponse?.result?.alarmList?.map { alarm ->
+                        val items = alarmResponse?.result?.alarmList?.mapNotNull { alarm ->
                             when (alarm.alarmType) {
-                                "FRIEND_REQUEST" -> NoticeItem.NoticeFriendRequestItem(alarm.nickname, alarm.alarmId)
-                                "REQUEST_ACCEPTED" -> NoticeItem.NoticeFriendRequestAcceptedItem(alarm.nickname, alarm.alarmId)
-                                "NEW_QUESTION" -> NoticeItem.NoticeCardCheckItem(alarm.nickname, alarm.alarmId)
+                                "FRIEND_REQUEST" -> NoticeItem.NoticeFriendRequestItem(
+                                    alarm.nickname,
+                                    alarm.alarmId
+                                )
+
+                                "REQUEST_ACCEPTED" -> NoticeItem.NoticeFriendRequestAcceptedItem(
+                                    alarm.nickname,
+                                    alarm.alarmId
+                                )
+
+                                "NEW_QUESTION" -> NoticeItem.NoticeCardCheckItem(
+                                    alarm.nickname,
+                                    alarm.alarmId
+                                )
+
                                 else -> null
                             }
-                        }?.filterNotNull() ?: emptyList()
+                        } ?: emptyList()
 
                         _noticeItems.value = items
                     }
