@@ -19,6 +19,8 @@ import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.presentation.fragment.notice.network.NetworkModule
 import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthService
 import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthViewModelFactory
+import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
 import com.toyou.toyouandroid.utils.TokenStorage
 import timber.log.Timber
 
@@ -30,6 +32,7 @@ class LoginFragment : Fragment() {
         get() = requireNotNull(_binding){"FragmentLoginBinding -> null"}
 
     private lateinit var loginViewModel: LoginViewModel
+    private lateinit var userViewModel: UserViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,6 +48,10 @@ class LoginFragment : Fragment() {
             this,
             AuthViewModelFactory(authService, tokenStorage)
         )[LoginViewModel::class.java]
+        userViewModel = ViewModelProvider(
+            this,
+            AuthViewModelFactory(authService, tokenStorage)
+        )[UserViewModel::class.java]
 
         return binding.root
     }
@@ -73,9 +80,16 @@ class LoginFragment : Fragment() {
                     } else if (token != null) {
                         Log.i(TAG, "로그인 성공 ${token.accessToken}")
                         loginViewModel.kakaoLogin(token.accessToken)
+                        /*userViewModel.getHomeEntry()
+
+                        userViewModel.cardId.observe(viewLifecycleOwner) { cardId ->
+                            Log.d("get home", cardId.toString())
+                        }*/
+
                     }
                 }
             }
+
             navController.navigate(R.id.action_navigation_login_to_signup_agree_fragment)
         }
     }

@@ -12,8 +12,12 @@ import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentModifyBinding
 import com.toyou.toyouandroid.databinding.FragmentPreviewBinding
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.CardViewModelFactory
+import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
 import com.toyou.toyouandroid.ui.home.CardFragment
 import com.toyou.toyouandroid.ui.home.adapter.CardPreviewListAdapter
+import com.toyou.toyouandroid.utils.TokenStorage
 
 class ModifyFragment: Fragment() {
     private var _binding : FragmentModifyBinding? = null
@@ -25,7 +29,11 @@ class ModifyFragment: Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        cardViewModel = ViewModelProvider(requireActivity()).get(CardViewModel::class.java)
+        val tokenStorage = TokenStorage(requireContext())
+        cardViewModel = ViewModelProvider(
+            this,
+            CardViewModelFactory(tokenStorage)
+        )[CardViewModel::class.java]
 
     }
 

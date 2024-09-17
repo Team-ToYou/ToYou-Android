@@ -19,7 +19,10 @@ import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.presentation.fragment.notice.network.NetworkModule
 import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthService
 import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthViewModelFactory
+import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.CardViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
 import com.toyou.toyouandroid.utils.TokenStorage
 
 class SplashFragment : Fragment() {
@@ -27,7 +30,6 @@ class SplashFragment : Fragment() {
     private lateinit var navController: NavController
     private var _binding: FragmentSplashBinding? = null
     private lateinit var database: UserDatabase
-    private lateinit var userViewModel: UserViewModel
     private lateinit var loginViewModel: LoginViewModel
 
     private val binding: FragmentSplashBinding
@@ -40,7 +42,6 @@ class SplashFragment : Fragment() {
     ): View {
 
         _binding = FragmentSplashBinding.inflate(inflater, container, false)
-        userViewModel = ViewModelProvider(requireActivity())[UserViewModel::class.java]
 
         val tokenStorage = TokenStorage(requireContext())
         val authService = NetworkModule.getClient().create(AuthService::class.java)
@@ -48,6 +49,7 @@ class SplashFragment : Fragment() {
             this,
             AuthViewModelFactory(authService, tokenStorage)
         )[LoginViewModel::class.java]
+
 
         return binding.root
     }
@@ -63,13 +65,6 @@ class SplashFragment : Fragment() {
         // navController 초기화
         navController = findNavController()
 
-        userViewModel.getHomeEntry()
-
-        userViewModel.cardId.observe(viewLifecycleOwner) { cardId ->
-
-                Log.d("get home", userViewModel.cardId.value.toString())
-
-        }
 
         val refreshToken = TokenStorage(requireContext()).getRefreshToken()
         if (refreshToken != null) {
