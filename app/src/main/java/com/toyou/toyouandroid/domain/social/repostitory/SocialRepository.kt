@@ -17,7 +17,7 @@ class SocialRepository(private val tokenStorage: TokenStorage) {
         request: RequestFriend
     ){
         try {
-            val response = client.patchApprove(1, friend = request)
+            val response = client.patchApprove("Bearer ${tokenStorage.getAccessToken().toString()}", friend = request)
             // 응답 처리
             if (response.isSuccess) {
                 Log.d("친구승인 성공!", response.message)
@@ -35,7 +35,7 @@ class SocialRepository(private val tokenStorage: TokenStorage) {
         request: RequestFriend
     ){
         try {
-            val response = client.deleteFriend(1, friend = request)
+            val response = client.deleteFriend("Bearer ${tokenStorage.getAccessToken().toString()}", friend = request)
             // 응답 처리
             if (response.isSuccess) {
                 Log.d("친구삭제 성공!", response.message)
@@ -52,7 +52,7 @@ class SocialRepository(private val tokenStorage: TokenStorage) {
         request : RequestFriend
     ){
         try {
-            val response = client.postFriendRequest(1, friend = request)
+            val response = client.postFriendRequest("Bearer ${tokenStorage.getAccessToken().toString()}", friend = request)
             // 응답 처리
             if (response.isSuccess) {
                 Log.d("친구요청 성공!", response.message)
@@ -69,13 +69,13 @@ class SocialRepository(private val tokenStorage: TokenStorage) {
 
     suspend fun getSearchData(
         name : String,
-    ) = client.getSearchFriend(1, name)
+    ) = client.getSearchFriend("Bearer ${tokenStorage.getAccessToken().toString()}", name)
 
     suspend fun postQuestionData(
         questionDto: QuestionDto,
     ) {
         try {
-            val response = client.postQuestion(1, request = questionDto)
+            val response = client.postQuestion("Bearer ${tokenStorage.getAccessToken().toString()}", request = questionDto)
             // 응답 처리
             if (response.isSuccess) {
                 Log.d("post성공!", response.message)
