@@ -19,8 +19,13 @@ import com.toyou.toyouandroid.databinding.CardLayoutBinding
 import com.toyou.toyouandroid.databinding.FragmentPreviewBinding
 import com.toyou.toyouandroid.presentation.fragment.home.RVMarginItemDecoration
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.CardViewModelFactory
+import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
 import com.toyou.toyouandroid.ui.home.adapter.CardPreviewListAdapter
+import com.toyou.toyouandroid.utils.TokenStorage
 import timber.log.Timber
 import java.time.LocalDate
 
@@ -36,9 +41,17 @@ class CardFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        cardViewModel = ViewModelProvider(requireActivity()).get(CardViewModel::class.java)
-        userViewModel = ViewModelProvider(requireActivity()).get(UserViewModel::class.java)
 
+        val tokenStorage = TokenStorage(requireContext())
+        cardViewModel = ViewModelProvider(
+            this,
+            CardViewModelFactory(tokenStorage)
+        )[CardViewModel::class.java]
+        userViewModel = ViewModelProvider(
+            this,
+            UserViewModelFactory(tokenStorage)
+        )[UserViewModel::class.java]
+        
     }
 
     override fun onCreateView(

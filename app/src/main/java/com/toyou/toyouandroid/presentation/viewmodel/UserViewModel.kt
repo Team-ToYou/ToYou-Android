@@ -6,11 +6,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.toyou.toyouandroid.domain.create.repository.CreateRepository
+import com.toyou.toyouandroid.utils.TokenStorage
 import kotlinx.coroutines.launch
 
-class UserViewModel : ViewModel() {
+class UserViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
 
-    private val repository = CreateRepository()
+    private val repository = CreateRepository(tokenStorage)
     private val _cardId = MutableLiveData<Int?>()
     val cardId: LiveData<Int?> get() = _cardId
     private val _emotion = MutableLiveData<String?>()
