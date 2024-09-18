@@ -32,7 +32,6 @@ class LoginFragment : Fragment() {
         get() = requireNotNull(_binding){"FragmentLoginBinding -> null"}
 
     private lateinit var loginViewModel: LoginViewModel
-    private lateinit var userViewModel: UserViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,10 +47,6 @@ class LoginFragment : Fragment() {
             this,
             AuthViewModelFactory(authService, tokenStorage)
         )[LoginViewModel::class.java]
-        userViewModel = ViewModelProvider(
-            requireActivity(),
-            UserViewModelFactory(tokenStorage)
-        )[UserViewModel::class.java]
 
         return binding.root
     }
@@ -80,11 +75,6 @@ class LoginFragment : Fragment() {
                     } else if (token != null) {
                         Log.i(TAG, "로그인 성공 ${token.accessToken}")
                         loginViewModel.kakaoLogin(token.accessToken)
-                        /*userViewModel.getHomeEntry()
-
-                        userViewModel.cardId.observe(viewLifecycleOwner) { cardId ->
-                            Log.d("get home", cardId.toString())
-                        }*/
 
                     }
                 }
