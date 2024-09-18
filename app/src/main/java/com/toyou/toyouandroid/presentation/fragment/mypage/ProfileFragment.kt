@@ -1,6 +1,5 @@
 package com.toyou.toyouandroid.presentation.fragment.mypage
 
-import com.toyou.toyouandroid.presentation.fragment.onboarding.SignupNicknameViewModel
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -15,9 +14,11 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentProfileBinding
+import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.presentation.base.MainActivity
-import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModel
-import com.toyou.toyouandroid.presentation.viewmodel.ViewModelManager
+import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthService
+import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthViewModelFactory
+import com.toyou.toyouandroid.utils.TokenStorage
 
 class ProfileFragment : Fragment() {
 
@@ -25,10 +26,15 @@ class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding: FragmentProfileBinding
         get() = requireNotNull(_binding){"FragmentProfileBinding -> null"}
-    private val viewModel: SignupNicknameViewModel by activityViewModels()
-    private val nicknameViewModel: SignupNicknameViewModel by activityViewModels()
-    private val homeViewModel: HomeViewModel by activityViewModels()
-    private lateinit var viewModelManager: ViewModelManager
+    private val viewModel: ProfileViewModel by activityViewModels()
+    private lateinit var tokenStorage: TokenStorage
+
+    private val mypageViewModel: MypageViewModel by activityViewModels {
+        AuthViewModelFactory(
+            AuthNetworkModule.getClient().create(AuthService::class.java),
+            tokenStorage
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,7 +46,6 @@ class ProfileFragment : Fragment() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
 
-        binding.signupNicknameInput.setText("")
         viewModel.resetNicknameEditState()
 
         return binding.root
@@ -48,12 +53,18 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModelManager = ViewModelManager(nicknameViewModel, homeViewModel)
+
+        // tokenStorage 초기화
+        tokenStorage = TokenStorage(requireContext())
 
         (requireActivity() as MainActivity).hideBottomNavigation(true)
 
         // navController 초기화
         navController = findNavController()
+
+        mypageViewModel.nickname.observe(viewLifecycleOwner) { nickname ->
+            binding.signupNicknameInput.setText(nickname)
+        }
 
         binding.signupNicknameBackBtn.setOnClickListener {
             navController.navigate(R.id.action_navigation_profile_to_mypage_fragment)
@@ -84,6 +95,58 @@ class ProfileFragment : Fragment() {
             hideKeyboard()
         }
 
+        mypageViewModel.status.observe(viewLifecycleOwner) { status ->
+            when (status) {
+                "SCHOOL" -> {
+                    binding.signupStatusOption1.setBackgroundResource(R.drawable.signupnickname_doublecheck_activate)
+                    binding.signupStatusOption2.setBackgroundResource(R.drawable.signupnickname_input)
+                    binding.signupStatusOption3.setBackgroundResource(R.drawable.signupnickname_input)
+                    binding.signupStatusOption4.setBackgroundResource(R.drawable.signupnickname_input)
+                }
+                "COLLEGE" -> {
+                    binding.signupStatusOption1.setBackgroundResource(R.drawable.signupnickname_input)
+                    binding.signupStatusOption2.setBackgroundResource(R.drawable.signupnickname_doublecheck_activate)
+                    binding.signupStatusOption3.setBackgroundResource(R.drawable.signupnickname_input)
+                    binding.signupStatusOption4.setBackgroundResource(R.drawable.signupnickname_input)
+                }
+                "OFFICE" -> {
+                    binding.signupStatusOption1.setBackgroundResource(R.drawable.signupnickname_input)
+                    binding.signupStatusOption2.setBackgroundResource(R.drawable.signupnickname_input)
+                    binding.signupStatusOption3.setBackgroundResource(R.drawable.signupnickname_doublecheck_activate)
+                    binding.signupStatusOption4.setBackgroundResource(R.drawable.signupnickname_input)
+                }
+                "ETC" -> {
+                    binding.signupStatusOption1.setBackgroundResource(R.drawable.signupnickname_input)
+                    binding.signupStatusOption2.setBackgroundResource(R.drawable.signupnickname_input)
+                    binding.signupStatusOption3.setBackgroundResource(R.drawable.signupnickname_input)
+                    binding.signupStatusOption4.setBackgroundResource(R.drawable.signupnickname_doublecheck_activate)
+                }
+            }
+        }
+
+        val buttonList = listOf(
+            binding.signupStatusOption1,
+            binding.signupStatusOption2,
+            binding.signupStatusOption3,
+            binding.signupStatusOption4
+        )
+
+        buttonList.forEach { button ->
+            button.setOnClickListener {
+                viewModel.onButtonClicked(button.id)
+                updateButtonBackgrounds()
+            }
+        }
+
+        viewModel.selectedStatusButtonId.observe(viewLifecycleOwner) {
+            updateButtonBackgrounds()
+        }
+
+        // 완료 버튼 활성화
+        viewModel.isNextButtonEnabled.observe(viewLifecycleOwner) { isEnabled ->
+            binding.signupNicknameBtn.isEnabled = isEnabled
+        }
+
         binding.root.setOnTouchListener { v, event ->
             if (event.action == MotionEvent.ACTION_DOWN) {
                 hideKeyboard()
@@ -94,6 +157,18 @@ class ProfileFragment : Fragment() {
 
         binding.root.setOnClickListener {
             hideKeyboard()
+        }
+    }
+
+    private fun updateButtonBackgrounds() {
+        val buttonList = listOf(
+            binding.signupStatusOption1,
+            binding.signupStatusOption2,
+            binding.signupStatusOption3,
+            binding.signupStatusOption4
+        )
+        buttonList.forEach { button ->
+            button.setBackgroundResource(viewModel.getButtonBackground(button.id))
         }
     }
 
