@@ -60,6 +60,7 @@ class SocialFragment : Fragment() {
 
         socialViewModel.getFriendsData()
 
+
     }
 
     override fun onCreateView(
@@ -99,7 +100,7 @@ class SocialFragment : Fragment() {
         })
 
 
-        binding.searchBtn.setOnClickListener {
+        /*binding.searchBtn.setOnClickListener {
             var searchName = binding.searchEt.text.toString()
             socialViewModel.getSearchData(searchName)
             addFriendLinearLayout.removeAllViews()
@@ -115,7 +116,27 @@ class SocialFragment : Fragment() {
                     addFriendView(isFriend, searchName)
             } ?: run {
             }*/
+        }*/
+
+        binding.searchBtn.setOnClickListener {
+            val searchName = binding.searchEt.text.toString()
+            addFriendLinearLayout.removeAllViews()  // 뷰를 초기화
+
+            // API 호출
+            socialViewModel.getSearchData(searchName)
         }
+
+        socialViewModel.isFriend.observe(viewLifecycleOwner, Observer { isFriend ->
+            if (isFriend == "400" || isFriend == "401") {
+                addNotExist(isFriend)
+            }else if (isFriend == "no"){
+                Log.d("destroy2", isFriend)
+                addFriendLinearLayout.removeAllViews()
+            }
+            else {
+                addFriendView(isFriend, binding.searchEt.text.toString())
+            }
+        })
 
         socialViewModel.friendRequestCompleted.observe(viewLifecycleOwner, Observer { isCompleted ->
             if (isCompleted) {
@@ -186,6 +207,12 @@ class SocialFragment : Fragment() {
         _binding = null
     }
 
+    override fun onPause() {
+        super.onPause()
+        // 친구 추가 뷰를 제거하도록
+        socialViewModel.resetFriendState()
+    }
+
     private fun addFriendView(isFriend : String, name : String){
         val addFriendView = LayoutInflater.from(requireContext()).inflate(R.layout.item_add_friend, addFriendLinearLayout,false)
         val friendName = addFriendView.findViewById<TextView>(R.id.friendName_tv)
@@ -227,8 +254,6 @@ class SocialFragment : Fragment() {
                 }
             }
         })
-
-
 
         addFriendLinearLayout.addView(addFriendView)
 

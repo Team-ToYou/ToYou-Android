@@ -264,7 +264,8 @@ class SocialViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
     }
 
     fun resetFriendState(){
-        _isFriend.value = ""
+        Log.d("destroy", _isFriend.value.toString())
+        _isFriend.value = "no"
     }
 
     fun deleteFriend(name: String){
