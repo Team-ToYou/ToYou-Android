@@ -104,4 +104,9 @@ class CreateWriteFragment: Fragment() {
             addItemDecoration(RVMarginItemDecoration(margin, true))
         }
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

@@ -17,13 +17,13 @@ import retrofit2.http.Query
 interface FCMService {
     @POST("/fcm/token")
     suspend fun postToken(
-        @Header("userId") id : Long,
+        @Header("Authorization") id : String,
         @Body request : Token
     ) : BaseResponse<Unit>
 
     @GET("/fcm/token")
     suspend fun getToken(
-        @Header("userId") id : Long,
+        @Header("Authorization") id : String,
         @Query("keyword") name: String
     ) : BaseResponse<GetToken>
 
@@ -34,7 +34,7 @@ interface FCMService {
 
     @HTTP(method = "DELETE", path = "/fcm/token", hasBody = true)
     suspend fun deleteToken(
-        @Header("userId") id : Long,
+        @Header("Authorization") id : String,
         @Body request: Token
         ) : BaseResponse<Unit>
 }

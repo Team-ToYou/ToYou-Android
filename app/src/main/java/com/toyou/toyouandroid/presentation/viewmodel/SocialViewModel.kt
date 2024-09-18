@@ -20,7 +20,7 @@ import retrofit2.HttpException
 
 class SocialViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
     private val repository = SocialRepository(tokenStorage)
-    private val fcmRepository = FCMRepository()
+    private val fcmRepository = FCMRepository(tokenStorage)
     private val _friends = MutableLiveData<List<FriendListModel>>()
     val friends: LiveData<List<FriendListModel>> get() = _friends
     private val _clickedPosition = MutableLiveData<Map<Int, Boolean>>()

@@ -48,7 +48,7 @@ class CardFragment : Fragment() {
             CardViewModelFactory(tokenStorage)
         )[CardViewModel::class.java]
         userViewModel = ViewModelProvider(
-            requireActivity(),
+            requireActivity() ,
             UserViewModelFactory(tokenStorage)
         )[UserViewModel::class.java]
         
