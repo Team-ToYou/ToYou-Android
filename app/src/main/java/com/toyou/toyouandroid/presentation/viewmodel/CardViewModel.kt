@@ -21,12 +21,13 @@ import com.toyou.toyouandroid.model.ChooseModel
 import com.toyou.toyouandroid.model.PreviewCardModel
 import com.toyou.toyouandroid.model.PreviewChooseModel
 import com.toyou.toyouandroid.network.BaseResponse
+import com.toyou.toyouandroid.utils.TokenStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
-class CardViewModel : ViewModel(){
+class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
     private val _cards = MutableLiveData<List<CardModel>>()
     val cards: LiveData<List<CardModel>> get() = _cards
     private val _shortCards = MutableLiveData<List<CardShortModel>>()
@@ -41,8 +42,8 @@ class CardViewModel : ViewModel(){
     private val _isAnyEditTextFilled = MutableLiveData(false)
     val isAnyEditTextFilled: LiveData<Boolean> get() = _isAnyEditTextFilled
 
-    private val repository = CreateRepository()
-    private val homeRepository = HomeRepository()
+    private val repository = CreateRepository(tokenStorage)
+    private val homeRepository = HomeRepository(tokenStorage)
 
     val exposure : LiveData<Boolean> get() = _exposure
     private val _exposure = MutableLiveData(false)
@@ -252,12 +253,25 @@ class CardViewModel : ViewModel(){
         existingCards.addAll(newChooseCards)
 
         _previewCards.value = existingCards.distinct()
-        Log.d("미리보기", _previewCards.value.toString())
+
+        _cards.value = _cards.value?.map {
+            it.copy(isButtonSelected = false)
+        }
+        _chooseCards.value = _chooseCards.value?.map {
+            it.copy(isButtonSelected = false)
+        }
+        _shortCards.value = _shortCards.value?.map {
+            it.copy(isButtonSelected = false)
+        }
+
+            Log.d("미리보기", _previewCards.value.toString())
     }
 
     fun clearAllData() {
         _previewCards.value = emptyList()
         _previewChoose.value = emptyList()
+        Log.d("이전", previewCards.value.toString())
+        Log.d("이전", _previewCards.value.toString())
     }
 
     fun clearAll(){

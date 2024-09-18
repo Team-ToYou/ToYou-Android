@@ -24,8 +24,11 @@ import com.toyou.toyouandroid.model.HomeBottomSheetItem
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.presentation.fragment.home.adapter.HomeBottomSheetAdapter
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.CardViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
+import com.toyou.toyouandroid.utils.TokenStorage
 
 class HomeFragment : Fragment() {
 
@@ -59,8 +62,21 @@ class HomeFragment : Fragment() {
             }
         })
 
-        userViewModel = ViewModelProvider(requireActivity()).get(UserViewModel::class.java)
-        cardViewModel = ViewModelProvider(requireActivity()).get(CardViewModel::class.java)
+        val tokenStorage = TokenStorage(requireContext())
+        cardViewModel = ViewModelProvider(
+            requireActivity(),
+            CardViewModelFactory(tokenStorage)
+        )[CardViewModel::class.java]
+        userViewModel = ViewModelProvider(
+            requireActivity(),
+            UserViewModelFactory(tokenStorage)
+        )[UserViewModel::class.java]
+
+        userViewModel.getHomeEntry()
+
+        userViewModel.cardId.observe(viewLifecycleOwner) { cardId ->
+            Log.d("get home", cardId.toString())
+        }
 
         return binding.root
     }
@@ -131,18 +147,26 @@ class HomeFragment : Fragment() {
 
         // 우체통 클릭시 일기카드 생성 화면으로 전환(임시)
         binding.homeMailboxIv.setOnClickListener {
+            Log.d("mail", "click")
             userViewModel.emotion.observe(viewLifecycleOwner, Observer { emotion ->
                 if (emotion != null){
+                    Log.d("mail", "click")
                     userViewModel.cardId.observe(viewLifecycleOwner, Observer { cardId ->
-                        if (cardId == null)
+                        if (cardId == null) {
+                            Log.d("mail", "click")
+
                             navController.navigate(R.id.action_navigation_home_to_create_fragment)
+                        }
                         else {
-                            cardViewModel.getCardDetail(cardId.toLong())
+                        Log.d("mail", "click")
+
+                        cardViewModel.getCardDetail(cardId.toLong())
                             navController.navigate(R.id.action_navigation_home_to_modifyFragment)
                         }
                     })
                     Log.d("cardID", userViewModel.cardId.value.toString())
                 } else{
+                    Log.d("mail", "click")
                     Toast.makeText(requireContext(), "감정 우표를 먼저 선택해주세요", Toast.LENGTH_SHORT).show()
                 }
             })
@@ -153,8 +177,12 @@ class HomeFragment : Fragment() {
         }
 
         binding.homeEmotionIv.setOnClickListener {
+
             navController.navigate(R.id.action_navigation_home_to_home_option_fragment)
         }
+
+
+
 
         viewModel.homeEmotion.observe(viewLifecycleOwner) { emotion ->
             binding.homeEmotionIv.setImageResource(emotion)

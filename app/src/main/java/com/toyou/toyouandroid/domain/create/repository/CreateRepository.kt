@@ -6,13 +6,14 @@ import com.toyou.toyouandroid.data.create.dto.request.AnswerDto
 import com.toyou.toyouandroid.data.create.service.CreateService
 import com.toyou.toyouandroid.model.PreviewCardModel
 import com.toyou.toyouandroid.network.RetrofitInstance
+import com.toyou.toyouandroid.utils.TokenStorage
 
-class CreateRepository {
+class CreateRepository(private val tokenStorage: TokenStorage) {
     private val client = RetrofitInstance.getInstance().create(CreateService::class.java)
 
-    suspend fun getAllData() = client.getQuestions(1)
+    suspend fun getAllData() = client.getQuestions("Bearer ${tokenStorage.getAccessToken().toString()}")
 
-    suspend fun getHomeEntryData() = client.getHomeEntry(1)
+    suspend fun getHomeEntryData() = client.getHomeEntry("Bearer ${tokenStorage.getAccessToken().toString()}")
 
 
     suspend fun patchCardData(
@@ -22,7 +23,7 @@ class CreateRepository {
     ) {
         val answerDto = convertPreviewCardModelsToAnswerDto(previewCardModels, exposure)
         try {
-            val response = client.patchCard(1, card = cardId, request = answerDto)
+            val response = client.patchCard("Bearer ${tokenStorage.getAccessToken().toString()}", card = cardId, request = answerDto)
 
             // 응답 처리
             if (response.isSuccess) {
@@ -63,7 +64,7 @@ class CreateRepository {
         val answerDto = convertPreviewCardModelsToAnswerDto(previewCardModels, exposure)
 
         try {
-            val response = client.postCard(1, request = answerDto)
+            val response = client.postCard("Bearer ${tokenStorage.getAccessToken().toString()}", request = answerDto)
             // 응답 처리
             if (response.isSuccess) {
                 Log.d("post성공", response.message)

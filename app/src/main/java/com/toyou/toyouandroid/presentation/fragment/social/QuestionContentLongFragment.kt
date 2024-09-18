@@ -15,6 +15,8 @@ import androidx.navigation.Navigation
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentContentLongBinding
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModelFactory
+import com.toyou.toyouandroid.utils.TokenStorage
 
 class QuestionContentLongFragment: Fragment() {
 
@@ -27,8 +29,11 @@ class QuestionContentLongFragment: Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        socialViewModel = ViewModelProvider(requireActivity()).get(SocialViewModel::class.java)
-
+        val tokenStorage = TokenStorage(requireContext())
+        socialViewModel = ViewModelProvider(
+            requireActivity(),
+            SocialViewModelFactory(tokenStorage)
+        )[SocialViewModel::class.java]
     }
 
     override fun onCreateView(

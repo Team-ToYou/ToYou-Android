@@ -13,8 +13,8 @@ class ShortCardAdapter(private val cardViewModel: CardViewModel) : RecyclerView.
     private var cardList: List<PreviewCardModel> = emptyList()
 
     fun setCards(cards: List<PreviewCardModel>) {
+        notifyDataSetChanged()
         this.cardList = cards.filter { it.type == 0 }
-        //notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

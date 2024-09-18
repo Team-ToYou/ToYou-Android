@@ -1,6 +1,7 @@
 package com.toyou.toyouandroid.presentation.fragment.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,9 +12,12 @@ import androidx.navigation.Navigation
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentPreviewBinding
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.CardViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
 import com.toyou.toyouandroid.ui.home.CardFragment
 import com.toyou.toyouandroid.ui.home.adapter.CardPreviewListAdapter
+import com.toyou.toyouandroid.utils.TokenStorage
 
 class PreviewFragment : Fragment(){
 
@@ -27,8 +31,15 @@ class PreviewFragment : Fragment(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        cardViewModel = ViewModelProvider(requireActivity()).get(CardViewModel::class.java)
-        userViewModel = ViewModelProvider(requireActivity()).get(UserViewModel::class.java)
+        val tokenStorage = TokenStorage(requireContext())
+        cardViewModel = ViewModelProvider(
+            requireActivity(),
+            CardViewModelFactory(tokenStorage)
+        )[CardViewModel::class.java]
+        userViewModel = ViewModelProvider(
+            requireActivity(),
+            UserViewModelFactory(tokenStorage)
+        )[UserViewModel::class.java]
 
     }
 

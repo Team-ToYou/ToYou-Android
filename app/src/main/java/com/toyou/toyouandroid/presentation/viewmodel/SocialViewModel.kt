@@ -12,14 +12,15 @@ import com.toyou.toyouandroid.domain.social.repostitory.SocialRepository
 import com.toyou.toyouandroid.fcm.domain.FCMRepository
 import com.toyou.toyouandroid.fcm.dto.request.FCM
 import com.toyou.toyouandroid.model.FriendListModel
+import com.toyou.toyouandroid.utils.TokenStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
-class SocialViewModel : ViewModel() {
-    private val repository = SocialRepository()
-    private val fcmRepository = FCMRepository()
+class SocialViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
+    private val repository = SocialRepository(tokenStorage)
+    private val fcmRepository = FCMRepository(tokenStorage)
     private val _friends = MutableLiveData<List<FriendListModel>>()
     val friends: LiveData<List<FriendListModel>> get() = _friends
     private val _clickedPosition = MutableLiveData<Map<Int, Boolean>>()
@@ -51,6 +52,12 @@ class SocialViewModel : ViewModel() {
     val retrieveToken : LiveData<List<String>> get() = _retrieveToken
     private val _fcm = MutableLiveData<FCM>()
     val fcm : LiveData<FCM> get() = _fcm
+    private val _friendRequestCompleted = MutableLiveData<Boolean>()
+    val friendRequestCompleted: LiveData<Boolean> get() = _friendRequestCompleted
+    private val _friendRequestCanceled = MutableLiveData<Boolean>()
+    val friendRequestCanceled : LiveData<Boolean> get() = _friendRequestCanceled
+    private val _friendRequestRemove = MutableLiveData<Boolean>()
+    val friendRequestRemove : LiveData<Boolean> get() = _friendRequestRemove
 
 
     init {
@@ -80,7 +87,7 @@ class SocialViewModel : ViewModel() {
         try {
             val response = repository.getFriendsData()
             if (response.isSuccess) {
-                Log.d("API 호출 성공", response.message)
+                Log.d("API 호출 성공~", response.message)
                 val friendsDto = response.result
                 friendsDto?.let { mapToFriendModels(it) }
             } else {
@@ -197,7 +204,7 @@ class SocialViewModel : ViewModel() {
         else _questionDto.value?.anonymous = false
     }
 
-    fun sendQuestion() {
+    fun sendQuestion(myName: String) {
         viewModelScope.launch {
             _questionDto.value?.let { currentQuestionDto ->
                 repository.postQuestionData(currentQuestionDto)
@@ -209,7 +216,7 @@ class SocialViewModel : ViewModel() {
         retrieveTokenFromServer(questionDto.value!!.target)
         _retrieveToken.value?.let { tokens ->
             for (token in tokens) {
-                postFCM(questionDto.value!!.target, token, 3)
+                postFCM(myName, token, 3)
             }
             resetToken()
 
@@ -217,25 +224,48 @@ class SocialViewModel : ViewModel() {
         resetQuestionData()
     }
 
-    fun sendFriendRequest(name: String) {
+    fun sendFriendRequest(name: String, myName: String) {
         _friendRequest.value = RequestFriend(name = name)
         viewModelScope.launch {
-            _friendRequest.value?.let { name ->
-                repository.postRequest(name)
-            } ?: run {
-                Log.e("api 실패!", "널")
+            try {
+                _friendRequest.value?.let { name ->
+                    repository.postRequest(name)
+                } ?: run {
+                    Log.e("api 실패!", "널")
+                }
+                Log.d("api 성공!", "성공")
+
+                // 작업이 성공적으로 완료되었음을 표시
+                _friendRequestCompleted.postValue(true)
+            } catch (e: Exception) {
+                // 오류 처리
+                Log.e("api 실패!", e.message.toString())
+                _friendRequestCompleted.postValue(false)
             }
-            Log.d("api 성공!", "성공")
         }
+
         retrieveTokenFromServer(name)
         _retrieveToken.value?.let { tokens ->
             for (token in tokens) {
-                postFCM(name, token, 1)
+                postFCM(myName, token, 1)
             }
             resetToken()
-
         }
+    }
 
+    fun resetFriendRequest() {
+        _friendRequestCompleted.value = false
+    }
+    fun resetFriendRequestCanceled() {
+        _friendRequestCanceled.value = false
+    }
+    fun resetFriendRequestRemove() {
+        _friendRequestRemove.value = false
+    }
+
+    fun resetFriendState(){
+        Log.d("destroy", _isFriend.value.toString())
+        _isFriend.value = "no"
     }
 
     fun deleteFriend(name: String){
@@ -247,6 +277,7 @@ class SocialViewModel : ViewModel() {
                 Log.e("api 실패!", "널")
             }
             Log.d("api 성공!", "성공")
+            _friendRequestRemove.postValue(true)
         }
     }
 
@@ -267,7 +298,7 @@ class SocialViewModel : ViewModel() {
 
     }
 
-    fun patchApprove(name: String){
+    fun patchApprove(name: String, myName : String){
         _friendRequest.value = RequestFriend(name = name)
         viewModelScope.launch {
             _friendRequest.value?.let { name ->
@@ -276,11 +307,12 @@ class SocialViewModel : ViewModel() {
                 Log.e("api 실패!", "널")
             }
             Log.d("api 성공!", "성공")
+            _friendRequestCanceled.postValue(true)
         }
         retrieveTokenFromServer(name)
         _retrieveToken.value?.let { tokens ->
             for (token in tokens) {
-                postFCM(name, token, 1)
+                postFCM(myName, token, 2)
             }
             resetToken()
         }
@@ -314,6 +346,8 @@ class SocialViewModel : ViewModel() {
     private fun resetToken(){
         _retrieveToken.value = emptyList()
     }
+
+
 
 
 }
