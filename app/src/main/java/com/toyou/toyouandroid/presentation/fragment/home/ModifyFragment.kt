@@ -54,8 +54,6 @@ class ModifyFragment: Fragment() {
                 .commit()
         }
 
-
-
         return binding.root
 
     }

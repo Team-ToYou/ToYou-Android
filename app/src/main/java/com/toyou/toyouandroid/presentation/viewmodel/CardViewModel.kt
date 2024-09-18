@@ -253,12 +253,25 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
         existingCards.addAll(newChooseCards)
 
         _previewCards.value = existingCards.distinct()
-        Log.d("미리보기", _previewCards.value.toString())
+
+        _cards.value = _cards.value?.map {
+            it.copy(isButtonSelected = false)
+        }
+        _chooseCards.value = _chooseCards.value?.map {
+            it.copy(isButtonSelected = false)
+        }
+        _shortCards.value = _shortCards.value?.map {
+            it.copy(isButtonSelected = false)
+        }
+
+            Log.d("미리보기", _previewCards.value.toString())
     }
 
     fun clearAllData() {
         _previewCards.value = emptyList()
         _previewChoose.value = emptyList()
+        Log.d("이전", previewCards.value.toString())
+        Log.d("이전", _previewCards.value.toString())
     }
 
     fun clearAll(){
