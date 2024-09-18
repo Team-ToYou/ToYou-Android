@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.toyou.toyouandroid.R
@@ -77,13 +76,13 @@ class SignupAgreeFragment : Fragment() {
             }
         }
 
-        viewModel.imageStates.observe(viewLifecycleOwner, Observer { imageStates ->
+        viewModel.imageStates.observe(viewLifecycleOwner) { imageStates ->
             imageStates.forEachIndexed { index, state ->
                 val newImageResId = if (state) R.drawable.checkbox_checked else R.drawable.checkbox_uncheck
                 imageViews[index].setImageResource(newImageResId)
                 imageViews[index].tag = newImageResId
             }
-        })
+        }
 
         viewModel.isNextButtonEnabled.observe(viewLifecycleOwner) { isEnabled ->
             binding.signupagreeNextBtn.isEnabled = isEnabled
