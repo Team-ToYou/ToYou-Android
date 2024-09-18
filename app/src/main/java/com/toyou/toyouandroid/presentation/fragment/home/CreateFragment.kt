@@ -20,6 +20,10 @@ import com.toyou.toyouandroid.presentation.fragment.home.adapter.CardAdapter
 import com.toyou.toyouandroid.presentation.fragment.home.adapter.CardChooseAdapter
 import com.toyou.toyouandroid.presentation.fragment.home.adapter.CardShortAdapter
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.CardViewModelFactory
+import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
+import com.toyou.toyouandroid.utils.TokenStorage
 import timber.log.Timber
 
 class CreateFragment : Fragment(){
@@ -38,8 +42,11 @@ class CreateFragment : Fragment(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        cardViewModel = ViewModelProvider(requireActivity()).get(CardViewModel::class.java)
-
+        val tokenStorage = TokenStorage(requireContext())
+        cardViewModel = ViewModelProvider(
+            requireActivity(),
+            CardViewModelFactory(tokenStorage)
+        )[CardViewModel::class.java]
 
         //cardViewModel.loadCardData()
         cardViewModel.getAllData()
@@ -171,6 +178,11 @@ class CreateFragment : Fragment(){
             // 아이템 데코레이션 추가
             addItemDecoration(RVMarginItemDecoration(margin, true))
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

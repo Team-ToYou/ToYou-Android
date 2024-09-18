@@ -7,8 +7,9 @@ import com.toyou.toyouandroid.fcm.dto.request.FCM
 import com.toyou.toyouandroid.fcm.dto.request.Token
 import com.toyou.toyouandroid.fcm.service.FCMService
 import com.toyou.toyouandroid.network.RetrofitInstance
+import com.toyou.toyouandroid.utils.TokenStorage
 
-class FCMRepository {
+class FCMRepository(private val tokenStorage: TokenStorage) {
 
     private val client = RetrofitInstance.getInstance().create(FCMService::class.java)
 
@@ -16,7 +17,7 @@ class FCMRepository {
         token: Token,
     ) {
         try {
-            val response = client.postToken(1, token)
+            val response = client.postToken("Bearer ${tokenStorage.getAccessToken().toString()}", token)
             // 응답 처리
             if (response.isSuccess) {
                 Log.d("post성공!", response.message)
@@ -30,13 +31,13 @@ class FCMRepository {
         }
     }
 
-    suspend fun getToken(name : String) = client.getToken(1, name)
+    suspend fun getToken(name : String) = client.getToken("Bearer ${tokenStorage.getAccessToken().toString()}", name)
 
     suspend fun deleteToken(
         request: Token
     ){
         try {
-            val response = client.deleteToken(1, request)
+            val response = client.deleteToken("Bearer ${tokenStorage.getAccessToken().toString()}", request)
             // 응답 처리
             if (response.isSuccess) {
                 Log.d("토큰삭제 성공!", response.message)

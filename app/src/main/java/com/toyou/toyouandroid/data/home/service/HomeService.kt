@@ -12,7 +12,7 @@ interface HomeService {
 
     @GET("/diarycards/{cardId}")
     suspend fun getCardDetail(
-        @Header("userId") id : Int,
+        @Header("Authorization") id : String,
         @Path("cardId") card : Long,
     ) : BaseResponse<CardDetail>
 }

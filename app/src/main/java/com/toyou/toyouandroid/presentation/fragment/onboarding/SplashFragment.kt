@@ -18,7 +18,10 @@ import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.presentation.fragment.notice.network.NetworkModule
 import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthService
 import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthViewModelFactory
+import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.CardViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
 import com.toyou.toyouandroid.utils.TokenStorage
 import timber.log.Timber
 
@@ -27,8 +30,9 @@ class SplashFragment : Fragment() {
     private lateinit var navController: NavController
     private var _binding: FragmentSplashBinding? = null
     private lateinit var database: UserDatabase
-    private lateinit var userViewModel: UserViewModel
     private lateinit var loginViewModel: LoginViewModel
+    private lateinit var userViewModel: UserViewModel
+
 
     private val binding: FragmentSplashBinding
         get() = requireNotNull(_binding){"FragmentSplashBinding -> null"}
@@ -40,7 +44,6 @@ class SplashFragment : Fragment() {
     ): View {
 
         _binding = FragmentSplashBinding.inflate(inflater, container, false)
-        userViewModel = ViewModelProvider(requireActivity())[UserViewModel::class.java]
 
         val tokenStorage = TokenStorage(requireContext())
         val authService = NetworkModule.getClient().create(AuthService::class.java)
@@ -48,6 +51,11 @@ class SplashFragment : Fragment() {
             this,
             AuthViewModelFactory(authService, tokenStorage)
         )[LoginViewModel::class.java]
+        userViewModel = ViewModelProvider(
+            requireActivity(),
+            UserViewModelFactory(tokenStorage)
+        )[UserViewModel::class.java]
+
 
         return binding.root
     }
@@ -72,6 +80,11 @@ class SplashFragment : Fragment() {
         val refreshToken = TokenStorage(requireContext()).getRefreshToken()
         if (refreshToken != null) {
             loginViewModel.reissueJWT(refreshToken)
+            userViewModel.getHomeEntry()
+
+            userViewModel.cardId.observe(viewLifecycleOwner) { cardId ->
+                Log.d("get home", cardId.toString())
+            }
         } else {
             // 토큰이 없으면 로그인 화면으로 이동
             // 3초 후에 다음 화면으로 이동

@@ -19,6 +19,8 @@ import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.presentation.fragment.notice.network.NetworkModule
 import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthService
 import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthViewModelFactory
+import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
 import com.toyou.toyouandroid.utils.TokenStorage
 import timber.log.Timber
 
@@ -75,6 +77,7 @@ class LoginFragment : Fragment() {
                         Log.i(TAG, "로그인 성공 ${token.accessToken}")
                         loginViewModel.setOAuthAccessToken(token.accessToken)
                         loginViewModel.kakaoLogin(token.accessToken)
+
                     }
                 }
             }

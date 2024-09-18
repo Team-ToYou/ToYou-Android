@@ -19,36 +19,36 @@ interface SocialService {
 
     @POST("/questions")
     suspend fun postQuestion(
-        @Header("userId") id : Int,
+        @Header("Authorization") id : String,
         @Body request : QuestionDto
     ) : BaseResponse<ResponseFriend>
 
     @GET("/friends")
     suspend fun getFriends(
-        @Header("userId") id : Int
+        @Header("Authorization") id : String
     ) : BaseResponse<FriendsDto>
 
     @GET("/friends/search")
     suspend fun getSearchFriend(
-        @Header("userId") id: Int,
+        @Header("Authorization") id : String,
         @Query("keyword") name: String
     ): BaseResponse<SearchFriendDto>
 
     @POST("/friends/requests")
     suspend fun postFriendRequest(
-        @Header("userId") id: Int,
+        @Header("Authorization") id : String,
         @Body friend : RequestFriend
     ) : BaseResponse<ResponseFriend>
 
     @HTTP(method = "DELETE", path = "/friends", hasBody = true)
     suspend fun deleteFriend(
-        @Header("userId") id: Int,
+        @Header("Authorization") id : String,
         @Body friend : RequestFriend
     ) : BaseResponse<Unit>
 
     @PATCH("/friends/requests/approve")
     suspend fun patchApprove(
-        @Header("userId") id: Int,
+        @Header("Authorization") id : String,
         @Body friend : RequestFriend
     ) : BaseResponse<ResponseFriend>
 }

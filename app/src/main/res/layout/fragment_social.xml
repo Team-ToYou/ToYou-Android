@@ -44,8 +44,8 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
             android:background="@null"
-            android:hint="친구 아이디를 입력하세요."
-            android:textColorHint="@color/b01" />
+            android:hint="친구 닉네임을 입력하세요."
+            android:textColorHint="#FFA6A6A6" />
 
     </LinearLayout>
 

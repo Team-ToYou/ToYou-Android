@@ -16,12 +16,18 @@ import com.toyou.toyouandroid.fcm.domain.FCMRepository
 import com.toyou.toyouandroid.fcm.dto.request.Token
 import com.toyou.toyouandroid.model.PreviewCardModel
 import com.toyou.toyouandroid.presentation.base.MainActivity
+import com.toyou.toyouandroid.utils.TokenStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
-    val fcmRepository = FCMRepository()
+    // TokenStorage를 초기화
+    private val tokenStorage by lazy { TokenStorage(applicationContext) }
+
+    // FCMRepository 초기화 시 tokenStorage를 전달
+    private val fcmRepository by lazy { FCMRepository(tokenStorage) }
+
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)

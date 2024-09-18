@@ -70,14 +70,17 @@ class SocialRVAdapter(private val viewModel: SocialViewModel, private val onItem
             ment = friend.message
 
             val emotionIconRes = when (friend.emotion) {
+                1 -> R.drawable.home_stamp_option_happy
+                2 -> R.drawable.home_stamp_option_exciting
                 3 -> R.drawable.friend_normal
+                4 -> R.drawable.home_stamp_option_anxiety
+                5->R.drawable.home_stamp_option_upset
                 else -> R.drawable.social_char
             }
             friendEmotionIcon.setImageResource(emotionIconRes)
 
         }
     }
-
 
 }
 

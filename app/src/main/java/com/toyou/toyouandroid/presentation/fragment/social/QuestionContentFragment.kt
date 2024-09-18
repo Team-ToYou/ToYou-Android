@@ -22,6 +22,8 @@ import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.data.social.dto.request.QuestionDto
 import com.toyou.toyouandroid.databinding.FragmentQuestionContentBinding
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModelFactory
+import com.toyou.toyouandroid.utils.TokenStorage
 
 class QuestionContentFragment : Fragment() {
     private var _binding : FragmentQuestionContentBinding? = null
@@ -37,7 +39,11 @@ class QuestionContentFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        socialViewModel = ViewModelProvider(requireActivity()).get(SocialViewModel::class.java)
+        val tokenStorage = TokenStorage(requireContext())
+        socialViewModel = ViewModelProvider(
+            requireActivity(),
+            SocialViewModelFactory(tokenStorage)
+        )[SocialViewModel::class.java]
     }
 
     override fun onCreateView(
