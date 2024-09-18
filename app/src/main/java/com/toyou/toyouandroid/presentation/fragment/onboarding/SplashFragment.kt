@@ -52,7 +52,7 @@ class SplashFragment : Fragment() {
             AuthViewModelFactory(authService, tokenStorage)
         )[LoginViewModel::class.java]
         userViewModel = ViewModelProvider(
-            this,
+            requireActivity(),
             UserViewModelFactory(tokenStorage)
         )[UserViewModel::class.java]
 

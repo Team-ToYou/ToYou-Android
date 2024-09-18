@@ -33,11 +33,11 @@ class PreviewFragment : Fragment(){
         super.onCreate(savedInstanceState)
         val tokenStorage = TokenStorage(requireContext())
         cardViewModel = ViewModelProvider(
-            this,
+            requireActivity(),
             CardViewModelFactory(tokenStorage)
         )[CardViewModel::class.java]
         userViewModel = ViewModelProvider(
-            this,
+            requireActivity(),
             UserViewModelFactory(tokenStorage)
         )[UserViewModel::class.java]
 

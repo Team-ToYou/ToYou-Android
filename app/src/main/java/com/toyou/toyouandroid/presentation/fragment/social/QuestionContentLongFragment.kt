@@ -31,7 +31,7 @@ class QuestionContentLongFragment: Fragment() {
         super.onCreate(savedInstanceState)
         val tokenStorage = TokenStorage(requireContext())
         socialViewModel = ViewModelProvider(
-            this,
+            requireActivity(),
             SocialViewModelFactory(tokenStorage)
         )[SocialViewModel::class.java]
     }

@@ -41,7 +41,7 @@ class CreateWriteFragment: Fragment() {
         super.onCreate(savedInstanceState)
         val tokenStorage = TokenStorage(requireContext())
         cardViewModel = ViewModelProvider(
-            this,
+            requireActivity(),
             CardViewModelFactory(tokenStorage)
         )[CardViewModel::class.java]
 

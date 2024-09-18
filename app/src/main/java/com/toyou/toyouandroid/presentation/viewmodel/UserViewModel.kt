@@ -27,7 +27,7 @@ class UserViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
                 _emotion.value = response.result.emotion
                 _nickname.value = response.result.nickname
                 Log.d("get home", "API 성공, 카드 ID: ${response.result.id}")
-                Log.d("get home", "API 성공, 상태: ${response.result.nickname}")
+                Log.d("get home", "API 성공, 상태: ${response.result.emotion}")
 
             } else {
                 Log.e("get home", "home API 호출 실패: ${response.message}")
