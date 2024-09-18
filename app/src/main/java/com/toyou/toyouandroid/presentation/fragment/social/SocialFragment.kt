@@ -30,6 +30,7 @@ import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
 import com.toyou.toyouandroid.presentation.fragment.social.adapter.SocialRVAdapter
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
 import com.toyou.toyouandroid.utils.TokenStorage
 
 class SocialFragment : Fragment() {
@@ -42,6 +43,7 @@ class SocialFragment : Fragment() {
     private lateinit var socialAdapter: SocialRVAdapter
     private lateinit var socialViewModel : SocialViewModel
     private lateinit var addFriendLinearLayout: LinearLayout
+    private lateinit var userViewModel: UserViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +53,10 @@ class SocialFragment : Fragment() {
             requireActivity(),
             SocialViewModelFactory(tokenStorage)
         )[SocialViewModel::class.java]
+        userViewModel = ViewModelProvider(
+            requireActivity(),
+            UserViewModelFactory(tokenStorage)
+        )[UserViewModel::class.java]
 
         socialViewModel.getFriendsData()
 
@@ -191,17 +197,21 @@ class SocialFragment : Fragment() {
             }
         }
 
-        stateBtn.setOnClickListener {
-            if (isFriend == "NOT_FRIEND"){
-                socialViewModel.sendFriendRequest(name)
+        userViewModel.nickname.observe(viewLifecycleOwner, Observer { myName ->
+            stateBtn.setOnClickListener {
+                if (isFriend == "NOT_FRIEND"){
+                    socialViewModel.sendFriendRequest(name, myName)
+                }
+                else if (isFriend == "REQUEST_RECEIVED"){
+                    socialViewModel.patchApprove(name, myName)
+                }
+                else if (isFriend == "REQUEST_SENT"){
+                    socialViewModel.deleteFriend(name)
+                }
             }
-            else if (isFriend == "REQUEST_RECEIVED"){
-                socialViewModel.patchApprove(name)
-            }
-            else if (isFriend == "REQUEST_SENT"){
-                socialViewModel.deleteFriend(name)
-            }
-        }
+        })
+
+
 
         addFriendLinearLayout.addView(addFriendView)
 

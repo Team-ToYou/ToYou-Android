@@ -202,7 +202,7 @@ class SocialViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
         else _questionDto.value?.anonymous = false
     }
 
-    fun sendQuestion() {
+    fun sendQuestion(myName: String) {
         viewModelScope.launch {
             _questionDto.value?.let { currentQuestionDto ->
                 repository.postQuestionData(currentQuestionDto)
@@ -214,7 +214,7 @@ class SocialViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
         retrieveTokenFromServer(questionDto.value!!.target)
         _retrieveToken.value?.let { tokens ->
             for (token in tokens) {
-                postFCM(questionDto.value!!.target, token, 3)
+                postFCM(myName, token, 3)
             }
             resetToken()
 
@@ -222,7 +222,7 @@ class SocialViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
         resetQuestionData()
     }
 
-    fun sendFriendRequest(name: String) {
+    fun sendFriendRequest(name: String, myName: String) {
         _friendRequest.value = RequestFriend(name = name)
         viewModelScope.launch {
             try {
@@ -245,7 +245,7 @@ class SocialViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
         retrieveTokenFromServer(name)
         _retrieveToken.value?.let { tokens ->
             for (token in tokens) {
-                postFCM(name, token, 1)
+                postFCM(myName, token, 1)
             }
             resetToken()
         }
@@ -288,7 +288,7 @@ class SocialViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
 
     }
 
-    fun patchApprove(name: String){
+    fun patchApprove(name: String, myName : String){
         _friendRequest.value = RequestFriend(name = name)
         viewModelScope.launch {
             _friendRequest.value?.let { name ->
@@ -302,7 +302,7 @@ class SocialViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
         retrieveTokenFromServer(name)
         _retrieveToken.value?.let { tokens ->
             for (token in tokens) {
-                postFCM(name, token, 1)
+                postFCM(myName, token, 2)
             }
             resetToken()
         }
