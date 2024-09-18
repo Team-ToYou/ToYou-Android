@@ -105,6 +105,15 @@ class SocialFragment : Fragment() {
             }
         }
 
+        socialViewModel.friendRequestCompleted.observe(viewLifecycleOwner, Observer { isCompleted ->
+            if (isCompleted) {
+                // 친구 요청이 완료되었을 때 addFriendView 제거
+                if (addFriendLinearLayout.childCount > 0) {
+                    addFriendLinearLayout.removeViewAt(addFriendLinearLayout.childCount - 1)
+                }
+            }
+        })
+
         val dialog = CustomDialogFragment()
         val btn = arrayOf("취소", "확인")
         dialog.arguments= bundleOf(

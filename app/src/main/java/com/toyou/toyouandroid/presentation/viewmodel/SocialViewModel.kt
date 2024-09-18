@@ -52,6 +52,8 @@ class SocialViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
     val retrieveToken : LiveData<List<String>> get() = _retrieveToken
     private val _fcm = MutableLiveData<FCM>()
     val fcm : LiveData<FCM> get() = _fcm
+    private val _friendRequestCompleted = MutableLiveData<Boolean>()
+    val friendRequestCompleted: LiveData<Boolean> get() = _friendRequestCompleted
 
 
     init {
@@ -221,22 +223,30 @@ class SocialViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
     fun sendFriendRequest(name: String) {
         _friendRequest.value = RequestFriend(name = name)
         viewModelScope.launch {
-            _friendRequest.value?.let { name ->
-                repository.postRequest(name)
-            } ?: run {
-                Log.e("api 실패!", "널")
+            try {
+                _friendRequest.value?.let { name ->
+                    repository.postRequest(name)
+                } ?: run {
+                    Log.e("api 실패!", "널")
+                }
+                Log.d("api 성공!", "성공")
+
+                // 작업이 성공적으로 완료되었음을 표시
+                _friendRequestCompleted.postValue(true)
+            } catch (e: Exception) {
+                // 오류 처리
+                Log.e("api 실패!", e.message.toString())
+                _friendRequestCompleted.postValue(false)
             }
-            Log.d("api 성공!", "성공")
         }
+
         retrieveTokenFromServer(name)
         _retrieveToken.value?.let { tokens ->
             for (token in tokens) {
                 postFCM(name, token, 1)
             }
             resetToken()
-
         }
-
     }
 
     fun deleteFriend(name: String){
