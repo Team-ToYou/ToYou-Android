@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -111,6 +112,21 @@ class SocialFragment : Fragment() {
                 if (addFriendLinearLayout.childCount > 0) {
                     addFriendLinearLayout.removeViewAt(addFriendLinearLayout.childCount - 1)
                 }
+                socialViewModel.resetFriendRequest()
+                Toast.makeText(requireContext(), "친구 요청이 성공적으로 전송되었습니다.", Toast.LENGTH_SHORT).show()
+
+            }
+        })
+
+        socialViewModel.friendRequestCanceled.observe(viewLifecycleOwner, Observer { isCanceled ->
+            if (isCanceled) {
+                // 친구 요청이 완료되었을 때 addFriendView 제거
+                if (addFriendLinearLayout.childCount > 0) {
+                    addFriendLinearLayout.removeViewAt(addFriendLinearLayout.childCount - 1)
+                }
+                socialViewModel.resetFriendRequestCanceled()
+                Toast.makeText(requireContext(), "친구 요청이 성공적으로 승인되었습니다.", Toast.LENGTH_SHORT).show()
+
             }
         })
 
