@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.kakao.sdk.user.UserApiClient
@@ -29,7 +29,13 @@ class LoginFragment : Fragment() {
     private val binding: FragmentLoginBinding
         get() = requireNotNull(_binding){"FragmentLoginBinding -> null"}
 
-    private lateinit var loginViewModel: LoginViewModel
+    private lateinit var tokenStorage: TokenStorage
+    private val loginViewModel: LoginViewModel by activityViewModels {
+        AuthViewModelFactory(
+            NetworkModule.getClient().create(AuthService::class.java),
+            tokenStorage
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,12 +45,7 @@ class LoginFragment : Fragment() {
 
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
 
-        val tokenStorage = TokenStorage(requireContext())
-        val authService = NetworkModule.getClient().create(AuthService::class.java)
-        loginViewModel = ViewModelProvider(
-            this,
-            AuthViewModelFactory(authService, tokenStorage)
-        )[LoginViewModel::class.java]
+        tokenStorage = TokenStorage(requireContext())
 
         return binding.root
     }
@@ -72,11 +73,34 @@ class LoginFragment : Fragment() {
                         Timber.tag(TAG).e(error, "로그인 실패")
                     } else if (token != null) {
                         Log.i(TAG, "로그인 성공 ${token.accessToken}")
+                        loginViewModel.setOAuthAccessToken(token.accessToken)
                         loginViewModel.kakaoLogin(token.accessToken)
                     }
                 }
             }
-            navController.navigate(R.id.action_navigation_login_to_signup_agree_fragment)
+        }
+
+        loginViewModel.loginSuccess.observe(viewLifecycleOwner) { isSuccess ->
+            if (isSuccess) {
+                checkIfTokenExists()  // 토큰이 저장되었는지 확인 후 이동
+            } else {
+                navController.navigate(R.id.action_navigation_login_to_signup_agree_fragment)
+            }
+        }
+    }
+
+    private fun checkIfTokenExists() {
+        tokenStorage.let { storage ->
+            val accessToken = storage.getAccessToken()
+            if (accessToken != "") {
+                // 액세스 토큰이 있으면 홈 화면으로 이동
+                navController.navigate(R.id.action_navigation_login_to_home_fragment)
+                Timber.d("User Info Existed")
+            } else {
+                // 액세스 토큰이 없으면 회원가입 동의 화면으로 이동
+                navController.navigate(R.id.action_navigation_login_to_signup_agree_fragment)
+                Timber.d("User Info Not Existed")
+            }
         }
     }
 
