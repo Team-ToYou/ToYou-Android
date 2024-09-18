@@ -72,6 +72,12 @@ class HomeFragment : Fragment() {
             UserViewModelFactory(tokenStorage)
         )[UserViewModel::class.java]
 
+        userViewModel.getHomeEntry()
+
+        userViewModel.cardId.observe(viewLifecycleOwner) { cardId ->
+            Log.d("get home", cardId.toString())
+        }
+
         return binding.root
     }
 
@@ -171,8 +177,12 @@ class HomeFragment : Fragment() {
         }
 
         binding.homeEmotionIv.setOnClickListener {
+
             navController.navigate(R.id.action_navigation_home_to_home_option_fragment)
         }
+
+
+
 
         viewModel.homeEmotion.observe(viewLifecycleOwner) { emotion ->
             binding.homeEmotionIv.setImageResource(emotion)
