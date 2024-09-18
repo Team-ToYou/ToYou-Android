@@ -17,9 +17,9 @@ class NoticeViewModel(private val repository: NoticeRepository) : ViewModel() {
     private val _noticeItems = MutableLiveData<List<NoticeItem>?>()
     val noticeItems: MutableLiveData<List<NoticeItem>?> get() = _noticeItems
 
-    fun fetchNotices(userId: Int) {
+    fun fetchNotices() {
         viewModelScope.launch {
-            val response = repository.getNotices(userId)
+            val response = repository.getNotices()
             response.enqueue(object : Callback<AlarmResponse> {
                 override fun onResponse(
                     call: Call<AlarmResponse>,
@@ -59,9 +59,9 @@ class NoticeViewModel(private val repository: NoticeRepository) : ViewModel() {
         }
     }
 
-    fun deleteNotice(userId: Int, alarmId: Int, position: Int) {
+    fun deleteNotice(alarmId: Int, position: Int) {
         viewModelScope.launch {
-            val response = repository.deleteNotice(alarmId, userId)
+            val response = repository.deleteNotice(alarmId)
             response.enqueue(object : Callback<AlarmDeleteResponse> {
                 override fun onResponse(
                     call: Call<AlarmDeleteResponse>,
