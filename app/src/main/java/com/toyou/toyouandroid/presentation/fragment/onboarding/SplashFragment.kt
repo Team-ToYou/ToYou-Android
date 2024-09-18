@@ -31,6 +31,8 @@ class SplashFragment : Fragment() {
     private var _binding: FragmentSplashBinding? = null
     private lateinit var database: UserDatabase
     private lateinit var loginViewModel: LoginViewModel
+    private lateinit var userViewModel: UserViewModel
+
 
     private val binding: FragmentSplashBinding
         get() = requireNotNull(_binding){"FragmentSplashBinding -> null"}
@@ -49,6 +51,10 @@ class SplashFragment : Fragment() {
             this,
             AuthViewModelFactory(authService, tokenStorage)
         )[LoginViewModel::class.java]
+        userViewModel = ViewModelProvider(
+            this,
+            UserViewModelFactory(tokenStorage)
+        )[UserViewModel::class.java]
 
 
         return binding.root
@@ -69,6 +75,11 @@ class SplashFragment : Fragment() {
         val refreshToken = TokenStorage(requireContext()).getRefreshToken()
         if (refreshToken != null) {
             loginViewModel.reissueJWT(refreshToken)
+            userViewModel.getHomeEntry()
+
+            userViewModel.cardId.observe(viewLifecycleOwner) { cardId ->
+                Log.d("get home", cardId.toString())
+            }
         } else {
             // 토큰이 없으면 로그인 화면으로 이동
             // 3초 후에 다음 화면으로 이동

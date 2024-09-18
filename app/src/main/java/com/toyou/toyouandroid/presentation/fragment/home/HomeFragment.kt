@@ -24,8 +24,11 @@ import com.toyou.toyouandroid.model.HomeBottomSheetItem
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.presentation.fragment.home.adapter.HomeBottomSheetAdapter
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.CardViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
+import com.toyou.toyouandroid.utils.TokenStorage
 
 class HomeFragment : Fragment() {
 
@@ -59,8 +62,15 @@ class HomeFragment : Fragment() {
             }
         })
 
-        userViewModel = ViewModelProvider(requireActivity()).get(UserViewModel::class.java)
-        cardViewModel = ViewModelProvider(requireActivity()).get(CardViewModel::class.java)
+        val tokenStorage = TokenStorage(requireContext())
+        cardViewModel = ViewModelProvider(
+            this,
+            CardViewModelFactory(tokenStorage)
+        )[CardViewModel::class.java]
+        userViewModel = ViewModelProvider(
+            this,
+            UserViewModelFactory(tokenStorage)
+        )[UserViewModel::class.java]
 
         return binding.root
     }

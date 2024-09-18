@@ -50,7 +50,7 @@ class LoginFragment : Fragment() {
         )[LoginViewModel::class.java]
         userViewModel = ViewModelProvider(
             this,
-            AuthViewModelFactory(authService, tokenStorage)
+            UserViewModelFactory(tokenStorage)
         )[UserViewModel::class.java]
 
         return binding.root
@@ -80,11 +80,11 @@ class LoginFragment : Fragment() {
                     } else if (token != null) {
                         Log.i(TAG, "로그인 성공 ${token.accessToken}")
                         loginViewModel.kakaoLogin(token.accessToken)
-                        /*userViewModel.getHomeEntry()
+                        userViewModel.getHomeEntry()
 
                         userViewModel.cardId.observe(viewLifecycleOwner) { cardId ->
                             Log.d("get home", cardId.toString())
-                        }*/
+                        }
 
                     }
                 }
