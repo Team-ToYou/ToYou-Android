@@ -103,13 +103,18 @@ class SocialFragment : Fragment() {
             var searchName = binding.searchEt.text.toString()
             socialViewModel.getSearchData(searchName)
             addFriendLinearLayout.removeAllViews()
-            socialViewModel.isFriend.value?.let { isFriend ->
+            socialViewModel.isFriend.observe(viewLifecycleOwner, Observer { isFriend ->
+                if (isFriend == "400" || isFriend =="401")
+                    addNotExist(isFriend)
+                else
+                    addFriendView(isFriend, searchName) })
+            /*socialViewModel.isFriend.value?.let { isFriend ->
                 if (isFriend == "400" || isFriend =="401")
                     addNotExist(isFriend)
                 else
                     addFriendView(isFriend, searchName)
             } ?: run {
-            }
+            }*/
         }
 
         socialViewModel.friendRequestCompleted.observe(viewLifecycleOwner, Observer { isCompleted ->
@@ -132,6 +137,18 @@ class SocialFragment : Fragment() {
                 }
                 socialViewModel.resetFriendRequestCanceled()
                 Toast.makeText(requireContext(), "친구 요청이 성공적으로 승인되었습니다.", Toast.LENGTH_SHORT).show()
+
+            }
+        })
+
+        socialViewModel.friendRequestRemove.observe(viewLifecycleOwner, Observer { isCanceled ->
+            if (isCanceled) {
+                // 친구 요청이 완료되었을 때 addFriendView 제거
+                if (addFriendLinearLayout.childCount > 0) {
+                    addFriendLinearLayout.removeViewAt(addFriendLinearLayout.childCount - 1)
+                }
+                socialViewModel.resetFriendRequestRemove()
+                Toast.makeText(requireContext(), "친구 요청이 성공적으로 취소되었습니다.", Toast.LENGTH_SHORT).show()
 
             }
         })
@@ -250,6 +267,7 @@ class SocialFragment : Fragment() {
 
             override fun onButton2Clicked() {
                 socialViewModel.deleteFriend(friendName)
+                socialViewModel.resetFriendRequestRemove()
             }
         })
         dialog.show(parentFragmentManager, "CustomDialogFragment")

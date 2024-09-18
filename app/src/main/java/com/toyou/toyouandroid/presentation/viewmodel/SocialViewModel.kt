@@ -56,6 +56,8 @@ class SocialViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
     val friendRequestCompleted: LiveData<Boolean> get() = _friendRequestCompleted
     private val _friendRequestCanceled = MutableLiveData<Boolean>()
     val friendRequestCanceled : LiveData<Boolean> get() = _friendRequestCanceled
+    private val _friendRequestRemove = MutableLiveData<Boolean>()
+    val friendRequestRemove : LiveData<Boolean> get() = _friendRequestRemove
 
 
     init {
@@ -257,6 +259,13 @@ class SocialViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
     fun resetFriendRequestCanceled() {
         _friendRequestCanceled.value = false
     }
+    fun resetFriendRequestRemove() {
+        _friendRequestRemove.value = false
+    }
+
+    fun resetFriendState(){
+        _isFriend.value = ""
+    }
 
     fun deleteFriend(name: String){
         _friendRequest.value = RequestFriend(name = name)
@@ -267,7 +276,7 @@ class SocialViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
                 Log.e("api 실패!", "널")
             }
             Log.d("api 성공!", "성공")
-
+            _friendRequestRemove.postValue(true)
         }
     }
 
@@ -336,6 +345,8 @@ class SocialViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
     private fun resetToken(){
         _retrieveToken.value = emptyList()
     }
+
+
 
 
 }
