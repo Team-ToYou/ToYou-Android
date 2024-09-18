@@ -1,6 +1,7 @@
 package com.toyou.toyouandroid.presentation.fragment.social
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,11 +58,11 @@ class SendFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
 
-        binding.nextBtn.setOnClickListener {
-            userViewModel.nickname.observe(viewLifecycleOwner, Observer { name ->
-                socialViewModel.sendQuestion(name)
 
-            })
+        binding.nextBtn.setOnClickListener {
+            val myName = userViewModel.nickname.value ?: ""
+            socialViewModel.sendQuestion(myName)
+
             navController.navigate(R.id.action_sendFragment_to_sendFinalFragment)
         }
 

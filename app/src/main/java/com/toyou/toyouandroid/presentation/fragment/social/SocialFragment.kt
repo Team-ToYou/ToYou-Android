@@ -100,24 +100,6 @@ class SocialFragment : Fragment() {
         })
 
 
-        /*binding.searchBtn.setOnClickListener {
-            var searchName = binding.searchEt.text.toString()
-            socialViewModel.getSearchData(searchName)
-            addFriendLinearLayout.removeAllViews()
-            socialViewModel.isFriend.observe(viewLifecycleOwner, Observer { isFriend ->
-                if (isFriend == "400" || isFriend =="401")
-                    addNotExist(isFriend)
-                else
-                    addFriendView(isFriend, searchName) })
-            /*socialViewModel.isFriend.value?.let { isFriend ->
-                if (isFriend == "400" || isFriend =="401")
-                    addNotExist(isFriend)
-                else
-                    addFriendView(isFriend, searchName)
-            } ?: run {
-            }*/
-        }*/
-
         binding.searchBtn.setOnClickListener {
             val searchName = binding.searchEt.text.toString()
             addFriendLinearLayout.removeAllViews()  // 뷰를 초기화
@@ -218,6 +200,7 @@ class SocialFragment : Fragment() {
         val friendName = addFriendView.findViewById<TextView>(R.id.friendName_tv)
         val stateBtn = addFriendView.findViewById<Button>(R.id.state_btn)
 
+
         friendName.apply {
             friendName?.setText(name)
         }
@@ -241,19 +224,17 @@ class SocialFragment : Fragment() {
             }
         }
 
-        userViewModel.nickname.observe(viewLifecycleOwner, Observer { myName ->
-            stateBtn.setOnClickListener {
-                if (isFriend == "NOT_FRIEND"){
-                    socialViewModel.sendFriendRequest(name, myName)
-                }
-                else if (isFriend == "REQUEST_RECEIVED"){
-                    socialViewModel.patchApprove(name, myName)
-                }
-                else if (isFriend == "REQUEST_SENT"){
-                    socialViewModel.deleteFriend(name)
-                }
+        stateBtn.setOnClickListener {
+            val myName = userViewModel.nickname.value ?: ""
+
+            if (isFriend == "NOT_FRIEND") {
+                socialViewModel.sendFriendRequest(name, myName)
+            } else if (isFriend == "REQUEST_RECEIVED") {
+                socialViewModel.patchApprove(name, myName)
+            } else if (isFriend == "REQUEST_SENT") {
+                socialViewModel.deleteFriend(name)
             }
-        })
+        }
 
         addFriendLinearLayout.addView(addFriendView)
 
