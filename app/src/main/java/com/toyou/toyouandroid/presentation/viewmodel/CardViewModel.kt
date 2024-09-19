@@ -39,9 +39,6 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
     val chooseCards : LiveData<List<ChooseModel>> get() = _chooseCards
     private val _previewChoose = MutableLiveData<List<PreviewChooseModel>>()
     val previewChoose : LiveData<List<PreviewChooseModel>> get() = _previewChoose
-    private val _isAnyEditTextFilled = MutableLiveData(false)
-    val isAnyEditTextFilled: LiveData<Boolean> get() = _isAnyEditTextFilled
-
     private val repository = CreateRepository(tokenStorage)
     private val homeRepository = HomeRepository(tokenStorage)
 
@@ -55,9 +52,11 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
     val isAllAnswersFilled: LiveData<Boolean> get() = _isAllAnswersFilled
 
     private var inputStatus: MutableList<Boolean> = mutableListOf()
+    private var inputLongStatus : MutableList<Boolean> = mutableListOf()
 
-    fun setCardCount(count: Int) {
-        inputStatus = MutableList(count) { false } // 카드 개수만큼 false로 초기화
+    fun setCardCount(count: Int, count2 : Int) {
+        inputStatus = MutableList(count){false} // 카드 개수만큼 false로 초기화
+        inputLongStatus = MutableList(count2){false} // 카드 개수만큼 false로 초기화
         //checkIfAllAnswersFilled()
     }
 
@@ -66,8 +65,13 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
         checkIfAllAnswersFilled() // 입력 상태가 변경될 때마다 확인
     }
 
+    fun updateCardInputStatusLong(index: Int, isFilled: Boolean) {
+        inputLongStatus[index] = isFilled
+        checkIfAllAnswersFilled() // 입력 상태가 변경될 때마다 확인
+    }
+
     private fun checkIfAllAnswersFilled() {
-        _isAllAnswersFilled.value = inputStatus.count { it } == inputStatus.size
+        _isAllAnswersFilled.value = inputStatus.count { it } == inputStatus.size && inputLongStatus.count { it } == inputLongStatus.size
     }
 
 
@@ -248,17 +252,32 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
     fun updateAllPreviews() {
         val existingCards = _previewCards.value?.toMutableList() ?: mutableListOf()
 
-        val newCards = _cards.value?.filter { it.isButtonSelected }?.map {
-            PreviewCardModel(answer = "", question = it.message, type = it.questionType, fromWho = it.fromWho, options = null, id = it.id)
-        } ?: emptyList()
+        val selectedNewCards = _cards.value?.filter { it.isButtonSelected } ?: emptyList()
+        val selectedNewShortCards = _shortCards.value?.filter { it.isButtonSelected } ?: emptyList()
+        val selectedNewChooseCards = _chooseCards.value?.filter { it.isButtonSelected } ?: emptyList()
 
-        val newShortCards = _shortCards.value?.filter { it.isButtonSelected }?.map {
+        // 선택된 카드를 PreviewCardModel로 변환
+        val newCards = selectedNewCards.map {
             PreviewCardModel(answer = "", question = it.message, type = it.questionType, fromWho = it.fromWho, options = null, id = it.id)
-        } ?: emptyList()
+        }
 
-        val newChooseCards =_chooseCards.value?.filter { it.isButtonSelected }?.map {
+        val newShortCards = selectedNewShortCards.map {
+            PreviewCardModel(answer = "", question = it.message, type = it.questionType, fromWho = it.fromWho, options = null, id = it.id)
+        }
+
+        val newChooseCards = selectedNewChooseCards.map {
             PreviewCardModel(question = it.message, fromWho = it.fromWho, options = it.options, type = it.type, answer = "", id = it.id)
-        } ?: emptyList()
+        }
+
+        // 선택된 카드의 개수 계산
+        val newCardsCount = selectedNewCards.size
+        val newShortCardsCount = selectedNewShortCards.size
+        val newChooseCardsCount = selectedNewChooseCards.size
+
+        Log.d("카드 선택 개수", "New Cards: $newCardsCount, Short Cards: $newShortCardsCount, Choose Cards: $newChooseCardsCount")
+
+
+        setCardCount(newShortCardsCount, newCardsCount)
 
         existingCards.addAll(newCards)
         existingCards.addAll(newShortCards)
@@ -266,7 +285,6 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
 
         _previewCards.value = existingCards.distinct()
 
-        setCardCount(previewCards.value!!.size)
 
         _cards.value = _cards.value?.map {
             it.copy(isButtonSelected = false)
