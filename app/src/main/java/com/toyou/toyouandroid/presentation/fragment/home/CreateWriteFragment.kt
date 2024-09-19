@@ -85,9 +85,10 @@ class CreateWriteFragment: Fragment() {
             navController.navigate(R.id.action_createWriteFragment_to_previewFragment)
         }
 
-        cardViewModel.isAnyEditTextFilled.observe(viewLifecycleOwner, Observer { isFilled ->
-            //binding.nextBtn.isEnabled = isFilled
+        cardViewModel.isAllAnswersFilled.observe(viewLifecycleOwner, Observer { isFilled ->
+            binding.nextBtn.isEnabled = isFilled
         })
+
     }
 
     private fun setupRecyclerView(recyclerView: RecyclerView, adapter: RecyclerView.Adapter<*>) {

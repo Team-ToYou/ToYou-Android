@@ -16,6 +16,7 @@
         android:padding="10dp"
         android:textColor="@color/black"
         android:textSize="12sp"
+        android:maxLength="30"
         android:background="@android:color/transparent" />
 
     <ImageView

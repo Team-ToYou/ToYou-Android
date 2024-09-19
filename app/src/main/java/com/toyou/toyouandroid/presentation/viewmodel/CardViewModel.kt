@@ -51,6 +51,25 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
     val answer = MutableLiveData<String>()
     private val _cardId = MutableLiveData<Int>().apply { value = 0 }
     val cardId: LiveData<Int> get() = _cardId
+    private val _isAllAnswersFilled = MutableLiveData(false)
+    val isAllAnswersFilled: LiveData<Boolean> get() = _isAllAnswersFilled
+
+    private var inputStatus: MutableList<Boolean> = mutableListOf()
+
+    fun setCardCount(count: Int) {
+        inputStatus = MutableList(count) { false } // 카드 개수만큼 false로 초기화
+        //checkIfAllAnswersFilled()
+    }
+
+    fun updateCardInputStatus(index: Int, isFilled: Boolean) {
+        inputStatus[index] = isFilled
+        checkIfAllAnswersFilled() // 입력 상태가 변경될 때마다 확인
+    }
+
+    private fun checkIfAllAnswersFilled() {
+        _isAllAnswersFilled.value = inputStatus.count { it } == inputStatus.size
+    }
+
 
     fun sendData(previewCardModels: List<PreviewCardModel>, exposure: Boolean,) {
         viewModelScope.launch {
@@ -189,13 +208,6 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
         return answer.length
     }
 
-
-
-    fun setEditTextFilled(isFilled: Boolean) {
-        _isAnyEditTextFilled.value = isFilled
-    }
-
-
     fun isLockSelected(lock : ImageView){
         lock.isSelected = !lock.isSelected
         _exposure.value = lock.isSelected
@@ -254,6 +266,8 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
 
         _previewCards.value = existingCards.distinct()
 
+        setCardCount(previewCards.value!!.size)
+
         _cards.value = _cards.value?.map {
             it.copy(isButtonSelected = false)
         }
@@ -264,14 +278,12 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
             it.copy(isButtonSelected = false)
         }
 
-            Log.d("미리보기", _previewCards.value.toString())
+            Log.d("미리보기", previewCards.value.toString())
     }
 
     fun clearAllData() {
         _previewCards.value = emptyList()
         _previewChoose.value = emptyList()
-        Log.d("이전", previewCards.value.toString())
-        Log.d("이전", _previewCards.value.toString())
     }
 
     fun clearAll(){

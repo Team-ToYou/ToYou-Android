@@ -56,7 +56,6 @@ class WriteCardAdapter(private val cardViewModel: CardViewModel) : RecyclerView.
                 override fun afterTextChanged(s: Editable?) {}
             })
 
-
             binding.executePendingBindings()
         }
     }
