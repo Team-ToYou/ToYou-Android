@@ -3,7 +3,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.toyou.toyouandroid.presentation.fragment.onboarding.SignupNicknameViewModel" />
+            type="com.toyou.toyouandroid.presentation.fragment.mypage.ProfileViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

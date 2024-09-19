@@ -9,7 +9,6 @@ import com.toyou.toyouandroid.databinding.ItemNoticeCardCheckBinding
 import com.toyou.toyouandroid.databinding.ItemNoticeFriendRequestAcceptedBinding
 import com.toyou.toyouandroid.databinding.ItemNoticeFriendRequestBinding
 import com.toyou.toyouandroid.model.NoticeItem
-import com.toyou.toyouandroid.presentation.fragment.mypage.MypageDialogViewModel
 
 class NoticeAdapter(
     private val items: MutableList<NoticeItem>,
@@ -79,7 +78,7 @@ class NoticeAdapter(
             binding.noticeCardCheckDelete.setOnClickListener {
 //                removeItem(this.layoutPosition)
                 // 삭제 API 호출
-                viewModel.deleteNotice(userId = 1, item.alarmId, this.layoutPosition)
+                viewModel.deleteNotice(item.alarmId, this.layoutPosition)
             }
 
             binding.noticeFriendRequestBtn.setOnClickListener {
@@ -96,7 +95,7 @@ class NoticeAdapter(
             binding.noticeCardCheckDelete.setOnClickListener {
 //                removeItem(this.layoutPosition)
                 // 삭제 API 호출
-                viewModel.deleteNotice(userId = 1, item.alarmId, this.layoutPosition)
+                viewModel.deleteNotice(item.alarmId, this.layoutPosition)
             }
 
             val layoutParams = binding.root.layoutParams
@@ -113,7 +112,7 @@ class NoticeAdapter(
             binding.noticeCardCheckDelete.setOnClickListener {
 //                removeItem(this.layoutPosition)
                 // 삭제 API 호출
-                viewModel.deleteNotice(userId = 1, item.alarmId, this.layoutPosition)
+                viewModel.deleteNotice(item.alarmId, this.layoutPosition)
             }
             binding.executePendingBindings()
         }

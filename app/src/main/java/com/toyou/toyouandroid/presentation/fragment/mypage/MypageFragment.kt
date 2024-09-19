@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.kakao.sdk.user.UserApiClient
@@ -36,8 +35,14 @@ class MypageFragment : Fragment() {
     private val mypageDialogViewModel: MypageDialogViewModel by activityViewModels()
     private lateinit var viewModelManager: ViewModelManager
     private var mypageDialog: MypageDialog? = null
-    private lateinit var mypageViewModel: MypageViewModel
+    private lateinit var tokenStorage: TokenStorage
 
+    private val mypageViewModel: MypageViewModel by activityViewModels {
+        AuthViewModelFactory(
+            AuthNetworkModule.getClient().create(AuthService::class.java),
+            tokenStorage
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,12 +52,7 @@ class MypageFragment : Fragment() {
 
         _binding = FragmentMypageBinding.inflate(inflater, container, false)
 
-        val tokenStorage = TokenStorage(requireContext())
-        val authService = AuthNetworkModule.getClient().create(AuthService::class.java)
-        mypageViewModel = ViewModelProvider(
-            this,
-            AuthViewModelFactory(authService, tokenStorage)
-        )[MypageViewModel::class.java]
+        tokenStorage = TokenStorage(requireContext())
 
         binding.viewModel = mypageViewModel
         binding.lifecycleOwner = this
@@ -67,7 +67,7 @@ class MypageFragment : Fragment() {
         (requireActivity() as MainActivity).hideBottomNavigation(false)
 
         viewModelManager = ViewModelManager(nicknameViewModel, homeViewModel)
-        mypageViewModel.updateMypage(1)
+        mypageViewModel.updateMypage()
 
         binding.mypageProfileBtn.setOnClickListener {
             navController.navigate(R.id.action_navigation_mypage_to_profile_fragment)
@@ -149,6 +149,7 @@ class MypageFragment : Fragment() {
             else {
                 Timber.tag(TAG).i("연결 끊기 성공. SDK에서 토큰 삭제 됨")
                 mypageViewModel.kakaoSignOut()
+                tokenStorage.clearTokens()
             }
         }
 
@@ -167,6 +168,7 @@ class MypageFragment : Fragment() {
             else {
                 Timber.tag(TAG).i("로그아웃 성공. SDK에서 토큰 삭제됨")
                 mypageViewModel.kakaoLogout()
+                tokenStorage.clearTokens()
             }
         }
         viewModelManager.resetAllViewModels()

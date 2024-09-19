@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.toyou.toyouandroid.network.AuthNetworkModule
+import com.toyou.toyouandroid.presentation.fragment.onboarding.data.dto.request.SignUpRequest
 import com.toyou.toyouandroid.presentation.fragment.onboarding.data.dto.response.SignUpResponse
 import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthService
 import com.toyou.toyouandroid.utils.TokenStorage
@@ -16,11 +17,62 @@ import timber.log.Timber
 
 class LoginViewModel(private val authService: AuthService, private val tokenStorage: TokenStorage) : ViewModel() {
 
+    private val _loginSuccess = MutableLiveData<Boolean>()
+    val loginSuccess: LiveData<Boolean> get() = _loginSuccess
+
     fun kakaoLogin(accessToken: String) {
         viewModelScope.launch {
             Timber.d("Attempting to log in with Kakao token: $accessToken")
 
             authService.kakaoLogin(accessToken).enqueue(object : Callback<SignUpResponse> {
+                override fun onResponse(call: Call<SignUpResponse>, response: Response<SignUpResponse>) {
+                    if (response.isSuccessful) {
+                        response.headers()["access_token"]?.let { newAccessToken ->
+                            response.headers()["refresh_token"]?.let { newRefreshToken ->
+                                Timber.d("Tokens received from server - Access: $newAccessToken, Refresh: $newRefreshToken")
+
+                                // 암호화된 토큰 저장소에 저장
+                                tokenStorage.saveTokens(newAccessToken, newRefreshToken)
+
+                                // 인증 네트워크 모듈에 access token 저장
+                                AuthNetworkModule.setAccessToken(newAccessToken)
+
+                                _loginSuccess.postValue(true)
+
+                                Timber.i("Tokens saved successfully")
+                            } ?: Timber.e("Refresh token missing in response headers")
+                        } ?: Timber.e("Access token missing in response headers")
+                    } else {
+                        val errorMessage = response.errorBody()?.string() ?: "Unknown error"
+                        Timber.e("API Error: $errorMessage")
+
+                        _loginSuccess.postValue(false)
+                    }
+                }
+
+                override fun onFailure(call: Call<SignUpResponse>, t: Throwable) {
+                    val errorMessage = t.message ?: "Unknown error"
+                    Timber.e("Network Failure: $errorMessage")
+
+                    _loginSuccess.postValue(false)
+                }
+            })
+        }
+    }
+
+    private val _oAuthAccessToken = MutableLiveData<String>()
+    val oAuthAccessToken: LiveData<String> get() = _oAuthAccessToken
+
+    fun setOAuthAccessToken(oAuthAccessToken: String) {
+        _oAuthAccessToken.value = oAuthAccessToken
+    }
+
+    fun signUp(signUpRequest: SignUpRequest) {
+        viewModelScope.launch {
+            val accessToken = _oAuthAccessToken.value ?: ""
+            Timber.d("Attempting to sign up with Kakao token: $accessToken, signUpRequest: $signUpRequest")
+
+            authService.signUp(accessToken, signUpRequest).enqueue(object : Callback<SignUpResponse> {
                 override fun onResponse(call: Call<SignUpResponse>, response: Response<SignUpResponse>) {
                     if (response.isSuccessful) {
                         response.headers()["access_token"]?.let { newAccessToken ->

@@ -23,9 +23,19 @@ class SignupStatusViewModel : ViewModel() {
     }
     val nextButtonBackground: LiveData<Int> = _nextButtonBackground
 
+    private val _status = MutableLiveData<String>()
+    val status: LiveData<String> get() = _status
+
     fun onButtonClicked(buttonId: Int) {
         if (_selectedButtonId.value == buttonId) return
         _selectedButtonId.value = buttonId
+
+        when (buttonId) {
+            R.id.signup_status_option_1 -> _status.value = "SCHOOL"
+            R.id.signup_status_option_2 -> _status.value = "COLLEGE"
+            R.id.signup_status_option_3 -> _status.value = "OFFICE"
+            R.id.signup_status_option_4 -> _status.value = "ETC"
+        }
 
         _isNextButtonEnabled.value = true
         _nextButtonTextColor.value = 0xFF000000.toInt()
