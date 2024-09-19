@@ -15,4 +15,12 @@ class TokenStorage(context: Context) {
 
     fun getAccessToken(): String? = sharedPreferences.getString("access_token", null)
     fun getRefreshToken(): String? = sharedPreferences.getString("refresh_token", null)
+
+    fun clearTokens() {
+        sharedPreferences.edit().apply {
+            remove("access_token")
+            remove("refresh_token")
+            apply()
+        }
+    }
 }

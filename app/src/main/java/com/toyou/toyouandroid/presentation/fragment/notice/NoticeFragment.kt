@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentNoticeBinding
 import com.toyou.toyouandroid.model.NoticeItem
-import com.toyou.toyouandroid.presentation.fragment.notice.network.NetworkModule
+import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.presentation.fragment.notice.network.NoticeRepository
 import com.toyou.toyouandroid.presentation.fragment.notice.network.NoticeService
 import com.toyou.toyouandroid.presentation.fragment.notice.network.NoticeViewModelFactory
@@ -32,7 +32,7 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
         get() = requireNotNull(_binding){"FragmentNoticeBinding -> null"}
 
     private val viewModel: NoticeViewModel by viewModels {
-        NoticeViewModelFactory(NoticeRepository(NetworkModule.getClient().create(NoticeService::class.java)))
+        NoticeViewModelFactory(NoticeRepository(AuthNetworkModule.getClient().create(NoticeService::class.java)))
     }
 
     private val noticeDialogViewModel: NoticeDialogViewModel by viewModels()
@@ -61,7 +61,7 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
             }
         }
 
-        viewModel.fetchNotices(userId = 1)
+        viewModel.fetchNotices()
 
         binding.noticeBackLayout.setOnClickListener {
             navController.navigate(R.id.action_navigation_notice_to_home_fragment)
@@ -109,7 +109,7 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
     }
 
     override fun onDeleteNotice(alarmId: Int, position: Int) {
-        viewModel.deleteNotice(userId = 1, alarmId, position)
+        viewModel.deleteNotice(alarmId, position)
     }
 
     // 회원 로그아웃

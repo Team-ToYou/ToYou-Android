@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.presentation.fragment.mypage.network.MypageResponse
 import com.toyou.toyouandroid.presentation.fragment.mypage.network.MypageService
-import com.toyou.toyouandroid.presentation.fragment.notice.network.NetworkModule
 import com.toyou.toyouandroid.presentation.fragment.onboarding.data.dto.response.SignUpResponse
 import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthService
 import com.toyou.toyouandroid.utils.TokenStorage
@@ -64,8 +64,7 @@ class MypageViewModel(private val authService: AuthService, private val tokenSto
         }
     }
 
-    private val retrofit = NetworkModule.getClient()
-    private val apiService: MypageService = retrofit.create(MypageService::class.java)
+    private val apiService: MypageService = AuthNetworkModule.getClient().create(MypageService::class.java)
 
     private val _friendNum = MutableLiveData<Int?>()
     val friendNum: LiveData<Int?> get() = _friendNum
@@ -73,8 +72,11 @@ class MypageViewModel(private val authService: AuthService, private val tokenSto
     private val _nickname = MutableLiveData<String?>()
     val nickname: LiveData<String?> get() = _nickname
 
-    fun updateMypage(userId: Int) {
-        val call = apiService.getMypage(userId)
+    private val _status = MutableLiveData<String?>()
+    val status: LiveData<String?> get() = _status
+
+    fun updateMypage() {
+        val call = apiService.getMypage()
 
         call.enqueue(object : Callback<MypageResponse> {
             override fun onResponse(
@@ -84,8 +86,12 @@ class MypageViewModel(private val authService: AuthService, private val tokenSto
                 if (response.isSuccessful) {
                     val friendNumber = response.body()?.result?.friendNum
                     val nickname = response.body()?.result?.nickname
+                    val status = response.body()?.result?.status
+
                     _friendNum.postValue(friendNumber)
                     _nickname.postValue(nickname)
+                    _status.postValue(status)
+
                     Timber.tag("updateFriendNum").d("FriendNum updated: $friendNumber")
                 } else {
                     Timber.tag("API Error").e("Failed to update FriendNum. Code: ${response.code()}, Message: ${response.message()}")

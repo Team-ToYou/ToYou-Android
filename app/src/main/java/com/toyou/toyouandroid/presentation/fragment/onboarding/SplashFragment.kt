@@ -3,7 +3,6 @@ package com.toyou.toyouandroid.presentation.fragment.onboarding
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +23,7 @@ import com.toyou.toyouandroid.presentation.viewmodel.CardViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
 import com.toyou.toyouandroid.utils.TokenStorage
+import timber.log.Timber
 
 class SplashFragment : Fragment() {
 
@@ -40,7 +40,7 @@ class SplashFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
 
         _binding = FragmentSplashBinding.inflate(inflater, container, false)
@@ -71,6 +71,11 @@ class SplashFragment : Fragment() {
         // navController 초기화
         navController = findNavController()
 
+        userViewModel.getHomeEntry()
+
+        userViewModel.cardId.observe(viewLifecycleOwner) {
+            Timber.tag("get home").d(userViewModel.cardId.value.toString())
+        }
 
         val refreshToken = TokenStorage(requireContext()).getRefreshToken()
         if (refreshToken != null) {
@@ -119,7 +124,5 @@ class SplashFragment : Fragment() {
             }
         }
     }*/
-
-
 
 }

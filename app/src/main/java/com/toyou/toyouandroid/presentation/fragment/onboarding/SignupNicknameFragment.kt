@@ -72,7 +72,8 @@ class SignupNicknameFragment : Fragment() {
         })
 
         binding.signupNicknameBtn.setOnClickListener{
-            nicknameViewModel.changeNickname(1)
+//            nicknameViewModel.changeNickname(1)
+            navController.navigate(R.id.action_navigation_signup_nickname_to_signup_status_fragment)
         }
 
         binding.signupAgreeNicknameDoublecheckBtn.setOnClickListener {
