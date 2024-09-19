@@ -217,6 +217,10 @@ class QuestionContentFragment : Fragment() {
 
             optionsContainer.addView(optionView)
 
+            // 기존의 addOptionButton을 제거 후, newOption 아래로 이동
+            optionsContainer.removeView(addOptionButton)
+            optionsContainer.addView(addOptionButton)
+
             if (optionCount == 3) {
                 addOptionButton.isEnabled = false
             }
@@ -240,6 +244,6 @@ class QuestionContentFragment : Fragment() {
         Log.d("NextButtonState", "isQuestionFilled: $isQuestionFilled, optionCount: $optionCount, allOptionsFilled: $allOptionsFilled")
 
         // 조건: questionBoxEt가 빈 상태가 아니고, optionCount가 2 이상이며 모든 옵션이 비어있지 않을 때
-        binding.nextBtn.isEnabled = isQuestionFilled && optionCount >= 2 && allOptionsFilled
+        //binding.nextBtn.isEnabled = isQuestionFilled && optionCount >= 2 && allOptionsFilled
     }
 }

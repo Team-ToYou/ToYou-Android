@@ -58,6 +58,8 @@ class SocialViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
     val friendRequestCanceled : LiveData<Boolean> get() = _friendRequestCanceled
     private val _friendRequestRemove = MutableLiveData<Boolean>()
     val friendRequestRemove : LiveData<Boolean> get() = _friendRequestRemove
+    private val _allOptionsFilled = MutableLiveData<Boolean>()
+    val allOptionsFilled : LiveData<Boolean>get() = _allOptionsFilled
 
 
     init {
@@ -185,10 +187,20 @@ class SocialViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
             _questionDto.value = currentQuestionDto.copy(options = newOptions)
             Log.d("옵션", _questionDto.value.toString())
         }
+        /*_questionDto.value?.let { dto ->
+            if (dto.options?.size ?: 0 >= 1) {
+                _allOptionsFilled.value = true
+            } else {
+                _allOptionsFilled.value = false
+            }
+        }*/
+
     }
 
     fun updateOption() {
         _optionList.value = _questionDto.value!!.options!!
+        Log.d("옵션1", _questionDto.value.toString() )
+        Log.d("옵션1", _optionList.value.toString() )
     }
 
     fun removeOptions() {
