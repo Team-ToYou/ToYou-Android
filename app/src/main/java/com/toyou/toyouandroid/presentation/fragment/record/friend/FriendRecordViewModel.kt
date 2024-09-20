@@ -20,11 +20,11 @@ class FriendRecordViewModel(private val repository: RecordRepository): ViewModel
     private val _diaryCardsNum = MutableLiveData<List<DiaryCardNum>>()
     val diaryCardsNum: LiveData<List<DiaryCardNum>> get() = _diaryCardsNum
 
-    fun loadDiaryCardsNum(userId: Int, year: Int, month: Int) {
-        Timber.tag("FriendRecordViewModel").d("loadDiaryCards called with userId: $userId, year: $year, month: $month")
+    fun loadDiaryCardsNum(year: Int, month: Int) {
+        Timber.tag("FriendRecordViewModel").d("loadDiaryCards called with year: $year, month: $month")
 
         viewModelScope.launch {
-            val response = repository.getFriendRecordNum(userId, year, month)
+            val response = repository.getFriendRecordNum(year, month)
             response.enqueue(object : Callback<DiaryCardNumResponse> {
                 override fun onResponse(
                     call: Call<DiaryCardNumResponse>,
@@ -58,11 +58,11 @@ class FriendRecordViewModel(private val repository: RecordRepository): ViewModel
     private val _diaryCardPerDay = MutableLiveData<List<DiaryCardPerDay>>()
     val diaryCardPerDay: LiveData<List<DiaryCardPerDay>> get() = _diaryCardPerDay
 
-    fun loadDiaryCardPerDay(userId: Int, year: Int, month: Int, day: Int) {
-        Timber.tag("FriendRecordViewModel").d("loadDiaryCards called with userId: $userId, year: $year, month: $month")
+    fun loadDiaryCardPerDay(year: Int, month: Int, day: Int) {
+        Timber.tag("FriendRecordViewModel").d("loadDiaryCards called with year: $year, month: $month")
 
         viewModelScope.launch {
-            val response = repository.getFriendRecordPerDay(userId, year, month, day)
+            val response = repository.getFriendRecordPerDay(year, month, day)
             response.enqueue(object : Callback<DiaryCardPerDayResponse> {
                 override fun onResponse(
                     call: Call<DiaryCardPerDayResponse>,

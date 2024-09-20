@@ -92,17 +92,6 @@ class SignupNicknameFragment : Fragment() {
         binding.root.setOnClickListener {
             hideKeyboard()
         }
-
-        viewModel.navigationEvent.observe(viewLifecycleOwner) { event ->
-            when (event) {
-                is SignupNicknameViewModel.NavigationEvent.NavigateToMyPage -> {
-                    navController.navigate(R.id.action_navigation_signup_nickname_to_mypage_fragment)
-                }
-                is SignupNicknameViewModel.NavigationEvent.NavigateToSignupAgree -> {
-                    navController.navigate(R.id.action_navigation_signup_nickname_to_signup_agree_fragment)
-                }
-            }
-        }
     }
 
     private fun hideKeyboard() {

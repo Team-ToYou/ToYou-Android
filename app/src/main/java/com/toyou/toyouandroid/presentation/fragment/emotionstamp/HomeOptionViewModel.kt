@@ -3,10 +3,10 @@ package com.toyou.toyouandroid.presentation.fragment.emotionstamp
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.presentation.fragment.emotionstamp.network.EmotionRequest
 import com.toyou.toyouandroid.presentation.fragment.emotionstamp.network.EmotionResponse
 import com.toyou.toyouandroid.presentation.fragment.emotionstamp.network.EmotionService
-import com.toyou.toyouandroid.presentation.fragment.notice.network.NetworkModule
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -18,11 +18,10 @@ class HomeOptionViewModel : ViewModel() {
     private val _emotionResponse = MutableLiveData<EmotionResponse>()
     val emotionResponse: LiveData<EmotionResponse> get() = _emotionResponse
 
-    private val retrofit = NetworkModule.getClient()
-    private val apiService: EmotionService = retrofit.create(EmotionService::class.java)
+    private val apiService: EmotionService = AuthNetworkModule.getClient().create(EmotionService::class.java)
 
-    fun updateEmotion(userId: Int, emotionRequest: EmotionRequest) {
-        val call = apiService.patchEmotion(userId, emotionRequest)
+    fun updateEmotion(emotionRequest: EmotionRequest) {
+        val call = apiService.patchEmotion(emotionRequest)
 
         call.enqueue(object : Callback<EmotionResponse> {
             override fun onResponse(

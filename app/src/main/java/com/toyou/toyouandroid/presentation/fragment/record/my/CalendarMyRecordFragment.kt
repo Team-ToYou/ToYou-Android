@@ -12,7 +12,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentCalendarMyrecordBinding
 import com.toyou.toyouandroid.model.MyDate
-import com.toyou.toyouandroid.presentation.fragment.notice.network.NetworkModule
+import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.presentation.fragment.record.network.DiaryCard
 import com.toyou.toyouandroid.presentation.fragment.record.network.RecordRepository
 import com.toyou.toyouandroid.presentation.fragment.record.network.RecordService
@@ -29,7 +29,7 @@ class CalendarMyRecordFragment : Fragment(), MyRecordCalendarRVAdapter.OnDateCli
     private val binding: FragmentCalendarMyrecordBinding
         get() = requireNotNull(_binding){"FragmentCalendarMyrecordBinding -> null"}
     private val myRecordViewModel: MyRecordViewModel by viewModels {
-        RecordViewModelFactory(RecordRepository(NetworkModule.getClient().create(RecordService::class.java)))
+        RecordViewModelFactory(RecordRepository(AuthNetworkModule.getClient().create(RecordService::class.java)))
     }
 
     private var calendar = Calendar.getInstance()
@@ -70,7 +70,7 @@ class CalendarMyRecordFragment : Fragment(), MyRecordCalendarRVAdapter.OnDateCli
         binding.btnTodayDate.setOnClickListener {
             calendar = Calendar.getInstance()
             startCalendar.time = calendar.time
-            myRecordViewModel.loadDiaryCards(4, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)) // userId 대체
+            myRecordViewModel.loadDiaryCards(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)) // userId 대체
         }
 
         myRecordViewModel.diaryCards.observe(viewLifecycleOwner) { diaryCards ->
@@ -110,7 +110,7 @@ class CalendarMyRecordFragment : Fragment(), MyRecordCalendarRVAdapter.OnDateCli
             binding.yearMonthTextView.text = "${year}년 ${month + 1}월"
             Timber.tag("CalendarFragment").d("Updating calendar for: ${year}년 ${month + 1}월")
 
-            myRecordViewModel.loadDiaryCards(4, year, month + 1) // userId 대체
+            myRecordViewModel.loadDiaryCards(year, month + 1) // userId 대체
             Timber.tag("CalendarFragment").d("loadDiaryCards called for User: 1, Year: $year, Month: ${month + 1}")
         }
     }

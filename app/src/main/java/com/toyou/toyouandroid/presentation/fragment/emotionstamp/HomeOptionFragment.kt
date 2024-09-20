@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.toyou.toyouandroid.R
@@ -13,7 +14,13 @@ import com.toyou.toyouandroid.databinding.FragmentHomeOptionBinding
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.presentation.fragment.emotionstamp.network.EmotionData
 import com.toyou.toyouandroid.presentation.fragment.emotionstamp.network.EmotionRequest
+import com.toyou.toyouandroid.presentation.fragment.notice.NoticeDialog
+import com.toyou.toyouandroid.presentation.fragment.notice.NoticeDialogViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
+import com.toyou.toyouandroid.utils.TokenStorage
+import timber.log.Timber
 
 class HomeOptionFragment : Fragment() {
 
@@ -23,6 +30,10 @@ class HomeOptionFragment : Fragment() {
         get() = requireNotNull(_binding){"FragmentHomeOptionBinding -> null"}
     private val homeOptionViewModel: HomeOptionViewModel by activityViewModels()
     private val homeViewModel: HomeViewModel by activityViewModels()
+    private val noticeDialogViewModel: NoticeDialogViewModel by activityViewModels()
+    private var noticeDialog: NoticeDialog? = null
+    private lateinit var userViewModel: UserViewModel
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,6 +43,12 @@ class HomeOptionFragment : Fragment() {
         _binding = FragmentHomeOptionBinding.inflate(layoutInflater, container, false)
         binding.viewModel = homeOptionViewModel
         binding.lifecycleOwner = viewLifecycleOwner
+
+        val tokenStorage = TokenStorage(requireContext())
+        userViewModel = ViewModelProvider(
+            requireActivity(),
+            UserViewModelFactory(tokenStorage)
+        )[UserViewModel::class.java]
         return binding.root
     }
 
@@ -46,6 +63,13 @@ class HomeOptionFragment : Fragment() {
         }
 
         setupEmotionClickListeners()
+
+        // 홈 조회 후 감정이 존재할 경우 dialog
+        userViewModel.emotion.observe(viewLifecycleOwner) { emotion ->
+            if (emotion != null) {
+                onShowDialog()
+            }
+        }
     }
 
     private fun setupEmotionClickListeners() {
@@ -117,13 +141,37 @@ class HomeOptionFragment : Fragment() {
             emotionData.backgroundDrawable
         )
 
-        homeViewModel.updateMypageEmotion(emotionData.mypageEmotionDrawable)
-
-        homeOptionViewModel.updateEmotion(userId = 1, emotionRequest = emotionData.emotion)
+        // 감정 우표 선택 API 호출
+        homeOptionViewModel.updateEmotion(emotionRequest = emotionData.emotion)
 
         navController.navigate(R.id.action_navigation_home_option_to_home_result_fragment, bundle)
     }
 
+    private fun onShowDialog() {
+        noticeDialogViewModel.setDialogData(
+            title = "감정은 하루에 한 번만 \n 선택할 수 있어요",
+            subTitle = "",
+            leftButtonText = "확인",
+            rightButtonText = "",
+            leftButtonTextColor = R.color.black,
+            rightButtonTextColor = R.color.black,
+            leftButtonClickAction = { backToHome() },
+            rightButtonClickAction = { dismissDialog() }
+        )
+        noticeDialog = NoticeDialog()
+        noticeDialog?.show(parentFragmentManager, "CustomDialog")
+    }
+
+    private fun backToHome() {
+        Timber.tag("backToHome").d("backToHome")
+        navController.navigate(R.id.action_navigation_home_option_to_home_fragment)
+        noticeDialog?.dismiss()
+    }
+
+    private fun dismissDialog() {
+        Timber.tag("dismissDialog").d("dismissDialog")
+        noticeDialog?.dismiss()
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
