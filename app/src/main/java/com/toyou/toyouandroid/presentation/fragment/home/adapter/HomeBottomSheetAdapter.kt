@@ -5,8 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.databinding.ItemHomeBottomSheetBinding
 import com.toyou.toyouandroid.model.HomeBottomSheetItem
+import com.toyou.toyouandroid.presentation.fragment.emotionstamp.network.DiaryCard
 
-class HomeBottomSheetAdapter(private val items: List<HomeBottomSheetItem>) : RecyclerView.Adapter<HomeBottomSheetAdapter.ViewHolder>() {
+class HomeBottomSheetAdapter : RecyclerView.Adapter<HomeBottomSheetAdapter.ViewHolder>() {
+
+    private val diaryCards = mutableListOf<DiaryCard>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -15,18 +18,25 @@ class HomeBottomSheetAdapter(private val items: List<HomeBottomSheetItem>) : Rec
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = items[position]
+        val item = diaryCards[position]
         holder.bind(item)
     }
 
+    fun submitList(cards: List<DiaryCard>) {
+        diaryCards.clear()
+        diaryCards.addAll(cards)
+        notifyDataSetChanged()
+    }
+
     override fun getItemCount(): Int {
-        return items.size
+        return diaryCards.size
     }
 
     inner class ViewHolder(private val binding: ItemHomeBottomSheetBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: HomeBottomSheetItem) {
-            binding.item = item
+        fun bind(diaryCard: DiaryCard) {
+//            binding.item = diaryCard
+            binding.friendNickname.text = diaryCard.nickname
             binding.executePendingBindings()
         }
     }
