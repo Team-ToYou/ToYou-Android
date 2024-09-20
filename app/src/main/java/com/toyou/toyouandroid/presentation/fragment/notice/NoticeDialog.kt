@@ -31,7 +31,7 @@ class NoticeDialog : DialogFragment() {
         super.onResume()
         dialog?.window?.setLayout(
             convertDpToPx(280),
-            convertDpToPx(140)
+            convertDpToPx(120)
         )
     }
 

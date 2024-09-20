@@ -2,6 +2,7 @@ package com.toyou.toyouandroid.presentation.fragment.emotionstamp.network
 
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface EmotionService {
@@ -10,4 +11,7 @@ interface EmotionService {
     fun patchEmotion(
         @Body emotion: EmotionRequest
     ): Call<EmotionResponse>
+
+    @GET("friends/yesterday")
+    fun getYesterdayFriendCard(): Call<YesterdayFriendsResponse>
 }

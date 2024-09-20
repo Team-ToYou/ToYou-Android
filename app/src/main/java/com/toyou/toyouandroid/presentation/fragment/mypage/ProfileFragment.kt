@@ -87,7 +87,16 @@ class ProfileFragment : Fragment() {
         })
 
         binding.signupNicknameBtn.setOnClickListener{
-            navController.navigate(R.id.action_navigation_profile_to_mypage_fragment)
+            viewModel.changeNickname()
+            viewModel.changeStatus()
+        }
+
+        viewModel.statusChangedSuccess.observe(viewLifecycleOwner) { success ->
+            if (success) {
+                navController.navigate(R.id.action_navigation_profile_to_mypage_fragment)
+            } else {
+                navController.navigate(R.id.action_navigation_profile_to_mypage_fragment)
+            }
         }
 
         binding.signupAgreeNicknameDoublecheckBtn.setOnClickListener {

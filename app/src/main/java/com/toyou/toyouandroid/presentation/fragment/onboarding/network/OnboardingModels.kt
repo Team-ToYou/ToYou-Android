@@ -16,3 +16,11 @@ data class PatchNicknameResponse(
     val code: String,
     val message: String
 )
+
+data class PatchNicknameRequest(
+    val nickname: String
+)
+
+data class PatchStatusRequest(
+    val status: String
+)
