@@ -53,11 +53,12 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
 
     private var inputStatus: MutableList<Boolean> = mutableListOf()
     private var inputLongStatus : MutableList<Boolean> = mutableListOf()
+    private var inputChooseStatus : MutableList<Boolean> = mutableListOf()
 
-    fun setCardCount(count: Int, count2 : Int) {
+    fun setCardCount(count: Int, count2 : Int, count3 : Int) {
         inputStatus = MutableList(count){false} // 카드 개수만큼 false로 초기화
         inputLongStatus = MutableList(count2){false} // 카드 개수만큼 false로 초기화
-        //checkIfAllAnswersFilled()
+        inputChooseStatus = MutableList(count3){false}
     }
 
     fun updateCardInputStatus(index: Int, isFilled: Boolean) {
@@ -69,10 +70,15 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
         inputLongStatus[index] = isFilled
         checkIfAllAnswersFilled() // 입력 상태가 변경될 때마다 확인
     }
+    fun updateCardInputStatusChoose(index: Int, isFilled: Boolean) {
+        inputChooseStatus[index] = isFilled
+        checkIfAllAnswersFilled() // 입력 상태가 변경될 때마다 확인
+    }
 
     private fun checkIfAllAnswersFilled() {
-        _isAllAnswersFilled.value = inputStatus.count { it } == inputStatus.size && inputLongStatus.count { it } == inputLongStatus.size
+        _isAllAnswersFilled.value = inputStatus.count { it } == inputStatus.size && inputLongStatus.count { it } == inputLongStatus.size && inputChooseStatus.count { it } == inputChooseStatus.size
     }
+
 
 
     fun sendData(previewCardModels: List<PreviewCardModel>, exposure: Boolean,) {
@@ -277,7 +283,7 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
         Log.d("카드 선택 개수", "New Cards: $newCardsCount, Short Cards: $newShortCardsCount, Choose Cards: $newChooseCardsCount")
 
 
-        setCardCount(newShortCardsCount, newCardsCount)
+        setCardCount(newShortCardsCount, newCardsCount, newChooseCardsCount)
 
         existingCards.addAll(newCards)
         existingCards.addAll(newShortCards)

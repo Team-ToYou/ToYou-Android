@@ -65,7 +65,7 @@ class CreateWriteFragment: Fragment() {
 
         longAdapter = WriteCardAdapter(cardViewModel)
         shortAdapter = ShortCardAdapter(cardViewModel)
-        chooseAdapter = ChooseCardAdapter()
+        chooseAdapter = ChooseCardAdapter(cardViewModel)
 
         setupRecyclerView(binding.cardRv, longAdapter)
         setupRecyclerView(binding.cardShortRv, shortAdapter)
