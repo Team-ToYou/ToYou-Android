@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -118,16 +119,19 @@ class CreateFragment : Fragment(){
 
         cardAdapter = CardAdapter { position, isSelected ->
             cardViewModel.updateButtonState(position, isSelected)
+            cardViewModel.countSelect(isSelected)
             Log.d("버튼", position.toString())
 
         }
         cardShortAdapter = CardShortAdapter{ position, isSelected ->
             Log.d("선택2", position.toString()+isSelected.toString())
             cardViewModel.updateShortButtonState(position, isSelected)
+            cardViewModel.countSelect(isSelected)
         }
         cardChooseAdapter = CardChooseAdapter{ position, isSelected ->
             Log.d("선택1", position.toString()+isSelected.toString())
             cardViewModel.updateChooseButton(position, isSelected)
+            cardViewModel.countSelect(isSelected)
         }
 
 
@@ -163,6 +167,12 @@ class CreateFragment : Fragment(){
             }
             navController.navigate(R.id.action_create_fragment_to_createWriteFragment)
         }
+
+        cardViewModel.countSelection.observe(viewLifecycleOwner, Observer { count ->
+            if (count == 5){
+                Toast.makeText(requireContext(), "질문은 최대 5개까지 선택할 수 있습니다", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun setupRecyclerView(recyclerView: RecyclerView, adapter: RecyclerView.Adapter<*>) {

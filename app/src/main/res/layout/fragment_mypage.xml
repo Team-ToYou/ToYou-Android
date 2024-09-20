@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
             name="viewModel"
@@ -12,9 +14,6 @@
             type="com.toyou.toyouandroid.presentation.fragment.onboarding.SignupNicknameViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/background_white">
@@ -246,15 +245,15 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/mypage_signout_btn"
+                style="@style/gangwon15"
                 android:layout_width="92dp"
                 android:layout_height="33dp"
+                android:background="@drawable/next_button_roundly"
                 android:stateListAnimator="@null"
                 android:text="@string/mypage_signout"
                 android:textColor="@color/black"
-                style="@style/gangwon15"
-                android:background="@drawable/next_button_roundly"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/mypage_logout_btn"

@@ -55,6 +55,9 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
     private var inputLongStatus : MutableList<Boolean> = mutableListOf()
     private var inputChooseStatus : MutableList<Boolean> = mutableListOf()
 
+    private val _countSelection = MutableLiveData<Int>(0)
+    val countSelection : LiveData<Int>get() = _countSelection
+
     fun setCardCount(count: Int, count2 : Int, count3 : Int) {
         inputStatus = MutableList(count){false} // 카드 개수만큼 false로 초기화
         inputLongStatus = MutableList(count2){false} // 카드 개수만큼 false로 초기화
@@ -320,6 +323,20 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
    fun patchCard(previewCardModels: List<PreviewCardModel>, exposure: Boolean, id : Int){
             viewModelScope.launch {
                 repository.patchCardData(previewCardModels, exposure, id)
+        }
+
+    }
+
+    fun countSelect(selection : Boolean){
+        if (selection) {
+            _countSelection.value?.let {
+                _countSelection.value = it + 1
+            }
+        }
+        else{
+            _countSelection.value?.let {
+                _countSelection.value = it - 1
+            }
         }
 
     }

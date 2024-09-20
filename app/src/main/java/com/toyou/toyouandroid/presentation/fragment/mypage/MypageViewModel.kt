@@ -1,15 +1,20 @@
 package com.toyou.toyouandroid.presentation.fragment.mypage
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.toyou.toyouandroid.fcm.domain.FCMRepository
+import com.toyou.toyouandroid.fcm.dto.request.Token
 import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.presentation.fragment.mypage.network.MypageResponse
 import com.toyou.toyouandroid.presentation.fragment.mypage.network.MypageService
 import com.toyou.toyouandroid.presentation.fragment.onboarding.data.dto.response.SignUpResponse
 import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthService
 import com.toyou.toyouandroid.utils.TokenStorage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -17,6 +22,10 @@ import retrofit2.Response
 import timber.log.Timber
 
 class MypageViewModel(private val authService: AuthService, private val tokenStorage: TokenStorage) : ViewModel() {
+
+    private val fcmRepository = FCMRepository(tokenStorage)
+    private val _retrieveToken = MutableLiveData<List<String>>()
+    val retrieveToken : LiveData<List<String>> get() = _retrieveToken
 
     fun kakaoLogout() {
         viewModelScope.launch {
@@ -104,4 +113,49 @@ class MypageViewModel(private val authService: AuthService, private val tokenSto
             }
         })
     }
+
+    fun retrieveTokenFromServer(name : String) = viewModelScope.launch {
+        try {
+            val response = fcmRepository.getToken(name)
+            if (response.isSuccess) {
+                _retrieveToken.value = response.result.tokens
+                // 서버에서 받은 토큰을 사용해 로직을 처리
+                Log.d("Token Retrieval", retrieveToken.value.toString())
+            } else {
+                Log.e("Token Retrieval", "토큰 조회 실패: ${response.message}")
+            }
+        } catch (e: Exception) {
+            Log.e("Token Retrieval", "토큰 조회 중 오류 발생: ${e.message}")
+
+        }
+    }
+
+    private fun deleteFcmToken(token : String){
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val tokenRequest = Token(token)
+                fcmRepository.deleteToken(tokenRequest)
+                Log.d("deleteToken", "성공")
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Log.d("deleteToken", "토큰 삭제 실패: ${e.message}")
+            }
+        }
+    }
+
+    fun fcmTokenDelete(name : String){
+        retrieveTokenFromServer(name)
+        _retrieveToken.value?.let { tokens ->
+            for (token in tokens) {
+                deleteFcmToken(token)
+            }
+
+        }
+        resetToken()
+    }
+
+    private fun resetToken(){
+        _retrieveToken.value = emptyList()
+    }
+
 }
