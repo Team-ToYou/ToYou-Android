@@ -347,7 +347,5 @@ class SocialViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
         _retrieveToken.value = emptyList()
     }
 
-
-
 }
 
