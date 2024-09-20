@@ -97,15 +97,6 @@ class SignupNicknameViewModel : ViewModel() {
         _nickname.value = newNickname
     }
 
-    fun setForEditNickname() {
-        _title.value = "프로필 수정"
-        _backButtonAction.value = { /* 닉네임 수정 화면에서의 back 버튼 로직 */ }
-    }
-
-    fun onBackButtonClicked() {
-        _backButtonAction.value?.invoke()
-    }
-
     fun resetState() {
         _duplicateCheckMessage.value = "중복된 닉네임인지 확인해주세요"
         _duplicateCheckMessageColor.value = 0xFF000000.toInt()
@@ -113,16 +104,6 @@ class SignupNicknameViewModel : ViewModel() {
         _nextButtonTextColor.value = 0xFFA6A6A6.toInt()
         _nextButtonBackground.value = R.drawable.next_button
         _nickname.value = ""
-        _duplicateCheckButtonTextColor.value = 0xFFA6A6A6.toInt()
-        _duplicateCheckButtonBackground.value = R.drawable.next_button
-    }
-
-    fun resetNicknameEditState() {
-        _duplicateCheckMessage.value = "중복된 닉네임인지 확인해주세요"
-        _duplicateCheckMessageColor.value = 0xFF000000.toInt()
-        _isNextButtonEnabled.value = false
-        _nextButtonTextColor.value = 0xFFA6A6A6.toInt()
-        _nextButtonBackground.value = R.drawable.next_button
         _duplicateCheckButtonTextColor.value = 0xFFA6A6A6.toInt()
         _duplicateCheckButtonBackground.value = R.drawable.next_button
     }
@@ -158,55 +139,6 @@ class SignupNicknameViewModel : ViewModel() {
 
             override fun onFailure(call: Call<NicknameCheckResponse>, t: Throwable) {
                 Timber.tag("API Failure").e(t, "Error checking nickname")
-                _duplicateCheckMessage.value = "서버에 연결할 수 없습니다."
-                _duplicateCheckMessageColor.value = 0xFFFF0000.toInt()
-            }
-        })
-    }
-
-    private val _isUpdatingNickname = MutableLiveData<Boolean>()
-    val isUpdatingNickname: LiveData<Boolean> get() = _isUpdatingNickname
-
-    fun setUpdatingNickname(isUpdating: Boolean) {
-        _isUpdatingNickname.value = isUpdating
-    }
-
-    sealed class NavigationEvent {
-        data object NavigateToMyPage : NavigationEvent()
-        data object NavigateToSignupAgree : NavigationEvent()
-    }
-
-    private val _navigationEvent = MutableLiveData<NavigationEvent>()
-    val navigationEvent: LiveData<NavigationEvent> get() = _navigationEvent
-
-
-    fun changeNickname(userId: Int) {
-        val nickname = _nickname.value ?: return
-
-        val call = apiService.patchNickname(userId, nickname)
-        call.enqueue(object : Callback<PatchNicknameResponse> {
-            override fun onResponse(call: Call<PatchNicknameResponse>, response: Response<PatchNicknameResponse>) {
-                if (response.isSuccessful) {
-                    val success = response.body()?.isSuccess ?: false
-                    if (success) {
-                        // 닉네임 변경 완료 후 로직
-                        if (_isUpdatingNickname.value == true) {
-                            _navigationEvent.value = NavigationEvent.NavigateToMyPage
-                        } else {
-                            _navigationEvent.value = NavigationEvent.NavigateToSignupAgree
-                        }
-                    } else {
-                        _duplicateCheckMessage.value = response.body()?.message.toString()
-                        _duplicateCheckMessageColor.value = 0xFFFF0000.toInt()
-                    }
-                } else {
-                    _duplicateCheckMessage.value = "닉네임 변경에 실패했습니다."
-                    _duplicateCheckMessageColor.value = 0xFFFF0000.toInt()
-                }
-            }
-
-            override fun onFailure(call: Call<PatchNicknameResponse>, t: Throwable) {
-                Timber.tag("API Failure").e(t, "Error updating nickname")
                 _duplicateCheckMessage.value = "서버에 연결할 수 없습니다."
                 _duplicateCheckMessageColor.value = 0xFFFF0000.toInt()
             }
