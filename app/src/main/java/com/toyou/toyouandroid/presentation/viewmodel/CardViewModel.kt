@@ -341,4 +341,8 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
 
     }
 
+    fun resetSelect(){
+        _countSelection.value = 0
+    }
+
 }
