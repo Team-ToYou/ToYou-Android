@@ -4,10 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.toyou.toyouandroid.R
-import com.toyou.toyouandroid.presentation.fragment.notice.network.NetworkModule
+import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.presentation.fragment.onboarding.network.NicknameCheckResponse
 import com.toyou.toyouandroid.presentation.fragment.onboarding.network.OnboardingService
+import com.toyou.toyouandroid.presentation.fragment.onboarding.network.PatchNicknameRequest
 import com.toyou.toyouandroid.presentation.fragment.onboarding.network.PatchNicknameResponse
+import com.toyou.toyouandroid.presentation.fragment.onboarding.network.PatchStatusRequest
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -126,8 +129,7 @@ class ProfileViewModel : ViewModel() {
         _duplicateCheckButtonBackground.value = R.drawable.next_button
     }
 
-    private val retrofit = NetworkModule.getClient()
-    private val apiService: OnboardingService = retrofit.create(OnboardingService::class.java)
+    private val apiService: OnboardingService = AuthNetworkModule.getClient().create(OnboardingService::class.java)
 
     // API를 호출하여 닉네임 중복 체크를 수행하는 함수
     fun checkDuplicate() {
@@ -170,37 +172,27 @@ class ProfileViewModel : ViewModel() {
         _isUpdatingNickname.value = isUpdating
     }
 
-    sealed class NavigationEvent {
-        data object NavigateToMyPage : NavigationEvent()
-        data object NavigateToSignupAgree : NavigationEvent()
-    }
+    private val _nicknameChangedSuccess = MutableLiveData<Boolean>()
+    val nicknameChangedSuccess: LiveData<Boolean> get() = _nicknameChangedSuccess
 
-    private val _navigationEvent = MutableLiveData<NavigationEvent>()
-    val navigationEvent: LiveData<NavigationEvent> get() = _navigationEvent
-
-
-    fun changeNickname(userId: Int) {
+    fun changeNickname() {
         val nickname = _nickname.value ?: return
-
-        val call = apiService.patchNickname(nickname)
+        val request = PatchNicknameRequest(nickname)
+        val call = apiService.patchNickname(request)
         call.enqueue(object : Callback<PatchNicknameResponse> {
-            override fun onResponse(call: Call<PatchNicknameResponse>, response: Response<PatchNicknameResponse>) {
+            override fun onResponse(
+                call: Call<PatchNicknameResponse>,
+                response: Response<PatchNicknameResponse>
+            ) {
                 if (response.isSuccessful) {
-                    val success = response.body()?.isSuccess ?: false
-                    if (success) {
-                        // 닉네임 변경 완료 후 로직
-                        if (_isUpdatingNickname.value == true) {
-                            _navigationEvent.value = NavigationEvent.NavigateToMyPage
-                        } else {
-                            _navigationEvent.value = NavigationEvent.NavigateToSignupAgree
-                        }
-                    } else {
-                        _duplicateCheckMessage.value = response.body()?.message.toString()
-                        _duplicateCheckMessageColor.value = 0xFFFF0000.toInt()
-                    }
+                    _duplicateCheckMessage.value = response.body()?.message.toString()
+                    _duplicateCheckMessageColor.value = 0xFFFF0000.toInt()
+                    _nicknameChangedSuccess.postValue(true)
+                    Timber.tag("changeNickname").d("$response")
                 } else {
                     _duplicateCheckMessage.value = "닉네임 변경에 실패했습니다."
                     _duplicateCheckMessageColor.value = 0xFFFF0000.toInt()
+                    Timber.tag("changeNickname").d("$response")
                 }
             }
 
@@ -208,6 +200,31 @@ class ProfileViewModel : ViewModel() {
                 Timber.tag("API Failure").e(t, "Error updating nickname")
                 _duplicateCheckMessage.value = "서버에 연결할 수 없습니다."
                 _duplicateCheckMessageColor.value = 0xFFFF0000.toInt()
+            }
+        })
+    }
+
+    private val _statusChangedSuccess = MutableLiveData<Boolean>()
+    val statusChangedSuccess: LiveData<Boolean> get() = _statusChangedSuccess
+
+    fun changeStatus() {
+        val status = _status.value ?: return
+        val request = PatchStatusRequest(status)
+        val call = apiService.patchStatus(request)
+        call.enqueue(object : Callback<PatchNicknameResponse> {
+            override fun onResponse(
+                call: Call<PatchNicknameResponse>,
+                response: Response<PatchNicknameResponse>
+            ) {
+                if (response.isSuccessful) {
+                    Timber.tag("changeStatus").d("${response.body()}")
+                    _statusChangedSuccess.postValue(true)
+                }
+            }
+
+            override fun onFailure(call: Call<PatchNicknameResponse>, t: Throwable) {
+                // 에러 처리 로직
+                Timber.tag("API Failure").e(t, "Error updating nickname")
             }
         })
     }
