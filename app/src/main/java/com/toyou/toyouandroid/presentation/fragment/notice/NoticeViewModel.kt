@@ -1,5 +1,6 @@
 package com.toyou.toyouandroid.presentation.fragment.notice
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,6 +17,9 @@ class NoticeViewModel(private val repository: NoticeRepository) : ViewModel() {
 
     private val _noticeItems = MutableLiveData<List<NoticeItem>?>()
     val noticeItems: MutableLiveData<List<NoticeItem>?> get() = _noticeItems
+
+    private val _hasNotifications = MutableLiveData<Boolean>()
+    val hasNotifications: LiveData<Boolean> get() = _hasNotifications
 
     fun fetchNotices() {
         viewModelScope.launch {
@@ -48,6 +52,7 @@ class NoticeViewModel(private val repository: NoticeRepository) : ViewModel() {
                             }
                         } ?: emptyList()
 
+                        _hasNotifications.value = items.isNotEmpty()
                         _noticeItems.value = items
                     }
                 }
