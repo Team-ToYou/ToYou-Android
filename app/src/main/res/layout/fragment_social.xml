@@ -46,6 +46,7 @@
             android:background="@null"
             android:imeOptions="actionSearch"
             android:hint="친구 닉네임을 입력하세요."
+            android:inputType="text"
             android:textColorHint="#FFA6A6A6" />
 
     </LinearLayout>

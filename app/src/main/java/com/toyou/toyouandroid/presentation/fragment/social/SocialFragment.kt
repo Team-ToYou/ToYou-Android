@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -100,13 +101,13 @@ class SocialFragment : Fragment() {
         })
 
 
-        binding.searchBtn.setOnClickListener {
+        /*binding.searchBtn.setOnClickListener {
             val searchName = binding.searchEt.text.toString()
             addFriendLinearLayout.removeAllViews()  // 뷰를 초기화
 
             // API 호출
             socialViewModel.getSearchData(searchName)
-        }
+        }*/
 
         socialViewModel.isFriend.observe(viewLifecycleOwner, Observer { isFriend ->
             if (isFriend == "400" || isFriend == "401") {
@@ -181,6 +182,18 @@ class SocialFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
+
+        binding.searchEt.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH){
+                val searchName = binding.searchEt.text.toString()
+                addFriendLinearLayout.removeAllViews()  // 뷰를 초기화
+
+                // API 호출
+                socialViewModel.getSearchData(searchName)
+                true
+            }
+            false
+        }
 
     }
 
