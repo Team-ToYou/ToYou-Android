@@ -149,6 +149,7 @@ class CreateFragment : Fragment(){
         navController = Navigation.findNavController(view)
 
         binding.backBtn.setOnClickListener {
+            cardViewModel.resetSelect()
             val mainActivity = activity as MainActivity
             mainActivity.hideBottomNavigation(false)
             navController.popBackStack()
