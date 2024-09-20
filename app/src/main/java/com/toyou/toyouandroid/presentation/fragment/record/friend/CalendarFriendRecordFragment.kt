@@ -13,7 +13,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentCalendarFriendrecordBinding
 import com.toyou.toyouandroid.model.FriendDate
-import com.toyou.toyouandroid.presentation.fragment.notice.network.NetworkModule
+import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.presentation.fragment.record.CalendarAdapter
 import com.toyou.toyouandroid.presentation.fragment.record.CalendarItemDecoration
 import com.toyou.toyouandroid.presentation.fragment.record.network.DiaryCardNum
@@ -35,7 +35,7 @@ class CalendarFriendRecordFragment : Fragment(), FriendCalendarRVAdapter.OnDateC
         get() = requireNotNull(_binding){"FragmentCalendarFriendrecordBinding -> null"}
 
     private val friendRecordViewModel: FriendRecordViewModel by viewModels {
-        RecordViewModelFactory(RecordRepository(NetworkModule.getClient().create(RecordService::class.java)))
+        RecordViewModelFactory(RecordRepository(AuthNetworkModule.getClient().create(RecordService::class.java)))
     }
 
     private var calendar = Calendar.getInstance()
@@ -92,7 +92,7 @@ class CalendarFriendRecordFragment : Fragment(), FriendCalendarRVAdapter.OnDateC
         binding.btnTodayDate.setOnClickListener {
             calendar = Calendar.getInstance()
             startCalendar.time = calendar.time
-            friendRecordViewModel.loadDiaryCardsNum(1, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)) // userId 대체
+            friendRecordViewModel.loadDiaryCardsNum(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)) // userId 대체
         }
 
         friendRecordViewModel.diaryCardsNum.observe(viewLifecycleOwner) { diaryCardsNum ->
@@ -136,7 +136,7 @@ class CalendarFriendRecordFragment : Fragment(), FriendCalendarRVAdapter.OnDateC
             binding.yearMonthTextView.text = "${year}년 ${month + 1}월"
             Timber.tag("CalendarFriendRecordFragment").d("Updating calendar for: ${year}년 ${month + 1}월")
 
-            friendRecordViewModel.loadDiaryCardsNum(1, year, month + 1) // userId 대체
+            friendRecordViewModel.loadDiaryCardsNum(year, month + 1) // userId 대체
             Timber.tag("CalendarFriendRecordFragment").d("loadDiaryCards called for User: 1, Year: $year, Month: ${month + 1}")
         }
     }
@@ -202,7 +202,7 @@ class CalendarFriendRecordFragment : Fragment(), FriendCalendarRVAdapter.OnDateC
         val formattedDate = SimpleDateFormat("yyyyMMdd 친구 기록", Locale.getDefault()).format(date)
         binding.recordTitle.text = formattedDate
 
-        friendRecordViewModel.loadDiaryCardPerDay(1, year, month, day) // userId 대체
+        friendRecordViewModel.loadDiaryCardPerDay(year, month, day) // userId 대체
     }
 
     override fun onDestroyView() {
