@@ -16,7 +16,6 @@ interface OnboardingService {
 
     @PATCH("users/nickname")
     fun patchNickname(
-        @Header("userId") userId: Int,
         @Body nickname: String
     ): Call<PatchNicknameResponse>
 }

@@ -1,15 +1,13 @@
 package com.toyou.toyouandroid.presentation.fragment.emotionstamp.network
 
 import retrofit2.Call
-import retrofit2.http.Header
-import retrofit2.http.PATCH
-import retrofit2.http.Query
+import retrofit2.http.Body
+import retrofit2.http.POST
 
 interface EmotionService {
 
-    @PATCH("users/emotions")
+    @POST("users/emotions")
     fun patchEmotion(
-        @Header("userId") userId: Int,
-        @Query("emotion") emotion: EmotionRequest
+        @Body emotion: EmotionRequest
     ): Call<EmotionResponse>
 }

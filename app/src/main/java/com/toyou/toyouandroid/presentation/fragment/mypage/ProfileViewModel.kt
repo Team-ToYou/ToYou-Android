@@ -182,7 +182,7 @@ class ProfileViewModel : ViewModel() {
     fun changeNickname(userId: Int) {
         val nickname = _nickname.value ?: return
 
-        val call = apiService.patchNickname(userId, nickname)
+        val call = apiService.patchNickname(nickname)
         call.enqueue(object : Callback<PatchNicknameResponse> {
             override fun onResponse(call: Call<PatchNicknameResponse>, response: Response<PatchNicknameResponse>) {
                 if (response.isSuccessful) {

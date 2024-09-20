@@ -18,11 +18,11 @@ class MyRecordViewModel(private val repository: RecordRepository) : ViewModel() 
     private val _diaryCards = MutableLiveData<List<DiaryCard>>()
     val diaryCards: LiveData<List<DiaryCard>> get() = _diaryCards
 
-    fun loadDiaryCards(userId: Int, year: Int, month: Int) {
-        Timber.tag("MyRecordViewModel").d("loadDiaryCards called with userId: $userId, year: $year, month: $month")
+    fun loadDiaryCards(year: Int, month: Int) {
+        Timber.tag("MyRecordViewModel").d("loadDiaryCards called with year: $year, month: $month")
 
         viewModelScope.launch {
-            val response = repository.getMyRecord(userId, year, month)
+            val response = repository.getMyRecord(year, month)
             response.enqueue(object : Callback<DiaryCardResponse> {
                 override fun onResponse(
                     call: Call<DiaryCardResponse>,

@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.toyou.toyouandroid.domain.create.repository.CreateRepository
 import com.toyou.toyouandroid.utils.TokenStorage
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class UserViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
 
@@ -26,8 +27,10 @@ class UserViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
                 _cardId.value = response.result.id
                 _emotion.value = response.result.emotion
                 _nickname.value = response.result.nickname
-                Log.d("get home", "API 성공, 카드 ID: ${response.result.id}")
-                Log.d("get home", "API 성공, 상태: ${response.result.emotion}")
+
+                Timber.tag("getHomeEntry").d("API 성공, 카드 ID: ${response.result.id}")
+                Timber.tag("getHomeEntry").d("API 성공, 상태: ${response.result.emotion}")
+                Timber.tag("getHomeEntry").d("API 성공, 카드 ID: ${response.result.nickname}")
 
             } else {
                 Log.e("get home", "home API 호출 실패: ${response.message}")
