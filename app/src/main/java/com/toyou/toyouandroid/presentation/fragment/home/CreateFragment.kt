@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -207,6 +208,10 @@ class CreateFragment : Fragment(){
         val mainActivity = activity as MainActivity
         mainActivity.hideBottomNavigation(false)
         navController.popBackStack()
+        val fragmentManager = (context as MainActivity).supportFragmentManager
+
+        // 이전의 모든 프래그먼트를 백 스택에서 제거 (AFragment)
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
 
 }
