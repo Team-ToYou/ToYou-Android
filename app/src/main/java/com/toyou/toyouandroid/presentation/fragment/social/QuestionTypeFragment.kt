@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -86,6 +87,14 @@ class QuestionTypeFragment : Fragment(){
             mainActivity.hideBottomNavigation(false)
             navController.popBackStack()
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val mainActivity = activity as MainActivity
+                mainActivity.hideBottomNavigation(false)
+                navController.popBackStack()            }
+
+        })
 
         socialViewModel.selectedEmotionMent.observe(viewLifecycleOwner) { ment,  ->
             binding.normalTv.text = ment

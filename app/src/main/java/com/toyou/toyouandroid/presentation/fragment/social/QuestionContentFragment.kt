@@ -12,6 +12,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -21,6 +22,7 @@ import androidx.navigation.Navigation
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.data.social.dto.request.QuestionDto
 import com.toyou.toyouandroid.databinding.FragmentQuestionContentBinding
+import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModelFactory
 import com.toyou.toyouandroid.utils.TokenStorage
@@ -88,6 +90,14 @@ class QuestionContentFragment : Fragment() {
             socialViewModel.removeContent()
             navController.popBackStack()
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                socialViewModel.removeOptions()
+                socialViewModel.removeContent()
+                navController.popBackStack()       }
+
+        })
 
         binding.questionBoxEt.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(

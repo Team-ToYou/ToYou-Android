@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -62,6 +63,14 @@ class QuestionContentLongFragment: Fragment() {
             navController.popBackStack()
 
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                socialViewModel.removeContent()
+                navController.popBackStack()
+            }
+
+        })
 
         binding.questionBoxEt.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(
