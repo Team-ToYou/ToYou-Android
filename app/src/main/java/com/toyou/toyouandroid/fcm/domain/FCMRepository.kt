@@ -22,12 +22,14 @@ class FCMRepository(private val tokenStorage: TokenStorage) {
             if (response.isSuccess) {
                 Log.d("post성공!", response.message)
             } else {
-                Log.d("post실패!", response.message)
+                Log.d("post실패!", "Response Code: ${response.code}, Message: ${response.message}")
+                response.result?.let {
+                    Log.d("post실패!", "Response Body: ${it}")
+                }
             }
         } catch (e: Exception) {
             e.printStackTrace()
             Log.d("post실패!", e.message.toString())
-
         }
     }
 

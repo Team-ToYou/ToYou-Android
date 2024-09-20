@@ -6,12 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.model.ChooseModel
 import com.toyou.toyouandroid.model.multi_type1
+import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 
-class CardChooseAdapter(private val onItemClick: (Int, Boolean) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CardChooseAdapter(private val onItemClick: (Int, Boolean) -> Unit, private val cardViewModel: CardViewModel) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var cardList: List<ChooseModel> = emptyList()
 
     fun setCards(cards: List<ChooseModel>) {
@@ -35,7 +39,7 @@ class CardChooseAdapter(private val onItemClick: (Int, Boolean) -> Unit) : Recyc
                     parent,
                     false
                 )
-                MultiViewHolder1(view, onItemClick)
+                MultiViewHolder1(view, onItemClick, cardViewModel)
             }
 
             else -> {
@@ -44,7 +48,7 @@ class CardChooseAdapter(private val onItemClick: (Int, Boolean) -> Unit) : Recyc
                     parent,
                     false
                 )
-                MultiViewHolder2(view, onItemClick)
+                MultiViewHolder2(view, onItemClick, cardViewModel)
             }
         }
     }
@@ -63,7 +67,7 @@ class CardChooseAdapter(private val onItemClick: (Int, Boolean) -> Unit) : Recyc
         }
     }
 
-    inner class MultiViewHolder1(view: View, onItemClick: (Int, Boolean) -> Unit) : RecyclerView.ViewHolder(view) {
+    inner class MultiViewHolder1(view: View, onItemClick: (Int, Boolean) -> Unit, private val cardViewModel: CardViewModel) : RecyclerView.ViewHolder(view) {
         private val question: TextView = view.findViewById(R.id.textMessage)
         private val txtOption1: TextView = view.findViewById(R.id.choose_option1)
         private val txtOption2: TextView = view.findViewById(R.id.choose_option2)
@@ -71,15 +75,42 @@ class CardChooseAdapter(private val onItemClick: (Int, Boolean) -> Unit) : Recyc
         private val button: Button = itemView.findViewById(R.id.button)
         private var isSelected: Boolean = false
 
-
         init {
+            // 기본적으로 클릭 리스너는 항상 동작하도록 설정
+            button.setOnClickListener {
+                val currentCount = cardViewModel.countSelection.value ?: 0
+                if (isSelected) {
+                    isSelected = !isSelected
+                    updateButtonBackground(isSelected)
+                    onItemClick(adapterPosition, isSelected)
+                } else if (currentCount < 5) {
+                    isSelected = !isSelected
+                    updateButtonBackground(isSelected)
+                    onItemClick(adapterPosition, isSelected)
+                } else{
+                    Toast.makeText(itemView.context, "질문은 최대 5개까지 선택할 수 있습니다", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            // LiveData 변화 관찰
+            val lifecycleOwner = itemView.findViewTreeLifecycleOwner() // LifecycleOwner 가져옴
+            lifecycleOwner?.let {
+                cardViewModel.countSelection.observe(it, Observer { count ->
+                    // 필요한 경우 UI 업데이트 등 처리
+                })
+            } ?: run {
+                Log.e("CardViewHolder", "LifecycleOwner is null")
+            }
+
+
+        /*init {
             button.setOnClickListener {
                 val isSelected = !button.isSelected
                 button.isSelected = isSelected
                 updateButtonBackground(isSelected)
                 Log.d("클릭", isSelected.toString())
                 onItemClick(adapterPosition, isSelected)
-            }
+            }*/
 
         }
 
@@ -99,21 +130,50 @@ class CardChooseAdapter(private val onItemClick: (Int, Boolean) -> Unit) : Recyc
         }
     }
 
-    inner class MultiViewHolder2(view: View, onItemClick: (Int, Boolean) -> Unit) : RecyclerView.ViewHolder(view) {
+    inner class MultiViewHolder2(view: View, onItemClick: (Int, Boolean) -> Unit, private val cardViewModel: CardViewModel) : RecyclerView.ViewHolder(view) {
         private val question: TextView = view.findViewById(R.id.textMessage)
         private val txtOption1: TextView = view.findViewById(R.id.choose_option1)
         private val txtOption2: TextView = view.findViewById(R.id.choose_option2)
         private val txtOption3: TextView = view.findViewById(R.id.choose_option3)
         private val fromWho : TextView = view.findViewById(R.id.fromWho_tv)
         private val button: Button = itemView.findViewById(R.id.button)
+        private var isSelected: Boolean = false
+
         init {
+            // 기본적으로 클릭 리스너는 항상 동작하도록 설정
+            button.setOnClickListener {
+                val currentCount = cardViewModel.countSelection.value ?: 0
+                if (isSelected) {
+                    isSelected = !isSelected
+                    updateButtonBackground(isSelected)
+                    onItemClick(adapterPosition, isSelected)
+                } else if (currentCount < 5) {
+                    isSelected = !isSelected
+                    updateButtonBackground(isSelected)
+                    onItemClick(adapterPosition, isSelected)
+                } else{
+                    Toast.makeText(itemView.context, "질문은 최대 5개까지 선택할 수 있습니다", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            // LiveData 변화 관찰
+            val lifecycleOwner = itemView.findViewTreeLifecycleOwner() // LifecycleOwner 가져옴
+            lifecycleOwner?.let {
+                cardViewModel.countSelection.observe(it, Observer { count ->
+                    // 필요한 경우 UI 업데이트 등 처리
+                })
+            } ?: run {
+                Log.e("CardViewHolder", "LifecycleOwner is null")
+            }
+
+        /*init {
             button.setOnClickListener {
                 val isSelected = !button.isSelected
                 button.isSelected = isSelected
                 updateButtonBackground(isSelected)
                 onItemClick(adapterPosition, isSelected)
                 Log.d("클릭", isSelected.toString())
-            }
+            }*/
 
         }
         private fun updateButtonBackground(isSelected: Boolean) {

@@ -6,7 +6,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -116,19 +119,21 @@ class CreateFragment : Fragment(){
 
         })
 
-        cardAdapter = CardAdapter { position, isSelected ->
+        cardAdapter = CardAdapter({ position, isSelected ->
             cardViewModel.updateButtonState(position, isSelected)
+            cardViewModel.countSelect(isSelected)
             Log.d("버튼", position.toString())
-
-        }
-        cardShortAdapter = CardShortAdapter{ position, isSelected ->
+        }, cardViewModel)
+        cardShortAdapter = CardShortAdapter({ position, isSelected ->
             Log.d("선택2", position.toString()+isSelected.toString())
             cardViewModel.updateShortButtonState(position, isSelected)
-        }
-        cardChooseAdapter = CardChooseAdapter{ position, isSelected ->
+            cardViewModel.countSelect(isSelected)
+        }, cardViewModel)
+        cardChooseAdapter = CardChooseAdapter({ position, isSelected ->
             Log.d("선택1", position.toString()+isSelected.toString())
             cardViewModel.updateChooseButton(position, isSelected)
-        }
+            cardViewModel.countSelect(isSelected)
+        }, cardViewModel)
 
 
 
@@ -146,10 +151,16 @@ class CreateFragment : Fragment(){
         navController = Navigation.findNavController(view)
 
         binding.backBtn.setOnClickListener {
-            val mainActivity = activity as MainActivity
-            mainActivity.hideBottomNavigation(false)
-            navController.popBackStack()
+            handleBackAction()
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                handleBackAction()
+            }
+
+        })
+
 
         binding.nextBtn.setOnClickListener {
             //cardViewModel.updateChooseCard()
@@ -161,8 +172,15 @@ class CreateFragment : Fragment(){
                     Timber.tag("카드3").d(previewCards[0].question)
                 }
             }
+            cardViewModel.resetSelect()
             navController.navigate(R.id.action_create_fragment_to_createWriteFragment)
         }
+
+        /*cardViewModel.countSelection.observe(viewLifecycleOwner, Observer { count ->
+            if (count > 5){
+                Toast.makeText(requireContext(), "질문은 최대 5개까지 선택할 수 있습니다", Toast.LENGTH_SHORT).show()
+            }
+        })*/
     }
 
     private fun setupRecyclerView(recyclerView: RecyclerView, adapter: RecyclerView.Adapter<*>) {
@@ -183,6 +201,17 @@ class CreateFragment : Fragment(){
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun handleBackAction() {
+        cardViewModel.resetSelect()
+        val mainActivity = activity as MainActivity
+        mainActivity.hideBottomNavigation(false)
+        navController.popBackStack()
+        val fragmentManager = (context as MainActivity).supportFragmentManager
+
+        // 이전의 모든 프래그먼트를 백 스택에서 제거 (AFragment)
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
 
 }

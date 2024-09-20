@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -65,7 +66,7 @@ class CreateWriteFragment: Fragment() {
 
         longAdapter = WriteCardAdapter(cardViewModel)
         shortAdapter = ShortCardAdapter(cardViewModel)
-        chooseAdapter = ChooseCardAdapter()
+        chooseAdapter = ChooseCardAdapter(cardViewModel)
 
         setupRecyclerView(binding.cardRv, longAdapter)
         setupRecyclerView(binding.cardShortRv, shortAdapter)
@@ -81,13 +82,21 @@ class CreateWriteFragment: Fragment() {
             cardViewModel.clearAllData()
             navController.popBackStack()
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                cardViewModel.clearAllData()
+                navController.popBackStack()            }
+
+        })
         binding.nextBtn.setOnClickListener {
             navController.navigate(R.id.action_createWriteFragment_to_previewFragment)
         }
 
-        cardViewModel.isAnyEditTextFilled.observe(viewLifecycleOwner, Observer { isFilled ->
-            //binding.nextBtn.isEnabled = isFilled
+        cardViewModel.isAllAnswersFilled.observe(viewLifecycleOwner, Observer { isFilled ->
+            binding.nextBtn.isEnabled = isFilled
         })
+
     }
 
     private fun setupRecyclerView(recyclerView: RecyclerView, adapter: RecyclerView.Adapter<*>) {

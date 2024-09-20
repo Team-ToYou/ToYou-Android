@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/optionsContainer"
     android:layout_width="match_parent"
     android:layout_height="40dp"
     android:orientation="horizontal"
     android:background="@drawable/search_container"
-    android:layout_marginTop="20dp"
-    >
+    android:layout_marginTop="20dp">
 
     <EditText
         android:id="@+id/edit_text"
@@ -18,6 +16,7 @@
         android:padding="10dp"
         android:textColor="@color/black"
         android:textSize="12sp"
+        android:maxLength="30"
         android:background="@android:color/transparent" />
 
     <ImageView

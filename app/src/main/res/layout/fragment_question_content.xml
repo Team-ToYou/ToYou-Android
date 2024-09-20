@@ -109,7 +109,7 @@
             app:layout_constraintEnd_toEndOf="@id/guideline20"
             app:layout_constraintStart_toStartOf="@id/guideline19"
             app:layout_constraintTop_toBottomOf="@id/guideline4"
-            android:enabled="false"/>
+            />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline7"

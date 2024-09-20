@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -101,30 +102,12 @@ class SocialFragment : Fragment() {
 
 
         /*binding.searchBtn.setOnClickListener {
-            var searchName = binding.searchEt.text.toString()
-            socialViewModel.getSearchData(searchName)
-            addFriendLinearLayout.removeAllViews()
-            socialViewModel.isFriend.observe(viewLifecycleOwner, Observer { isFriend ->
-                if (isFriend == "400" || isFriend =="401")
-                    addNotExist(isFriend)
-                else
-                    addFriendView(isFriend, searchName) })
-            /*socialViewModel.isFriend.value?.let { isFriend ->
-                if (isFriend == "400" || isFriend =="401")
-                    addNotExist(isFriend)
-                else
-                    addFriendView(isFriend, searchName)
-            } ?: run {
-            }*/
-        }*/
-
-        binding.searchBtn.setOnClickListener {
             val searchName = binding.searchEt.text.toString()
             addFriendLinearLayout.removeAllViews()  // 뷰를 초기화
 
             // API 호출
             socialViewModel.getSearchData(searchName)
-        }
+        }*/
 
         socialViewModel.isFriend.observe(viewLifecycleOwner, Observer { isFriend ->
             if (isFriend == "400" || isFriend == "401") {
@@ -200,6 +183,18 @@ class SocialFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
 
+        binding.searchEt.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH){
+                val searchName = binding.searchEt.text.toString()
+                addFriendLinearLayout.removeAllViews()  // 뷰를 초기화
+
+                // API 호출
+                socialViewModel.getSearchData(searchName)
+                true
+            }
+            false
+        }
+
     }
 
     override fun onDestroy() {
@@ -217,6 +212,7 @@ class SocialFragment : Fragment() {
         val addFriendView = LayoutInflater.from(requireContext()).inflate(R.layout.item_add_friend, addFriendLinearLayout,false)
         val friendName = addFriendView.findViewById<TextView>(R.id.friendName_tv)
         val stateBtn = addFriendView.findViewById<Button>(R.id.state_btn)
+
 
         friendName.apply {
             friendName?.setText(name)
@@ -241,19 +237,17 @@ class SocialFragment : Fragment() {
             }
         }
 
-        userViewModel.nickname.observe(viewLifecycleOwner, Observer { myName ->
-            stateBtn.setOnClickListener {
-                if (isFriend == "NOT_FRIEND"){
-                    socialViewModel.sendFriendRequest(name, myName)
-                }
-                else if (isFriend == "REQUEST_RECEIVED"){
-                    socialViewModel.patchApprove(name, myName)
-                }
-                else if (isFriend == "REQUEST_SENT"){
-                    socialViewModel.deleteFriend(name)
-                }
+        stateBtn.setOnClickListener {
+            val myName = userViewModel.nickname.value ?: ""
+
+            if (isFriend == "NOT_FRIEND") {
+                socialViewModel.sendFriendRequest(name, myName)
+            } else if (isFriend == "REQUEST_RECEIVED") {
+                socialViewModel.patchApprove(name, myName)
+            } else if (isFriend == "REQUEST_SENT") {
+                socialViewModel.deleteFriend(name)
             }
-        })
+        }
 
         addFriendLinearLayout.addView(addFriendView)
 

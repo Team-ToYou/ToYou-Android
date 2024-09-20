@@ -14,7 +14,7 @@ import com.toyou.toyouandroid.model.PreviewChooseModel
 import com.toyou.toyouandroid.model.multi_type1
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 
-class ChooseCardAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ChooseCardAdapter(private val cardViewModel: CardViewModel) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var cardList: List<PreviewCardModel> = emptyList()
 
 
@@ -79,10 +79,12 @@ class ChooseCardAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             txtOption1.setOnClickListener {
                 handleOptionSelection(txtOption1)
                 cardList[adapterPosition].answer = txtOption1.text.toString()
+                cardViewModel.updateCardInputStatusChoose(adapterPosition, true)
             }
             txtOption2.setOnClickListener {
                 handleOptionSelection(txtOption2)
                 cardList[adapterPosition].answer = txtOption2.text.toString()
+                cardViewModel.updateCardInputStatusChoose(adapterPosition, true)
             }
         }
 
@@ -117,14 +119,17 @@ class ChooseCardAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             txtOption1.setOnClickListener {
                 handleOptionSelection(txtOption1)
                 cardList[adapterPosition].answer = txtOption1.text.toString()
+                cardViewModel.updateCardInputStatusChoose(adapterPosition, true)
             }
             txtOption2.setOnClickListener {
                 handleOptionSelection(txtOption2)
                 cardList[adapterPosition].answer = txtOption2.text.toString()
+                cardViewModel.updateCardInputStatusChoose(adapterPosition, true)
             }
             txtOption3.setOnClickListener {
                 handleOptionSelection(txtOption3)
                 cardList[adapterPosition].answer = txtOption3.text.toString()
+                cardViewModel.updateCardInputStatusChoose(adapterPosition, true)
             }
         }
 

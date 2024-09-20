@@ -60,6 +60,7 @@ class SocialViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
     val friendRequestRemove : LiveData<Boolean> get() = _friendRequestRemove
 
 
+
     init {
         loadInitQuestionType()
         _selectedChar.value = -1
@@ -72,8 +73,6 @@ class SocialViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
         _questionDto.value = currentQuestionDto.copy(target = friendName)
         _selectedEmotion!!.value = emotion
         _selectedEmotionMent!!.value = ment
-        Log.d("타겟", _questionDto.value.toString())
-        Log.d("타겟", _selectedEmotion.value.toString())
     }
 
     fun setTypeFriend(type: String) {
@@ -185,6 +184,7 @@ class SocialViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
             _questionDto.value = currentQuestionDto.copy(options = newOptions)
             Log.d("옵션", _questionDto.value.toString())
         }
+
     }
 
     fun updateOption() {
@@ -346,9 +346,6 @@ class SocialViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
     private fun resetToken(){
         _retrieveToken.value = emptyList()
     }
-
-
-
 
 }
 

@@ -39,9 +39,6 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
     val chooseCards : LiveData<List<ChooseModel>> get() = _chooseCards
     private val _previewChoose = MutableLiveData<List<PreviewChooseModel>>()
     val previewChoose : LiveData<List<PreviewChooseModel>> get() = _previewChoose
-    private val _isAnyEditTextFilled = MutableLiveData(false)
-    val isAnyEditTextFilled: LiveData<Boolean> get() = _isAnyEditTextFilled
-
     private val repository = CreateRepository(tokenStorage)
     private val homeRepository = HomeRepository(tokenStorage)
 
@@ -51,6 +48,41 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
     val answer = MutableLiveData<String>()
     private val _cardId = MutableLiveData<Int>().apply { value = 0 }
     val cardId: LiveData<Int> get() = _cardId
+    private val _isAllAnswersFilled = MutableLiveData(false)
+    val isAllAnswersFilled: LiveData<Boolean> get() = _isAllAnswersFilled
+
+    private var inputStatus: MutableList<Boolean> = mutableListOf()
+    private var inputLongStatus : MutableList<Boolean> = mutableListOf()
+    private var inputChooseStatus : MutableList<Boolean> = mutableListOf()
+
+    private val _countSelection = MutableLiveData<Int>(0)
+    val countSelection : LiveData<Int>get() = _countSelection
+
+    fun setCardCount(count: Int, count2 : Int, count3 : Int) {
+        inputStatus = MutableList(count){false} // 카드 개수만큼 false로 초기화
+        inputLongStatus = MutableList(count2){false} // 카드 개수만큼 false로 초기화
+        inputChooseStatus = MutableList(count3){false}
+    }
+
+    fun updateCardInputStatus(index: Int, isFilled: Boolean) {
+        inputStatus[index] = isFilled
+        checkIfAllAnswersFilled() // 입력 상태가 변경될 때마다 확인
+    }
+
+    fun updateCardInputStatusLong(index: Int, isFilled: Boolean) {
+        inputLongStatus[index] = isFilled
+        checkIfAllAnswersFilled() // 입력 상태가 변경될 때마다 확인
+    }
+    fun updateCardInputStatusChoose(index: Int, isFilled: Boolean) {
+        inputChooseStatus[index] = isFilled
+        checkIfAllAnswersFilled() // 입력 상태가 변경될 때마다 확인
+    }
+
+    private fun checkIfAllAnswersFilled() {
+        _isAllAnswersFilled.value = inputStatus.count { it } == inputStatus.size && inputLongStatus.count { it } == inputLongStatus.size && inputChooseStatus.count { it } == inputChooseStatus.size
+    }
+
+
 
     fun sendData(previewCardModels: List<PreviewCardModel>, exposure: Boolean,) {
         viewModelScope.launch {
@@ -189,13 +221,6 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
         return answer.length
     }
 
-
-
-    fun setEditTextFilled(isFilled: Boolean) {
-        _isAnyEditTextFilled.value = isFilled
-    }
-
-
     fun isLockSelected(lock : ImageView){
         lock.isSelected = !lock.isSelected
         _exposure.value = lock.isSelected
@@ -236,23 +261,39 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
     fun updateAllPreviews() {
         val existingCards = _previewCards.value?.toMutableList() ?: mutableListOf()
 
-        val newCards = _cards.value?.filter { it.isButtonSelected }?.map {
-            PreviewCardModel(answer = "", question = it.message, type = it.questionType, fromWho = it.fromWho, options = null, id = it.id)
-        } ?: emptyList()
+        val selectedNewCards = _cards.value?.filter { it.isButtonSelected } ?: emptyList()
+        val selectedNewShortCards = _shortCards.value?.filter { it.isButtonSelected } ?: emptyList()
+        val selectedNewChooseCards = _chooseCards.value?.filter { it.isButtonSelected } ?: emptyList()
 
-        val newShortCards = _shortCards.value?.filter { it.isButtonSelected }?.map {
+        // 선택된 카드를 PreviewCardModel로 변환
+        val newCards = selectedNewCards.map {
             PreviewCardModel(answer = "", question = it.message, type = it.questionType, fromWho = it.fromWho, options = null, id = it.id)
-        } ?: emptyList()
+        }
 
-        val newChooseCards =_chooseCards.value?.filter { it.isButtonSelected }?.map {
+        val newShortCards = selectedNewShortCards.map {
+            PreviewCardModel(answer = "", question = it.message, type = it.questionType, fromWho = it.fromWho, options = null, id = it.id)
+        }
+
+        val newChooseCards = selectedNewChooseCards.map {
             PreviewCardModel(question = it.message, fromWho = it.fromWho, options = it.options, type = it.type, answer = "", id = it.id)
-        } ?: emptyList()
+        }
+
+        // 선택된 카드의 개수 계산
+        val newCardsCount = selectedNewCards.size
+        val newShortCardsCount = selectedNewShortCards.size
+        val newChooseCardsCount = selectedNewChooseCards.size
+
+        Log.d("카드 선택 개수", "New Cards: $newCardsCount, Short Cards: $newShortCardsCount, Choose Cards: $newChooseCardsCount")
+
+
+        setCardCount(newShortCardsCount, newCardsCount, newChooseCardsCount)
 
         existingCards.addAll(newCards)
         existingCards.addAll(newShortCards)
         existingCards.addAll(newChooseCards)
 
         _previewCards.value = existingCards.distinct()
+
 
         _cards.value = _cards.value?.map {
             it.copy(isButtonSelected = false)
@@ -264,14 +305,12 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
             it.copy(isButtonSelected = false)
         }
 
-            Log.d("미리보기", _previewCards.value.toString())
+            Log.d("미리보기", previewCards.value.toString())
     }
 
     fun clearAllData() {
         _previewCards.value = emptyList()
         _previewChoose.value = emptyList()
-        Log.d("이전", previewCards.value.toString())
-        Log.d("이전", _previewCards.value.toString())
     }
 
     fun clearAll(){
@@ -286,6 +325,24 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
                 repository.patchCardData(previewCardModels, exposure, id)
         }
 
+    }
+
+    fun countSelect(selection : Boolean){
+        if (selection) {
+            _countSelection.value?.let {
+                _countSelection.value = it + 1
+            }
+        }
+        else{
+            _countSelection.value?.let {
+                _countSelection.value = it - 1
+            }
+        }
+
+    }
+
+    fun resetSelect(){
+        _countSelection.value = 0
     }
 
 }
