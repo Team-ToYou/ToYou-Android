@@ -23,8 +23,6 @@ class HomeViewModel : ViewModel() {
     private val _currentDate = MutableLiveData<String>()
     val currentDate: LiveData<String> get() = _currentDate
 
-    private val _mypageEmotionStamp = MutableLiveData<Int>()
-    val mypageEmotionStamp: LiveData<Int> get() = _mypageEmotionStamp
 
     init {
         _currentDate.value = getCurrentDate()
@@ -37,15 +35,10 @@ class HomeViewModel : ViewModel() {
         _homeBackground.value = background
     }
 
-    fun updateMypageEmotion(emotion: Int) {
-        _mypageEmotionStamp.value = emotion
-    }
-
     fun resetState() {
         _homeEmotion.value = R.drawable.home_emotion_none
         _text.value = "멘트"
         _homeDateBackground.value = R.color.g00
         _homeBackground.value = R.drawable.background_white
-        _mypageEmotionStamp.value = R.drawable.mypage_profile_default
     }
 }

@@ -177,12 +177,48 @@ class HomeFragment : Fragment() {
         }
 
         binding.homeEmotionIv.setOnClickListener {
-
             navController.navigate(R.id.action_navigation_home_to_home_option_fragment)
         }
 
-
-
+        // 홈화면 조회 후 사용자의 당일 감정우표 반영
+        userViewModel.emotion.observe(viewLifecycleOwner) { emotion ->
+            if (emotion == "HAPPY") {
+                viewModel.updateHomeEmotion(
+                    R.drawable.home_emotion_happy,
+                    getString(R.string.home_emotion_happy_title),
+                    R.color.y01,
+                    R.drawable.background_yellow
+                )
+            } else if (emotion == "EXCITED") {
+                viewModel.updateHomeEmotion(
+                    R.drawable.home_emotion_exciting,
+                    getString(R.string.home_emotion_exciting_title),
+                    R.color.b01,
+                    R.drawable.background_skyblue
+                )
+            } else if (emotion == "NORMAL") {
+                viewModel.updateHomeEmotion(
+                    R.drawable.home_emotion_normal,
+                    getString(R.string.home_emotion_normal_title),
+                    R.color.p01,
+                    R.drawable.background_purple
+                )
+            } else if (emotion == "NERVOUS") {
+                viewModel.updateHomeEmotion(
+                    R.drawable.home_emotion_anxiety,
+                    getString(R.string.home_emotion_anxiety_title),
+                    R.color.g02,
+                    R.drawable.background_green
+                )
+            } else if (emotion == "ANGRY") {
+                viewModel.updateHomeEmotion(
+                    R.drawable.home_emotion_upset,
+                    getString(R.string.home_emotion_upset_title),
+                    R.color.r01,
+                    R.drawable.background_red
+                )
+            }
+        }
 
         viewModel.homeEmotion.observe(viewLifecycleOwner) { emotion ->
             binding.homeEmotionIv.setImageResource(emotion)
@@ -199,10 +235,6 @@ class HomeFragment : Fragment() {
         viewModel.homeBackground.observe(viewLifecycleOwner) { background ->
             binding.layoutHome.setBackgroundResource(background)
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
     }
 
     override fun onDestroyView() {
