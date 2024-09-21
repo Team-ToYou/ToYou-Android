@@ -18,6 +18,7 @@ class FCMRepository(private val tokenStorage: TokenStorage) {
     ) {
         try {
             val response = client.postToken("Bearer ${tokenStorage.getAccessToken().toString()}", token)
+            Log.d("로그인","Bearer ${tokenStorage.getAccessToken().toString()}")
             // 응답 처리
             if (response.isSuccess) {
                 Log.d("post성공!", response.message)

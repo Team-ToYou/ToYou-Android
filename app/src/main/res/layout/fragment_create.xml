@@ -96,14 +96,14 @@
         style="@style/sc_l12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="25dp"
         android:background="@drawable/r50_box"
         android:paddingHorizontal="15dp"
         android:paddingVertical="5dp"
         android:text="장문형"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="@id/guideline"
-        app:layout_constraintTop_toBottomOf="@id/create_title_bottom" />
+        app:layout_constraintTop_toBottomOf="@id/view" />
 
 
     <androidx.recyclerview.widget.RecyclerView
