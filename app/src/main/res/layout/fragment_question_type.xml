@@ -31,7 +31,9 @@
         android:text="질문 유형을 선택해주세요"
         app:layout_constraintTop_toBottomOf="@id/title_tv"
         app:layout_constraintStart_toStartOf="@id/guideline19"
-        android:textColor="@color/black" />
+        android:textColor="@color/black"
+        android:layout_marginTop="3dp"
+        />
 
     <View
         android:id="@+id/view"
@@ -94,7 +96,9 @@
         app:layout_constraintEnd_toEndOf="@id/guideline20"
         app:layout_constraintStart_toEndOf="@id/guideline19"
         app:layout_constraintTop_toBottomOf="@+id/balloon_tv"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="20dp"
+
+        />
 
     <LinearLayout
         android:id="@+id/linearLayout2"

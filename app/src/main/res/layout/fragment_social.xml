@@ -11,9 +11,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="친구 추가하기"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="78dp"
         android:textColor="@color/black"
-        app:layout_constraintStart_toStartOf="@+id/guideline13"
-        app:layout_constraintTop_toTopOf="@+id/titleTopGuide" />
+        app:layout_constraintStart_toStartOf="@+id/guideline13" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -55,13 +56,15 @@
         android:id="@+id/add_friend_linear"
         android:layout_width="0dp"
         android:layout_height="70dp"
-        app:layout_constraintStart_toStartOf="@id/guideline13"
-        app:layout_constraintEnd_toEndOf="@id/guideline15"
-        app:layout_constraintTop_toBottomOf="@id/linearLayout"
-        android:layout_marginTop="16dp"
         android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="20dp"
         app:layout_constraintBottom_toTopOf="@id/title2_tv"
-        android:layout_marginBottom="20dp"/>
+        app:layout_constraintEnd_toEndOf="@id/guideline15"
+        app:layout_constraintHorizontal_bias="0.476"
+        app:layout_constraintStart_toStartOf="@id/guideline13"
+        app:layout_constraintTop_toBottomOf="@id/linearLayout"
+        app:layout_constraintVertical_bias="0.545" />
 
     <TextView
         android:id="@+id/title2_tv"
@@ -84,13 +87,6 @@
         app:layout_constraintEnd_toEndOf="@id/guideline15"
         android:layout_marginTop="10dp"/>
 
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/titleTopGuide"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.03" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline13"
