@@ -32,9 +32,4 @@ interface FCMService {
         @Body request: FCM
     ) : BaseResponse<Unit>
 
-    @HTTP(method = "DELETE", path = "/fcm/token", hasBody = true)
-    suspend fun deleteToken(
-        @Header("Authorization") id : String,
-        @Body request: Token
-        ) : BaseResponse<Unit>
 }
