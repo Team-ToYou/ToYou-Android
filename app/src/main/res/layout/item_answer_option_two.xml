@@ -47,7 +47,7 @@
             android:layout_weight="1"
             android:background="@drawable/search_container"
             android:gravity="center"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="20dp"
             android:textColor="@color/black"
             />
 

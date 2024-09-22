@@ -47,7 +47,7 @@
             android:layout_height="35dp"
             android:background="@drawable/search_container"
             android:gravity="center"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="23dp"
             android:textColor="@color/black"
             />
 
@@ -60,7 +60,7 @@
             android:layout_height="35dp"
             android:background="@drawable/search_container"
             android:gravity="center"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="23dp"
             android:textColor="@color/black"
             />
 
