@@ -11,8 +11,9 @@
         android:layout_margin="15dp"
         card_view:cardBackgroundColor="@color/gr00"
         card_view:cardCornerRadius="5dp"
-        card_view:cardElevation="3dp"
         card_view:contentPadding="4dp"
+        android:outlineProvider="none"
+        card_view:cardElevation="0dp"
         card_view:layout_constraintStart_toStartOf="@id/guideline21"
         card_view:layout_constraintEnd_toEndOf="@id/guideline22">
 
