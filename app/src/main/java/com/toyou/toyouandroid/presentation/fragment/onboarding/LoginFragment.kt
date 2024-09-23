@@ -79,7 +79,7 @@ class LoginFragment : Fragment() {
                         Log.i(TAG, "로그인 성공 ${token.accessToken}")
                         loginViewModel.setOAuthAccessToken(token.accessToken)
                         loginViewModel.kakaoLogin(token.accessToken)
-                        loginViewModel.sendTokenToServer(tokenStorage.getFcmToken() ?: "")
+                        //loginViewModel.sendTokenToServer(tokenStorage.getFcmToken() ?: "")
                         Log.d("fcm토큰!", tokenStorage.getFcmToken().toString())
                     }
                 }
