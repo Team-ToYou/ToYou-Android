@@ -89,6 +89,7 @@ class LoginViewModel(private val authService: AuthService, private val tokenStor
 
                                 // 암호화된 토큰 저장소에 저장
                                 tokenStorage.saveTokens(newAccessToken, newRefreshToken)
+                                sendTokenToServer(tokenStorage.getFcmToken().toString())
 
                                 // 인증 네트워크 모듈에 access token 저장
                                 AuthNetworkModule.setAccessToken(newAccessToken)
@@ -151,8 +152,7 @@ class LoginViewModel(private val authService: AuthService, private val tokenStor
             })
         }
     }
-
-    fun sendTokenToServer(token: String) {
+    private fun sendTokenToServer(token: String) {
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
