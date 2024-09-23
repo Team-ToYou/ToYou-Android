@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -88,9 +89,13 @@ class PreviewFragment : Fragment(){
             if (userViewModel.cardId.value == null) {
                 cardViewModel.sendData(previewCards, exposure)
                 userViewModel.updateCardIdFromOtherViewModel(cardViewModel)
+                Toast.makeText(requireContext(), "일기카드가 저장되었습니다", Toast.LENGTH_SHORT).show()
             }
-            else
+            else {
                 cardViewModel.patchCard(previewCards, exposure, userViewModel.cardId.value!!)
+                Toast.makeText(requireContext(), "일기카드가 수정되었습니다", Toast.LENGTH_SHORT).show()
+            }
+
 
             navController.navigate(R.id.action_previewFragment_to_navigation_home)
         }
