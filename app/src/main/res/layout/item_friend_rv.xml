@@ -51,14 +51,28 @@
 
     </LinearLayout>
 
-    <ImageButton
-        android:id="@+id/friend_btn"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/send_btn"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout3"
         app:layout_constraintEnd_toEndOf="@+id/linearLayout3"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginRight="20dp"/>
+        app:layout_constraintTop_toTopOf="@+id/linearLayout3"
+        android:layout_marginRight="13dp">
+
+        <ImageButton
+            android:id="@+id/friend_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/send_btn"
+            android:layout_marginRight="7dp"/>
+
+        <ImageButton
+            android:id="@+id/trash_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ph_trash"
+            />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
