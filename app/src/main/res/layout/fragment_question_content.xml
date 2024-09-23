@@ -37,7 +37,7 @@
             style="@style/sc_l12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="질문 유형을 선택해주세요"
+            android:text="질문 내용을 입력해주세요"
             app:layout_constraintTop_toBottomOf="@id/title_tv"
             app:layout_constraintStart_toStartOf="@id/guideline19"
             android:textColor="@color/black" />
