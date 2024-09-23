@@ -101,13 +101,13 @@ class SocialFragment : Fragment() {
         })
 
 
-        /*binding.searchBtn.setOnClickListener {
+        binding.searchBtn.setOnClickListener {
             val searchName = binding.searchEt.text.toString()
             addFriendLinearLayout.removeAllViews()  // 뷰를 초기화
 
             // API 호출
             socialViewModel.getSearchData(searchName)
-        }*/
+        }
 
         socialViewModel.isFriend.observe(viewLifecycleOwner, Observer { isFriend ->
             if (isFriend == "400" || isFriend == "401") {
