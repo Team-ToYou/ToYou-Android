@@ -22,32 +22,24 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
-    // TokenStorage를 초기화
-    private val tokenStorage by lazy { TokenStorage(applicationContext) }
 
-    // FCMRepository 초기화 시 tokenStorage를 전달
-    private val fcmRepository by lazy { FCMRepository(tokenStorage) }
 
+    private lateinit var tokenStorage: TokenStorage
+
+    override fun onCreate() {
+        super.onCreate()
+        // TokenStorage 초기화
+        tokenStorage = TokenStorage(applicationContext)
+    }
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         Log.d("FCM Token", "FCM 토큰: $token")
-        sendTokenToServer(token)
-    }
 
-    private fun sendTokenToServer(token: String) {
+        tokenStorage.saveFcmToken(token)
+        Log.d("FCM Token 저장", "토큰이 저장되었습니다: $token")
 
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val tokenRequest = Token(token)
-                fcmRepository.postToken(tokenRequest)
-                Log.d("sendTokenToServer", "성공")
-            } catch (e: Exception) {
-                e.printStackTrace()
-                Log.d("sendTokenToServer", "토큰 전송 실패: ${e.message}")
-            }
-        }
-
+        //sendTokenToServer(token)
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {

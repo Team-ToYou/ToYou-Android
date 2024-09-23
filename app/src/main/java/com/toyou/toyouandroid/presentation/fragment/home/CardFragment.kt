@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -94,10 +95,15 @@ class CardFragment : Fragment() {
         binding.itemTitle.text = LocalDate.now().toString().replace("-", "")
 
         cardViewModel.exposure.observe(viewLifecycleOwner, Observer { exposure ->
-            if (exposure)
+            if (exposure) {
                 binding.lockFreeIv.setImageResource(R.drawable.lock_btn2)
-            else
+                Toast.makeText(requireContext(),"일기카드를 비공개로 설정합니다", Toast.LENGTH_SHORT).show()
+            }
+            else {
                 binding.lockFreeIv.setImageResource(R.drawable.lock_free2)
+                Toast.makeText(requireContext(), "일기카드를 공개로 설정합니다", Toast.LENGTH_SHORT).show()
+            }
+
         })
 
         userViewModel.emotion.observe(viewLifecycleOwner, Observer { emotion ->
@@ -131,6 +137,7 @@ class CardFragment : Fragment() {
                 }
             }
         })
+
 
     }
 

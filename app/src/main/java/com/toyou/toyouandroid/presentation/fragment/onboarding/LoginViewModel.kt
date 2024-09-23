@@ -1,14 +1,19 @@
 package com.toyou.toyouandroid.presentation.fragment.onboarding
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.toyou.toyouandroid.fcm.domain.FCMRepository
+import com.toyou.toyouandroid.fcm.dto.request.Token
 import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.presentation.fragment.onboarding.data.dto.request.SignUpRequest
 import com.toyou.toyouandroid.presentation.fragment.onboarding.data.dto.response.SignUpResponse
 import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthService
 import com.toyou.toyouandroid.utils.TokenStorage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -19,6 +24,8 @@ class LoginViewModel(private val authService: AuthService, private val tokenStor
 
     private val _loginSuccess = MutableLiveData<Boolean>()
     val loginSuccess: LiveData<Boolean> get() = _loginSuccess
+    private val fcmRepository by lazy { FCMRepository(tokenStorage) }
+
 
     fun kakaoLogin(accessToken: String) {
         viewModelScope.launch {
@@ -33,6 +40,7 @@ class LoginViewModel(private val authService: AuthService, private val tokenStor
 
                                 // 암호화된 토큰 저장소에 저장
                                 tokenStorage.saveTokens(newAccessToken, newRefreshToken)
+                                sendTokenToServer(tokenStorage.getFcmToken().toString())
 
                                 // 인증 네트워크 모듈에 access token 저장
                                 AuthNetworkModule.setAccessToken(newAccessToken)
@@ -81,6 +89,7 @@ class LoginViewModel(private val authService: AuthService, private val tokenStor
 
                                 // 암호화된 토큰 저장소에 저장
                                 tokenStorage.saveTokens(newAccessToken, newRefreshToken)
+                                sendTokenToServer(tokenStorage.getFcmToken().toString())
 
                                 // 인증 네트워크 모듈에 access token 저장
                                 AuthNetworkModule.setAccessToken(newAccessToken)
@@ -142,5 +151,19 @@ class LoginViewModel(private val authService: AuthService, private val tokenStor
                 }
             })
         }
+    }
+    private fun sendTokenToServer(token: String) {
+
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val tokenRequest = Token(token)
+                fcmRepository.postToken(tokenRequest)
+                Log.d("sendTokenToServer", "성공")
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Log.d("sendTokenToServer", "토큰 전송 실패: ${e.message}")
+            }
+        }
+
     }
 }

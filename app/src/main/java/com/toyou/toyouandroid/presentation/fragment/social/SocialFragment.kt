@@ -101,13 +101,13 @@ class SocialFragment : Fragment() {
         })
 
 
-        /*binding.searchBtn.setOnClickListener {
+        binding.searchBtn.setOnClickListener {
             val searchName = binding.searchEt.text.toString()
             addFriendLinearLayout.removeAllViews()  // 뷰를 초기화
 
             // API 호출
             socialViewModel.getSearchData(searchName)
-        }*/
+        }
 
         socialViewModel.isFriend.observe(viewLifecycleOwner, Observer { isFriend ->
             if (isFriend == "400" || isFriend == "401") {
@@ -150,10 +150,9 @@ class SocialFragment : Fragment() {
                 // 친구 요청이 완료되었을 때 addFriendView 제거
                 if (addFriendLinearLayout.childCount > 0) {
                     addFriendLinearLayout.removeViewAt(addFriendLinearLayout.childCount - 1)
+                    Toast.makeText(requireContext(), "친구 요청이 성공적으로 취소되었습니다.", Toast.LENGTH_SHORT).show()
                 }
                 socialViewModel.resetFriendRequestRemove()
-                Toast.makeText(requireContext(), "친구 요청이 성공적으로 취소되었습니다.", Toast.LENGTH_SHORT).show()
-
             }
         })
 
@@ -274,7 +273,7 @@ class SocialFragment : Fragment() {
 
     private fun showDeleteDialog(friendName: String) {
         val dialog = CustomDialogFragment()
-        val btn = arrayOf("취소", "확인")
+        val btn = arrayOf("취소", "삭제")
         dialog.arguments = bundleOf(
             "dialogTitle" to "선택한 친구를\n삭제하시겠습니까?",
             "btnText" to btn
@@ -287,6 +286,8 @@ class SocialFragment : Fragment() {
             override fun onButton2Clicked() {
                 socialViewModel.deleteFriend(friendName)
                 socialViewModel.resetFriendRequestRemove()
+                Toast.makeText(requireContext(), "선택한 친구가 삭제 되었습니다.", Toast.LENGTH_SHORT).show()
+
             }
         })
         dialog.show(parentFragmentManager, "CustomDialogFragment")

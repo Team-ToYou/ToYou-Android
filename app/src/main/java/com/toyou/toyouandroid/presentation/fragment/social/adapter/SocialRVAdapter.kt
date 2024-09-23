@@ -6,11 +6,9 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.model.FriendListModel
-import com.toyou.toyouandroid.presentation.fragment.social.CustomDialogFragment
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
 
 class SocialRVAdapter(private val viewModel: SocialViewModel, private val onItemClick: (Int) -> Unit,
@@ -48,6 +46,7 @@ class SocialRVAdapter(private val viewModel: SocialViewModel, private val onItem
         private val friendEmotionIcon: ImageView = itemView.findViewById(R.id.imageView)
         private var emotion : Int? = null
         private var ment : String? = null
+        private val deleteBtn : ImageButton = itemView.findViewById(R.id.trash_btn)
 
         init {
             friendDetailBtn.setOnClickListener {
@@ -56,10 +55,10 @@ class SocialRVAdapter(private val viewModel: SocialViewModel, private val onItem
                 viewModel.setTargetFriend(friend, emotion, ment)
             }
 
-            itemView.setOnLongClickListener {
+            deleteBtn.setOnClickListener {
                 val friend = friendName.text.toString()
-                showDeleteDialog(friend) // 다이얼로그 호출
-                true
+                showDeleteDialog(friend)
+                //true
             }
         }
 
@@ -80,7 +79,12 @@ class SocialRVAdapter(private val viewModel: SocialViewModel, private val onItem
             friendEmotionIcon.setImageResource(emotionIconRes)
 
         }
+
+
     }
+
+
+
 
 }
 

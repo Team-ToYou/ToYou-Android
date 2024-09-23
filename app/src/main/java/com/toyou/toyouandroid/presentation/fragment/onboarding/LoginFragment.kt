@@ -2,6 +2,7 @@ package com.toyou.toyouandroid.presentation.fragment.onboarding
 
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -57,6 +58,7 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         // MainActivity의 메소드를 호출하여 바텀 네비게이션 뷰 숨기기
         (requireActivity() as MainActivity).hideBottomNavigation(true)
 
@@ -79,6 +81,8 @@ class LoginFragment : Fragment() {
                     } else if (token != null) {
                         Log.i(TAG, "카카오계정으로 로그인 성공 ${token.accessToken}")
                         loginViewModel.setOAuthAccessToken(token.accessToken)
+                        loginViewModel.kakaoLogin(token.accessToken)
+                       
                         loginViewModel.kakaoLogin(token.accessToken)  // 로그인 성공 시 호출
                     }
                 }

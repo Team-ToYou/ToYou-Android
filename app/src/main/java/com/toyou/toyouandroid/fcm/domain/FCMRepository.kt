@@ -36,24 +36,6 @@ class FCMRepository(private val tokenStorage: TokenStorage) {
 
     suspend fun getToken(name : String) = client.getToken("Bearer ${tokenStorage.getAccessToken().toString()}", name)
 
-    suspend fun deleteToken(
-        request: Token
-    ){
-        try {
-            val response = client.deleteToken("Bearer ${tokenStorage.getAccessToken().toString()}", request)
-            // 응답 처리
-            if (response.isSuccess) {
-                Log.d("토큰삭제 성공!", response.message)
-            } else {
-                Log.d("토큰삭제 실패!", response.message)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Log.d("토큰삭제 실패!", e.message.toString())
-
-        }
-    }
-
     suspend fun postFCM(
         request : FCM
     ){

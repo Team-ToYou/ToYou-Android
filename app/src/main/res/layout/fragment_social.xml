@@ -20,8 +20,8 @@
         android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="35dp"
-        android:layout_marginTop="15dp"
         android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/search_container"
         app:layout_constraintEnd_toStartOf="@+id/guideline15"
         app:layout_constraintStart_toStartOf="@+id/guideline13"
@@ -31,9 +31,9 @@
             android:id="@+id/search_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_marginLeft="10dp"
             android:src="@drawable/tdesign_search"
-            android:layout_gravity="center_vertical"
             app:layout_constraintBottom_toTopOf="@+id/guideline14"
             app:layout_constraintStart_toStartOf="@+id/linearLayout"
             app:layout_constraintTop_toBottomOf="@+id/title_tv" />
@@ -45,8 +45,8 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
             android:background="@null"
-            android:imeOptions="actionSearch"
             android:hint="친구 닉네임을 입력하세요."
+            android:imeOptions="actionSearch"
             android:inputType="text"
             android:textColorHint="#FFA6A6A6" />
 
@@ -55,27 +55,24 @@
     <LinearLayout
         android:id="@+id/add_friend_linear"
         android:layout_width="0dp"
-        android:layout_height="70dp"
+        android:layout_height="60dp"
         android:layout_marginHorizontal="10dp"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="20dp"
+        app:layout_constraintTop_toBottomOf="@id/linearLayout"
         app:layout_constraintBottom_toTopOf="@id/title2_tv"
         app:layout_constraintEnd_toEndOf="@id/guideline15"
-        app:layout_constraintHorizontal_bias="0.476"
-        app:layout_constraintStart_toStartOf="@id/guideline13"
-        app:layout_constraintTop_toBottomOf="@id/linearLayout"
-        app:layout_constraintVertical_bias="0.545" />
+        app:layout_constraintStart_toStartOf="@id/guideline13" />
 
     <TextView
         android:id="@+id/title2_tv"
         style="@style/sc_r15"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="29dp"
         android:text="친구 목록"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="@id/guideline13"
-        app:layout_constraintTop_toBottomOf="@id/guideline14" />
+        app:layout_constraintTop_toBottomOf="@id/add_friend_linear" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/social_rv"
