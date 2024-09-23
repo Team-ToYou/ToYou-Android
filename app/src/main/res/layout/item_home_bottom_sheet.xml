@@ -4,9 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable
-            name="item"
-            type="com.toyou.toyouandroid.model.HomeBottomSheetItem" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,15 +16,14 @@
             android:id="@+id/home_bottom_sheet_card"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            imageResource="@{item.imagePath}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/friend_nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{item.nickname}"
             android:textColor="@color/black"
             style="@style/gangwon16"
             app:layout_constraintStart_toStartOf="parent"

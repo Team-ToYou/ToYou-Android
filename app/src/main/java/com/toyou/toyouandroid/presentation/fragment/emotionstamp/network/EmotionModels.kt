@@ -21,3 +21,19 @@ data class EmotionData(
     val backgroundDrawable: Int,
     val mypageEmotionDrawable: Int
 )
+
+data class YesterdayFriendsResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: ResultData
+)
+
+data class ResultData(
+    val yesterday: List<DiaryCard>
+)
+
+data class DiaryCard(
+    val cardId: Int,
+    val nickname: String
+)

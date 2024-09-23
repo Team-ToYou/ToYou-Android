@@ -16,6 +16,11 @@ interface OnboardingService {
 
     @PATCH("users/nickname")
     fun patchNickname(
-        @Body nickname: String
+        @Body request: PatchNicknameRequest
+    ): Call<PatchNicknameResponse>
+
+    @PATCH("users/status")
+    fun patchStatus(
+        @Body request: PatchStatusRequest
     ): Call<PatchNicknameResponse>
 }

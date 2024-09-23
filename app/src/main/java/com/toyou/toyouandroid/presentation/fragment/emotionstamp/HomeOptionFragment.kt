@@ -149,14 +149,9 @@ class HomeOptionFragment : Fragment() {
 
     private fun onShowDialog() {
         noticeDialogViewModel.setDialogData(
-            title = "감정은 하루에 한 번만 \n 선택할 수 있어요",
-            subTitle = "",
+            title = "감정은 하루에 한 번만 \n     선택할 수 있어요",
             leftButtonText = "확인",
-            rightButtonText = "",
-            leftButtonTextColor = R.color.black,
-            rightButtonTextColor = R.color.black,
             leftButtonClickAction = { backToHome() },
-            rightButtonClickAction = { dismissDialog() }
         )
         noticeDialog = NoticeDialog()
         noticeDialog?.show(parentFragmentManager, "CustomDialog")
@@ -165,11 +160,6 @@ class HomeOptionFragment : Fragment() {
     private fun backToHome() {
         Timber.tag("backToHome").d("backToHome")
         navController.navigate(R.id.action_navigation_home_option_to_home_fragment)
-        noticeDialog?.dismiss()
-    }
-
-    private fun dismissDialog() {
-        Timber.tag("dismissDialog").d("dismissDialog")
         noticeDialog?.dismiss()
     }
 

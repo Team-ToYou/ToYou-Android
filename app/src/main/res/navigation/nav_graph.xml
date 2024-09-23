@@ -259,6 +259,10 @@
             app:popUpTo="@id/navigation_home"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out"/>
+        <action
+            android:id="@+id/action_navigation_notice_to_social_fragment"
+            app:destination="@id/navigation_social"
+            app:popUpTo="@id/navigation_social" />
     </fragment>
     <fragment
         android:id="@+id/questionTypeFragment"

@@ -37,10 +37,8 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
     }
 
     private val noticeDialogViewModel: NoticeDialogViewModel by activityViewModels()
-    private val listener: NoticeAdapterListener
-        get() {
-            TODO()
-        }
+    private lateinit var listener: NoticeAdapterListener
+    private lateinit var noticeAdapter: NoticeAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,6 +46,34 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentNoticeBinding.inflate(inflater, container, false)
+
+        listener = object : NoticeAdapterListener {
+            override fun onShowDialog() {
+                noticeDialogViewModel.setDialogData(
+                    title = "존재하지 않는 \n 사용자입니다",
+                    leftButtonText = "확인",
+                    leftButtonClickAction = { checkUserNone() },
+                )
+                noticeDialog = NoticeDialog()
+                noticeDialog?.show(parentFragmentManager, "CustomDialog")
+            }
+
+            override fun onDeleteNotice(alarmId: Int, position: Int) {
+                viewModel.deleteNotice(alarmId, position)
+            }
+
+            override fun onFriendRequestItemClick(item: NoticeItem.NoticeFriendRequestItem) {
+                navController.navigate(R.id.action_navigation_notice_to_social_fragment)
+            }
+
+            override fun onFriendRequestAcceptedItemClick(item: NoticeItem.NoticeFriendRequestAcceptedItem) {
+                navController.navigate(R.id.action_navigation_notice_to_social_fragment)
+            }
+
+            override fun onFriendCardItemClick(item: NoticeItem.NoticeCardCheckItem) {
+                navController.navigate(R.id.action_navigation_notice_to_home_fragment)
+            }
+        }
 
         return binding.root
     }
@@ -70,7 +96,7 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
     }
 
     private fun setupRecyclerView(items: List<NoticeItem>) {
-        val adapter = NoticeAdapter(items.toMutableList(), viewModel)
+        val adapter = NoticeAdapter(items.toMutableList(), viewModel, listener)
         binding.noticeRv.layoutManager = GridLayoutManager(context, 1)
         binding.noticeRv.adapter = adapter
 
@@ -86,6 +112,7 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
             setOnTouchListener { v, _ ->
                 swipeToDeleteNotice.removePreviousClamp(this)
                 v.performClick()
+                invalidateItemDecorations()
                 false
             }
 
@@ -94,16 +121,16 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
         }
     }
 
+    private fun checkUserNone() {
+        Timber.tag("handleLogout").d("handleWithdraw")
+        noticeDialog?.dismiss()
+    }
+
     override fun onShowDialog() {
         noticeDialogViewModel.setDialogData(
             title = "존재하지 않는 \n 사용자입니다",
-            subTitle = "",
             leftButtonText = "확인",
-            rightButtonText = "",
-            leftButtonTextColor = R.color.black,
-            rightButtonTextColor = R.color.black,
             leftButtonClickAction = { checkUserNone() },
-            rightButtonClickAction = { dismissDialog() }
         )
         noticeDialog = NoticeDialog()
         noticeDialog?.show(parentFragmentManager, "CustomDialog")
@@ -111,18 +138,26 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
 
     override fun onDeleteNotice(alarmId: Int, position: Int) {
         viewModel.deleteNotice(alarmId, position)
+        noticeAdapter.removeItem(position)
+
+        // RecyclerView 간격 재설정
+        binding.noticeRv.post {
+            binding.noticeRv.invalidateItemDecorations()
+        }
     }
 
-    // 회원 로그아웃
-    private fun checkUserNone() {
-        Timber.tag("handleLogout").d("handleWithdraw")
-        noticeDialog?.dismiss()
+    override fun onFriendRequestItemClick(item: NoticeItem.NoticeFriendRequestItem) {
+        navController.navigate(R.id.action_navigation_notice_to_social_fragment)
     }
 
-    private fun dismissDialog() {
-        Timber.tag("dismissDialog").d("dismissDialog")
-        noticeDialog?.dismiss()
+    override fun onFriendRequestAcceptedItemClick(item: NoticeItem.NoticeFriendRequestAcceptedItem) {
+        navController.navigate(R.id.action_navigation_notice_to_social_fragment)
     }
+
+    override fun onFriendCardItemClick(item: NoticeItem.NoticeCardCheckItem) {
+        navController.navigate(R.id.action_navigation_notice_to_home_fragment)
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

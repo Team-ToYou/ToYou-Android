@@ -11,18 +11,24 @@ import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.data.UserDatabase
 import com.toyou.toyouandroid.databinding.FragmentHomeBinding
-import com.toyou.toyouandroid.model.HomeBottomSheetItem
+import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.presentation.fragment.home.adapter.HomeBottomSheetAdapter
+import com.toyou.toyouandroid.presentation.fragment.notice.NoticeViewModel
+import com.toyou.toyouandroid.presentation.fragment.notice.network.NoticeRepository
+import com.toyou.toyouandroid.presentation.fragment.notice.network.NoticeService
+import com.toyou.toyouandroid.presentation.fragment.notice.network.NoticeViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModel
@@ -37,12 +43,17 @@ class HomeFragment : Fragment() {
     private val binding: FragmentHomeBinding
         get() = requireNotNull(_binding){"FragmentHomeBinding -> null"}
     private val viewModel: HomeViewModel by activityViewModels()
+    private val noticeViewModel: NoticeViewModel by viewModels {
+        NoticeViewModelFactory(NoticeRepository(AuthNetworkModule.getClient().create(NoticeService::class.java)))
+    }
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
 
     private lateinit var userViewModel: UserViewModel
     private lateinit var database: UserDatabase
     private lateinit var cardViewModel: CardViewModel
+
+    private lateinit var diaryAdapter: HomeBottomSheetAdapter
 
 
     override fun onCreateView(
@@ -88,35 +99,26 @@ class HomeFragment : Fragment() {
         (requireActivity() as MainActivity).hideBottomNavigation(false)
         database = UserDatabase.getDatabase(requireContext())
 
-
         val bottomSheet: ConstraintLayout = binding.homeBottomSheet
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         bottomSheetBehavior.peekHeight = resources.getDimensionPixelSize(R.dimen.bottom_sheet_peek_height)
 
-        val items = listOf(
-            HomeBottomSheetItem(R.drawable.home_bottom_sheet_card, "테디"),
-            HomeBottomSheetItem(R.drawable.home_bottom_sheet_card, "승원"),
-            HomeBottomSheetItem(R.drawable.home_bottom_sheet_card, "현정"),
-            HomeBottomSheetItem(R.drawable.home_bottom_sheet_card, "유은"),
-            HomeBottomSheetItem(R.drawable.home_bottom_sheet_card, "테디"),
-            HomeBottomSheetItem(R.drawable.home_bottom_sheet_card, "승원"),
-            HomeBottomSheetItem(R.drawable.home_bottom_sheet_card, "현정"),
-            HomeBottomSheetItem(R.drawable.home_bottom_sheet_card, "유은")
-        )
+        viewModel.diaryCards.observe(viewLifecycleOwner) { diaryCards ->
+            diaryAdapter.submitList(diaryCards)
+        }
 
-        val adapter = HomeBottomSheetAdapter(items)
-        binding.homeBottomSheetRv.layoutManager = GridLayoutManager(context, 2)
-        binding.homeBottomSheetRv.adapter = adapter
+        viewModel.isEmpty.observe(viewLifecycleOwner) { isEmpty ->
+            if (isEmpty) {
+                binding.homeBottomsheetPseudo.visibility = View.VISIBLE
+                binding.homeBottomSheetRv.visibility = View.GONE
+            } else {
+                binding.homeBottomsheetPseudo.visibility = View.GONE
+                binding.homeBottomSheetRv.visibility = View.VISIBLE
+            }
+        }
 
-        val verticalSpaceHeight = resources.getDimensionPixelSize(R.dimen.recycler_item_spacing)
-        val horizontalSpaceHeight = verticalSpaceHeight / 2
-        binding.homeBottomSheetRv.addItemDecoration(
-            HomeBottomSheetItemDecoration(
-                horizontalSpaceHeight,
-                verticalSpaceHeight
-            )
-        )
+        viewModel.loadYesterdayDiaryCards()
 
         binding.homeBottomSheet.apply {
             setOnTouchListener { v, event ->
@@ -139,10 +141,6 @@ class HomeFragment : Fragment() {
             setOnClickListener {
                 // performClick 시 수행할 작업
             }
-        }
-
-        viewModel.currentDate.observe(viewLifecycleOwner) { date ->
-            binding.homeDateTv.text = date
         }
 
         // 우체통 클릭시 일기카드 생성 화면으로 전환(임시)
@@ -182,42 +180,52 @@ class HomeFragment : Fragment() {
 
         // 홈화면 조회 후 사용자의 당일 감정우표 반영
         userViewModel.emotion.observe(viewLifecycleOwner) { emotion ->
-            if (emotion == "HAPPY") {
-                viewModel.updateHomeEmotion(
-                    R.drawable.home_emotion_happy,
-                    getString(R.string.home_emotion_happy_title),
-                    R.color.y01,
-                    R.drawable.background_yellow
-                )
-            } else if (emotion == "EXCITED") {
-                viewModel.updateHomeEmotion(
-                    R.drawable.home_emotion_exciting,
-                    getString(R.string.home_emotion_exciting_title),
-                    R.color.b01,
-                    R.drawable.background_skyblue
-                )
-            } else if (emotion == "NORMAL") {
-                viewModel.updateHomeEmotion(
-                    R.drawable.home_emotion_normal,
-                    getString(R.string.home_emotion_normal_title),
-                    R.color.p01,
-                    R.drawable.background_purple
-                )
-            } else if (emotion == "NERVOUS") {
-                viewModel.updateHomeEmotion(
-                    R.drawable.home_emotion_anxiety,
-                    getString(R.string.home_emotion_anxiety_title),
-                    R.color.g02,
-                    R.drawable.background_green
-                )
-            } else if (emotion == "ANGRY") {
-                viewModel.updateHomeEmotion(
-                    R.drawable.home_emotion_upset,
-                    getString(R.string.home_emotion_upset_title),
-                    R.color.r01,
-                    R.drawable.background_red
-                )
+            when (emotion) {
+                "HAPPY" -> {
+                    viewModel.updateHomeEmotion(
+                        R.drawable.home_emotion_happy,
+                        getString(R.string.home_emotion_happy_title),
+                        R.color.y01,
+                        R.drawable.background_yellow
+                    )
+                }
+                "EXCITED" -> {
+                    viewModel.updateHomeEmotion(
+                        R.drawable.home_emotion_exciting,
+                        getString(R.string.home_emotion_exciting_title),
+                        R.color.b01,
+                        R.drawable.background_skyblue
+                    )
+                }
+                "NORMAL" -> {
+                    viewModel.updateHomeEmotion(
+                        R.drawable.home_emotion_normal,
+                        getString(R.string.home_emotion_normal_title),
+                        R.color.p01,
+                        R.drawable.background_purple
+                    )
+                }
+                "NERVOUS" -> {
+                    viewModel.updateHomeEmotion(
+                        R.drawable.home_emotion_anxiety,
+                        getString(R.string.home_emotion_anxiety_title),
+                        R.color.g02,
+                        R.drawable.background_green
+                    )
+                }
+                "ANGRY" -> {
+                    viewModel.updateHomeEmotion(
+                        R.drawable.home_emotion_upset,
+                        getString(R.string.home_emotion_upset_title),
+                        R.color.r01,
+                        R.drawable.background_red
+                    )
+                }
             }
+        }
+
+        viewModel.currentDate.observe(viewLifecycleOwner) { date ->
+            binding.homeDateTv.text = date
         }
 
         viewModel.homeEmotion.observe(viewLifecycleOwner) { emotion ->
@@ -235,6 +243,32 @@ class HomeFragment : Fragment() {
         viewModel.homeBackground.observe(viewLifecycleOwner) { background ->
             binding.layoutHome.setBackgroundResource(background)
         }
+
+        noticeViewModel.hasNotifications.observe(viewLifecycleOwner) { hasNotifications ->
+            if (hasNotifications) {
+                binding.homeNoticeNew.visibility = View.VISIBLE
+            } else {
+                binding.homeNoticeNew.visibility = View.GONE
+            }
+        }
+
+        setupRecyclerView()
+    }
+
+    private fun setupRecyclerView() {
+
+        val adapter = HomeBottomSheetAdapter()
+        binding.homeBottomSheetRv.layoutManager = GridLayoutManager(context, 2)
+        binding.homeBottomSheetRv.adapter = adapter
+
+        val verticalSpaceHeight = resources.getDimensionPixelSize(R.dimen.recycler_item_spacing)
+        val horizontalSpaceHeight = verticalSpaceHeight / 2
+        binding.homeBottomSheetRv.addItemDecoration(
+            HomeBottomSheetItemDecoration(
+                horizontalSpaceHeight,
+                verticalSpaceHeight
+            )
+        )
     }
 
     override fun onDestroyView() {

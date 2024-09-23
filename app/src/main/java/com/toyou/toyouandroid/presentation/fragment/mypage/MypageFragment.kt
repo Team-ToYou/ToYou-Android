@@ -1,7 +1,9 @@
 package com.toyou.toyouandroid.presentation.fragment.mypage
 
 import android.content.ContentValues.TAG
+import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -78,11 +80,15 @@ class MypageFragment : Fragment() {
         }
 
         binding.mypageOpinion.setOnClickListener {
-            navController.navigate(R.id.action_navigation_mypage_to_opinion_fragment)
+            val i = Intent(Intent.ACTION_VIEW)
+            i.data = Uri.parse("https://forms.gle/fJweAP16cT4Tc3cA6")
+            startActivity(i)
         }
 
         binding.mypageContact.setOnClickListener {
-            navController.navigate(R.id.action_navigation_mypage_to_contact_fragment)
+            val i = Intent(Intent.ACTION_VIEW)
+            i.data = Uri.parse("http://pf.kakao.com/_xiuPIn/chat")
+            startActivity(i)
         }
 
         binding.mypageTermsOfUse.setOnClickListener {
