@@ -8,6 +8,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
@@ -89,6 +90,7 @@ class ProfileFragment : Fragment() {
         binding.signupNicknameBtn.setOnClickListener{
             viewModel.changeNickname()
             viewModel.changeStatus()
+            Toast.makeText(requireContext(), "프로필 수정이 완료되었습니다", Toast.LENGTH_SHORT).show()
         }
 
         viewModel.statusChangedSuccess.observe(viewLifecycleOwner) { success ->

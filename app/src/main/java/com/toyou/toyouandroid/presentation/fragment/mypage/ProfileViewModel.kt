@@ -27,7 +27,7 @@ class ProfileViewModel : ViewModel() {
     val textCount: LiveData<String> get() = _textCount
 
     fun updateTextCount(count: Int) {
-        _textCount.value = "$count/15"
+        _textCount.value = "($count/15)"
     }
 
     private val inputText = MutableLiveData<String>()
