@@ -17,7 +17,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.data.UserDatabase
@@ -84,6 +83,7 @@ class HomeFragment : Fragment() {
         )[UserViewModel::class.java]
 
         userViewModel.getHomeEntry()
+        noticeViewModel.fetchNotices()
 
         userViewModel.cardId.observe(viewLifecycleOwner) { cardId ->
             Log.d("get home", cardId.toString())
