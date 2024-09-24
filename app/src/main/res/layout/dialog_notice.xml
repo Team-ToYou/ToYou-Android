@@ -23,6 +23,7 @@
             android:layout_height="wrap_content"
             android:text="@{viewModel.title}"
             android:textColor="@color/black"
+            android:gravity="center"
             style="@style/sc_m15"
             android:layout_marginTop="25dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -47,7 +48,8 @@
                 style="@style/sc_l12"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
