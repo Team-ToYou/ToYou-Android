@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
@@ -20,7 +21,6 @@ import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
 import com.toyou.toyouandroid.utils.TokenStorage
-import timber.log.Timber
 
 class HomeOptionFragment : Fragment() {
 
@@ -49,6 +49,7 @@ class HomeOptionFragment : Fragment() {
             requireActivity(),
             UserViewModelFactory(tokenStorage)
         )[UserViewModel::class.java]
+
         return binding.root
     }
 
@@ -64,12 +65,8 @@ class HomeOptionFragment : Fragment() {
 
         setupEmotionClickListeners()
 
-        // 홈 조회 후 감정이 존재할 경우 dialog
-        userViewModel.emotion.observe(viewLifecycleOwner) { emotion ->
-            if (emotion != null) {
-                onShowDialog()
-            }
-        }
+        // 기본 모달창
+        onShowDialog()
     }
 
     private fun setupEmotionClickListeners() {
@@ -123,7 +120,14 @@ class HomeOptionFragment : Fragment() {
 
         emotionData.forEach { data ->
             data.imageView.setOnClickListener {
-                updateEmotion(data)
+                userViewModel.emotion.observe(viewLifecycleOwner) { emotion ->
+                    if (emotion != null) {
+                        Toast.makeText(requireContext(),"감정은 하루에 한 번만 선택할 수 있어요", Toast.LENGTH_SHORT).show()
+                        navController.navigate(R.id.action_navigation_home_option_to_home_fragment)
+                    } else {
+                        updateEmotion(data)
+                    }
+                }
             }
         }
     }
@@ -149,17 +153,15 @@ class HomeOptionFragment : Fragment() {
 
     private fun onShowDialog() {
         noticeDialogViewModel.setDialogData(
-            title = "감정은 하루에 한 번만 \n     선택할 수 있어요",
+            title = "감정은 하루에 한 번만\n선택할 수 있어요",
             leftButtonText = "확인",
-            leftButtonClickAction = { backToHome() },
+            leftButtonClickAction = { dismissDialog() },
         )
         noticeDialog = NoticeDialog()
         noticeDialog?.show(parentFragmentManager, "CustomDialog")
     }
 
-    private fun backToHome() {
-        Timber.tag("backToHome").d("backToHome")
-        navController.navigate(R.id.action_navigation_home_option_to_home_fragment)
+    private fun dismissDialog() {
         noticeDialog?.dismiss()
     }
 

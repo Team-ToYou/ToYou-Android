@@ -46,7 +46,7 @@ class HomeResultFragment : Fragment() {
         binding.homeResultTv.text = text
 
         ObjectAnimator.ofFloat(binding.homeResultTv, "alpha", 0f, 1f).apply {
-            duration = 2000
+            duration = 1000
             interpolator = DecelerateInterpolator()
             start()
         }
@@ -57,7 +57,7 @@ class HomeResultFragment : Fragment() {
             navController.navigate(R.id.action_navigation_home_result_to_home_fragment)
         }
 
-        handler.postDelayed(navigateRunnable, 4000)
+        handler.postDelayed(navigateRunnable, 1500)
 
         binding.root.setOnClickListener {
             handler.removeCallbacks(navigateRunnable)
