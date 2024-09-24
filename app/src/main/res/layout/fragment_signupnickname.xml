@@ -130,6 +130,7 @@
             android:layout_width="61dp"
             android:layout_height="35dp"
             android:text="@string/signup_nickname_double_check"
+            android:stateListAnimator="@null"
             style="@style/sc_r10"
             android:textColor="@{viewModel.duplicateCheckButtonTextColor}"
             android:setBackground="@{viewModel.duplicateCheckButtonBackground}"
