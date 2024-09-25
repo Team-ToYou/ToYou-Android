@@ -10,7 +10,6 @@ import com.toyou.toyouandroid.presentation.fragment.onboarding.network.Onboardin
 import com.toyou.toyouandroid.presentation.fragment.onboarding.network.PatchNicknameRequest
 import com.toyou.toyouandroid.presentation.fragment.onboarding.network.PatchNicknameResponse
 import com.toyou.toyouandroid.presentation.fragment.onboarding.network.PatchStatusRequest
-import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,9 +18,6 @@ import timber.log.Timber
 class ProfileViewModel : ViewModel() {
     private val _title = MutableLiveData<String>()
     val title: LiveData<String> get() = _title
-
-    private val _backButtonAction = MutableLiveData<() -> Unit>()
-    val backButtonAction: LiveData<() -> Unit> get() = _backButtonAction
 
     private val _textCount = MutableLiveData("0/15")
     val textCount: LiveData<String> get() = _textCount
@@ -77,7 +73,6 @@ class ProfileViewModel : ViewModel() {
             _isDuplicateCheckEnabled.value = !text.isNullOrEmpty()
         }
         _title.value = "회원가입"
-//        _backButtonAction.value = { /* 회원가입 화면에서의 back 버튼 로직 */ }
     }
 
     fun duplicateBtnActivate() {
@@ -99,26 +94,6 @@ class ProfileViewModel : ViewModel() {
         _nickname.value = newNickname
     }
 
-    fun setForEditNickname() {
-        _title.value = "프로필 수정"
-        _backButtonAction.value = { /* 닉네임 수정 화면에서의 back 버튼 로직 */ }
-    }
-
-    fun onBackButtonClicked() {
-        _backButtonAction.value?.invoke()
-    }
-
-    fun resetState() {
-        _duplicateCheckMessage.value = "중복된 닉네임인지 확인해주세요"
-        _duplicateCheckMessageColor.value = 0xFF000000.toInt()
-        _isNextButtonEnabled.value = false
-        _nextButtonTextColor.value = 0xFFA6A6A6.toInt()
-        _nextButtonBackground.value = R.drawable.next_button
-        _nickname.value = ""
-        _duplicateCheckButtonTextColor.value = 0xFFA6A6A6.toInt()
-        _duplicateCheckButtonBackground.value = R.drawable.next_button
-    }
-
     fun resetNicknameEditState() {
         _duplicateCheckMessage.value = "중복된 닉네임인지 확인해주세요"
         _duplicateCheckMessageColor.value = 0xFF000000.toInt()
@@ -128,6 +103,21 @@ class ProfileViewModel : ViewModel() {
         _duplicateCheckButtonTextColor.value = 0xFFA6A6A6.toInt()
         _duplicateCheckButtonBackground.value = R.drawable.next_button
     }
+
+    fun nextButtonDisable() {
+        _isNextButtonEnabled.value = false
+        _nextButtonTextColor.value = 0xFFA6A6A6.toInt()
+        _nextButtonBackground.value = R.drawable.next_button
+    }
+
+    private fun nextButtonEnable() {
+        _isNextButtonEnabled.value = true
+        _nextButtonTextColor.value = 0xFF000000.toInt()
+        _nextButtonBackground.value = R.drawable.next_button_enabled
+    }
+
+    private val _nicknameValidate = MutableLiveData<Boolean>()
+    private val nicknameValidate: LiveData<Boolean> get() = _nicknameValidate
 
     private val apiService: OnboardingService = AuthNetworkModule.getClient().create(OnboardingService::class.java)
 
@@ -143,17 +133,19 @@ class ProfileViewModel : ViewModel() {
                     if (!exists) {
                         _duplicateCheckMessage.value = "사용 가능한 닉네임입니다."
                         _duplicateCheckMessageColor.value = 0xFFEA9797.toInt()
-
-                        _isNextButtonEnabled.value = true
-                        _nextButtonTextColor.value = 0xFF000000.toInt()
-                        _nextButtonBackground.value = R.drawable.next_button_enabled
+                        nextButtonEnable()
                     } else {
                         _duplicateCheckMessage.value = "이미 사용 중인 닉네임입니다."
                         _duplicateCheckMessageColor.value = 0xFFFF0000.toInt()
+                        nextButtonDisable()
                     }
                 } else {
                     _duplicateCheckMessage.value = "닉네임 확인에 실패했습니다."
                     _duplicateCheckMessageColor.value = 0xFFFF0000.toInt()
+                    _isNextButtonEnabled.value = false
+                    _nextButtonTextColor.value = 0xFFA6A6A6.toInt()
+                    _nextButtonBackground.value = R.drawable.next_button
+                    nextButtonDisable()
                 }
             }
 
@@ -161,15 +153,9 @@ class ProfileViewModel : ViewModel() {
                 Timber.tag("API Failure").e(t, "Error checking nickname")
                 _duplicateCheckMessage.value = "서버에 연결할 수 없습니다."
                 _duplicateCheckMessageColor.value = 0xFFFF0000.toInt()
+                nextButtonDisable()
             }
         })
-    }
-
-    private val _isUpdatingNickname = MutableLiveData<Boolean>()
-    val isUpdatingNickname: LiveData<Boolean> get() = _isUpdatingNickname
-
-    fun setUpdatingNickname(isUpdating: Boolean) {
-        _isUpdatingNickname.value = isUpdating
     }
 
     private val _nicknameChangedSuccess = MutableLiveData<Boolean>()
@@ -204,9 +190,6 @@ class ProfileViewModel : ViewModel() {
         })
     }
 
-    private val _statusChangedSuccess = MutableLiveData<Boolean>()
-    val statusChangedSuccess: LiveData<Boolean> get() = _statusChangedSuccess
-
     fun changeStatus() {
         val status = _status.value ?: return
         val request = PatchStatusRequest(status)
@@ -218,7 +201,6 @@ class ProfileViewModel : ViewModel() {
             ) {
                 if (response.isSuccessful) {
                     Timber.tag("changeStatus").d("${response.body()}")
-                    _statusChangedSuccess.postValue(true)
                 }
             }
 
@@ -245,10 +227,6 @@ class ProfileViewModel : ViewModel() {
             R.id.signup_status_option_3 -> _status.value = "OFFICE"
             R.id.signup_status_option_4 -> _status.value = "ETC"
         }
-
-        _isNextButtonEnabled.value = true
-        _nextButtonTextColor.value = 0xFF000000.toInt()
-        _nextButtonBackground.value = R.drawable.next_button_enabled
     }
 
     fun getButtonBackground(buttonId: Int): Int {
