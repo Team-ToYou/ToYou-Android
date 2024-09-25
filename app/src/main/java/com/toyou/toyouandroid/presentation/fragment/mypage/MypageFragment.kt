@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,7 +58,7 @@ class MypageFragment : Fragment() {
         tokenStorage = TokenStorage(requireContext())
 
         binding.viewModel = mypageViewModel
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
 
         return binding.root
     }
@@ -72,11 +73,14 @@ class MypageFragment : Fragment() {
         mypageViewModel.updateMypage()
 
         binding.mypageProfileBtn.setOnClickListener {
-            navController.navigate(R.id.action_navigation_mypage_to_profile_fragment)
+            navController.navigate(R.id.action_navigation_mypage_to_profile_fragment) // 프로필 화면으로 이동
         }
 
         binding.mypageNoticeSetting.setOnClickListener {
-            navController.navigate(R.id.action_navigation_mypage_to_notice_setting_fragment)
+            val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+                putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().packageName)
+            }
+            startActivity(intent)
         }
 
         binding.mypageOpinion.setOnClickListener {
@@ -92,6 +96,9 @@ class MypageFragment : Fragment() {
         }
 
         binding.mypageTermsOfUse.setOnClickListener {
+//            val i = Intent(Intent.ACTION_VIEW)
+//            i.data = Uri.parse("http://pf.kakao.com/_xiuPIn/chat")
+//            startActivity(i)
             navController.navigate(R.id.action_navigation_mypage_to_terms_of_use_fragment)
         }
 
@@ -149,6 +156,12 @@ class MypageFragment : Fragment() {
     private fun handleSignout() {
         Timber.tag("handleSignout").d("handleSignout")
 
+        val refreshToken = tokenStorage.getRefreshToken()
+        if (refreshToken.isNullOrEmpty()) {
+            Timber.e("No valid refresh token found.")
+            return
+        }
+
         UserApiClient.instance.unlink { error ->
             if (error != null) {
                 Timber.tag(TAG).e(error, "연결 끊기 실패")
@@ -158,17 +171,22 @@ class MypageFragment : Fragment() {
                 mypageViewModel.fcmTokenDelete(nicknameViewModel.nickname.toString())
                 mypageViewModel.kakaoSignOut()
                 tokenStorage.clearTokens()
-                //mypageViewModel.fcmTokenDelete(nicknameViewModel.nickname.toString())
+
+                // 탈퇴할 경우 사용자 정보 삭제 후 로그인 화면 이동
+                navController.navigate(R.id.action_navigation_mypage_to_login_fragment)
             }
         }
-
-        // 탈퇴할 경우 사용자 정보 삭제 후 앱 종료
-        activity?.finishAffinity()
     }
 
     // 회원 로그아웃
     private fun handleLogout() {
         Timber.tag("handleLogout").d("handleWithdraw")
+
+        val refreshToken = tokenStorage.getRefreshToken()
+        if (refreshToken.isNullOrEmpty()) {
+            Timber.e("No valid refresh token found.")
+            return
+        }
 
         UserApiClient.instance.logout { error ->
             if (error != null) {
@@ -176,12 +194,13 @@ class MypageFragment : Fragment() {
             }
             else {
                 Timber.tag(TAG).i("로그아웃 성공. SDK에서 토큰 삭제됨")
-                mypageViewModel.kakaoLogout()
-                tokenStorage.clearTokens()
             }
         }
+
+        mypageViewModel.kakaoLogout()
         viewModelManager.resetAllViewModels()
         navController.navigate(R.id.action_navigation_mypage_to_login_fragment)
+        tokenStorage.clearTokens()
         mypageDialog?.dismiss()
     }
 

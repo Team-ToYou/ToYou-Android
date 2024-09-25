@@ -36,6 +36,7 @@ class MypageViewModel(private val authService: AuthService, private val tokenSto
                 override fun onResponse(call: Call<SignUpResponse>, response: Response<SignUpResponse>) {
                     if (response.isSuccessful) {
                         Timber.i("Logout successfully")
+                        tokenStorage.clearTokens()
                     } else {
                         val errorMessage = response.errorBody()?.string() ?: "Unknown error"
                         Timber.e("API Error: $errorMessage")

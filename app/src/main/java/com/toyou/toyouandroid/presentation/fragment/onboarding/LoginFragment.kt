@@ -121,13 +121,13 @@ class LoginFragment : Fragment() {
     private fun checkIfTokenExists() {
         tokenStorage.let { storage ->
             val accessToken = storage.getAccessToken()
-            if (accessToken != "") {
+            if (accessToken != null) {
                 // 액세스 토큰이 있으면 홈 화면으로 이동
                 navController.navigate(R.id.action_navigation_login_to_home_fragment)
-                Timber.d("User Info Existed")
+                Timber.d("User Info Existed: $accessToken")
             } else {
                 // 액세스 토큰이 없으면 회원가입 동의 화면으로 이동
-                navController.navigate(R.id.action_navigation_login_to_signup_agree_fragment)
+//                navController.navigate(R.id.action_navigation_login_to_signup_agree_fragment)
                 Timber.d("User Info Not Existed")
             }
         }
