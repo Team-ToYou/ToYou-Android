@@ -16,6 +16,7 @@ import com.toyou.toyouandroid.utils.TokenStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 
 class SocialViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
@@ -212,16 +213,15 @@ class SocialViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
                 Log.e("api 실패!", "널")
             }
             Log.d("api 성공!", "성공")
-        }
-        retrieveTokenFromServer(questionDto.value!!.target)
-        _retrieveToken.value?.let { tokens ->
-            for (token in tokens) {
-                postFCM(myName, token, 3)
-            }
-            resetToken()
 
+            retrieveTokenFromServer(questionDto.value!!.target)
+            _retrieveToken.value?.let { tokens ->
+                for (token in tokens) {
+                    postFCM(myName, token, 3)
+                }
+            }
         }
-        resetQuestionData()
+
     }
 
     fun sendFriendRequest(name: String, myName: String) {
@@ -236,6 +236,12 @@ class SocialViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
                 Log.d("api 성공!", "성공")
 
                 // 작업이 성공적으로 완료되었음을 표시
+                retrieveTokenFromServer(name)
+                _retrieveToken.value?.let { tokens ->
+                    for (token in tokens) {
+                        postFCM(myName, token, 1)
+                    }
+                }
                 _friendRequestCompleted.postValue(true)
             } catch (e: Exception) {
                 // 오류 처리
@@ -244,13 +250,14 @@ class SocialViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
             }
         }
 
-        retrieveTokenFromServer(name)
-        _retrieveToken.value?.let { tokens ->
+
+        //retrieveTokenFromServer(name)
+        /*_retrieveToken.value?.let { tokens ->
             for (token in tokens) {
                 postFCM(myName, token, 1)
-            }
-            resetToken()
-        }
+            }*/
+            //resetToken()
+        //}
     }
 
     fun resetFriendRequest() {
@@ -308,43 +315,51 @@ class SocialViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
             }
             Log.d("api 성공!", "성공")
             _friendRequestCanceled.postValue(true)
-        }
-        retrieveTokenFromServer(name)
-        _retrieveToken.value?.let { tokens ->
-            for (token in tokens) {
-                postFCM(myName, token, 2)
+            retrieveTokenFromServer(name)
+            _retrieveToken.value?.let { tokens ->
+                for (token in tokens) {
+                    postFCM(myName, token, 2)
+                }
+                //resetToken()
             }
-            resetToken()
+        }
+
+    }
+
+    suspend fun retrieveTokenFromServer(name: String) {
+        resetToken()
+        try {
+            // IO 스레드에서 네트워크 호출을 처리
+            val response = withContext(Dispatchers.IO) {
+                fcmRepository.getToken(name)
+            }
+
+            if (response.isSuccess) {
+                _retrieveToken.value = response.result.tokens
+                // 서버에서 받은 토큰을 사용해 로직을 처리
+                Log.d("Token Retrieval", _retrieveToken.value.toString())
+            } else {
+                Log.e("Token Retrieval", "토큰 조회 실패: ${response.message}")
+            }
+        } catch (e: Exception) {
+            Log.e("Token Retrieval", "토큰 조회 중 오류 발생: ${e.message}")
         }
     }
 
-    fun retrieveTokenFromServer(name : String) = viewModelScope.launch {
-            try {
-                val response = fcmRepository.getToken(name)
-                if (response.isSuccess) {
-                    _retrieveToken.value = response.result.tokens
-                    // 서버에서 받은 토큰을 사용해 로직을 처리
-                    Log.d("Token Retrieval", retrieveToken.value.toString())
-                } else {
-                    Log.e("Token Retrieval", "토큰 조회 실패: ${response.message}")
-                }
-            } catch (e: Exception) {
-                Log.e("Token Retrieval", "토큰 조회 중 오류 발생: ${e.message}")
-
-            }
-        }
-
-    private fun resetQuestionData() {
+    fun resetQuestionData() {
         _selectedChar.value = -1
         _nextBtnEnabled.value = false
         _questionDto.value = QuestionDto("", "", "", false, null) // 초기화
         _selectedEmotion.value = 0
         _selectedEmotionMent.value = ""
         _optionList.value = emptyList()
+        Log.d("fcm!!","호출")
+
     }
 
     private fun resetToken(){
         _retrieveToken.value = emptyList()
+        Log.d("fcm!","호출")
     }
 
 }

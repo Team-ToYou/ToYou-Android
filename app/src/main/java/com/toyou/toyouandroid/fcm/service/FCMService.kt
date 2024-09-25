@@ -29,6 +29,7 @@ interface FCMService {
 
     @POST("/fcm/send")
     suspend fun postFCM(
+        @Header("Authorization") id : String,
         @Body request: FCM
     ) : BaseResponse<Unit>
 

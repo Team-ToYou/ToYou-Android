@@ -40,7 +40,7 @@ class FCMRepository(private val tokenStorage: TokenStorage) {
         request : FCM
     ){
         try {
-            val response = client.postFCM(request = request)
+            val response = client.postFCM("Bearer ${tokenStorage.getAccessToken().toString()}",request = request)
             // 응답 처리
             if (response.isSuccess) {
                 Log.d("fcm 성공!", response.message)

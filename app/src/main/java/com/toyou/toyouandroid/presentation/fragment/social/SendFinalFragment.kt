@@ -9,12 +9,16 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentSendBinding
 import com.toyou.toyouandroid.databinding.FragmentSendFinalBinding
 import com.toyou.toyouandroid.presentation.base.MainActivity
+import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModelFactory
+import com.toyou.toyouandroid.utils.TokenStorage
 
 class SendFinalFragment: Fragment() {
     private var _binding : FragmentSendFinalBinding? = null
@@ -22,8 +26,16 @@ class SendFinalFragment: Fragment() {
 
     private lateinit var navController: NavController
 
+    private lateinit var socialViewModel : SocialViewModel
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val tokenStorage = TokenStorage(requireContext())
+        socialViewModel = ViewModelProvider(
+            requireActivity(),
+            SocialViewModelFactory(tokenStorage)
+        )[SocialViewModel::class.java]
     }
 
     override fun onCreateView(
