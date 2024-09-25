@@ -68,13 +68,6 @@ class ProfileViewModel : ViewModel() {
     private val _nickname = MutableLiveData<String>()
     val nickname: LiveData<String> get() = _nickname
 
-    init {
-        inputText.observeForever { text ->
-            _isDuplicateCheckEnabled.value = !text.isNullOrEmpty()
-        }
-        _title.value = "회원가입"
-    }
-
     fun duplicateBtnActivate() {
         _duplicateCheckButtonTextColor.value = 0xFF000000.toInt()
         _duplicateCheckButtonBackground.value = R.drawable.signupnickname_doublecheck_activate
@@ -111,13 +104,23 @@ class ProfileViewModel : ViewModel() {
     }
 
     private fun nextButtonEnable() {
-        _isNextButtonEnabled.value = true
-        _nextButtonTextColor.value = 0xFF000000.toInt()
-        _nextButtonBackground.value = R.drawable.next_button_enabled
+        if (_nicknameValidate.value == true) {
+            _isNextButtonEnabled.value = true
+            _nextButtonTextColor.value = 0xFF000000.toInt()
+            _nextButtonBackground.value = R.drawable.next_button_enabled
+        }
     }
 
     private val _nicknameValidate = MutableLiveData<Boolean>()
     private val nicknameValidate: LiveData<Boolean> get() = _nicknameValidate
+
+    init {
+        inputText.observeForever { text ->
+            _isDuplicateCheckEnabled.value = !text.isNullOrEmpty()
+        }
+        _title.value = "회원가입"
+        _nicknameValidate.value = true
+    }
 
     private val apiService: OnboardingService = AuthNetworkModule.getClient().create(OnboardingService::class.java)
 
@@ -133,18 +136,18 @@ class ProfileViewModel : ViewModel() {
                     if (!exists) {
                         _duplicateCheckMessage.value = "사용 가능한 닉네임입니다."
                         _duplicateCheckMessageColor.value = 0xFFEA9797.toInt()
+                        _nicknameValidate.value = true
                         nextButtonEnable()
                     } else {
                         _duplicateCheckMessage.value = "이미 사용 중인 닉네임입니다."
                         _duplicateCheckMessageColor.value = 0xFFFF0000.toInt()
+                        _nicknameValidate.value = false
                         nextButtonDisable()
                     }
                 } else {
                     _duplicateCheckMessage.value = "닉네임 확인에 실패했습니다."
                     _duplicateCheckMessageColor.value = 0xFFFF0000.toInt()
-                    _isNextButtonEnabled.value = false
-                    _nextButtonTextColor.value = 0xFFA6A6A6.toInt()
-                    _nextButtonBackground.value = R.drawable.next_button
+                    _nicknameValidate.value = false
                     nextButtonDisable()
                 }
             }
@@ -153,6 +156,7 @@ class ProfileViewModel : ViewModel() {
                 Timber.tag("API Failure").e(t, "Error checking nickname")
                 _duplicateCheckMessage.value = "서버에 연결할 수 없습니다."
                 _duplicateCheckMessageColor.value = 0xFFFF0000.toInt()
+                _nicknameValidate.value = false
                 nextButtonDisable()
             }
         })
