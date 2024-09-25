@@ -66,13 +66,6 @@ class CalendarMyRecordFragment : Fragment(), MyRecordCalendarRVAdapter.OnDateCli
             }
         })
 
-        // 오늘로 돌아가기
-        binding.btnTodayDate.setOnClickListener {
-            calendar = Calendar.getInstance()
-            startCalendar.time = calendar.time
-            myRecordViewModel.loadDiaryCards(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)) // userId 대체
-        }
-
         myRecordViewModel.diaryCards.observe(viewLifecycleOwner) { diaryCards ->
             Timber.tag("CalendarFragment").d("DiaryCards loaded: ${diaryCards.size} items")
             Timber.tag("CalendarFragment").d("DiaryCards loaded: $diaryCards")

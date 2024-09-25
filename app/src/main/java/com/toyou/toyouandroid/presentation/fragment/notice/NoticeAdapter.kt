@@ -13,7 +13,7 @@ import com.toyou.toyouandroid.model.NoticeItem
 class NoticeAdapter(
     private val items: MutableList<NoticeItem>,
     private val viewModel: NoticeViewModel,
-//    private val listener: NoticeAdapterListener
+    private val listener: NoticeAdapterListener
     ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     companion object {
         private const val TYPE_FRIEND_REQUEST = 1
@@ -76,9 +76,13 @@ class NoticeAdapter(
         fun bind(item: NoticeItem.NoticeFriendRequestItem) {
             binding.itemFriendRequest = item
             binding.noticeCardCheckDelete.setOnClickListener {
-//                removeItem(this.layoutPosition)
                 // 삭제 API 호출
                 viewModel.deleteNotice(item.alarmId, this.layoutPosition)
+                removeItem(this.layoutPosition)
+            }
+
+            binding.noticeLayout.setOnClickListener {
+                listener.onFriendRequestItemClick(item)
             }
 
             binding.noticeFriendRequestBtn.setOnClickListener {
@@ -93,9 +97,13 @@ class NoticeAdapter(
         fun bind(item: NoticeItem.NoticeFriendRequestAcceptedItem) {
             binding.itemFriendRequestAccepted = item
             binding.noticeCardCheckDelete.setOnClickListener {
-//                removeItem(this.layoutPosition)
                 // 삭제 API 호출
                 viewModel.deleteNotice(item.alarmId, this.layoutPosition)
+                removeItem(this.layoutPosition)
+            }
+
+            binding.noticeLayout.setOnClickListener {
+                listener.onFriendRequestAcceptedItemClick(item)
             }
 
             val layoutParams = binding.root.layoutParams
@@ -110,10 +118,15 @@ class NoticeAdapter(
         fun bind(item: NoticeItem.NoticeCardCheckItem) {
             binding.itemCardCheck = item
             binding.noticeCardCheckDelete.setOnClickListener {
-//                removeItem(this.layoutPosition)
                 // 삭제 API 호출
                 viewModel.deleteNotice(item.alarmId, this.layoutPosition)
+                removeItem(this.layoutPosition)
             }
+
+            binding.noticeLayout.setOnClickListener {
+                listener.onFriendCardItemClick(item)
+            }
+
             binding.executePendingBindings()
         }
     }

@@ -88,13 +88,6 @@ class CalendarFriendRecordFragment : Fragment(), FriendCalendarRVAdapter.OnDateC
         val horizontalSpaceHeight = resources.getDimensionPixelSize(R.dimen.recycler_item_spacing_side)
         binding.calendarRv.addItemDecoration(CalendarItemDecoration(horizontalSpaceHeight, verticalSpaceHeight))
 
-        // 오늘로 돌아가기
-        binding.btnTodayDate.setOnClickListener {
-            calendar = Calendar.getInstance()
-            startCalendar.time = calendar.time
-            friendRecordViewModel.loadDiaryCardsNum(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)) // userId 대체
-        }
-
         friendRecordViewModel.diaryCardsNum.observe(viewLifecycleOwner) { diaryCardsNum ->
             Timber.tag("CalendarFriendRecordFragment").d("DiaryCards loaded: ${diaryCardsNum.size} items")
             Timber.tag("CalendarFriendRecordFragment").d("DiaryCards loaded: $diaryCardsNum")
