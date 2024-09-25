@@ -3,7 +3,6 @@ package com.toyou.toyouandroid.presentation.fragment.onboarding
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,7 +54,6 @@ class SplashFragment : Fragment() {
             UserViewModelFactory(tokenStorage)
         )[UserViewModel::class.java]
 
-
         return binding.root
     }
 
@@ -63,9 +61,13 @@ class SplashFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         database = UserDatabase.getDatabase(requireContext())
 
-
-        // MainActivity의 메소드를 호출하여 바텀 네비게이션 뷰 숨기기
         (requireActivity() as MainActivity).hideBottomNavigation(true)
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                requireActivity().finish()
+            }
+        })
 
         // navController 초기화
         navController = findNavController()
@@ -82,11 +84,10 @@ class SplashFragment : Fragment() {
             userViewModel.getHomeEntry()
 
             userViewModel.cardId.observe(viewLifecycleOwner) { cardId ->
-                Log.d("get home", cardId.toString())
+                Timber.tag("get home").d(cardId.toString())
             }
         } else {
             // 토큰이 없으면 로그인 화면으로 이동
-            // 3초 후에 다음 화면으로 이동
             Handler(Looper.getMainLooper()).postDelayed({
                 findNavController().navigate(R.id.action_navigation_splash_to_login_fragment)
             }, 3000)
@@ -99,13 +100,6 @@ class SplashFragment : Fragment() {
                 navController.navigate(R.id.action_navigation_splash_to_login_fragment)
             }
         }
-
-
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                requireActivity().finish()
-            }
-        })
     }
 
     override fun onDestroyView() {
