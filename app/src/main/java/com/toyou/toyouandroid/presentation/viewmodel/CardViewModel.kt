@@ -82,8 +82,6 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
         _isAllAnswersFilled.value = inputStatus.count { it } == inputStatus.size && inputLongStatus.count { it } == inputLongStatus.size && inputChooseStatus.count { it } == inputChooseStatus.size
     }
 
-
-
     fun sendData(previewCardModels: List<PreviewCardModel>, exposure: Boolean,) {
         viewModelScope.launch {
             _cardId.value = repository.postCardData(previewCardModels, exposure)
@@ -91,13 +89,16 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
         }
     }
 
-
     fun getAllData() = viewModelScope.launch {
         try {
             val response = repository.getAllData()
             if (response.isSuccess) {
                 val questionsDto = response.result
                 questionsDto?.let { mapToModels(it) }
+                Log.e("CardViewModel", "API 호출 성공: ${response.message}")
+                if (_previewCards != null){
+                    patchSelect()
+                }
             } else {
                 // 오류 처리
                 Log.e("CardViewModel", "API 호출 실패: ${response.message}")
@@ -154,14 +155,52 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
                     }
                 }
 
-                // ViewModel이나 LiveData에 리스트 전달
-                Log.d("detail", response.result.toString())
             } else {
                 // 오류 처리
                 Log.e("CardViewModel", "detail API 호출 실패: ${response.message}")
             }
         } catch (e: Exception) {
             Log.e("CardViewModel", "detail 예외 발생: ${e.message}")
+        }
+    }
+
+    fun patchSelect(){
+        Log.d("patch2", _previewCards.value.toString())
+        _previewCards.value?.let { questionList -> // 안전 호출 연산자 사용
+            questionList.forEach { question ->
+                when (question.type) {
+                    0 -> {
+                        _shortCards.value?.forEach { shortCard -> // null 안전 호출
+                            if (question.id == shortCard.id) {
+                                shortCard.isButtonSelected = true
+                            }
+                        }
+                    }
+                    1 -> {
+                        cards.value?.forEach { longCard -> // null 안전 호출
+                            if (question.id == longCard.id) {
+                                longCard.isButtonSelected = true
+                            }
+                        }
+                    }
+                    2 -> {
+                        chooseCards.value?.forEach { chooseCard -> // null 안전 호출
+                            if (question.id == chooseCard.id) {
+                                chooseCard.isButtonSelected = true
+                            }
+                        }
+                    }
+                    3 -> {
+                        chooseCards.value?.forEach { chooseCard -> // null 안전 호출
+                            if (question.id == chooseCard.id) {
+                                chooseCard.isButtonSelected = true
+                            }
+                        }
+                    }
+                }
+                Log.d("patch2 ",_shortCards.value.toString())
+            }
+
         }
     }
 
