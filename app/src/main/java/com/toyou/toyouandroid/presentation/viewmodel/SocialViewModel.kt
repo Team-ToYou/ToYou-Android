@@ -215,9 +215,17 @@ class SocialViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
             Log.d("api 성공!", "성공")
 
             retrieveTokenFromServer(questionDto.value!!.target)
-            _retrieveToken.value?.let { tokens ->
-                for (token in tokens) {
-                    postFCM(myName, token, 3)
+            if (_questionDto.value!!.anonymous){
+                _retrieveToken.value?.let { tokens ->
+                    for (token in tokens) {
+                        postFCM("익명", token, 3)
+                    }
+                }
+            }else {
+                _retrieveToken.value?.let { tokens ->
+                    for (token in tokens) {
+                        postFCM(myName, token, 3)
+                    }
                 }
             }
         }
