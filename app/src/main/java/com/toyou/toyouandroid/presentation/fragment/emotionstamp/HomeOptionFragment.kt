@@ -120,13 +120,11 @@ class HomeOptionFragment : Fragment() {
 
         emotionData.forEach { data ->
             data.imageView.setOnClickListener {
-                userViewModel.emotion.observe(viewLifecycleOwner) { emotion ->
-                    if (emotion != null) {
-                        Toast.makeText(requireContext(),"감정은 하루에 한 번만 선택할 수 있어요", Toast.LENGTH_SHORT).show()
-                        navController.navigate(R.id.action_navigation_home_option_to_home_fragment)
-                    } else {
-                        updateEmotion(data)
-                    }
+                if (userViewModel.emotion.value != null) {
+                    Toast.makeText(requireContext(),"감정은 하루에 한 번만 선택할 수 있어요", Toast.LENGTH_SHORT).show()
+                    navController.navigate(R.id.action_navigation_home_option_to_home_fragment)
+                } else {
+                    updateEmotion(data)
                 }
             }
         }
@@ -155,7 +153,7 @@ class HomeOptionFragment : Fragment() {
         noticeDialogViewModel.setDialogData(
             title = "감정은 하루에 한 번만\n선택할 수 있어요",
             leftButtonText = "확인",
-            leftButtonClickAction = { dismissDialog() },
+            leftButtonClickAction = { dismissDialog() }
         )
         noticeDialog = NoticeDialog()
         noticeDialog?.show(parentFragmentManager, "CustomDialog")
