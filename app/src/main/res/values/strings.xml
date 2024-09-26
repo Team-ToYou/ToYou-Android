@@ -7,6 +7,18 @@
 
     <string name="ToYou_hanguel">투유</string>
 
+    <string name="tutorial_step_1_title">투유는 맞춤형 질문과 친구들이 보낸 질문으로\n오늘의 일기카드를 만드는 서비스예요.</string>
+    <string name="tutorial_step_1_subtitle">하루하루 그날의 감정을 기록할 수 있어요</string>
+    <string name="tutorial_step_2_title">우체통에는 배달된 질문들이 기다리고 있어요\n질문들로 오늘의 일기카드를 만들 수 있답니다.</string>
+    <string name="tutorial_step_2_subtitle">질문들은 24시가 지나면 사라지니 서두르세요!</string>
+    <string name="tutorial_step_3_title">다양한 유형의 질문을 답하며\n나만의 일기카드를 완성해보세요.</string>
+    <string name="tutorial_step_3_subtitle">물론 당신도 친구들에게 질문을 보낼 수 있답니다!</string>
+    <string name="tutorial_step_4_title">기록탭에서 당신과 친구들의 일기카드를\n살펴보며 그날의 추억을 되새겨보세요.</string>
+    <string name="tutorial_step_4_subtitle"> 작은 기록들이 모여 특별한 이야기가 완성됩니다</string>
+    <string name="tutorial_step_5_title">투유와 함께 당신의 감정에 한 걸음 더\n가까이 다가가 특별한 경험을 만들어보세요!</string>
+    <string name="tutorial_skip">건너뛰기</string>
+    <string name="tutorial_complete">투유 시작하기</string>
+
     <string name="signup_screen_bar_title">회원가입</string>
     <string name="next_button">다음</string>
     <string name="complete_button">완료</string>
