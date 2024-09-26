@@ -23,6 +23,7 @@ import com.toyou.toyouandroid.presentation.fragment.notice.network.NetworkModule
 import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthService
 import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthViewModelFactory
 import com.toyou.toyouandroid.utils.TokenStorage
+import com.toyou.toyouandroid.utils.TutorialStorage
 import timber.log.Timber
 
 class LoginFragment : Fragment() {
@@ -33,6 +34,7 @@ class LoginFragment : Fragment() {
         get() = requireNotNull(_binding){"FragmentLoginBinding -> null"}
 
     private lateinit var tokenStorage: TokenStorage
+    private lateinit var tutorialStorage: TutorialStorage
     private val loginViewModel: LoginViewModel by activityViewModels {
         AuthViewModelFactory(
             NetworkModule.getClient().create(AuthService::class.java),
@@ -49,6 +51,7 @@ class LoginFragment : Fragment() {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
 
         tokenStorage = TokenStorage(requireContext())
+        tutorialStorage = TutorialStorage(requireContext())
 
         return binding.root
     }
@@ -122,14 +125,24 @@ class LoginFragment : Fragment() {
         tokenStorage.let { storage ->
             val accessToken = storage.getAccessToken()
             if (accessToken != null) {
-                // 액세스 토큰이 있으면 홈 화면으로 이동
-                navController.navigate(R.id.action_navigation_login_to_home_fragment)
                 Timber.d("User Info Existed: $accessToken")
+                checkTutorial()
             } else {
                 // 액세스 토큰이 없으면 회원가입 동의 화면으로 이동
 //                navController.navigate(R.id.action_navigation_login_to_signup_agree_fragment)
                 Timber.d("User Info Not Existed")
             }
+        }
+    }
+
+    private fun checkTutorial() {
+        if (!tutorialStorage.isTutorialShown()) {
+            navController.navigate(R.id.action_navigation_login_to_tutorial_fragment)
+            tutorialStorage.setTutorialShown()
+        } else {
+            // 튜토리얼을 본 적이 있으면 홈 화면으로 바로 이동
+            // 액세스 토큰이 있으면 홈 화면으로 이동
+            navController.navigate(R.id.action_navigation_login_to_home_fragment)
         }
     }
 
