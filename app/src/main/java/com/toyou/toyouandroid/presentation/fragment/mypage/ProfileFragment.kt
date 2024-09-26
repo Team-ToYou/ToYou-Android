@@ -8,6 +8,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
@@ -44,7 +45,7 @@ class ProfileFragment : Fragment() {
 
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
 
         viewModel.resetNicknameEditState()
 
@@ -89,14 +90,8 @@ class ProfileFragment : Fragment() {
         binding.signupNicknameBtn.setOnClickListener{
             viewModel.changeNickname()
             viewModel.changeStatus()
-        }
-
-        viewModel.statusChangedSuccess.observe(viewLifecycleOwner) { success ->
-            if (success) {
-                navController.navigate(R.id.action_navigation_profile_to_mypage_fragment)
-            } else {
-                navController.navigate(R.id.action_navigation_profile_to_mypage_fragment)
-            }
+            navController.navigate(R.id.action_navigation_profile_to_mypage_fragment)
+            Toast.makeText(requireContext(), "프로필 수정이 완료되었습니다", Toast.LENGTH_SHORT).show()
         }
 
         binding.signupAgreeNicknameDoublecheckBtn.setOnClickListener {

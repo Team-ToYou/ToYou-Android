@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
@@ -18,7 +20,12 @@ import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.presentation.fragment.notice.network.NoticeRepository
 import com.toyou.toyouandroid.presentation.fragment.notice.network.NoticeService
 import com.toyou.toyouandroid.presentation.fragment.notice.network.NoticeViewModelFactory
+import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.CardViewModelFactory
+import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
 import com.toyou.toyouandroid.utils.SwipeToDeleteNotice
+import com.toyou.toyouandroid.utils.TokenStorage
 import timber.log.Timber
 
 class NoticeFragment : Fragment(), NoticeAdapterListener {
@@ -40,12 +47,25 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
     private lateinit var listener: NoticeAdapterListener
     private lateinit var noticeAdapter: NoticeAdapter
 
+    private lateinit var userViewModel: UserViewModel
+    private lateinit var cardViewModel: CardViewModel
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentNoticeBinding.inflate(inflater, container, false)
+
+        val tokenStorage = TokenStorage(requireContext())
+        cardViewModel = ViewModelProvider(
+            requireActivity(),
+            CardViewModelFactory(tokenStorage)
+        )[CardViewModel::class.java]
+        userViewModel = ViewModelProvider(
+            requireActivity(),
+            UserViewModelFactory(tokenStorage)
+        )[UserViewModel::class.java]
 
         listener = object : NoticeAdapterListener {
             override fun onShowDialog() {
@@ -71,7 +91,21 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
             }
 
             override fun onFriendCardItemClick(item: NoticeItem.NoticeCardCheckItem) {
-                navController.navigate(R.id.action_navigation_notice_to_home_fragment)
+                userViewModel.emotion.observe(viewLifecycleOwner) { emotion ->
+                    if (emotion != null){
+                        userViewModel.cardId.observe(viewLifecycleOwner) { cardId ->
+                            if (cardId == null) {
+                                navController.navigate(R.id.action_navigation_notice_to_create_fragment)
+                            }
+                            else {
+                                cardViewModel.getCardDetail(cardId.toLong())
+                                navController.navigate(R.id.action_navigation_notice_to_modify_fragment)
+                            }
+                        }
+                    } else{
+                        Toast.makeText(requireContext(), "감정 우표를 먼저 선택해주세요", Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
         }
 
@@ -99,9 +133,6 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
         val adapter = NoticeAdapter(items.toMutableList(), viewModel, listener)
         binding.noticeRv.layoutManager = GridLayoutManager(context, 1)
         binding.noticeRv.adapter = adapter
-
-        val verticalSpaceHeight = resources.getDimensionPixelSize(R.dimen.recycler_item_spacing)
-        binding.noticeRv.addItemDecoration(NoticeItemDecoration(verticalSpaceHeight))
 
         val swipeToDeleteNotice = SwipeToDeleteNotice().apply {
             setClamp(resources.displayMetrics.widthPixels.toFloat() / 5)

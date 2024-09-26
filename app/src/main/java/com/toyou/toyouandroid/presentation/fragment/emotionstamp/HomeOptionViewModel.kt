@@ -30,11 +30,9 @@ class HomeOptionViewModel : ViewModel() {
             ) {
                 if (response.isSuccessful) {
                     _emotionResponse.postValue(response.body())
-                    Timber.tag("emotionResponse").d("emotionResponse: $emotionResponse")
+                    Timber.tag("emotionResponse").d("emotionResponse: $response")
                 } else {
                     Timber.tag("API Error").e("Failed to update emotion. Code: ${response.code()}, Message: ${response.message()}")
-                    Timber.tag("API Error").e("Failed to update emotion. Code: ${response.code()}, Message: ${response.body()?.message}")
-                    Timber.tag("API Error").e("$response")
                 }
             }
 
