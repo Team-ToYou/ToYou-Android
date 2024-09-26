@@ -34,6 +34,7 @@ import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
 import com.toyou.toyouandroid.utils.TokenStorage
+import timber.log.Timber
 
 class HomeFragment : Fragment() {
 
@@ -52,13 +53,13 @@ class HomeFragment : Fragment() {
     private lateinit var database: UserDatabase
     private lateinit var cardViewModel: CardViewModel
 
-    private lateinit var diaryAdapter: HomeBottomSheetAdapter
+//    private lateinit var diaryAdapter: HomeBottomSheetAdapter
 
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
@@ -86,7 +87,7 @@ class HomeFragment : Fragment() {
         noticeViewModel.fetchNotices()
 
         userViewModel.cardId.observe(viewLifecycleOwner) { cardId ->
-            Log.d("get home", cardId.toString())
+            Timber.tag("get home").d(cardId.toString())
         }
 
         return binding.root
@@ -99,13 +100,26 @@ class HomeFragment : Fragment() {
         (requireActivity() as MainActivity).hideBottomNavigation(false)
         database = UserDatabase.getDatabase(requireContext())
 
+        userViewModel.cardNum.observe(viewLifecycleOwner) { cardNum ->
+            Timber.tag("get home").d(cardNum.toString())
+
+            val imageRes = when {
+                cardNum == 0 -> R.drawable.home_mailbox_none
+                cardNum in 1..9 -> R.drawable.home_mailbox_single
+                cardNum >= 10 -> R.drawable.home_mailbox_multiple
+                else -> R.drawable.home_mailbox_none
+            }
+            binding.homeMailboxIv.setImageResource(imageRes)
+        }
+
+
         val bottomSheet: ConstraintLayout = binding.homeBottomSheet
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         bottomSheetBehavior.peekHeight = resources.getDimensionPixelSize(R.dimen.bottom_sheet_peek_height)
 
         viewModel.diaryCards.observe(viewLifecycleOwner) { diaryCards ->
-            diaryAdapter.submitList(diaryCards)
+//            diaryAdapter.submitList(diaryCards)
         }
 
         viewModel.isEmpty.observe(viewLifecycleOwner) { isEmpty ->
