@@ -43,7 +43,6 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit, private val c
         private var isSelected: Boolean = false
         private val fromWho: TextView = itemView.findViewById(R.id.fromWho_tv)
         init {
-            // 기본적으로 클릭 리스너는 항상 동작하도록 설정
             button.setOnClickListener {
                 val currentCount = cardViewModel.countSelection.value ?: 0
                 if (isSelected) {
@@ -54,7 +53,7 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit, private val c
                     isSelected = !isSelected
                     updateButtonBackground(isSelected)
                     onItemClick(adapterPosition, isSelected)
-                } else{
+                } else {
                     Toast.makeText(itemView.context, "질문은 최대 5개까지 선택할 수 있습니다", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -82,6 +81,10 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit, private val c
         fun bind(card: CardModel) {
             cardMessageTextView.text = card.message
             fromWho.text = card.fromWho
+            isSelected = card.isButtonSelected
+
+            // 버튼 배경을 업데이트
+            updateButtonBackground(isSelected)
         }
 
 

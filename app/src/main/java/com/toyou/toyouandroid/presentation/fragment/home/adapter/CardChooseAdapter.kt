@@ -92,6 +92,8 @@ class CardChooseAdapter(private val onItemClick: (Int, Boolean) -> Unit, private
                 }
             }
 
+
+
             // LiveData 변화 관찰
             val lifecycleOwner = itemView.findViewTreeLifecycleOwner() // LifecycleOwner 가져옴
             lifecycleOwner?.let {
@@ -119,9 +121,7 @@ class CardChooseAdapter(private val onItemClick: (Int, Boolean) -> Unit, private
             txtOption1.text = item.options[0]
             txtOption2.text = item.options[1]
             fromWho.text = item.fromWho
-
-            val isSelected = item.isButtonSelected
-            button.isSelected = isSelected
+            isSelected = item.isButtonSelected
             updateButtonBackground(isSelected)
         }
         private fun updateButtonBackground(isSelected: Boolean) {
@@ -187,8 +187,7 @@ class CardChooseAdapter(private val onItemClick: (Int, Boolean) -> Unit, private
             txtOption2.text = item.options[1]
             txtOption3.text = item.options[2]
             fromWho.text = item.fromWho
-            val isSelected = item.isButtonSelected
-            button.isSelected = isSelected
+            isSelected = item.isButtonSelected
             updateButtonBackground(isSelected)
 
         }
