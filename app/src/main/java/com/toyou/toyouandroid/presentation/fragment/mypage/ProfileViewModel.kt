@@ -103,7 +103,7 @@ class ProfileViewModel : ViewModel() {
         _nextButtonBackground.value = R.drawable.next_button
     }
 
-    private fun nextButtonEnable() {
+    private fun nextButtonEnableCheck() {
         if (_nicknameValidate.value == true) {
             _isNextButtonEnabled.value = true
             _nextButtonTextColor.value = 0xFF000000.toInt()
@@ -137,18 +137,20 @@ class ProfileViewModel : ViewModel() {
                         _duplicateCheckMessage.value = "사용 가능한 닉네임입니다."
                         _duplicateCheckMessageColor.value = 0xFFEA9797.toInt()
                         _nicknameValidate.value = true
-                        nextButtonEnable()
+                        nextButtonEnableCheck()
                     } else {
                         _duplicateCheckMessage.value = "이미 사용 중인 닉네임입니다."
                         _duplicateCheckMessageColor.value = 0xFFFF0000.toInt()
                         _nicknameValidate.value = false
                         nextButtonDisable()
+                        nextButtonEnableCheck()
                     }
                 } else {
                     _duplicateCheckMessage.value = "닉네임 확인에 실패했습니다."
                     _duplicateCheckMessageColor.value = 0xFFFF0000.toInt()
                     _nicknameValidate.value = false
                     nextButtonDisable()
+                    nextButtonEnableCheck()
                 }
             }
 
@@ -158,6 +160,7 @@ class ProfileViewModel : ViewModel() {
                 _duplicateCheckMessageColor.value = 0xFFFF0000.toInt()
                 _nicknameValidate.value = false
                 nextButtonDisable()
+                nextButtonEnableCheck()
             }
         })
     }
@@ -231,6 +234,8 @@ class ProfileViewModel : ViewModel() {
             R.id.signup_status_option_3 -> _status.value = "OFFICE"
             R.id.signup_status_option_4 -> _status.value = "ETC"
         }
+
+        nextButtonEnableCheck()
     }
 
     fun getButtonBackground(buttonId: Int): Int {
