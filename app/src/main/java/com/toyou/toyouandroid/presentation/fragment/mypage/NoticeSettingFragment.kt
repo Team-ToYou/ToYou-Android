@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentNoticeSettingBinding
 
 class NoticeSettingFragment : Fragment() {
@@ -31,6 +32,10 @@ class NoticeSettingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
+
+        binding.signupNicknameBackBtn.setOnClickListener {
+            navController.navigate(R.id.action_navigation_notice_setting_to_mypage_fragment)
+        }
     }
 
     override fun onDestroyView() {
