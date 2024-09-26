@@ -77,10 +77,11 @@ class MypageFragment : Fragment() {
         }
 
         binding.mypageNoticeSetting.setOnClickListener {
-            val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
-                putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().packageName)
-            }
-            startActivity(intent)
+//            val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+//                putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().packageName)
+//            }
+//            startActivity(intent)
+            navController.navigate(R.id.action_navigation_mypage_to_notice_setting_fragment)
         }
 
         binding.mypageOpinion.setOnClickListener {
@@ -99,7 +100,6 @@ class MypageFragment : Fragment() {
 //            val i = Intent(Intent.ACTION_VIEW)
 //            i.data = Uri.parse("http://pf.kakao.com/_xiuPIn/chat")
 //            startActivity(i)
-            navController.navigate(R.id.action_navigation_mypage_to_terms_of_use_fragment)
         }
 
         // ViewModel에서 닉네임을 가져와서 TextView에 설정
