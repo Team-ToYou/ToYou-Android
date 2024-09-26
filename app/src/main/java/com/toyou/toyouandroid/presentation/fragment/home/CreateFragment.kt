@@ -54,6 +54,17 @@ class CreateFragment : Fragment(){
         //cardViewModel.loadCardData()
         cardViewModel.getAllData()
 
+        /*cardViewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->
+            if (isLoading) {
+                // 로딩 중이라면 로딩 애니메이션 표시
+                showLoading()
+            } else {
+                // 로딩 완료되면 UI 업데이트
+                hideLoading()
+                updateUI()
+            }
+        })*/
+
     }
 
     override fun onCreateView(
@@ -62,6 +73,9 @@ class CreateFragment : Fragment(){
         savedInstanceState: Bundle?,
     ): View? {
         _binding = FragmentCreateBinding.inflate(inflater, container, false)
+
+
+
 
         cardViewModel.cards.observe(viewLifecycleOwner, Observer { cards ->
             Log.d("CreateFragment", "Loading cards: ${cardViewModel.cards.value}") // 디버그 로그 추가

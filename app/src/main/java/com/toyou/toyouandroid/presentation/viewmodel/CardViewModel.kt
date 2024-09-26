@@ -58,6 +58,9 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
     private val _countSelection = MutableLiveData<Int>(0)
     val countSelection : LiveData<Int>get() = _countSelection
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> get() = _isLoading
+
     fun setCardCount(count: Int, count2 : Int, count3 : Int) {
         inputStatus = MutableList(count){false} // 카드 개수만큼 false로 초기화
         inputLongStatus = MutableList(count2){false} // 카드 개수만큼 false로 초기화
@@ -94,11 +97,14 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
             val response = repository.getAllData()
             if (response.isSuccess) {
                 val questionsDto = response.result
-                questionsDto?.let { mapToModels(it) }
+                if (previewCards.value == null)
+                    questionsDto?.let { mapToModels(it) }
+                else
+                    questionsDto?.let { mapToPatchModels(it) }
                 Log.e("CardViewModel", "API 호출 성공: ${response.message}")
-                if (_previewCards != null){
+                /*if (_previewCards != null){
                     patchSelect()
-                }
+                }*/
             } else {
                 // 오류 처리
                 Log.e("CardViewModel", "API 호출 실패: ${response.message}")
@@ -107,6 +113,30 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
             Log.e("CardViewModel", "예외 발생: ${e.message}")
         }
     }
+
+    /*fun getAllData() = viewModelScope.launch {
+        _isLoading.value = true // 로딩 시작
+
+        try {
+            val response = repository.getAllData()
+            if (response.isSuccess) {
+                val questionsDto = response.result
+                questionsDto?.let { mapToModels(it) }
+                Log.e("CardViewModel", "API 호출 성공: ${response.message}")
+
+                if (_previewCards != null) {
+                    patchSelect()
+                }
+            } else {
+                Log.e("CardViewModel", "API 호출 실패: ${response.message}")
+            }
+        } catch (e: Exception) {
+            Log.e("CardViewModel", "예외 발생: ${e.message}")
+        } finally {
+            _isLoading.value = false // 로딩 끝
+        }
+    }*/
+
 
     fun getCardDetail(id : Long) = viewModelScope.launch {
         try {
@@ -164,7 +194,7 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
         }
     }
 
-    fun patchSelect(){
+    /*fun patchSelect(){
         Log.d("patch2", _previewCards.value.toString())
         _previewCards.value?.let { questionList -> // 안전 호출 연산자 사용
             questionList.forEach { question ->
@@ -199,10 +229,77 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
                     }
                 }
                 Log.d("patch2 ",_shortCards.value.toString())
+                Log.d("patch3 ",_cards.value.toString())
+                Log.d("patch4 ",_chooseCards.value.toString())
             }
 
         }
+    }*/
+
+    private fun mapToPatchModels(questionsDto: QuestionsDto) {
+        val cardModels = mutableListOf<CardModel>()
+        val chooseModels = mutableListOf<ChooseModel>()
+        val cardShortModel = mutableListOf<CardShortModel>()
+        Log.d("patch", "호출")
+
+        for (question in questionsDto.questions) {
+            when (question.type) {
+                "OPTIONAL" -> {
+                    // 선택된 상태인지 확인 (previewCards에서 동일한 id가 있는지 확인)
+                    val isSelected = _previewCards.value?.any { it.id == question.id && it.type == 2 } ?: false
+                            || _previewCards.value?.any { it.id == question.id && it.type == 3 } ?: false
+
+                    chooseModels.add(
+                        ChooseModel(
+                            message = question.content,
+                            fromWho = question.questioner,
+                            options = question.options ?: emptyList(),
+                            type = question.options.size,
+                            id = question.id,
+                            isButtonSelected = isSelected // 선택 여부 설정
+                        )
+                    )
+                }
+                "LONG_ANSWER" -> {
+                    // 선택된 상태인지 확인 (previewCards에서 동일한 id가 있는지 확인)
+                    val isSelected = _previewCards.value?.any { it.id == question.id && it.type == 1 } ?: false
+
+                    cardModels.add(
+                        CardModel(
+                            message = question.content,
+                            fromWho = question.questioner,
+                            questionType = 1,
+                            id = question.id,
+                            isButtonSelected = isSelected // 선택 여부 설정
+                        )
+                    )
+                }
+                else -> {
+                    // 선택된 상태인지 확인 (previewCards에서 동일한 id가 있는지 확인)
+                    val isSelected = _previewCards.value?.any { it.id == question.id && it.type == 0 } ?: false
+
+                    cardShortModel.add(
+                        CardShortModel(
+                            message = question.content,
+                            fromWho = question.questioner,
+                            questionType = 0,
+                            id = question.id,
+                            isButtonSelected = isSelected // 선택 여부 설정
+                        )
+                    )
+                }
+            }
+        }
+
+        _cards.value = cardModels
+        _chooseCards.value = chooseModels
+        _shortCards.value = cardShortModel
+
+        Log.d("patch2 ",_shortCards.value.toString())
+        Log.d("patch3 ",_cards.value.toString())
+        Log.d("patch4 ",_chooseCards.value.toString())
     }
+
 
 
     // 응답 데이터 매핑
