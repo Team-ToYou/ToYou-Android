@@ -50,14 +50,14 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit, private val c
                     isSelected = !isSelected
                     updateButtonBackground(isSelected)
                     onItemClick(adapterPosition, isSelected)
-                    updateCardModelSelectionState(isSelected)
+                    //updateCardModelSelectionState(isSelected)
                     Log.d("선택7", isSelected.toString())
 
                 } else if (currentCount < 5) {
                     isSelected = !isSelected
                     updateButtonBackground(isSelected)
                     onItemClick(adapterPosition, isSelected)
-                    updateCardModelSelectionState(isSelected)
+                    //updateCardModelSelectionState(isSelected)
 
                 } else {
                     Toast.makeText(itemView.context, "질문은 최대 5개까지 선택할 수 있습니다", Toast.LENGTH_SHORT).show()

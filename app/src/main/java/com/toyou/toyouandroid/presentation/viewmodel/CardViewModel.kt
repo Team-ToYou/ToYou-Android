@@ -406,6 +406,7 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
 
     fun updateAllPreviews() {
         val existingCards = _previewCards.value?.toMutableList() ?: mutableListOf()
+        Log.d("미리보기", existingCards.toString())
 
         val selectedNewCards = _cards.value?.filter { it.isButtonSelected } ?: emptyList()
         val selectedNewShortCards = _shortCards.value?.filter { it.isButtonSelected } ?: emptyList()
@@ -434,9 +435,17 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
 
         setCardCount(newShortCardsCount, newCardsCount, newChooseCardsCount)
 
-        existingCards.addAll(newCards)
-        existingCards.addAll(newShortCards)
-        existingCards.addAll(newChooseCards)
+        val existingIds = existingCards.map { it.id }.toSet()
+
+        // 기존에 없는 새로운 카드만 추가
+        val filteredNewCards = newCards.filter { it.id !in existingIds }
+        val filteredNewShortCards = newShortCards.filter { it.id !in existingIds }
+        val filteredNewChooseCards = newChooseCards.filter { it.id !in existingIds }
+
+        // 새로운 카드를 기존 목록에 추가
+        existingCards.addAll(filteredNewCards)
+        existingCards.addAll(filteredNewShortCards)
+        existingCards.addAll(filteredNewChooseCards)
 
         _previewCards.value = existingCards.distinct()
 
@@ -460,8 +469,8 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
     }
 
     fun clearAll(){
-        _previewCards.value = emptyList()
-        _previewChoose.value = emptyList()
+        //_previewCards.value = emptyList()
+        //_previewChoose.value = emptyList()
         _cards.value = emptyList()
         _chooseCards.value = emptyList()
         _shortCards.value = emptyList()
