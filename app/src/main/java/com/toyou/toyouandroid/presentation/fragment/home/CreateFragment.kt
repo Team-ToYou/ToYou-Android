@@ -65,52 +65,17 @@ class CreateFragment : Fragment(){
 
 
 
-
         cardViewModel.cards.observe(viewLifecycleOwner, Observer { cards ->
             cardAdapter.setCards(cards)
-
-            cards?.let {
-                for (card in it) {
-                    if (card.isButtonSelected) {
-                        binding.nextBtn.isEnabled = true
-                        break
-                    }
-                    binding.nextBtn.isEnabled = false
-                }
-            }
-            Log.d("카드수", count.toString())
         })
 
         cardViewModel.shortCards.observe(viewLifecycleOwner, Observer { cards ->
             cardShortAdapter.setCards(cards)
-
-            cards?.let {
-                for (card in it) {
-                    if (card.isButtonSelected) {
-                        binding.nextBtn.isEnabled = true
-                        break
-                    }
-                    binding.nextBtn.isEnabled = false
-                }
-            }
-
-
         })
 
 
         cardViewModel.chooseCards.observe(viewLifecycleOwner, Observer { cards ->
             cardChooseAdapter.setCards(cards)
-
-            cards?.let {
-                for (card in it) {
-                    if (card.isButtonSelected) {
-                        binding.nextBtn.isEnabled = true
-                        break
-                    }
-                    binding.nextBtn.isEnabled = false
-                }
-            }
-
         })
 
         cardAdapter = CardAdapter({ position, isSelected ->
@@ -153,6 +118,16 @@ class CreateFragment : Fragment(){
                 handleBackAction()
             }
 
+        })
+
+        binding.nextBtn.isEnabled = (cardViewModel.countSelection.value ?: 0) > 0
+
+        cardViewModel.countSelection.observe(viewLifecycleOwner, Observer { count ->
+            if (count > 0)
+                binding.nextBtn.isEnabled = true
+            else
+                binding.nextBtn.isEnabled = false
+            Log.d("선택9", count.toString())
         })
 
 
