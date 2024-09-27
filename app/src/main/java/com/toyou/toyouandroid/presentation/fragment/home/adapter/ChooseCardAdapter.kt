@@ -115,6 +115,7 @@ class ChooseCardAdapter(private val cardViewModel: CardViewModel) : RecyclerView
         private val fromWho: TextView = view.findViewById(R.id.fromWho_tv)
         private var selectedOption: TextView? = null
 
+
         init {
             txtOption1.setOnClickListener {
                 handleOptionSelection(txtOption1)
@@ -145,6 +146,12 @@ class ChooseCardAdapter(private val cardViewModel: CardViewModel) : RecyclerView
             txtOption2.text = item.options!![1]
             txtOption3.text = item.options!![2]
             fromWho.text = item.fromWho
+
+
+            val isNotEmpty = item.answer.isNotEmpty()
+            if (isNotEmpty) {
+                cardViewModel.updateCardInputStatusChoose(adapterPosition, isNotEmpty)
+            }
 
             when (item.answer) {
                 txtOption1.text.toString() -> handleOptionSelection(txtOption1)

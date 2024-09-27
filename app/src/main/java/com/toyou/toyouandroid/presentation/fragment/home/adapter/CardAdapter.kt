@@ -15,6 +15,7 @@ import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.model.CardModel
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 import kotlinx.coroutines.NonCancellable.parent
+import okhttp3.internal.addHeaderLenient
 
 class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit, private val cardViewModel: CardViewModel) : RecyclerView.Adapter<CardAdapter.CardViewHolder>() {
     private var cardList: List<CardModel> = emptyList()
@@ -43,45 +44,41 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit, private val c
         private var isSelected: Boolean = false
         private val fromWho: TextView = itemView.findViewById(R.id.fromWho_tv)
         init {
-            // 기본적으로 클릭 리스너는 항상 동작하도록 설정
             button.setOnClickListener {
                 val currentCount = cardViewModel.countSelection.value ?: 0
                 if (isSelected) {
                     isSelected = !isSelected
                     updateButtonBackground(isSelected)
                     onItemClick(adapterPosition, isSelected)
+                    Log.d("선택7", isSelected.toString())
+
                 } else if (currentCount < 5) {
                     isSelected = !isSelected
                     updateButtonBackground(isSelected)
                     onItemClick(adapterPosition, isSelected)
-                } else{
+                } else {
                     Toast.makeText(itemView.context, "질문은 최대 5개까지 선택할 수 있습니다", Toast.LENGTH_SHORT).show()
                 }
             }
 
             // LiveData 변화 관찰
-            val lifecycleOwner = itemView.findViewTreeLifecycleOwner() // LifecycleOwner 가져옴
+            /*val lifecycleOwner = itemView.findViewTreeLifecycleOwner() // LifecycleOwner 가져옴
             lifecycleOwner?.let {
                 cardViewModel.countSelection.observe(it, Observer { count ->
                     // 필요한 경우 UI 업데이트 등 처리
                 })
             } ?: run {
-                Log.e("CardViewHolder", "LifecycleOwner is null")
-            }
-
-
-
-        /*button.setOnClickListener {
-            isSelected = !isSelected
-            updateButtonBackground(isSelected)
-            onItemClick(adapterPosition, isSelected)
-        }*/
+            }*/
 
         }
 
         fun bind(card: CardModel) {
             cardMessageTextView.text = card.message
             fromWho.text = card.fromWho
+            isSelected = card.isButtonSelected
+
+            // 버튼 배경을 업데이트
+            updateButtonBackground(isSelected)
         }
 
 

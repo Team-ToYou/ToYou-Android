@@ -86,10 +86,6 @@ class HomeFragment : Fragment() {
         userViewModel.getHomeEntry()
         noticeViewModel.fetchNotices()
 
-        userViewModel.cardId.observe(viewLifecycleOwner) { cardId ->
-            Timber.tag("get home").d(cardId.toString())
-        }
-
         return binding.root
     }
 
@@ -159,13 +155,10 @@ class HomeFragment : Fragment() {
 
         // 우체통 클릭시 일기카드 생성 화면으로 전환(임시)
         binding.homeMailboxIv.setOnClickListener {
-            Log.d("mail", "click")
             userViewModel.emotion.observe(viewLifecycleOwner, Observer { emotion ->
                 if (emotion != null){
-                    Log.d("mail", "click")
                     userViewModel.cardId.observe(viewLifecycleOwner, Observer { cardId ->
                         if (cardId == null) {
-                            Log.d("mail", "click")
 
                             navController.navigate(R.id.action_navigation_home_to_create_fragment)
                         }
@@ -176,9 +169,8 @@ class HomeFragment : Fragment() {
                             navController.navigate(R.id.action_navigation_home_to_modifyFragment)
                         }
                     })
-                    Log.d("cardID", userViewModel.cardId.value.toString())
-                } else{
-                    Log.d("mail", "click")
+                }
+                else{
                     Toast.makeText(requireContext(), "감정 우표를 먼저 선택해주세요", Toast.LENGTH_SHORT).show()
                 }
             })

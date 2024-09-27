@@ -59,16 +59,6 @@ class CustomDialogFragment : DialogFragment() {
         
     }
 
-    /*override fun onStart() {
-        super.onStart();
-        //val lp : WindowManager.LayoutParams  =  WindowManager.LayoutParams()
-        //lp.copyFrom(dialog!!.window!!.attributes)
-        //lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        //lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        //val window: Window = dialog!!.window!!
-        //window.attributes =lp
-    }*/
-
     override fun onStart() {
         super.onStart()
 

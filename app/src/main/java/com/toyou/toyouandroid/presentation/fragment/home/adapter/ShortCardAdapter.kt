@@ -1,5 +1,6 @@
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.widget.doAfterTextChanged
@@ -37,8 +38,15 @@ class ShortCardAdapter(private val cardViewModel: CardViewModel) : RecyclerView.
 
             binding.memoEt.setText(card.answer)
 
+            val isNotEmpty = binding.memoEt.text?.isNotEmpty() ?: false
+            if (isNotEmpty) {
+                cardViewModel.updateCardInputStatus(adapterPosition, isNotEmpty)
+            }
+
             binding.memoEt.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+                }
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     card.answer = s.toString()  // 변경된 텍스트를 PreviewCardModel의 answer에 저장
@@ -46,6 +54,7 @@ class ShortCardAdapter(private val cardViewModel: CardViewModel) : RecyclerView.
 
                     val isNotEmpty = !s.isNullOrEmpty()
                     cardViewModel.updateCardInputStatus(adapterPosition, isNotEmpty) // 카드 인덱스와 함께 입력 상태 전달
+                    Log.d("카드 입력", isNotEmpty.toString())
 
                 }
 

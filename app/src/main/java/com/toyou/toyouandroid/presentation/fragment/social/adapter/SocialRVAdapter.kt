@@ -50,6 +50,7 @@ class SocialRVAdapter(private val viewModel: SocialViewModel, private val onItem
 
         init {
             friendDetailBtn.setOnClickListener {
+                viewModel.resetQuestionData()
                 onItemClick(adapterPosition)
                 val friend = friendName.text.toString()
                 viewModel.setTargetFriend(friend, emotion, ment)
