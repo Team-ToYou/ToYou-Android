@@ -50,36 +50,25 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit, private val c
                     isSelected = !isSelected
                     updateButtonBackground(isSelected)
                     onItemClick(adapterPosition, isSelected)
-                    //updateCardModelSelectionState(isSelected)
                     Log.d("선택7", isSelected.toString())
 
                 } else if (currentCount < 5) {
                     isSelected = !isSelected
                     updateButtonBackground(isSelected)
                     onItemClick(adapterPosition, isSelected)
-                    //updateCardModelSelectionState(isSelected)
-
                 } else {
                     Toast.makeText(itemView.context, "질문은 최대 5개까지 선택할 수 있습니다", Toast.LENGTH_SHORT).show()
                 }
             }
 
             // LiveData 변화 관찰
-            val lifecycleOwner = itemView.findViewTreeLifecycleOwner() // LifecycleOwner 가져옴
+            /*val lifecycleOwner = itemView.findViewTreeLifecycleOwner() // LifecycleOwner 가져옴
             lifecycleOwner?.let {
                 cardViewModel.countSelection.observe(it, Observer { count ->
                     // 필요한 경우 UI 업데이트 등 처리
                 })
             } ?: run {
-            }
-
-
-
-        /*button.setOnClickListener {
-            isSelected = !isSelected
-            updateButtonBackground(isSelected)
-            onItemClick(adapterPosition, isSelected)
-        }*/
+            }*/
 
         }
 

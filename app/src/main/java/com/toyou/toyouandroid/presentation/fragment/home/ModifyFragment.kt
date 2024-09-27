@@ -76,6 +76,7 @@ class ModifyFragment: Fragment() {
 
         binding.nextBtn.setOnClickListener {
             cardViewModel.clearAll()
+            cardViewModel.isInitialize = false
             //cardViewModel.patchSelect()
             //cardViewModel.getAllData()
             navController.navigate(R.id.action_modifyFragment_to_create_fragment)

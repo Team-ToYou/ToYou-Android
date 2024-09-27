@@ -54,17 +54,6 @@ class CreateFragment : Fragment(){
         //cardViewModel.loadCardData()
         cardViewModel.getAllData()
 
-        /*cardViewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->
-            if (isLoading) {
-                // 로딩 중이라면 로딩 애니메이션 표시
-                showLoading()
-            } else {
-                // 로딩 완료되면 UI 업데이트
-                hideLoading()
-                updateUI()
-            }
-        })*/
-
     }
 
     override fun onCreateView(
@@ -83,15 +72,13 @@ class CreateFragment : Fragment(){
             cards?.let {
                 for (card in it) {
                     if (card.isButtonSelected) {
-                        count = 1
                         binding.nextBtn.isEnabled = true
+                        break
                     }
-                }
-                if (count == 0)
                     binding.nextBtn.isEnabled = false
-                count = 0
+                }
             }
-
+            Log.d("카드수", count.toString())
         })
 
         cardViewModel.shortCards.observe(viewLifecycleOwner, Observer { cards ->
@@ -100,13 +87,11 @@ class CreateFragment : Fragment(){
             cards?.let {
                 for (card in it) {
                     if (card.isButtonSelected) {
-                        count = 1
                         binding.nextBtn.isEnabled = true
+                        break
                     }
-                }
-                if (count == 0)
                     binding.nextBtn.isEnabled = false
-                count = 0
+                }
             }
 
 
@@ -119,15 +104,12 @@ class CreateFragment : Fragment(){
             cards?.let {
                 for (card in it) {
                     if (card.isButtonSelected) {
-                        count = 1
                         binding.nextBtn.isEnabled = true
+                        break
                     }
-                }
-                if (count == 0)
                     binding.nextBtn.isEnabled = false
-                count = 0
+                }
             }
-
 
         })
 
@@ -179,11 +161,6 @@ class CreateFragment : Fragment(){
             cardViewModel.updateAllPreviews()
             //cardViewModel.updatePreviewShortCard()
 
-            /*cardViewModel.previewCards.value?.let { previewCards ->
-                if (previewCards.isNotEmpty()) {
-                    Timber.tag("카드3").d(previewCards[0].question)
-                }
-            }*/
             cardViewModel.resetSelect()
             navController.navigate(R.id.action_create_fragment_to_createWriteFragment)
         }

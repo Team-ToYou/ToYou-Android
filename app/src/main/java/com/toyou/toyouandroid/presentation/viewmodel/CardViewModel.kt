@@ -55,8 +55,10 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
     private var inputLongStatus : MutableList<Boolean> = mutableListOf()
     private var inputChooseStatus : MutableList<Boolean> = mutableListOf()
 
-    private val _countSelection = MutableLiveData<Int>(0)
+    private val _countSelection = MutableLiveData<Int>()
     val countSelection : LiveData<Int>get() = _countSelection
+
+    var isInitialize = false
 
     fun setCardCount(count: Int, count2 : Int, count3 : Int) {
         inputStatus = MutableList(count){false}
@@ -391,6 +393,11 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
     }
 
     fun countSelect(selection : Boolean){
+        if (!isInitialize) {
+            _countSelection.value = _previewCards.value?.size ?: 0
+            isInitialize = true
+        }
+
         if (selection) {
             _countSelection.value?.let {
                 _countSelection.value = it + 1
@@ -401,6 +408,8 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
                 _countSelection.value = it - 1
             }
         }
+
+        Log.d("선택5", countSelection.value.toString())
 
     }
 
