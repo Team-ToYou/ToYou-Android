@@ -99,14 +99,6 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit, private val c
             button.setBackgroundResource(backgroundRes)
         }
 
-        private fun updateCardModelSelectionState(isSelected: Boolean) {
-            // AdapterPosition을 사용하여 현재 CardModel 업데이트
-            val currentCard = cardViewModel.cards.value?.get(adapterPosition)
-            currentCard?.let {
-                it.isButtonSelected = isSelected
-            }
-        }
-
     }
 
 }

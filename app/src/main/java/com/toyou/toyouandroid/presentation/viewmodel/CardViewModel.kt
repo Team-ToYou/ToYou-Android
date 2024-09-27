@@ -62,8 +62,8 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
     val isLoading: LiveData<Boolean> get() = _isLoading
 
     fun setCardCount(count: Int, count2 : Int, count3 : Int) {
-        inputStatus = MutableList(count){false} // 카드 개수만큼 false로 초기화
-        inputLongStatus = MutableList(count2){false} // 카드 개수만큼 false로 초기화
+        inputStatus = MutableList(count){false}
+        inputLongStatus = MutableList(count2){false}
         inputChooseStatus = MutableList(count3){false}
     }
 
@@ -101,16 +101,13 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
                     questionsDto?.let { mapToModels(it) }
                 else
                     questionsDto?.let { mapToPatchModels(it) }
-                Log.e("CardViewModel", "API 호출 성공: ${response.message}")
                 /*if (_previewCards != null){
                     patchSelect()
                 }*/
             } else {
                 // 오류 처리
-                Log.e("CardViewModel", "API 호출 실패: ${response.message}")
             }
         } catch (e: Exception) {
-            Log.e("CardViewModel", "예외 발생: ${e.message}")
         }
     }
 
@@ -256,7 +253,7 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
                             options = question.options ?: emptyList(),
                             type = question.options.size,
                             id = question.id,
-                            isButtonSelected = isSelected // 선택 여부 설정
+                            isButtonSelected = isSelected,
                         )
                     )
                 }
@@ -295,21 +292,7 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
         _chooseCards.value = chooseModels
         _shortCards.value = cardShortModel
 
-        Log.d("patch2 ",_shortCards.value.toString())
-        Log.d("patch3 ",_cards.value.toString())
-        Log.d("patch4 ",_chooseCards.value.toString())
     }
-
-    /*fun updateCardModelSelectionState(cardId: Long, isSelected: Boolean) {
-        _cards.value = _cards.value?.map { card ->
-            if (card.id == cardId) {
-                card.copy(isButtonSelected = isSelected)
-            } else {
-                card
-            }
-        }
-    }*/
-
 
 
     // 응답 데이터 매핑
@@ -405,12 +388,20 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
     }
 
     fun updateAllPreviews() {
-        val existingCards = _previewCards.value?.toMutableList() ?: mutableListOf()
-        Log.d("미리보기", existingCards.toString())
+        val selectedCardIds = _cards.value?.filter { it.isButtonSelected }?.map { it.id }?.toSet() ?: emptySet()
+        val selectedShortCardIds = _shortCards.value?.filter { it.isButtonSelected }?.map { it.id }?.toSet() ?: emptySet()
+        val selectedChooseCardIds = _chooseCards.value?.filter { it.isButtonSelected }?.map { it.id }?.toSet() ?: emptySet()
+        Log.d("Selected Card IDs", selectedCardIds.toString())
 
-        val selectedNewCards = _cards.value?.filter { it.isButtonSelected } ?: emptyList()
-        val selectedNewShortCards = _shortCards.value?.filter { it.isButtonSelected } ?: emptyList()
-        val selectedNewChooseCards = _chooseCards.value?.filter { it.isButtonSelected } ?: emptyList()
+        // 기존 미리보기 목록 중 선택된 ID가 포함된 카드만 필터링하여 새로운 목록으로 설정
+        val existingCards = _previewCards.value?.filter { it.id in selectedCardIds || it.id in selectedShortCardIds || it.id in selectedChooseCardIds }?.toMutableList() ?: mutableListOf()
+        Log.d("Existing Preview Cards", existingCards.toString())
+
+        val existingIds = existingCards.map { it.id }.toSet()
+
+        val selectedNewCards = _cards.value?.filter { it.isButtonSelected && it.id !in existingIds } ?: emptyList()
+        val selectedNewShortCards = _shortCards.value?.filter { it.isButtonSelected && it.id !in existingIds } ?: emptyList()
+        val selectedNewChooseCards = _chooseCards.value?.filter { it.isButtonSelected && it.id !in existingIds } ?: emptyList()
 
         // 선택된 카드를 PreviewCardModel로 변환
         val newCards = selectedNewCards.map {
@@ -432,20 +423,12 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
 
         Log.d("카드 선택 개수", "New Cards: $newCardsCount, Short Cards: $newShortCardsCount, Choose Cards: $newChooseCardsCount")
 
-
         setCardCount(newShortCardsCount, newCardsCount, newChooseCardsCount)
 
-        val existingIds = existingCards.map { it.id }.toSet()
-
-        // 기존에 없는 새로운 카드만 추가
-        val filteredNewCards = newCards.filter { it.id !in existingIds }
-        val filteredNewShortCards = newShortCards.filter { it.id !in existingIds }
-        val filteredNewChooseCards = newChooseCards.filter { it.id !in existingIds }
-
         // 새로운 카드를 기존 목록에 추가
-        existingCards.addAll(filteredNewCards)
-        existingCards.addAll(filteredNewShortCards)
-        existingCards.addAll(filteredNewChooseCards)
+        existingCards.addAll(newCards)
+        existingCards.addAll(newShortCards)
+        existingCards.addAll(newChooseCards)
 
         _previewCards.value = existingCards.distinct()
 

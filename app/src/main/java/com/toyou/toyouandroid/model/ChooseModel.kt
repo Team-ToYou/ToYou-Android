@@ -6,5 +6,5 @@ data class ChooseModel(
     val options : List<String>,
     val type : Int,
     var isButtonSelected : Boolean = false,
-    val id : Long
+    val id : Long,
     )
