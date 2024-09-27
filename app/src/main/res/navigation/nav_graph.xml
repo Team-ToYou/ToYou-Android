@@ -61,6 +61,22 @@
             app:popUpTo="@id/navigation_home"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out"/>
+        <action
+            android:id="@+id/action_navigation_login_to_tutorial_fragment"
+            app:destination="@id/navigation_tutorial"
+            app:popUpTo="@id/navigation_tutorial" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_tutorial"
+        android:name="com.toyou.toyouandroid.presentation.fragment.onboarding.tutorial.TutorialFragment"
+        android:label="fragment_tutorial"
+        tools:layout="@layout/fragment_tutorial">
+        <action
+            android:id="@+id/action_navigation_tutorial_to_home_fragment"
+            app:destination="@id/navigation_home"
+            app:popUpTo="@id/navigation_home"
+            app:enterAnim="@anim/fade_in_2s"
+            app:exitAnim="@anim/fade_out_2s"/>
     </fragment>
     <fragment
         android:id="@+id/navigation_signup_agree"
@@ -126,8 +142,8 @@
             android:id="@+id/action_navigation_home_option_to_home_result_fragment"
             app:destination="@id/navigation_home_result"
             app:popUpTo="@id/navigation_home_result"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_in_left"/>
+            app:enterAnim="@anim/slide_in_fade_in"
+            app:exitAnim="@anim/slide_in_fade_out"/>
         <action
             android:id="@+id/action_navigation_home_option_to_home_fragment"
             app:destination="@id/navigation_home"
@@ -170,46 +186,18 @@
             app:popUpTo="@id/navigation_login"
             app:popUpToInclusive="true"/>
         <action
-            android:id="@+id/action_navigation_mypage_to_opinion_fragment"
-            app:destination="@id/navigation_opinion"
-            app:popUpTo="@+id/navigation_opinion"
+            android:id="@+id/action_navigation_mypage_to_profile_fragment"
+            app:destination="@+id/navigation_profile"
+            app:popUpTo="@id/navigation_mypage"
             app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_in_left"/>
+            app:exitAnim="@anim/slide_in_left" />
         <action
             android:id="@+id/action_navigation_mypage_to_notice_setting_fragment"
             app:destination="@+id/navigation_notice_setting"
             app:popUpTo="@id/navigation_notice_setting"
             app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_in_left"/>
-        <action
-            android:id="@+id/action_navigation_mypage_to_profile_fragment"
-            app:destination="@+id/navigation_profile"
-            app:popUpTo="@id/navigation_profile"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_in_left"/>
-        <action
-            android:id="@+id/action_navigation_mypage_to_terms_of_use_fragment"
-            app:destination="@+id/navigation_terms_of_use"
-            app:popUpTo="@id/navigation_terms_of_use"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_in_left"/>
-        <action
-            android:id="@+id/action_navigation_mypage_to_contact_fragment"
-            app:destination="@+id/navigation_contact"
-            app:popUpTo="@id/navigation_contact"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_in_left"/>
+            app:exitAnim="@anim/slide_in_left" />
     </fragment>
-    <fragment
-        android:id="@+id/navigation_opinion"
-        android:name="com.toyou.toyouandroid.presentation.fragment.mypage.OpinionFragment"
-        android:label="OpinionFragment"
-        tools:layout="@layout/fragment_opinion"/>
-    <fragment
-        android:id="@+id/navigation_notice_setting"
-        android:name="com.toyou.toyouandroid.presentation.fragment.mypage.NoticeSettingFragment"
-        android:label="NoticeSettingFragment"
-        tools:layout="@layout/fragment_notice_setting"/>
     <fragment
         android:id="@+id/navigation_profile"
         android:name="com.toyou.toyouandroid.presentation.fragment.mypage.ProfileFragment"
@@ -217,19 +205,19 @@
         tools:layout="@layout/fragment_profile">
         <action
             android:id="@+id/action_navigation_profile_to_mypage_fragment"
-            app:destination="@+id/navigation_mypage"
+            app:destination="@id/navigation_mypage"
             app:popUpTo="@id/navigation_mypage" />
     </fragment>
     <fragment
-        android:id="@+id/navigation_terms_of_use"
-        android:name="com.toyou.toyouandroid.presentation.fragment.mypage.TermsOfUseFragment"
-        android:label="TermsOfUseFragment"
-        tools:layout="@layout/fragment_terms_of_use"/>
-    <fragment
-        android:id="@+id/navigation_contact"
-        android:name="com.toyou.toyouandroid.presentation.fragment.mypage.ContactFragment"
-        android:label="ContactFragment"
-        tools:layout="@layout/fragment_contact"/>
+        android:id="@+id/navigation_notice_setting"
+        android:name="com.toyou.toyouandroid.presentation.fragment.mypage.NoticeSettingFragment"
+        android:label="fragment_notice_setting"
+        tools:layout="@layout/fragment_notice_setting">
+        <action
+            android:id="@+id/action_navigation_notice_setting_to_mypage_fragment"
+            app:destination="@id/navigation_mypage"
+            app:popUpTo="@id/navigation_mypage" />
+    </fragment>
     <fragment
         android:id="@+id/create_fragment"
         android:name="com.toyou.toyouandroid.presentation.fragment.home.CreateFragment"
@@ -263,6 +251,14 @@
             android:id="@+id/action_navigation_notice_to_social_fragment"
             app:destination="@id/navigation_social"
             app:popUpTo="@id/navigation_social" />
+        <action
+            android:id="@+id/action_navigation_notice_to_create_fragment"
+            app:destination="@id/create_fragment"
+            app:popUpTo="@id/create_fragment" />
+        <action
+            android:id="@+id/action_navigation_notice_to_modify_fragment"
+            app:destination="@id/modifyFragment"
+            app:popUpTo="@id/modifyFragment" />
     </fragment>
     <fragment
         android:id="@+id/questionTypeFragment"

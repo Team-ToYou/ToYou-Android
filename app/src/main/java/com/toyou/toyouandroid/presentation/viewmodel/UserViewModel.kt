@@ -13,12 +13,18 @@ import timber.log.Timber
 class UserViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
 
     private val repository = CreateRepository(tokenStorage)
+
     private val _cardId = MutableLiveData<Int?>()
     val cardId: LiveData<Int?> get() = _cardId
+
     private val _emotion = MutableLiveData<String?>()
     val emotion : LiveData<String?> get() = _emotion
+
     private val _nickname = MutableLiveData<String>()
     val nickname : LiveData<String> get() = _nickname
+
+    private val _cardNum = MutableLiveData<Int>()
+    val cardNum : LiveData<Int> get() = _cardNum
 
     fun getHomeEntry() = viewModelScope.launch {
         try {
@@ -27,6 +33,7 @@ class UserViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
                 _cardId.value = response.result.id
                 _emotion.value = response.result.emotion
                 _nickname.value = response.result.nickname
+                _cardNum.value = response.result.question
 
                 Timber.tag("getHomeEntry").d("API 성공, 카드 ID: ${response.result.id}")
                 Timber.tag("getHomeEntry").d("API 성공, 상태: ${response.result.emotion}")

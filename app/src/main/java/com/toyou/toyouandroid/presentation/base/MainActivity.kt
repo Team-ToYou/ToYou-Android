@@ -1,8 +1,13 @@
 package com.toyou.toyouandroid.presentation.base
 
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.WindowInsets
+import android.view.WindowInsetsController
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.toyou.toyouandroid.R
@@ -22,6 +27,15 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+//        WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        binding.fragmentContainer.setPadding(
+            0,
+            this.statusBarHeight(),
+            0,
+            0
+        )
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment
@@ -53,6 +67,13 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
+    }
+
+    fun Context.statusBarHeight(): Int {
+        val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
+
+        return if (resourceId > 0) resources.getDimensionPixelSize(resourceId)
+        else 0
     }
 
     fun hideBottomNavigation(state:Boolean){

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/tutorial_step_2_device"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/tutorial_step_3"
+            android:layout_marginTop="37dp"
+            android:layout_marginStart="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tutorial_step_3_subtitle" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/faded_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#40000000"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tutorial_step_2_device"/>
+
+        <TextView
+            android:id="@+id/tutorial_step_3_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/sc_r15"
+            android:gravity="center"
+            android:text="@string/tutorial_step_3_title"
+            android:textColor="@color/white"
+            android:layout_marginTop="111dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tutorial_step_3_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/sc_l12"
+            android:gravity="center"
+            android:text="@string/tutorial_step_3_subtitle"
+            android:textColor="@color/white"
+            android:layout_marginTop="14dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tutorial_step_3_title" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/tutorial_step_3_yellow_triangle"
+            android:layout_marginEnd="225dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="@+id/tutorial_step_3_yellow_circle"
+            app:layout_constraintTop_toTopOf="@+id/tutorial_step_3_yellow_circle" />
+
+        <TextView
+            android:id="@+id/tutorial_step_3_yellow_circle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/tutorial_step_3_yellow_circle"
+            android:layout_marginTop="274dp"
+            android:layout_marginStart="43dp"
+            android:text="더없이 행복한 하루였어요"
+            android:textColor="@color/black"
+            style="@style/gangwon20"
+            android:paddingStart="21dp"
+            android:gravity="center_vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/tutorial_step_3_smile"
+            android:layout_marginEnd="25dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="@+id/tutorial_step_3_yellow_circle"
+            app:layout_constraintTop_toTopOf="@+id/tutorial_step_3_yellow_circle" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/tutorial_step_3_message_1"
+            android:layout_marginStart="125dp"
+            android:layout_marginTop="26dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tutorial_step_3_yellow_circle" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/tutorial_step_3_message_3"
+            android:layout_marginStart="125dp"
+            android:layout_marginTop="113dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tutorial_step_3_yellow_circle" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/tutorial_step_3_message_2"
+            android:layout_marginStart="125dp"
+            android:layout_marginTop="71dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tutorial_step_3_yellow_circle" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

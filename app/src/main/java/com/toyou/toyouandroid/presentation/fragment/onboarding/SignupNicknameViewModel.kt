@@ -7,7 +7,6 @@ import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.presentation.fragment.notice.network.NetworkModule
 import com.toyou.toyouandroid.presentation.fragment.onboarding.network.NicknameCheckResponse
 import com.toyou.toyouandroid.presentation.fragment.onboarding.network.OnboardingService
-import com.toyou.toyouandroid.presentation.fragment.onboarding.network.PatchNicknameResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -25,7 +24,7 @@ class SignupNicknameViewModel : ViewModel() {
     val textCount: LiveData<String> get() = _textCount
 
     fun updateTextCount(count: Int) {
-        _textCount.value = "$count/15"
+        _textCount.value = "($count/15)"
     }
 
     private val inputText = MutableLiveData<String>()
@@ -108,6 +107,12 @@ class SignupNicknameViewModel : ViewModel() {
         _duplicateCheckButtonBackground.value = R.drawable.next_button
     }
 
+    fun nextButtonDisable() {
+        _isNextButtonEnabled.value = false
+        _nextButtonTextColor.value = 0xFFA6A6A6.toInt()
+        _nextButtonBackground.value = R.drawable.next_button
+    }
+
     private val retrofit = NetworkModule.getClient()
     private val apiService: OnboardingService = retrofit.create(OnboardingService::class.java)
 
@@ -130,10 +135,12 @@ class SignupNicknameViewModel : ViewModel() {
                     } else {
                         _duplicateCheckMessage.value = "이미 사용 중인 닉네임입니다."
                         _duplicateCheckMessageColor.value = 0xFFFF0000.toInt()
+                        nextButtonDisable()
                     }
                 } else {
                     _duplicateCheckMessage.value = "닉네임 확인에 실패했습니다."
                     _duplicateCheckMessageColor.value = 0xFFFF0000.toInt()
+                    nextButtonDisable()
                 }
             }
 
@@ -141,6 +148,7 @@ class SignupNicknameViewModel : ViewModel() {
                 Timber.tag("API Failure").e(t, "Error checking nickname")
                 _duplicateCheckMessage.value = "서버에 연결할 수 없습니다."
                 _duplicateCheckMessageColor.value = 0xFFFF0000.toInt()
+                nextButtonDisable()
             }
         })
     }

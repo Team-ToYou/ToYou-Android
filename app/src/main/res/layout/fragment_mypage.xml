@@ -124,10 +124,10 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:background="@drawable/social_arrow"
-            android:layout_marginTop="18dp"
             android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="@+id/mypage_notice_setting"
-            app:layout_constraintTop_toTopOf="@+id/mypage_notice_setting" />
+            app:layout_constraintTop_toTopOf="@+id/mypage_notice_setting"
+            app:layout_constraintBottom_toBottomOf="@+id/mypage_notice_setting"/>
 
         <TextView
             android:id="@+id/mypage_opinion"
@@ -150,10 +150,10 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:background="@drawable/social_arrow"
-            android:layout_marginTop="18dp"
             android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="@+id/mypage_opinion"
-            app:layout_constraintTop_toTopOf="@+id/mypage_opinion" />
+            app:layout_constraintTop_toTopOf="@+id/mypage_opinion"
+            app:layout_constraintBottom_toBottomOf="@+id/mypage_opinion"/>
 
         <TextView
             android:id="@+id/mypage_contact"
@@ -176,10 +176,10 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:background="@drawable/social_arrow"
-            android:layout_marginTop="18dp"
             android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="@+id/mypage_contact"
-            app:layout_constraintTop_toTopOf="@+id/mypage_contact" />
+            app:layout_constraintTop_toTopOf="@+id/mypage_contact"
+            app:layout_constraintBottom_toBottomOf="@+id/mypage_contact"/>
 
         <TextView
             android:id="@+id/mypage_terms_of_use"
@@ -202,10 +202,10 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:background="@drawable/social_arrow"
-            android:layout_marginTop="18dp"
             android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="@+id/mypage_terms_of_use"
-            app:layout_constraintTop_toTopOf="@+id/mypage_terms_of_use" />
+            app:layout_constraintTop_toTopOf="@+id/mypage_terms_of_use"
+            app:layout_constraintBottom_toBottomOf="@+id/mypage_terms_of_use"/>
 
         <TextView
             android:id="@+id/mypage_version"
@@ -230,10 +230,10 @@
             android:text="@string/mypage_version_name"
             android:textColor="@color/black"
             style="@style/sc_r10"
-            android:layout_marginTop="24dp"
             android:layout_marginEnd="24dp"
             app:layout_constraintEnd_toEndOf="@+id/mypage_version"
-            app:layout_constraintTop_toTopOf="@+id/mypage_version" />
+            app:layout_constraintTop_toTopOf="@+id/mypage_version"
+            app:layout_constraintBottom_toBottomOf="@+id/mypage_version"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="220dp"
