@@ -127,19 +127,11 @@ class CreateFragment : Fragment(){
 
 
         binding.nextBtn.setOnClickListener {
-            //cardViewModel.updateChooseCard()
             cardViewModel.updateAllPreviews()
-            //cardViewModel.updatePreviewShortCard()
 
             cardViewModel.resetSelect()
             navController.navigate(R.id.action_create_fragment_to_createWriteFragment)
         }
-
-        /*cardViewModel.countSelection.observe(viewLifecycleOwner, Observer { count ->
-            if (count > 5){
-                Toast.makeText(requireContext(), "질문은 최대 5개까지 선택할 수 있습니다", Toast.LENGTH_SHORT).show()
-            }
-        })*/
     }
 
     private fun setupRecyclerView(recyclerView: RecyclerView, adapter: RecyclerView.Adapter<*>) {

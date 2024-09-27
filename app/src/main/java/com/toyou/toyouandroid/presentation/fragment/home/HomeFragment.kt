@@ -142,7 +142,7 @@ class HomeFragment : Fragment() {
         // 우체통 클릭시 일기카드 생성 화면으로 전환(임시)
         binding.homeMailboxIv.setOnClickListener {
             userViewModel.emotion.observe(viewLifecycleOwner, Observer { emotion ->
-                //if (emotion != null){
+                if (emotion != null){
                     userViewModel.cardId.observe(viewLifecycleOwner, Observer { cardId ->
                         if (cardId == null) {
 
@@ -155,10 +155,10 @@ class HomeFragment : Fragment() {
                             navController.navigate(R.id.action_navigation_home_to_modifyFragment)
                         }
                     })
-                //}
-                //else{
-                    //Toast.makeText(requireContext(), "감정 우표를 먼저 선택해주세요", Toast.LENGTH_SHORT).show()
-                //}
+                }
+                else{
+                    Toast.makeText(requireContext(), "감정 우표를 먼저 선택해주세요", Toast.LENGTH_SHORT).show()
+                }
             })
         }
 

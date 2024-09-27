@@ -71,7 +71,6 @@ class ModifyFragment: Fragment() {
             override fun handleOnBackPressed() {
                 navController.popBackStack()
             }
-
         })
 
         binding.nextBtn.setOnClickListener {
