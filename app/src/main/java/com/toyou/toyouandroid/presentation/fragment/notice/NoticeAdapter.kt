@@ -9,6 +9,7 @@ import com.toyou.toyouandroid.databinding.ItemNoticeCardCheckBinding
 import com.toyou.toyouandroid.databinding.ItemNoticeFriendRequestAcceptedBinding
 import com.toyou.toyouandroid.databinding.ItemNoticeFriendRequestBinding
 import com.toyou.toyouandroid.model.NoticeItem
+import timber.log.Timber
 
 class NoticeAdapter(
     private val items: MutableList<NoticeItem>,
@@ -86,7 +87,12 @@ class NoticeAdapter(
             }
 
             binding.noticeFriendRequestBtn.setOnClickListener {
-//                listener.onShowDialog()
+                // 친구 요청 수락 버튼 클릭 후 알림 메시지 제거
+                val name = item.nickname
+                Timber.d(name)
+                listener.onFriendRequestApprove(name)
+                viewModel.deleteNotice(item.alarmId, this.layoutPosition)
+                removeItem(this.layoutPosition)
             }
 
             binding.executePendingBindings()
@@ -103,7 +109,10 @@ class NoticeAdapter(
             }
 
             binding.noticeLayout.setOnClickListener {
+                // 알림 메시지 클릭 후 메시지 삭제
                 listener.onFriendRequestAcceptedItemClick(item)
+                viewModel.deleteNotice(item.alarmId, this.layoutPosition)
+                removeItem(this.layoutPosition)
             }
 
             val layoutParams = binding.root.layoutParams
@@ -124,7 +133,10 @@ class NoticeAdapter(
             }
 
             binding.noticeLayout.setOnClickListener {
+                // 알림 메시지 클릭 후 메시지 삭제
                 listener.onFriendCardItemClick(item)
+                viewModel.deleteNotice(item.alarmId, this.layoutPosition)
+                removeItem(this.layoutPosition)
             }
 
             binding.executePendingBindings()

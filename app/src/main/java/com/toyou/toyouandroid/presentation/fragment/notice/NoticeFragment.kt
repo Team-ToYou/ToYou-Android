@@ -22,6 +22,8 @@ import com.toyou.toyouandroid.presentation.fragment.notice.network.NoticeService
 import com.toyou.toyouandroid.presentation.fragment.notice.network.NoticeViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModelFactory
+import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
 import com.toyou.toyouandroid.utils.SwipeToDeleteNotice
@@ -48,6 +50,7 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
     private lateinit var noticeAdapter: NoticeAdapter
 
     private lateinit var userViewModel: UserViewModel
+    private lateinit var socialViewModel : SocialViewModel
     private lateinit var cardViewModel: CardViewModel
 
     override fun onCreateView(
@@ -66,6 +69,10 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
             requireActivity(),
             UserViewModelFactory(tokenStorage)
         )[UserViewModel::class.java]
+        socialViewModel = ViewModelProvider(
+            requireActivity(),
+            SocialViewModelFactory(tokenStorage)
+        )[SocialViewModel::class.java]
 
         listener = object : NoticeAdapterListener {
             override fun onShowDialog() {
@@ -80,6 +87,12 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
 
             override fun onDeleteNotice(alarmId: Int, position: Int) {
                 viewModel.deleteNotice(alarmId, position)
+            }
+
+            override fun onFriendRequestApprove(name: String) {
+                val myName = userViewModel.nickname.value ?: ""
+                Timber.d(myName)
+                socialViewModel.patchApprove(name, myName)
             }
 
             override fun onFriendRequestItemClick(item: NoticeItem.NoticeFriendRequestItem) {
@@ -165,6 +178,11 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
         )
         noticeDialog = NoticeDialog()
         noticeDialog?.show(parentFragmentManager, "CustomDialog")
+    }
+
+    override fun onFriendRequestApprove(name: String) {
+        val myName = userViewModel.nickname.value ?: ""
+        socialViewModel.patchApprove(name, myName)
     }
 
     override fun onDeleteNotice(alarmId: Int, position: Int) {
