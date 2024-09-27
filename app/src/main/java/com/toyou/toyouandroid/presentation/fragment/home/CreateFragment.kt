@@ -120,13 +120,8 @@ class CreateFragment : Fragment(){
 
         })
 
-        binding.nextBtn.isEnabled = (cardViewModel.countSelection.value ?: 0) > 0
-
         cardViewModel.countSelection.observe(viewLifecycleOwner, Observer { count ->
-            if (count > 0)
-                binding.nextBtn.isEnabled = true
-            else
-                binding.nextBtn.isEnabled = false
+            binding.nextBtn.isEnabled = count > 0
             Log.d("선택9", count.toString())
         })
 

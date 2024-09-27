@@ -58,7 +58,9 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
     private val _countSelection = MutableLiveData<Int>()
     val countSelection : LiveData<Int>get() = _countSelection
 
-    var isInitialize = false
+    private fun initializeCountSelection() {
+        _countSelection.value = _previewCards.value?.size ?: 0
+    }
 
     fun setCardCount(count: Int, count2 : Int, count3 : Int) {
         inputStatus = MutableList(count){false}
@@ -167,6 +169,7 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
         val cardModels = mutableListOf<CardModel>()
         val chooseModels = mutableListOf<ChooseModel>()
         val cardShortModel = mutableListOf<CardShortModel>()
+        initializeCountSelection()
 
         for (question in questionsDto.questions) {
             when (question.type) {
@@ -229,6 +232,7 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
         val cardModels = mutableListOf<CardModel>()
         val chooseModels = mutableListOf<ChooseModel>()
         val cardShortModel = mutableListOf<CardShortModel>()
+        initializeCountSelection()
 
         for (question in questionsDto.questions) {
             when (question.type) {
@@ -393,10 +397,6 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
     }
 
     fun countSelect(selection : Boolean){
-        if (!isInitialize) {
-            _countSelection.value = _previewCards.value?.size ?: 0
-            isInitialize = true
-        }
 
         if (selection) {
             _countSelection.value?.let {
@@ -416,7 +416,5 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
     fun resetSelect(){
         _countSelection.value = 0
     }
-
-
 
 }
