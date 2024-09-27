@@ -38,6 +38,11 @@ class ShortCardAdapter(private val cardViewModel: CardViewModel) : RecyclerView.
 
             binding.memoEt.setText(card.answer)
 
+            val isNotEmpty = binding.memoEt.text?.isNotEmpty() ?: false
+            if (isNotEmpty) {
+                cardViewModel.updateCardInputStatus(adapterPosition, isNotEmpty)
+            }
+
             binding.memoEt.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 

@@ -71,11 +71,11 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
 
     fun updateCardInputStatusLong(index: Int, isFilled: Boolean) {
         inputLongStatus[index] = isFilled
-        checkIfAllAnswersFilled() // 입력 상태가 변경될 때마다 확인
+        checkIfAllAnswersFilled()
     }
     fun updateCardInputStatusChoose(index: Int, isFilled: Boolean) {
         inputChooseStatus[index] = isFilled
-        checkIfAllAnswersFilled() // 입력 상태가 변경될 때마다 확인
+        checkIfAllAnswersFilled()
     }
 
     private fun checkIfAllAnswersFilled() {
@@ -98,39 +98,12 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
                     questionsDto?.let { mapToModels(it) }
                 else
                     questionsDto?.let { mapToPatchModels(it) }
-                /*if (_previewCards != null){
-                    patchSelect()
-                }*/
             } else {
                 // 오류 처리
             }
         } catch (e: Exception) {
         }
     }
-
-    /*fun getAllData() = viewModelScope.launch {
-        _isLoading.value = true // 로딩 시작
-
-        try {
-            val response = repository.getAllData()
-            if (response.isSuccess) {
-                val questionsDto = response.result
-                questionsDto?.let { mapToModels(it) }
-                Log.e("CardViewModel", "API 호출 성공: ${response.message}")
-
-                if (_previewCards != null) {
-                    patchSelect()
-                }
-            } else {
-                Log.e("CardViewModel", "API 호출 실패: ${response.message}")
-            }
-        } catch (e: Exception) {
-            Log.e("CardViewModel", "예외 발생: ${e.message}")
-        } finally {
-            _isLoading.value = false // 로딩 끝
-        }
-    }*/
-
 
     fun getCardDetail(id : Long) = viewModelScope.launch {
         try {
@@ -188,53 +161,10 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
         }
     }
 
-    /*fun patchSelect(){
-        Log.d("patch2", _previewCards.value.toString())
-        _previewCards.value?.let { questionList -> // 안전 호출 연산자 사용
-            questionList.forEach { question ->
-                when (question.type) {
-                    0 -> {
-                        _shortCards.value?.forEach { shortCard -> // null 안전 호출
-                            if (question.id == shortCard.id) {
-                                shortCard.isButtonSelected = true
-                            }
-                        }
-                    }
-                    1 -> {
-                        cards.value?.forEach { longCard -> // null 안전 호출
-                            if (question.id == longCard.id) {
-                                longCard.isButtonSelected = true
-                            }
-                        }
-                    }
-                    2 -> {
-                        chooseCards.value?.forEach { chooseCard -> // null 안전 호출
-                            if (question.id == chooseCard.id) {
-                                chooseCard.isButtonSelected = true
-                            }
-                        }
-                    }
-                    3 -> {
-                        chooseCards.value?.forEach { chooseCard -> // null 안전 호출
-                            if (question.id == chooseCard.id) {
-                                chooseCard.isButtonSelected = true
-                            }
-                        }
-                    }
-                }
-                Log.d("patch2 ",_shortCards.value.toString())
-                Log.d("patch3 ",_cards.value.toString())
-                Log.d("patch4 ",_chooseCards.value.toString())
-            }
-
-        }
-    }*/
-
     private fun mapToPatchModels(questionsDto: QuestionsDto) {
         val cardModels = mutableListOf<CardModel>()
         val chooseModels = mutableListOf<ChooseModel>()
         val cardShortModel = mutableListOf<CardShortModel>()
-        Log.d("patch", "호출")
 
         for (question in questionsDto.questions) {
             when (question.type) {
@@ -477,5 +407,7 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
     fun resetSelect(){
         _countSelection.value = 0
     }
+
+
 
 }
