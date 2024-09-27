@@ -58,9 +58,6 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
     private val _countSelection = MutableLiveData<Int>(0)
     val countSelection : LiveData<Int>get() = _countSelection
 
-    private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading: LiveData<Boolean> get() = _isLoading
-
     fun setCardCount(count: Int, count2 : Int, count3 : Int) {
         inputStatus = MutableList(count){false}
         inputLongStatus = MutableList(count2){false}
@@ -391,11 +388,9 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
         val selectedCardIds = _cards.value?.filter { it.isButtonSelected }?.map { it.id }?.toSet() ?: emptySet()
         val selectedShortCardIds = _shortCards.value?.filter { it.isButtonSelected }?.map { it.id }?.toSet() ?: emptySet()
         val selectedChooseCardIds = _chooseCards.value?.filter { it.isButtonSelected }?.map { it.id }?.toSet() ?: emptySet()
-        Log.d("Selected Card IDs", selectedCardIds.toString())
 
         // 기존 미리보기 목록 중 선택된 ID가 포함된 카드만 필터링하여 새로운 목록으로 설정
         val existingCards = _previewCards.value?.filter { it.id in selectedCardIds || it.id in selectedShortCardIds || it.id in selectedChooseCardIds }?.toMutableList() ?: mutableListOf()
-        Log.d("Existing Preview Cards", existingCards.toString())
 
         val existingIds = existingCards.map { it.id }.toSet()
 
@@ -417,9 +412,9 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
         }
 
         // 선택된 카드의 개수 계산
-        val newCardsCount = selectedNewCards.size
-        val newShortCardsCount = selectedNewShortCards.size
-        val newChooseCardsCount = selectedNewChooseCards.size
+        val newCardsCount = selectedNewCards.size + existingCards.filter { it.type == 1 }.size
+        val newShortCardsCount = selectedNewShortCards.size + existingCards.filter { it.type == 0 }.size
+        val newChooseCardsCount = selectedNewChooseCards.size + existingCards.filter { it.type == 2 || it.type ==3 }.size
 
         Log.d("카드 선택 개수", "New Cards: $newCardsCount, Short Cards: $newShortCardsCount, Choose Cards: $newChooseCardsCount")
 

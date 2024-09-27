@@ -179,11 +179,11 @@ class CreateFragment : Fragment(){
             cardViewModel.updateAllPreviews()
             //cardViewModel.updatePreviewShortCard()
 
-            cardViewModel.previewCards.value?.let { previewCards ->
+            /*cardViewModel.previewCards.value?.let { previewCards ->
                 if (previewCards.isNotEmpty()) {
                     Timber.tag("카드3").d(previewCards[0].question)
                 }
-            }
+            }*/
             cardViewModel.resetSelect()
             navController.navigate(R.id.action_create_fragment_to_createWriteFragment)
         }
