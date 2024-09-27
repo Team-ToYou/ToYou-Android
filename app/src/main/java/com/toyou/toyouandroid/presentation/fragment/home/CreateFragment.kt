@@ -78,7 +78,6 @@ class CreateFragment : Fragment(){
 
 
         cardViewModel.cards.observe(viewLifecycleOwner, Observer { cards ->
-            Log.d("CreateFragment", "Loading cards: ${cardViewModel.cards.value}") // 디버그 로그 추가
             cardAdapter.setCards(cards)
 
             cards?.let {
@@ -96,7 +95,6 @@ class CreateFragment : Fragment(){
         })
 
         cardViewModel.shortCards.observe(viewLifecycleOwner, Observer { cards ->
-            Log.d("CreateFragment", "Loading cards: ${cardViewModel.cards.value}") // 디버그 로그 추가
             cardShortAdapter.setCards(cards)
 
             cards?.let {
@@ -136,7 +134,7 @@ class CreateFragment : Fragment(){
         cardAdapter = CardAdapter({ position, isSelected ->
             cardViewModel.updateButtonState(position, isSelected)
             cardViewModel.countSelect(isSelected)
-            Log.d("버튼", position.toString())
+            Log.d("선택0", position.toString()+isSelected.toString())
         }, cardViewModel)
         cardShortAdapter = CardShortAdapter({ position, isSelected ->
             Log.d("선택2", position.toString()+isSelected.toString())

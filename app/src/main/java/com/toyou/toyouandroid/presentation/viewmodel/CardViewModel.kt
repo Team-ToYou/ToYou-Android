@@ -300,6 +300,16 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
         Log.d("patch4 ",_chooseCards.value.toString())
     }
 
+    /*fun updateCardModelSelectionState(cardId: Long, isSelected: Boolean) {
+        _cards.value = _cards.value?.map { card ->
+            if (card.id == cardId) {
+                card.copy(isButtonSelected = isSelected)
+            } else {
+                card
+            }
+        }
+    }*/
+
 
 
     // 응답 데이터 매핑
