@@ -171,10 +171,25 @@
             app:destination="@id/questionTypeFragment" />
     </fragment>
     <fragment
+        android:id="@+id/navigation_card_instant"
+        android:name="com.toyou.toyouandroid.presentation.fragment.record.CardInstantFragment"
+        android:label="fragment_card_instant"
+        tools:layout="@layout/fragment_card_instant">
+        <action
+            android:id="@+id/action_navigation_card_instant_to_record_fragment"
+            app:destination="@id/navigation_record"
+            app:popUpTo="@id/navigation_record" />
+    </fragment>
+    <fragment
         android:id="@+id/navigation_record"
         android:name="com.toyou.toyouandroid.presentation.fragment.record.RecordFragment"
         android:label="fragment_record"
-        tools:layout="@layout/fragment_record"/>
+        tools:layout="@layout/fragment_record">
+        <action
+            android:id="@+id/action_navigation_record_to_card_instant_fragment"
+            app:destination="@id/navigation_card_instant"
+            app:popUpTo="@id/navigation_card_instant" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_mypage"
         android:name="com.toyou.toyouandroid.presentation.fragment.mypage.MypageFragment"

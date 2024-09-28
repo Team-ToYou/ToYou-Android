@@ -7,7 +7,7 @@ import com.toyou.toyouandroid.R
 
 class SignupAgreeViewModel : ViewModel() {
 
-    private val _imageStates = MutableLiveData(listOf(false, false, false, false, false))
+    private val _imageStates = MutableLiveData(listOf(false, false, false, false))
     val imageStates: LiveData<List<Boolean>> get() = _imageStates
 
     private val _isNextButtonEnabled = MutableLiveData(false)

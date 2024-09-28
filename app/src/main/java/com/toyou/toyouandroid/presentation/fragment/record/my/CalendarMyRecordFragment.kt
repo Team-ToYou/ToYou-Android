@@ -13,6 +13,7 @@ import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentCalendarMyrecordBinding
 import com.toyou.toyouandroid.model.MyDate
 import com.toyou.toyouandroid.network.AuthNetworkModule
+import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.presentation.fragment.record.network.DiaryCard
 import com.toyou.toyouandroid.presentation.fragment.record.network.RecordRepository
 import com.toyou.toyouandroid.presentation.fragment.record.network.RecordService
@@ -22,7 +23,7 @@ import timber.log.Timber
 import java.util.Calendar
 import java.util.Date
 
-class CalendarMyRecordFragment : Fragment(), MyRecordCalendarRVAdapter.OnDateClickListener {
+class CalendarMyRecordFragment : Fragment(), OnMyDateClickListener {
 
     lateinit var navController: NavController
     private var _binding: FragmentCalendarMyrecordBinding? = null
@@ -54,6 +55,9 @@ class CalendarMyRecordFragment : Fragment(), MyRecordCalendarRVAdapter.OnDateCli
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
 
+        (requireActivity() as MainActivity).hideBottomNavigation(false)
+
+
         startCalendar.time = calendar.time
 
         // 월 달력
@@ -66,6 +70,7 @@ class CalendarMyRecordFragment : Fragment(), MyRecordCalendarRVAdapter.OnDateCli
             }
         })
 
+        // 나의 기록 api 호출 후 정보 재가공
         myRecordViewModel.diaryCards.observe(viewLifecycleOwner) { diaryCards ->
             Timber.tag("CalendarFragment").d("DiaryCards loaded: ${diaryCards.size} items")
             Timber.tag("CalendarFragment").d("DiaryCards loaded: $diaryCards")
@@ -108,10 +113,10 @@ class CalendarMyRecordFragment : Fragment(), MyRecordCalendarRVAdapter.OnDateCli
         }
     }
 
-    private fun mapDiaryCardsToImages(diaryCards: List<DiaryCard>): Map<Pair<Int, Int>, Map<Int, Int>> {
+    private fun mapDiaryCardsToImages(diaryCards: List<DiaryCard>): Map<Pair<Int, Int>, Map<Int, Pair<Int, Int?>>> {
         Timber.tag("CalendarFragment").d("Mapping diary cards to images")
 
-        val imageMap = mutableMapOf<Pair<Int, Int>, MutableMap<Int, Int>>()
+        val imageMap = mutableMapOf<Pair<Int, Int>, MutableMap<Int, Pair<Int, Int?>>>()
 
         diaryCards.forEach { diaryCard ->
             val dateParts = diaryCard.date.split("-")
@@ -131,7 +136,7 @@ class CalendarMyRecordFragment : Fragment(), MyRecordCalendarRVAdapter.OnDateCli
 
             if (emotionImageResId != null) {
                 val monthMap = imageMap.getOrPut(Pair(year, month)) { mutableMapOf() }
-                monthMap[day] = emotionImageResId
+                monthMap[day] = Pair(emotionImageResId, diaryCard.cardId)
             }
         }
 
@@ -140,7 +145,7 @@ class CalendarMyRecordFragment : Fragment(), MyRecordCalendarRVAdapter.OnDateCli
         return imageMap
     }
 
-    private fun updateCalendarWithImages(imageMap: Map<Pair<Int, Int>, Map<Int, Int>>) {
+    private fun updateCalendarWithImages(imageMap: Map<Pair<Int, Int>, Map<Int, Pair<Int, Int?>>>) {
         Timber.tag("CalendarFragment").d("Updating calendar with images")
 
         binding.yearMonthTextView.text = "${calendar.get(Calendar.YEAR)}년 ${calendar.get(Calendar.MONTH) + 1}월"
@@ -154,7 +159,7 @@ class CalendarMyRecordFragment : Fragment(), MyRecordCalendarRVAdapter.OnDateCli
         Timber.tag("CalendarFragment").d("Calendar update with images complete")
     }
 
-    private fun generateMonths(calendar: Calendar, imageMap: Map<Pair<Int, Int>, Map<Int, Int>>): List<List<MyDate>> {
+    private fun generateMonths(calendar: Calendar, imageMap: Map<Pair<Int, Int>, Map<Int, Pair<Int, Int?>>>): List<List<MyDate>> {
 
         val months = mutableListOf<List<MyDate>>()
 
@@ -167,7 +172,16 @@ class CalendarMyRecordFragment : Fragment(), MyRecordCalendarRVAdapter.OnDateCli
         return months
     }
 
-    override fun onDateClick(date: Date) {}
+    override fun onDateClick(date: Date, cardId: Int?) {
+        Timber.tag("CalendarFragment").d("$date $cardId")
+        cardId?.let {
+            val bundle = Bundle().apply {
+                putInt("cardId", it)
+                putString("date", date.toString())
+            }
+            navController.navigate(R.id.action_navigation_record_to_card_instant_fragment, bundle)
+        }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

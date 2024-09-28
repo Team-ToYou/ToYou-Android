@@ -5,10 +5,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.ItemCalendarFriendStampBinding
+import com.toyou.toyouandroid.presentation.fragment.record.friend.OnFriendDateClickListener
 import com.toyou.toyouandroid.presentation.fragment.record.network.DiaryCardPerDay
 import timber.log.Timber
 
-class CalendarAdapter(private var items: List<DiaryCardPerDay>) : RecyclerView.Adapter<CalendarAdapter.ViewHolder>() {
+class CalendarAdapter(
+    private var items: List<DiaryCardPerDay>,
+    private val listener: OnFriendDateClickListener
+) : RecyclerView.Adapter<CalendarAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -36,6 +40,11 @@ class CalendarAdapter(private var items: List<DiaryCardPerDay>) : RecyclerView.A
             Timber.tag("CalendarAdapter").d("Binding view for ${diaryCard.nickname}, emotion: ${diaryCard.emotion}")
             binding.calendarFriendNickname.text = diaryCard.nickname
             binding.calendarStampIv.setImageResource(getImageResource(diaryCard.emotion))
+
+            binding.root.setOnClickListener{
+                Timber.tag("CalendarAdapter").d(this.layoutPosition.toString())
+                listener.onFriendClick(diaryCard.cardId)
+            }
         }
 
         private fun getImageResource(emotion: String?): Int {

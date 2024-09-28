@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
@@ -13,7 +14,11 @@ import androidx.viewpager2.widget.ViewPager2
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentCalendarFriendrecordBinding
 import com.toyou.toyouandroid.model.FriendDate
+import com.toyou.toyouandroid.model.NoticeItem
 import com.toyou.toyouandroid.network.AuthNetworkModule
+import com.toyou.toyouandroid.presentation.fragment.notice.NoticeAdapter
+import com.toyou.toyouandroid.presentation.fragment.notice.NoticeAdapterListener
+import com.toyou.toyouandroid.presentation.fragment.notice.NoticeDialog
 import com.toyou.toyouandroid.presentation.fragment.record.CalendarAdapter
 import com.toyou.toyouandroid.presentation.fragment.record.CalendarItemDecoration
 import com.toyou.toyouandroid.presentation.fragment.record.network.DiaryCardNum
@@ -27,7 +32,7 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
-class CalendarFriendRecordFragment : Fragment(), FriendCalendarRVAdapter.OnDateClickListener {
+class CalendarFriendRecordFragment : Fragment(), OnFriendDateClickListener {
 
     lateinit var navController: NavController
     private var _binding: FragmentCalendarFriendrecordBinding? = null
@@ -44,6 +49,7 @@ class CalendarFriendRecordFragment : Fragment(), FriendCalendarRVAdapter.OnDateC
     }
 
     private lateinit var calendarAdapter: CalendarAdapter
+    private lateinit var listener: OnFriendDateClickListener
 
     private var currentYear: Int = -1
     private var currentMonth: Int = -1
@@ -55,6 +61,32 @@ class CalendarFriendRecordFragment : Fragment(), FriendCalendarRVAdapter.OnDateC
     ): View {
 
         _binding = FragmentCalendarFriendrecordBinding.inflate(inflater, container, false)
+
+        listener = object : OnFriendDateClickListener {
+            override fun onDateClick(date: Date) {
+                val calendar = Calendar.getInstance()
+                calendar.time = date
+
+                val year = calendar.get(Calendar.YEAR)
+                val month = calendar.get(Calendar.MONTH) + 1
+                val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+                val formattedDate = SimpleDateFormat("yyyyMMdd 친구 기록", Locale.getDefault()).format(date)
+                binding.recordTitle.text = formattedDate
+
+                friendRecordViewModel.loadDiaryCardPerDay(year, month, day) // userId 대체
+            }
+
+            override fun onFriendClick(cardId: Int?) {
+                Timber.tag("CalendarFriendRecordFragment").d("$cardId")
+                cardId?.let {
+                    val bundle = Bundle().apply {
+                        putInt("cardId", it)
+                    }
+                    navController.navigate(R.id.action_navigation_record_to_card_instant_fragment, bundle)
+                }
+            }
+        }
 
         return binding.root
     }
@@ -79,7 +111,7 @@ class CalendarFriendRecordFragment : Fragment(), FriendCalendarRVAdapter.OnDateC
             }
         })
 
-        calendarAdapter = CalendarAdapter(emptyList())
+        calendarAdapter = CalendarAdapter(emptyList(), listener)
 
         binding.calendarRv.layoutManager = GridLayoutManager(context, 5)
         binding.calendarRv.adapter = calendarAdapter
@@ -196,6 +228,16 @@ class CalendarFriendRecordFragment : Fragment(), FriendCalendarRVAdapter.OnDateC
         binding.recordTitle.text = formattedDate
 
         friendRecordViewModel.loadDiaryCardPerDay(year, month, day) // userId 대체
+    }
+
+    override fun onFriendClick(cardId: Int?) {
+        Timber.tag("CalendarFriendRecordFragment").d("$cardId")
+        cardId?.let {
+            val bundle = Bundle().apply {
+                putInt("cardId", it)
+            }
+            navController.navigate(R.id.action_navigation_record_to_card_instant_fragment, bundle)
+        }
     }
 
     override fun onDestroyView() {

@@ -16,7 +16,7 @@ import java.util.Locale
 class FriendCalendarRVAdapter(
     private val dates: List<FriendDate>,
     currentMonth: Int,
-    private val onDateClickListener: OnDateClickListener
+    private val onDateClickListener: OnFriendDateClickListener
 ) : RecyclerView.Adapter<FriendCalendarRVAdapter.ViewHolder>() {
 
     private val thisMonth = currentMonth
@@ -83,9 +83,4 @@ class FriendCalendarRVAdapter(
     override fun getItemCount(): Int {
         return dates.size
     }
-
-    interface OnDateClickListener {
-        fun onDateClick(date: Date)
-    }
-
 }

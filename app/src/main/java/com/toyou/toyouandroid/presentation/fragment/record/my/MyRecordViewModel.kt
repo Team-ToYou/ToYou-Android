@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.toyou.toyouandroid.presentation.fragment.record.network.DeleteDiaryCardResponse
 import com.toyou.toyouandroid.presentation.fragment.record.network.DiaryCard
 import com.toyou.toyouandroid.presentation.fragment.record.network.DiaryCardResponse
 import com.toyou.toyouandroid.presentation.fragment.record.network.RecordRepository
@@ -44,6 +45,37 @@ class MyRecordViewModel(private val repository: RecordRepository) : ViewModel() 
                 }
 
                 override fun onFailure(call: Call<DiaryCardResponse>, t: Throwable) {
+                    // 네트워크 오류 처리
+                    val errorMessage = t.message ?: "Unknown error"
+                    handleError(errorMessage)
+                    Timber.tag("MyRecordViewModel").d("Network Failure: $errorMessage")
+                }
+            })
+        }
+    }
+
+    fun deleteDiaryCard(cardId: Int) {
+        Timber.tag("MyRecordViewModel").d("$cardId")
+
+        viewModelScope.launch {
+            val response = repository.deleteDiaryCard(cardId)
+            response.enqueue(object : Callback<DeleteDiaryCardResponse> {
+                override fun onResponse(
+                    call: Call<DeleteDiaryCardResponse>,
+                    response: Response<DeleteDiaryCardResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        Timber.tag("MyRecordViewModel").d("API Success: Received $response")
+                    } else {
+                        // 오류 처리
+                        val errorMessage = response.message()
+                        handleError(errorMessage)
+                        Timber.tag("MyRecordViewModel").d("API Error: $errorMessage")
+
+                    }
+                }
+
+                override fun onFailure(call: Call<DeleteDiaryCardResponse>, t: Throwable) {
                     // 네트워크 오류 처리
                     val errorMessage = t.message ?: "Unknown error"
                     handleError(errorMessage)

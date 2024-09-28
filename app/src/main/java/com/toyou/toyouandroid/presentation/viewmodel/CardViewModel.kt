@@ -109,6 +109,15 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
         }
     }
 
+    private val _date = MutableLiveData<String>()
+    val date: LiveData<String> get() = _date
+
+    private val _emotion = MutableLiveData<String>()
+    val emotion: LiveData<String> get() = _emotion
+
+    private val _receiver = MutableLiveData<String>()
+    val receiver: LiveData<String> get() = _receiver
+
     fun getCardDetail(id : Long) = viewModelScope.launch {
         try {
             val response = homeRepository.getCardDetail(id)
@@ -116,6 +125,9 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
                 val detailCard = response.result
                 val previewCardList = mutableListOf<PreviewCardModel>()
                 _exposure.value = detailCard.exposure
+                _date.value = detailCard.date
+                _emotion.value = detailCard.emotion
+                _receiver.value = detailCard.receiver
 
                 detailCard?.questions?.let { questionList ->
                     questionList.forEach { question ->
