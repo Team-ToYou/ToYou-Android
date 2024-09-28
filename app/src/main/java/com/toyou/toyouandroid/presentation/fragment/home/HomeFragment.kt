@@ -114,10 +114,6 @@ class HomeFragment : Fragment() {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         bottomSheetBehavior.peekHeight = resources.getDimensionPixelSize(R.dimen.bottom_sheet_peek_height)
 
-        viewModel.diaryCards.observe(viewLifecycleOwner) { diaryCards ->
-//            diaryAdapter.submitList(diaryCards)
-        }
-
         viewModel.isEmpty.observe(viewLifecycleOwner) { isEmpty ->
             if (isEmpty) {
                 binding.homeBottomsheetPseudo.visibility = View.VISIBLE

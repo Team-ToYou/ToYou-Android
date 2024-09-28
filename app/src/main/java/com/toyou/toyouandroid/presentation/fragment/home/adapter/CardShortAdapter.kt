@@ -69,12 +69,6 @@ class CardShortAdapter (private val onItemClick: (Int, Boolean) -> Unit, private
             } ?: run {
                 Log.e("CardViewHolder", "LifecycleOwner is null")
             }
-        /*init {
-            button.setOnClickListener {
-                isSelected = !isSelected
-                updateButtonBackground(isSelected)
-                onItemClick(adapterPosition, isSelected)
-            }*/
 
         }
 

@@ -104,16 +104,6 @@ class CardChooseAdapter(private val onItemClick: (Int, Boolean) -> Unit, private
                 Log.e("CardViewHolder", "LifecycleOwner is null")
             }
 
-
-        /*init {
-            button.setOnClickListener {
-                val isSelected = !button.isSelected
-                button.isSelected = isSelected
-                updateButtonBackground(isSelected)
-                Log.d("클릭", isSelected.toString())
-                onItemClick(adapterPosition, isSelected)
-            }*/
-
         }
 
         fun bind(item: ChooseModel) {
@@ -165,15 +155,6 @@ class CardChooseAdapter(private val onItemClick: (Int, Boolean) -> Unit, private
             } ?: run {
                 Log.e("CardViewHolder", "LifecycleOwner is null")
             }
-
-        /*init {
-            button.setOnClickListener {
-                val isSelected = !button.isSelected
-                button.isSelected = isSelected
-                updateButtonBackground(isSelected)
-                onItemClick(adapterPosition, isSelected)
-                Log.d("클릭", isSelected.toString())
-            }*/
 
         }
         private fun updateButtonBackground(isSelected: Boolean) {
