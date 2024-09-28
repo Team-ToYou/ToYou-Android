@@ -53,8 +53,7 @@ class SignupAgreeFragment : Fragment() {
             binding.checkbox1,
             binding.checkbox2,
             binding.checkbox3,
-            binding.checkbox4,
-            binding.checkbox5
+            binding.checkbox4
         )
 
         imageViews.forEachIndexed { _, imageView ->

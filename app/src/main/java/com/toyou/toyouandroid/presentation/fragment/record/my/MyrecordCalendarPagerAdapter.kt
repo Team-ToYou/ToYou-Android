@@ -11,7 +11,7 @@ import com.toyou.toyouandroid.presentation.fragment.record.DayOfTheWeekAdapter
 class MyrecordCalendarPagerAdapter(
     private val datesList: List<List<MyDate>>,
     private val currentMonth: Int,
-    private val onDateClickListener: MyRecordCalendarRVAdapter.OnDateClickListener
+    private val onDateClickListener: OnMyDateClickListener
 ) : RecyclerView.Adapter<MyrecordCalendarPagerAdapter.ViewHolder>() {
 
     inner class ViewHolder(val binding: CalendarPageBinding) : RecyclerView.ViewHolder(binding.root) {

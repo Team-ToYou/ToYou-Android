@@ -77,10 +77,6 @@ class MypageFragment : Fragment() {
         }
 
         binding.mypageNoticeSetting.setOnClickListener {
-//            val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
-//                putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().packageName)
-//            }
-//            startActivity(intent)
             navController.navigate(R.id.action_navigation_mypage_to_notice_setting_fragment)
         }
 
@@ -123,7 +119,7 @@ class MypageFragment : Fragment() {
         binding.mypageSignoutBtn.setOnClickListener {
             mypageDialogViewModel.setDialogData(
                 title = "정말 탈퇴하시겠어요?",
-                subTitle = "탈퇴 시, 모든 정보가 사라집니다",
+                subTitle = "작성하신 일기카드가 모두\n삭제되며 복구할 수 없어요",
                 leftButtonText = "탈퇴하기",
                 rightButtonText = "취소",
                 leftButtonTextColor = Color.RED,

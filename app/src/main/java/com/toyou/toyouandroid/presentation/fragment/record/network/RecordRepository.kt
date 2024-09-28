@@ -15,4 +15,8 @@ class RecordRepository(private val recordService: RecordService) {
     fun getFriendRecordPerDay(year: Int, month: Int, day: Int): Call<DiaryCardPerDayResponse> {
         return recordService.getDiarycardsPerDayFriend(year, month, day)
     }
+
+    fun deleteDiaryCard(cardId: Int): Call<DeleteDiaryCardResponse> {
+        return recordService.deleteDiarycard(cardId)
+    }
 }

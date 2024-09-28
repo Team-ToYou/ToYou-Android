@@ -1,4 +1,4 @@
-package com.toyou.toyouandroid.presentation.fragment.mypage
+package com.toyou.toyouandroid.presentation.fragment.record
 
 import android.app.Dialog
 import android.os.Bundle
@@ -10,18 +10,18 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.toyou.toyouandroid.R
-import com.toyou.toyouandroid.databinding.DialogMypageBinding
+import com.toyou.toyouandroid.databinding.DialogCalendarBinding
 
-class MypageDialog : DialogFragment() {
+class CalendarDialog : DialogFragment() {
 
-    private val viewModel: MypageDialogViewModel by activityViewModels()
+    private val viewModel: CalendarDialogViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding: DialogMypageBinding = DataBindingUtil.inflate(
-            inflater, R.layout.dialog_mypage, container, false
+        val binding: DialogCalendarBinding = DataBindingUtil.inflate(
+            inflater, R.layout.dialog_calendar, container, false
         )
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
