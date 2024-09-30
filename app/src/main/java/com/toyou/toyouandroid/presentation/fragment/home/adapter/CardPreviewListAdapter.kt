@@ -1,25 +1,18 @@
 package com.toyou.toyouandroid.ui.home.adapter
 
-import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.model.PreviewCardModel
-import com.toyou.toyouandroid.model.PreviewChooseModel
-import com.toyou.toyouandroid.model.multi_type1
 import com.toyou.toyouandroid.model.type1
 import com.toyou.toyouandroid.model.type2
 import com.toyou.toyouandroid.model.type3
-import com.toyou.toyouandroid.presentation.fragment.home.adapter.ChooseCardAdapter
 import timber.log.Timber
 
-class CardPreviewListAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CardPreviewListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var cardList : List<PreviewCardModel> = emptyList()
     private lateinit var emotion: String
@@ -119,7 +112,7 @@ class CardPreviewListAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>()
         fun bind(item: PreviewCardModel) {
             question.text = item.question
             txtOption1.text = item.options!![0]
-            txtOption2.text = item.options!![1]
+            txtOption2.text = item.options[1]
 
             if (item.answer == item.options[0]) {
                 when(emotion){
@@ -156,8 +149,8 @@ class CardPreviewListAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>()
         fun bind(item: PreviewCardModel) {
             question.text = item.question
             txtOption1.text = item.options!![0]
-            txtOption2.text = item.options!![1]
-            txtOption3.text = item.options!![2]
+            txtOption2.text = item.options[1]
+            txtOption3.text = item.options[2]
 
             if (item.answer == item.options[0]) {
                 when(emotion){
@@ -199,7 +192,4 @@ class CardPreviewListAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>()
     override fun getItemCount(): Int {
         return cardList.size
     }
-
-
-
 }

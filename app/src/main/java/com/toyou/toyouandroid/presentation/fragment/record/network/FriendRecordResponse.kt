@@ -32,3 +32,9 @@ data class DiaryCardPerDay(
     val nickname: String,
     val emotion: String
 )
+
+data class DeleteDiaryCardResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String
+)

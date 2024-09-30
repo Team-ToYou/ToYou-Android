@@ -10,13 +10,12 @@ import com.toyou.toyouandroid.model.MyDate
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
 
 class MyRecordCalendarRVAdapter(
     private val dates: List<MyDate>,
     currentMonth: Int,
-    private val onDateClickListener: OnDateClickListener
+    private val onDateClickListener: OnMyDateClickListener
 ) : RecyclerView.Adapter<MyRecordCalendarRVAdapter.ViewHolder>() {
 
     private val thisMonth = currentMonth
@@ -26,6 +25,7 @@ class MyRecordCalendarRVAdapter(
 
         fun bind(myDate: MyDate) {
             val date = myDate.date
+            val cardId = myDate.cardId
             val imageResId = myDate.imageResId
             val calendar = Calendar.getInstance()
             calendar.time = date
@@ -61,7 +61,7 @@ class MyRecordCalendarRVAdapter(
                 Timber.tag("CalendarRVAdapter").d("Date clicked: $date")
 
                 // 날짜 클릭했을 때 기록탭 날짜 변경로직
-                onDateClickListener.onDateClick(date)
+                onDateClickListener.onDateClick(date, cardId)
             }
         }
     }
@@ -78,9 +78,4 @@ class MyRecordCalendarRVAdapter(
     override fun getItemCount(): Int {
         return dates.size
     }
-
-    interface OnDateClickListener {
-        fun onDateClick(date: Date)
-    }
-
 }

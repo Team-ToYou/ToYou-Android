@@ -21,13 +21,23 @@ class RecordFragment : Fragment() {
     private val binding: FragmentRecordBinding
         get() = requireNotNull(_binding){"FragmentRecordBinding -> null"}
 
+    // 현재 선택된 탭의 인덱스를 저장하기 위한 키
+    companion object {
+        private const val SELECTED_TAB_INDEX = "selected_tab_index"
+    }
+
+    // 탭의 인덱스를 저장하는 변수
+    private var selectedTabIndex: Int = 0
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentRecordBinding.inflate(inflater, container, false)
+
+        // 이전 상태에서 선택된 탭 인덱스 복원
+        selectedTabIndex = savedInstanceState?.getInt(SELECTED_TAB_INDEX) ?: 0
 
         return binding.root
     }
@@ -39,8 +49,10 @@ class RecordFragment : Fragment() {
 
         val tabLayout: TabLayout = binding.tabLayout
 
+        // 탭 선택 리스너 설정
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
+                selectedTabIndex = tab.position
                 when (tab.position) {
                     0 -> replaceFragment(CalendarMyRecordFragment())
                     1 -> replaceFragment(CalendarFriendRecordFragment())
@@ -52,10 +64,17 @@ class RecordFragment : Fragment() {
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
 
-        // 초기 화면 설정
+        // savedInstanceState가 null이 아니면 선택된 탭 복원
         if (savedInstanceState == null) {
-            tabLayout.getTabAt(0)?.select()
-            replaceFragment(CalendarMyRecordFragment())
+            // 초기 탭 설정
+            tabLayout.getTabAt(selectedTabIndex)?.select()
+            replaceFragment(
+                if (selectedTabIndex == 0) CalendarMyRecordFragment()
+                else CalendarFriendRecordFragment()
+            )
+        } else {
+            // 선택된 탭 복원
+            tabLayout.getTabAt(selectedTabIndex)?.select()
         }
     }
 
@@ -63,6 +82,12 @@ class RecordFragment : Fragment() {
         childFragmentManager.commit {
             replace(R.id.record_fragment_Container, fragment)
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        // 선택된 탭 인덱스를 저장
+        outState.putInt(SELECTED_TAB_INDEX, selectedTabIndex)
     }
 
     override fun onDestroyView() {

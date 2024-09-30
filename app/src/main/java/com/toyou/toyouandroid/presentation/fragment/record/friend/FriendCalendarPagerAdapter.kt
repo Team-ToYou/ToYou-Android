@@ -11,7 +11,7 @@ import com.toyou.toyouandroid.presentation.fragment.record.DayOfTheWeekAdapter
 class FriendCalendarPagerAdapter(
     private val datesList: List<List<FriendDate>>,
     private val currentMonth: Int,
-    private val onDateClickListener: FriendCalendarRVAdapter.OnDateClickListener
+    private val onDateClickListener: OnFriendDateClickListener
 ) : RecyclerView.Adapter<FriendCalendarPagerAdapter.ViewHolder>() {
 
     inner class ViewHolder(val binding: CalendarPageBinding) : RecyclerView.ViewHolder(binding.root) {
