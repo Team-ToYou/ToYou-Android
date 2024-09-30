@@ -84,7 +84,7 @@ class PreviewFragment : Fragment(){
         binding.nextBtn.setOnClickListener {
             val previewCards = cardViewModel.previewCards.value ?: emptyList()
             Log.d("수정", previewCards.toString())
-            val exposure = cardViewModel.exposure.value ?: false
+            val exposure = cardViewModel.exposure.value ?: true
 
             if (userViewModel.cardId.value == null) {
                 cardViewModel.sendData(previewCards, exposure)

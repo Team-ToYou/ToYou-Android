@@ -74,7 +74,7 @@ class CardShortAdapter (private val onItemClick: (Int, Boolean) -> Unit, private
 
         fun bind(card: CardShortModel) {
             cardMessageTextView.text = card.message
-            fromWho.text = card.fromWho
+            fromWho.text = "From. ${card.fromWho}"
             isSelected = card.isButtonSelected
             updateButtonBackground(isSelected)
         }

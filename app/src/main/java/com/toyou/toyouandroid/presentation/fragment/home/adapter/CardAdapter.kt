@@ -65,7 +65,7 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit, private val c
 
         fun bind(card: CardModel) {
             cardMessageTextView.text = card.message
-            fromWho.text = card.fromWho
+            fromWho.text = "From. ${card.fromWho}"
             isSelected = card.isButtonSelected
 
             // 버튼 배경을 업데이트

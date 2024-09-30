@@ -167,7 +167,7 @@ class CardChooseAdapter(private val onItemClick: (Int, Boolean) -> Unit, private
             txtOption1.text = item.options[0]
             txtOption2.text = item.options[1]
             txtOption3.text = item.options[2]
-            fromWho.text = item.fromWho
+            fromWho.text = "From. ${item.fromWho}"
             isSelected = item.isButtonSelected
             updateButtonBackground(isSelected)
 

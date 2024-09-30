@@ -99,7 +99,10 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
             if (response.isSuccess) {
                 val questionsDto = response.result
                 if (previewCards.value == null)
-                    questionsDto?.let { mapToModels(it) }
+                    questionsDto?.let {
+                        mapToModels(it)
+                        Log.d("get", questionsDto.toString())
+                    }
                 else
                     questionsDto?.let { mapToPatchModels(it) }
             } else {
@@ -286,6 +289,8 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
     fun isLockSelected(lock : ImageView){
         lock.isSelected = !lock.isSelected
         _exposure.value = lock.isSelected
+        Log.d("lock",_exposure.value.toString())
+
     }
 
     fun updateButtonState(position : Int, isSelected : Boolean){
