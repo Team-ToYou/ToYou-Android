@@ -98,7 +98,7 @@ class ChooseCardAdapter(private val cardViewModel: CardViewModel) : RecyclerView
             question.text = item.question
             txtOption1.text = item.options!![0]
             txtOption2.text = item.options!![1]
-            fromWho.text = item.fromWho
+            fromWho.text = "From. ${item.fromWho}"
 
             when (item.answer) {
                 txtOption1.text.toString() -> handleOptionSelection(txtOption1)
@@ -145,7 +145,7 @@ class ChooseCardAdapter(private val cardViewModel: CardViewModel) : RecyclerView
             txtOption1.text = item.options!![0]
             txtOption2.text = item.options!![1]
             txtOption3.text = item.options!![2]
-            fromWho.text = item.fromWho
+            fromWho.text = "From. ${item.fromWho}"
 
 
             val isNotEmpty = item.answer.isNotEmpty()

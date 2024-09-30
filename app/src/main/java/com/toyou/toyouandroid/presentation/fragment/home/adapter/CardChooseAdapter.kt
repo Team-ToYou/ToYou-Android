@@ -104,23 +104,13 @@ class CardChooseAdapter(private val onItemClick: (Int, Boolean) -> Unit, private
                 Log.e("CardViewHolder", "LifecycleOwner is null")
             }
 
-
-        /*init {
-            button.setOnClickListener {
-                val isSelected = !button.isSelected
-                button.isSelected = isSelected
-                updateButtonBackground(isSelected)
-                Log.d("클릭", isSelected.toString())
-                onItemClick(adapterPosition, isSelected)
-            }*/
-
         }
 
         fun bind(item: ChooseModel) {
             question.text = item.message
             txtOption1.text = item.options[0]
             txtOption2.text = item.options[1]
-            fromWho.text = item.fromWho
+            fromWho.text = "From. ${item.fromWho}"
             isSelected = item.isButtonSelected
             updateButtonBackground(isSelected)
         }
@@ -166,15 +156,6 @@ class CardChooseAdapter(private val onItemClick: (Int, Boolean) -> Unit, private
                 Log.e("CardViewHolder", "LifecycleOwner is null")
             }
 
-        /*init {
-            button.setOnClickListener {
-                val isSelected = !button.isSelected
-                button.isSelected = isSelected
-                updateButtonBackground(isSelected)
-                onItemClick(adapterPosition, isSelected)
-                Log.d("클릭", isSelected.toString())
-            }*/
-
         }
         private fun updateButtonBackground(isSelected: Boolean) {
             val backgroundRes = if (isSelected) R.drawable.create_check else R.drawable.create_uncheck
@@ -186,7 +167,7 @@ class CardChooseAdapter(private val onItemClick: (Int, Boolean) -> Unit, private
             txtOption1.text = item.options[0]
             txtOption2.text = item.options[1]
             txtOption3.text = item.options[2]
-            fromWho.text = item.fromWho
+            fromWho.text = "From. ${item.fromWho}"
             isSelected = item.isButtonSelected
             updateButtonBackground(isSelected)
 

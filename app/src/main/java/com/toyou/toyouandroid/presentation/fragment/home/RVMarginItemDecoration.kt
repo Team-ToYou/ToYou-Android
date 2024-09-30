@@ -12,13 +12,15 @@ class RVMarginItemDecoration (private val spaceSize: Int, private val side : Boo
         state: RecyclerView.State
     ) {
         with(outRect) {
-            /*if (parent.getChildAdapterPosition(view) == 0) {
-                top = spaceSize
-            }*/
-
-
+            if (parent.getChildAdapterPosition(view) != 0) {
                 left = spaceSize
                 right = spaceSize
+
+            }
+
+
+               // left = spaceSize
+                //right = spaceSize
 
             //bottom = spaceSize
         }

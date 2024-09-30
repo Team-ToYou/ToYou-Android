@@ -79,14 +79,12 @@ class CardFragment : Fragment() {
 
         })
 
-        userViewModel.cardId.observe(viewLifecycleOwner, Observer { cardId ->
 
-            if (cardId == null) {
+            //if (userViewModel.cardId.value == null) {
                 binding.lockFreeIv.setOnClickListener {
-                    cardViewModel.isLockSelected(binding.lockFreeIv)
+                    cardViewModel.isLockSelected()
                 }
-            }
-        })
+            //}
 
         userViewModel.nickname.observe(viewLifecycleOwner, Observer { name ->
             binding.itemDetail.setText("To.${name}")
@@ -95,14 +93,16 @@ class CardFragment : Fragment() {
         binding.itemTitle.text = LocalDate.now().toString().replace("-", "")
 
         cardViewModel.exposure.observe(viewLifecycleOwner, Observer { exposure ->
-            if (exposure) {
-                binding.lockFreeIv.setImageResource(R.drawable.lock_btn2)
-                Toast.makeText(requireContext(),"일기카드를 비공개로 설정합니다", Toast.LENGTH_SHORT).show()
-            }
-            else {
-                binding.lockFreeIv.setImageResource(R.drawable.lock_free2)
-                Toast.makeText(requireContext(), "일기카드를 공개로 설정합니다", Toast.LENGTH_SHORT).show()
-            }
+            binding.lockFreeIv.isSelected = exposure
+            //if (cardViewModel.toastShow){
+                if (exposure) {
+                    binding.lockFreeIv.setImageResource(R.drawable.lock_free2)
+                    Toast.makeText(requireContext(), "일기카드를 공개로 설정합니다", Toast.LENGTH_SHORT).show()
+                } else {
+                    binding.lockFreeIv.setImageResource(R.drawable.lock_btn2)
+                    Toast.makeText(requireContext(), "일기카드를 비공개로 설정합니다", Toast.LENGTH_SHORT).show()
+                }
+            //}
 
         })
 

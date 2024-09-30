@@ -61,20 +61,11 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit, private val c
                 }
             }
 
-            // LiveData 변화 관찰
-            /*val lifecycleOwner = itemView.findViewTreeLifecycleOwner() // LifecycleOwner 가져옴
-            lifecycleOwner?.let {
-                cardViewModel.countSelection.observe(it, Observer { count ->
-                    // 필요한 경우 UI 업데이트 등 처리
-                })
-            } ?: run {
-            }*/
-
         }
 
         fun bind(card: CardModel) {
             cardMessageTextView.text = card.message
-            fromWho.text = card.fromWho
+            fromWho.text = "From. ${card.fromWho}"
             isSelected = card.isButtonSelected
 
             // 버튼 배경을 업데이트

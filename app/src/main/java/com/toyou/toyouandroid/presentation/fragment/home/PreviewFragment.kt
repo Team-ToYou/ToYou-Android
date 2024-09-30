@@ -84,7 +84,7 @@ class PreviewFragment : Fragment(){
         binding.nextBtn.setOnClickListener {
             val previewCards = cardViewModel.previewCards.value ?: emptyList()
             Log.d("수정", previewCards.toString())
-            val exposure = cardViewModel.exposure.value ?: false
+            val exposure = cardViewModel.exposure.value ?: true
 
             if (userViewModel.cardId.value == null) {
                 cardViewModel.sendData(previewCards, exposure)
@@ -95,7 +95,7 @@ class PreviewFragment : Fragment(){
                 cardViewModel.patchCard(previewCards, exposure, userViewModel.cardId.value!!)
                 Toast.makeText(requireContext(), "일기카드가 수정되었습니다", Toast.LENGTH_SHORT).show()
             }
-
+            cardViewModel.toastShow = false
 
             navController.navigate(R.id.action_previewFragment_to_navigation_home)
         }

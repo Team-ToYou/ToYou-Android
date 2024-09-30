@@ -12,7 +12,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content">
 
         <TextView
@@ -29,7 +29,7 @@
             style="@style/sc_l12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{card.fromWho}"
+            android:text="@{`From. `+card.fromWho}"
             android:textColor="@color/black"
             app:layout_constraintTop_toBottomOf="@id/edit_linear"
             app:layout_constraintEnd_toEndOf="@id/edit_linear"
@@ -48,7 +48,7 @@
 
         <EditText
             android:id="@+id/memo_et"
-            android:layout_width="160dp"
+            android:layout_width="190dp"
             android:layout_height="70dp"
             style="@style/sc_l10"
             android:hint="답변을 입력해주세요."

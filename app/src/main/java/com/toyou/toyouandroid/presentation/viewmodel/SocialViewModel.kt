@@ -257,15 +257,6 @@ class SocialViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
                 _friendRequestCompleted.postValue(false)
             }
         }
-
-
-        //retrieveTokenFromServer(name)
-        /*_retrieveToken.value?.let { tokens ->
-            for (token in tokens) {
-                postFCM(myName, token, 1)
-            }*/
-            //resetToken()
-        //}
     }
 
     fun resetFriendRequest() {

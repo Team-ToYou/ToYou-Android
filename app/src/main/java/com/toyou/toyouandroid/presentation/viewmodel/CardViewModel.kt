@@ -43,7 +43,7 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
     private val homeRepository = HomeRepository(tokenStorage)
 
     val exposure : LiveData<Boolean> get() = _exposure
-    private val _exposure = MutableLiveData(false)
+    private val _exposure = MutableLiveData<Boolean>()
 
     val answer = MutableLiveData<String>()
     private val _cardId = MutableLiveData<Int>().apply { value = 0 }
@@ -57,6 +57,11 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
 
     private val _countSelection = MutableLiveData<Int>()
     val countSelection : LiveData<Int>get() = _countSelection
+    var toastShow : Boolean = false
+
+    init {
+        _exposure.value = true
+    }
 
     private fun initializeCountSelection() {
         _countSelection.value = _previewCards.value?.size ?: 0
@@ -99,7 +104,10 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
             if (response.isSuccess) {
                 val questionsDto = response.result
                 if (previewCards.value == null)
-                    questionsDto?.let { mapToModels(it) }
+                    questionsDto?.let {
+                        mapToModels(it)
+                        Log.d("get", questionsDto.toString())
+                    }
                 else
                     questionsDto?.let { mapToPatchModels(it) }
             } else {
@@ -295,9 +303,10 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
         return answer.length
     }
 
-    fun isLockSelected(lock : ImageView){
-        lock.isSelected = !lock.isSelected
-        _exposure.value = lock.isSelected
+    fun isLockSelected() {
+        _exposure.value = _exposure.value?.not() ?: true
+        Log.d("lock", _exposure.value.toString())
+        //toastShow = true
     }
 
     fun updateButtonState(position : Int, isSelected : Boolean){

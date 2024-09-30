@@ -69,18 +69,12 @@ class CardShortAdapter (private val onItemClick: (Int, Boolean) -> Unit, private
             } ?: run {
                 Log.e("CardViewHolder", "LifecycleOwner is null")
             }
-        /*init {
-            button.setOnClickListener {
-                isSelected = !isSelected
-                updateButtonBackground(isSelected)
-                onItemClick(adapterPosition, isSelected)
-            }*/
 
         }
 
         fun bind(card: CardShortModel) {
             cardMessageTextView.text = card.message
-            fromWho.text = card.fromWho
+            fromWho.text = "From. ${card.fromWho}"
             isSelected = card.isButtonSelected
             updateButtonBackground(isSelected)
         }
