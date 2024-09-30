@@ -57,6 +57,7 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
 
     private val _countSelection = MutableLiveData<Int>()
     val countSelection : LiveData<Int>get() = _countSelection
+    var toastShow : Boolean = false
 
     init {
         _exposure.value = true
@@ -290,16 +291,10 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
         return answer.length
     }
 
-    /*fun isLockSelected(lock : ImageView){
-        lock.isSelected = !lock.isSelected
-        _exposure.value = lock.isSelected
-        Log.d("lock",exposure.value.toString())
-
-    }*/
-
     fun isLockSelected() {
         _exposure.value = _exposure.value?.not() ?: true
         Log.d("lock", _exposure.value.toString())
+        //toastShow = true
     }
 
     fun updateButtonState(position : Int, isSelected : Boolean){

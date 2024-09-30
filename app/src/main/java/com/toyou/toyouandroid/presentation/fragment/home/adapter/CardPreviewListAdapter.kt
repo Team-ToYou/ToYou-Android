@@ -27,7 +27,6 @@ class CardPreviewListAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>()
     fun setCards(newCards: List<PreviewCardModel>) {
         cardList = newCards
         notifyDataSetChanged()
-        Timber.tag("카드1").d(cardList.toString())
     }
 
     fun setEmotion(emotion : String){
@@ -127,7 +126,7 @@ class CardPreviewListAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>()
                     "HAPPY" -> txtOption1.setBackgroundResource(R.drawable.selected_option_happy)
                     "EXCITED" -> txtOption1.setBackgroundResource(R.drawable.selected_option_excited)
                     "NORMAL" -> txtOption1.setBackgroundResource(R.drawable.selected_option_normal)
-                    "NERVOUS" -> txtOption1.setBackgroundResource(R.drawable.selected_option_excited)
+                    "NERVOUS" -> txtOption1.setBackgroundResource(R.drawable.selected_option_container)
                     "ANGRY" -> txtOption1.setBackgroundResource(R.drawable.selected_option_angry)
                 }
             } else {
@@ -139,7 +138,7 @@ class CardPreviewListAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>()
                     "HAPPY" -> txtOption2.setBackgroundResource(R.drawable.selected_option_happy)
                     "EXCITED" -> txtOption2.setBackgroundResource(R.drawable.selected_option_excited)
                     "NORMAL" -> txtOption2.setBackgroundResource(R.drawable.selected_option_normal)
-                    "NERVOUS" -> txtOption2.setBackgroundResource(R.drawable.selected_option_excited)
+                    "NERVOUS" -> txtOption2.setBackgroundResource(R.drawable.selected_option_container)
                     "ANGRY" -> txtOption2.setBackgroundResource(R.drawable.selected_option_angry)
                 }
             } else {
@@ -165,7 +164,7 @@ class CardPreviewListAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>()
                     "HAPPY" -> txtOption1.setBackgroundResource(R.drawable.selected_option_happy)
                     "EXCITED" -> txtOption1.setBackgroundResource(R.drawable.selected_option_excited)
                     "NORMAL" -> txtOption1.setBackgroundResource(R.drawable.selected_option_normal)
-                    "NERVOUS" -> txtOption1.setBackgroundResource(R.drawable.selected_option_excited)
+                    "NERVOUS" -> txtOption1.setBackgroundResource(R.drawable.selected_option_container)
                     "ANGRY" -> txtOption1.setBackgroundResource(R.drawable.selected_option_angry)
                 }
             } else {
@@ -177,7 +176,7 @@ class CardPreviewListAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>()
                     "HAPPY" -> txtOption2.setBackgroundResource(R.drawable.selected_option_happy)
                     "EXCITED" -> txtOption2.setBackgroundResource(R.drawable.selected_option_excited)
                     "NORMAL" -> txtOption2.setBackgroundResource(R.drawable.selected_option_normal)
-                    "NERVOUS" -> txtOption2.setBackgroundResource(R.drawable.selected_option_excited)
+                    "NERVOUS" -> txtOption2.setBackgroundResource(R.drawable.selected_option_container)
                     "ANGRY" -> txtOption2.setBackgroundResource(R.drawable.selected_option_angry)
                 }
             } else {
@@ -188,7 +187,7 @@ class CardPreviewListAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>()
                     "HAPPY" -> txtOption3.setBackgroundResource(R.drawable.selected_option_happy)
                     "EXCITED" -> txtOption3.setBackgroundResource(R.drawable.selected_option_excited)
                     "NORMAL" -> txtOption3.setBackgroundResource(R.drawable.selected_option_normal)
-                    "NERVOUS" -> txtOption3.setBackgroundResource(R.drawable.selected_option_excited)
+                    "NERVOUS" -> txtOption3.setBackgroundResource(R.drawable.selected_option_container)
                     "ANGRY" -> txtOption3.setBackgroundResource(R.drawable.selected_option_angry)
                 }
             } else {

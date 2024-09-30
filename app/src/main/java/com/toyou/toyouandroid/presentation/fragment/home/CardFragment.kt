@@ -94,14 +94,15 @@ class CardFragment : Fragment() {
 
         cardViewModel.exposure.observe(viewLifecycleOwner, Observer { exposure ->
             binding.lockFreeIv.isSelected = exposure
-            if (exposure) {
-                binding.lockFreeIv.setImageResource(R.drawable.lock_free2)
-                Toast.makeText(requireContext(), "일기카드를 공개로 설정합니다", Toast.LENGTH_SHORT).show()
-            }
-            else {
-                binding.lockFreeIv.setImageResource(R.drawable.lock_btn2)
-                Toast.makeText(requireContext(),"일기카드를 비공개로 설정합니다", Toast.LENGTH_SHORT).show()
-            }
+            //if (cardViewModel.toastShow){
+                if (exposure) {
+                    binding.lockFreeIv.setImageResource(R.drawable.lock_free2)
+                    Toast.makeText(requireContext(), "일기카드를 공개로 설정합니다", Toast.LENGTH_SHORT).show()
+                } else {
+                    binding.lockFreeIv.setImageResource(R.drawable.lock_btn2)
+                    Toast.makeText(requireContext(), "일기카드를 비공개로 설정합니다", Toast.LENGTH_SHORT).show()
+                }
+            //}
 
         })
 

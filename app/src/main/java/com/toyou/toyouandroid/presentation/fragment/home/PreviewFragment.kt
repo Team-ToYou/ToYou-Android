@@ -95,7 +95,7 @@ class PreviewFragment : Fragment(){
                 cardViewModel.patchCard(previewCards, exposure, userViewModel.cardId.value!!)
                 Toast.makeText(requireContext(), "일기카드가 수정되었습니다", Toast.LENGTH_SHORT).show()
             }
-
+            cardViewModel.toastShow = false
 
             navController.navigate(R.id.action_previewFragment_to_navigation_home)
         }
