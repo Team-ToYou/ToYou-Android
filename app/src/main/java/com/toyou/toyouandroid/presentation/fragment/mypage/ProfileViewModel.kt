@@ -125,7 +125,7 @@ class ProfileViewModel : ViewModel() {
     private val apiService: OnboardingService = AuthNetworkModule.getClient().create(OnboardingService::class.java)
 
     // API를 호출하여 닉네임 중복 체크를 수행하는 함수
-    fun checkDuplicate() {
+    fun checkDuplicate(userNickname: String) {
         val nickname = _nickname.value ?: return
 
         val call = apiService.getNicknameCheck(nickname)
@@ -139,11 +139,18 @@ class ProfileViewModel : ViewModel() {
                         _nicknameValidate.value = true
                         nextButtonEnableCheck()
                     } else {
-                        _duplicateCheckMessage.value = "이미 사용 중인 닉네임입니다."
-                        _duplicateCheckMessageColor.value = 0xFFFF0000.toInt()
-                        _nicknameValidate.value = false
-                        nextButtonDisable()
-                        nextButtonEnableCheck()
+                        if (userNickname == nickname) {
+                            _duplicateCheckMessage.value = "이미 사용 중인 닉네임입니다."
+                            _duplicateCheckMessageColor.value = 0xFFFF0000.toInt()
+                            _nicknameValidate.value = false
+                            nextButtonEnableCheck()
+                        } else {
+                            _duplicateCheckMessage.value = "이미 사용 중인 닉네임입니다."
+                            _duplicateCheckMessageColor.value = 0xFFFF0000.toInt()
+                            _nicknameValidate.value = false
+                            nextButtonDisable()
+                            nextButtonEnableCheck()
+                        }
                     }
                 } else {
                     _duplicateCheckMessage.value = "닉네임 확인에 실패했습니다."
