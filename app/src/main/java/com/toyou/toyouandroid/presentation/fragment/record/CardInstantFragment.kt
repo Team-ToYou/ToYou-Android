@@ -9,7 +9,6 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -17,9 +16,6 @@ import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentCardInstantBinding
 import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.presentation.base.MainActivity
-import com.toyou.toyouandroid.presentation.fragment.mypage.MypageDialog
-import com.toyou.toyouandroid.presentation.fragment.mypage.MypageDialogViewModel
-import com.toyou.toyouandroid.presentation.fragment.record.my.CalendarMyRecordFragment
 import com.toyou.toyouandroid.presentation.fragment.record.my.MyRecordViewModel
 import com.toyou.toyouandroid.presentation.fragment.record.network.RecordRepository
 import com.toyou.toyouandroid.presentation.fragment.record.network.RecordService
@@ -28,7 +24,6 @@ import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
-import com.toyou.toyouandroid.ui.home.CardFragment
 import com.toyou.toyouandroid.utils.TokenStorage
 import timber.log.Timber
 
@@ -44,7 +39,7 @@ class CardInstantFragment : Fragment(){
     private val calendarDialogViewModel: CalendarDialogViewModel by activityViewModels()
     private var calendarDialog: CalendarDialog? = null
 
-    private val myRecordViewModel: MyRecordViewModel by viewModels {
+    private val myRecordViewModel: MyRecordViewModel by activityViewModels {
         RecordViewModelFactory(RecordRepository(AuthNetworkModule.getClient().create(RecordService::class.java)))
     }
 
@@ -112,6 +107,7 @@ class CardInstantFragment : Fragment(){
 
         if (cardId != null) {
             cardViewModel.getCardDetail(cardId.toLong())
+            cardViewModel.setCardId(cardId)
         }
 
         binding.closeBtn.setOnClickListener {

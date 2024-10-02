@@ -7,11 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.CardLayoutBinding
+import com.toyou.toyouandroid.network.AuthNetworkModule
+import com.toyou.toyouandroid.presentation.fragment.record.my.MyRecordViewModel
+import com.toyou.toyouandroid.presentation.fragment.record.network.RecordRepository
+import com.toyou.toyouandroid.presentation.fragment.record.network.RecordService
+import com.toyou.toyouandroid.presentation.fragment.record.network.RecordViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
@@ -29,6 +35,9 @@ class CardInfoFragment : Fragment() {
     private lateinit var cardViewModel: CardViewModel
     private lateinit var userViewModel: UserViewModel
 
+    private val myRecordViewModel: MyRecordViewModel by activityViewModels {
+        RecordViewModelFactory(RecordRepository(AuthNetworkModule.getClient().create(RecordService::class.java)))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,8 +88,9 @@ class CardInfoFragment : Fragment() {
         }
 
         cardViewModel.cardId.observe(viewLifecycleOwner) { cardId ->
-            if (cardId == null) {
+            if (cardId != null) {
                 binding.lockFreeIv.setOnClickListener {
+                    myRecordViewModel.patchDiaryCard(cardId)
                     cardViewModel.isLockSelected()
                 }
             }
@@ -97,11 +107,11 @@ class CardInfoFragment : Fragment() {
         cardViewModel.exposure.observe(viewLifecycleOwner) { exposure ->
             if (exposure) {
                 binding.lockFreeIv.setImageResource(R.drawable.lock_btn2)
-//                Toast.makeText(requireContext(),"일기카드를 비공개로 설정합니다", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(),"일기카드를 비공개로 설정합니다", Toast.LENGTH_SHORT).show()
             }
             else {
                 binding.lockFreeIv.setImageResource(R.drawable.lock_free2)
-//                Toast.makeText(requireContext(), "일기카드를 공개로 설정합니다", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "일기카드를 공개로 설정합니다", Toast.LENGTH_SHORT).show()
             }
         }
 

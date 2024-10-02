@@ -35,4 +35,9 @@ interface RecordService {
     fun deleteDiarycard(
         @Path("cardId") cardId: Int
     ): Call<DeleteDiaryCardResponse>
+
+    @PATCH("diarycards/{cardId}/exposure")
+    fun patchDiarycardExposure(
+        @Path("cardId") cardId: Int
+    ): Call<PatchDiaryCardResponse>
 }

@@ -48,6 +48,12 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
     val answer = MutableLiveData<String>()
     private val _cardId = MutableLiveData<Int>().apply { value = 0 }
     val cardId: LiveData<Int> get() = _cardId
+
+    // cardId 설정을 위한 함수 추가
+    fun setCardId(cardId: Int) {
+        _cardId.value = cardId
+    }
+
     private val _isAllAnswersFilled = MutableLiveData(false)
     val isAllAnswersFilled: LiveData<Boolean> get() = _isAllAnswersFilled
 

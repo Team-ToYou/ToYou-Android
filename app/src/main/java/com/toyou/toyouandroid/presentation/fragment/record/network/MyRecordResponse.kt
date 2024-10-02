@@ -16,3 +16,14 @@ data class DiaryCard(
     val emotion: String?,
     val date: String
 )
+
+data class PatchDiaryCardResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: PatchDiaryCardResult
+)
+
+data class PatchDiaryCardResult(
+    val exposure: Boolean
+)

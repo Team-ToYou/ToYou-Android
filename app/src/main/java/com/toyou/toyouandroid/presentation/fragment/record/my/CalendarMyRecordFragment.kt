@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.viewpager2.widget.ViewPager2
@@ -29,7 +29,7 @@ class CalendarMyRecordFragment : Fragment(), OnMyDateClickListener {
     private var _binding: FragmentCalendarMyrecordBinding? = null
     private val binding: FragmentCalendarMyrecordBinding
         get() = requireNotNull(_binding){"FragmentCalendarMyrecordBinding -> null"}
-    private val myRecordViewModel: MyRecordViewModel by viewModels {
+    private val myRecordViewModel: MyRecordViewModel by activityViewModels {
         RecordViewModelFactory(RecordRepository(AuthNetworkModule.getClient().create(RecordService::class.java)))
     }
 
