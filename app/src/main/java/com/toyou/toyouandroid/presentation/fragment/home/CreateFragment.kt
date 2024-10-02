@@ -109,7 +109,7 @@ class CreateFragment : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         navController = Navigation.findNavController(view)
 
-        binding.backBtn.setOnClickListener {
+        binding.backFrame.setOnClickListener {
             handleBackAction()
         }
 

@@ -5,13 +5,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/background_paper">
 
-    <ImageButton
-        android:id="@+id/back_btn"
+    <FrameLayout
+        android:id="@+id/back_frame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/create_back"
-        app:layout_constraintStart_toStartOf="@id/guideline"
-        app:layout_constraintTop_toTopOf="@id/guideline2" />
+        android:paddingVertical="26dp"
+        android:paddingHorizontal="20dp"
+        >
+
+        <ImageButton
+            android:id="@+id/back_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:background="@drawable/create_back"
+            />
+    </FrameLayout>
 
     <TextView
         android:id="@+id/title_tv"
@@ -121,19 +130,6 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.94" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.04" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.02" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline18"

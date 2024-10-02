@@ -82,7 +82,7 @@ class QuestionTypeFragment : Fragment(){
 
 
 
-        binding.backBtn.setOnClickListener {
+        binding.backFrame.setOnClickListener {
             val mainActivity = activity as MainActivity
             mainActivity.hideBottomNavigation(false)
             navController.popBackStack()

@@ -69,7 +69,7 @@ class PreviewFragment : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         navController = Navigation.findNavController(view)
 
-        binding.imageButton.setOnClickListener {
+        binding.backFrame.setOnClickListener {
             navController.popBackStack()
 
         }
