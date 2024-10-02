@@ -81,7 +81,7 @@ class CardInfoFragment : Fragment() {
         cardViewModel.cardId.observe(viewLifecycleOwner) { cardId ->
             if (cardId == null) {
                 binding.lockFreeIv.setOnClickListener {
-                    cardViewModel.isLockSelected(binding.lockFreeIv)
+                    cardViewModel.isLockSelected()
                 }
             }
         }
