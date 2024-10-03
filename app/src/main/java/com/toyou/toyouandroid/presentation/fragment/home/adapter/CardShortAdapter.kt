@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.Observer
@@ -42,10 +43,11 @@ class CardShortAdapter (private val onItemClick: (Int, Boolean) -> Unit, private
         private val button: Button = itemView.findViewById(R.id.button)
         private var isSelected: Boolean = false
         private val fromWho: TextView = itemView.findViewById(R.id.fromWho_tv)
+        private val btnFrame : FrameLayout = itemView.findViewById(R.id.btn_frame)
 
         init {
             // 기본적으로 클릭 리스너는 항상 동작하도록 설정
-            button.setOnClickListener {
+            btnFrame.setOnClickListener {
                 val currentCount = cardViewModel.countSelection.value ?: 0
                 if (isSelected) {
                     isSelected = !isSelected

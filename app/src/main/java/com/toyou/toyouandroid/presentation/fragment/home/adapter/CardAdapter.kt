@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.Observer
@@ -43,8 +44,9 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit, private val c
         private val button: Button = itemView.findViewById(R.id.button)
         private var isSelected: Boolean = false
         private val fromWho: TextView = itemView.findViewById(R.id.fromWho_tv)
+        private val btnFrame : FrameLayout = itemView.findViewById(R.id.btn_frame)
         init {
-            button.setOnClickListener {
+            btnFrame.setOnClickListener {
                 val currentCount = cardViewModel.countSelection.value ?: 0
                 if (isSelected) {
                     isSelected = !isSelected

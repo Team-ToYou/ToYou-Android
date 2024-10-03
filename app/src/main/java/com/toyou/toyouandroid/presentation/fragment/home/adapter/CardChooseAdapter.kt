@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.Observer
@@ -74,10 +75,11 @@ class CardChooseAdapter(private val onItemClick: (Int, Boolean) -> Unit, private
         private val fromWho : TextView = view.findViewById(R.id.fromWho_tv)
         private val button: Button = itemView.findViewById(R.id.button)
         private var isSelected: Boolean = false
+        private val btnFrame : FrameLayout = itemView.findViewById(R.id.btn_frame)
 
         init {
             // 기본적으로 클릭 리스너는 항상 동작하도록 설정
-            button.setOnClickListener {
+            btnFrame.setOnClickListener {
                 val currentCount = cardViewModel.countSelection.value ?: 0
                 if (isSelected) {
                     isSelected = !isSelected
@@ -90,18 +92,6 @@ class CardChooseAdapter(private val onItemClick: (Int, Boolean) -> Unit, private
                 } else{
                     Toast.makeText(itemView.context, "질문은 최대 5개까지 선택할 수 있습니다", Toast.LENGTH_SHORT).show()
                 }
-            }
-
-
-
-            // LiveData 변화 관찰
-            val lifecycleOwner = itemView.findViewTreeLifecycleOwner() // LifecycleOwner 가져옴
-            lifecycleOwner?.let {
-                cardViewModel.countSelection.observe(it, Observer { count ->
-                    // 필요한 경우 UI 업데이트 등 처리
-                })
-            } ?: run {
-                Log.e("CardViewHolder", "LifecycleOwner is null")
             }
 
         }
@@ -128,10 +118,11 @@ class CardChooseAdapter(private val onItemClick: (Int, Boolean) -> Unit, private
         private val fromWho : TextView = view.findViewById(R.id.fromWho_tv)
         private val button: Button = itemView.findViewById(R.id.button)
         private var isSelected: Boolean = false
+        private val btnFrame : FrameLayout = itemView.findViewById(R.id.btn_frame)
 
         init {
             // 기본적으로 클릭 리스너는 항상 동작하도록 설정
-            button.setOnClickListener {
+            btnFrame.setOnClickListener {
                 val currentCount = cardViewModel.countSelection.value ?: 0
                 if (isSelected) {
                     isSelected = !isSelected
@@ -144,16 +135,6 @@ class CardChooseAdapter(private val onItemClick: (Int, Boolean) -> Unit, private
                 } else{
                     Toast.makeText(itemView.context, "질문은 최대 5개까지 선택할 수 있습니다", Toast.LENGTH_SHORT).show()
                 }
-            }
-
-            // LiveData 변화 관찰
-            val lifecycleOwner = itemView.findViewTreeLifecycleOwner() // LifecycleOwner 가져옴
-            lifecycleOwner?.let {
-                cardViewModel.countSelection.observe(it, Observer { count ->
-                    // 필요한 경우 UI 업데이트 등 처리
-                })
-            } ?: run {
-                Log.e("CardViewHolder", "LifecycleOwner is null")
             }
 
         }

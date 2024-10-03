@@ -85,7 +85,7 @@ class QuestionContentFragment : Fragment() {
             socialViewModel.updateOption()
             navController.navigate(R.id.action_questionContentFragment_to_sendFragment)
         }
-        binding.backBtn.setOnClickListener {
+        binding.backFrame.setOnClickListener {
             socialViewModel.removeOptions()
             socialViewModel.removeContent()
             navController.popBackStack()

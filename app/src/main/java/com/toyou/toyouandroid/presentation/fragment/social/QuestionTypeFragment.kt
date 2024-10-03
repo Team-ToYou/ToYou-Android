@@ -76,13 +76,13 @@ class QuestionTypeFragment : Fragment(){
             binding.nextBtn.isEnabled = isEnabled
         })
 
-        binding.char1Iv.setOnClickListener { socialViewModel.onCharSelected(1) }
-        binding.char2Iv.setOnClickListener { socialViewModel.onCharSelected(2) }
-        binding.char3Iv.setOnClickListener { socialViewModel.onCharSelected(3) }
+        binding.oneFrame.setOnClickListener { socialViewModel.onCharSelected(1) }
+        binding.twoFrame.setOnClickListener { socialViewModel.onCharSelected(2) }
+        binding.threeFrame.setOnClickListener { socialViewModel.onCharSelected(3) }
 
 
 
-        binding.backBtn.setOnClickListener {
+        binding.backFrame.setOnClickListener {
             val mainActivity = activity as MainActivity
             mainActivity.hideBottomNavigation(false)
             navController.popBackStack()

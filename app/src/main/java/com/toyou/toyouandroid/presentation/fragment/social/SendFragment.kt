@@ -67,7 +67,7 @@ class SendFragment: Fragment() {
             navController.navigate(R.id.action_sendFragment_to_sendFinalFragment)
         }
 
-        binding.backBtn.setOnClickListener {
+        binding.backFrame.setOnClickListener {
             navController.popBackStack()
         }
 
