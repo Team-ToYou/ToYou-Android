@@ -78,7 +78,7 @@ class ProfileFragment : Fragment() {
             binding.signupNicknameInput.setText(nickname)
         }
 
-        binding.signupNicknameBackBtn.setOnClickListener {
+        binding.signupNicknameBackLayout.setOnClickListener {
             navController.navigate(R.id.action_navigation_profile_to_mypage_fragment)
         }
 

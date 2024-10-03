@@ -48,15 +48,20 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_begin="662dp" />
 
-        <ImageView
-            android:id="@+id/signup_nickname_back_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:src="@drawable/back_button"
-            app:layout_constraintStart_toStartOf="@id/guideline_title_v"
-            app:layout_constraintTop_toTopOf="parent" />
+        <LinearLayout
+            android:id="@+id/signup_nickname_back_layout"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:layout_constraintStart_toStartOf="@+id/guideline_title_v"
+            app:layout_constraintTop_toTopOf="parent">
 
+            <ImageView
+                android:id="@+id/signup_nickname_back_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:src="@drawable/back_button" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/screen_bar_title"
