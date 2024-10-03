@@ -84,9 +84,9 @@ class CardInstantFragment : Fragment(){
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                cardViewModel.clearAll()
-
-                navController.navigate(R.id.action_navigation_card_instant_to_record_fragment)
+                cardViewModel.clearAllData()
+//                navController.navigate(R.id.action_navigation_card_instant_to_record_fragment)
+                navController.popBackStack()
             }
         })
 
@@ -111,9 +111,9 @@ class CardInstantFragment : Fragment(){
         }
 
         binding.closeBtn.setOnClickListener {
-            cardViewModel.clearAll()
-
-            navController.navigate(R.id.action_navigation_card_instant_to_record_fragment)
+            cardViewModel.clearAllData()
+//            navController.navigate(R.id.action_navigation_card_instant_to_record_fragment)
+            navController.popBackStack()
         }
 
         binding.diarycardDeleteBtn.setOnClickListener {
