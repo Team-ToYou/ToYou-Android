@@ -2,14 +2,17 @@ package com.toyou.toyouandroid.presentation.fragment.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.databinding.ItemHomeBottomSheetBinding
-import com.toyou.toyouandroid.model.HomeBottomSheetItem
 import com.toyou.toyouandroid.presentation.fragment.emotionstamp.network.DiaryCard
+import com.toyou.toyouandroid.presentation.fragment.home.HomeBottomSheetClickListener
 
-class HomeBottomSheetAdapter : RecyclerView.Adapter<HomeBottomSheetAdapter.ViewHolder>() {
-
-    private val diaryCards = mutableListOf<DiaryCard>()
+class HomeBottomSheetAdapter(
+    private val items: MutableList<DiaryCard>,
+//    private val cardDetails: List<CardDetail>,
+    private val listener: HomeBottomSheetClickListener
+) : RecyclerView.Adapter<HomeBottomSheetAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -18,25 +21,43 @@ class HomeBottomSheetAdapter : RecyclerView.Adapter<HomeBottomSheetAdapter.ViewH
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = diaryCards[position]
+        val item = items[position]
+//        val cardDetail = cardDetails.getOrNull(position)
         holder.bind(item)
     }
 
-    fun submitList(cards: List<DiaryCard>) {
-        diaryCards.clear()
-        diaryCards.addAll(cards)
-        notifyDataSetChanged()
-    }
-
     override fun getItemCount(): Int {
-        return diaryCards.size
+        return items.size
     }
 
     inner class ViewHolder(private val binding: ItemHomeBottomSheetBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(diaryCard: DiaryCard) {
-//            binding.item = diaryCard
-            binding.friendNickname.text = diaryCard.nickname
+        fun bind(item: DiaryCard) {
+
+            val homeBottomSheetCardDetailAdapter = HomeBottomSheetCardDetailAdapter()
+            binding.cardList.apply {
+                layoutManager = LinearLayoutManager(binding.root.context, LinearLayoutManager.VERTICAL, false)
+                adapter = homeBottomSheetCardDetailAdapter
+            }
+
+            val nickname = item.nickname
+            binding.itemHomeBottomSheet = item
+            binding.friendNickname.text = nickname
+
+            binding.itemDetail.text = if (nickname.isNotBlank()) {
+                "To.$nickname"
+            } else {
+                "To. Unknown"
+            }
+
+//            cardDetail.let {
+//                homeBottomSheetCardDetailAdapter.setEmotion(it.emotion)
+//            }
+
+            binding.homeBottomSheetItem.setOnClickListener {
+                listener.onDiaryCardClick(item.cardId)
+            }
+
             binding.executePendingBindings()
         }
     }
