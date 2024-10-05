@@ -57,7 +57,6 @@ class CalendarMyRecordFragment : Fragment(), OnMyDateClickListener {
 
         (requireActivity() as MainActivity).hideBottomNavigation(false)
 
-
         startCalendar.time = calendar.time
 
         // 월 달력
@@ -69,6 +68,16 @@ class CalendarMyRecordFragment : Fragment(), OnMyDateClickListener {
                 updateCalendar()
             }
         })
+
+        binding.calendarLeftBtn.setOnClickListener {
+            calendar.add(Calendar.MONTH, -1)
+            updateCalendar()
+        }
+
+        binding.calendarRightBtn.setOnClickListener {
+            calendar.add(Calendar.MONTH, 1)
+            updateCalendar()
+        }
 
         // 나의 기록 api 호출 후 정보 재가공
         myRecordViewModel.diaryCards.observe(viewLifecycleOwner) { diaryCards ->

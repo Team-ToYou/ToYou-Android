@@ -34,11 +34,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/calendar_arrow_left"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/calendar_arrow_left" />
+            <LinearLayout
+                android:id="@+id/calendar_left_btn"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/calendar_arrow_left"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/calendar_arrow_left" />
+            </LinearLayout>
 
             <!-- 연월 표시 -->
             <TextView
@@ -52,12 +58,18 @@
                 style="@style/sc_m13"/>
 
             <!-- 오른쪽 화살표 -->
-            <ImageView
-                android:id="@+id/calendar_arrow_right"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/calendar_arrow_right" />
+            <LinearLayout
+                android:id="@+id/calendar_right_btn"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content">
 
+                <ImageView
+                    android:id="@+id/calendar_arrow_right"
+                    android:layout_marginStart="25dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/calendar_arrow_right" />
+            </LinearLayout>
         </LinearLayout>
 
         <!--월별 달력 요일-->

@@ -111,6 +111,16 @@ class CalendarFriendRecordFragment : Fragment(), OnFriendDateClickListener {
             }
         })
 
+        binding.calendarArrowLeft.setOnClickListener {
+            calendar.add(Calendar.MONTH, -1)
+            updateCalendar()
+        }
+
+        binding.calendarArrowRight.setOnClickListener {
+            calendar.add(Calendar.MONTH, 1)
+            updateCalendar()
+        }
+
         calendarAdapter = CalendarAdapter(emptyList(), listener)
 
         binding.calendarRv.layoutManager = GridLayoutManager(context, 5)
