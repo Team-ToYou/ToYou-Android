@@ -109,7 +109,7 @@ class CreateFragment : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         navController = Navigation.findNavController(view)
 
-        binding.backBtn.setOnClickListener {
+        binding.backFrame.setOnClickListener {
             handleBackAction()
         }
 
@@ -159,10 +159,9 @@ class CreateFragment : Fragment(){
         val mainActivity = activity as MainActivity
         mainActivity.hideBottomNavigation(false)
         navController.popBackStack()
-        val fragmentManager = (context as MainActivity).supportFragmentManager
-
-        // 이전의 모든 프래그먼트를 백 스택에서 제거 (AFragment)
+        val fragmentManager = requireActivity().supportFragmentManager
         fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+
     }
 
 }
