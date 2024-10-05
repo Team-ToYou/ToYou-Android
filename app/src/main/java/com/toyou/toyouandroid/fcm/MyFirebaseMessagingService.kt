@@ -9,6 +9,7 @@ import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.toyou.toyouandroid.R
@@ -39,7 +40,24 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         tokenStorage.saveFcmToken(token)
         Log.d("FCM Token 저장", "토큰이 저장되었습니다: $token")
 
-        //sendTokenToServer(token)
+        FirebaseMessaging.getInstance().subscribeToTopic("alarm")
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.d("FCM", "topic 구독 성공'")
+                } else {
+                    Log.e("FCM",task.exception.toString())
+                }
+            }
+
+        /*FirebaseMessaging.getInstance().unsubscribeFromTopic("alarm")
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.d("FCM", "topic 구독 취소 성공")
+                } else {
+                    Log.e("FCM", task.exception.toString())
+                }
+            }*/
+
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
@@ -57,7 +75,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         // 알림 채널 생성
         createNotificationChannel()
 
-        // 알림 클릭 시 열릴 인텐트 설정 (MainActivity 예시)
         val intent = Intent(this, MainActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         }
@@ -106,5 +123,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         private const val CHANNEL_NAME = "FCM STUDY"
         private const val CHANNEL_ID = "FCM__channel_id"
     }
+
+
+
 
 }
