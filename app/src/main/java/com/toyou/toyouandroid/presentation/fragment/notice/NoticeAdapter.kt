@@ -1,5 +1,7 @@
 package com.toyou.toyouandroid.presentation.fragment.notice
 
+import android.provider.Settings.Global.getString
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -126,6 +128,15 @@ class NoticeAdapter(
     inner class CardCheckViewHolder(private val binding: ItemNoticeCardCheckBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: NoticeItem.NoticeCardCheckItem) {
             binding.itemCardCheck = item
+
+            val nickname = if (item.nickname.length > 4) {
+                TextUtils.ellipsize(item.nickname, binding.noticeBox.paint, 4 * binding.noticeBox.textSize, TextUtils.TruncateAt.END).toString()
+            } else {
+                item.nickname
+            }
+            val formattedMessage = binding.root.context.getString(R.string.notice_card_check, nickname)
+            binding.noticeBox.text = formattedMessage
+
             binding.noticeCardCheckDelete.setOnClickListener {
                 // 삭제 API 호출
                 viewModel.deleteNotice(item.alarmId, this.layoutPosition)

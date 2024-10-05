@@ -50,7 +50,7 @@
                 android:id="@+id/notice_box"
                 android:layout_width="340dp"
                 android:layout_height="60dp"
-                android:text="@{String.format(@string/notice_card_check, item_card_check.nickname)}"
+                android:text=""
                 android:textColor="@color/black"
                 style="@style/sc_r10"
                 android:gravity="center_vertical"
