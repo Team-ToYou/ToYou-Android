@@ -48,7 +48,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         tokenStorage.saveFcmToken(token)
         Log.d("FCM Token 저장", "토큰이 저장되었습니다: $token")
 
-        FirebaseMessaging.getInstance().subscribeToTopic("alarm")
+        FirebaseMessaging.getInstance().subscribeToTopic("allUsers")
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Log.d("FCM", "topic 구독 성공'")
