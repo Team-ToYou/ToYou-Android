@@ -35,9 +35,9 @@ interface FCMService {
     ) : BaseResponse<Unit>
 
     @PATCH("/fcm/token")
-    suspend fun patchFCM(
+    suspend fun patchToken(
         @Header("Authorization") id : String,
-        @Body request: FCM
+        @Body request: Token
     ) : BaseResponse<Unit>
 
 }

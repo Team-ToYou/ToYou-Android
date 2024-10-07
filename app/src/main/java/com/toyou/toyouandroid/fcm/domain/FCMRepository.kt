@@ -54,4 +54,22 @@ class FCMRepository(private val tokenStorage: TokenStorage) {
         }
     }
 
+    suspend fun patchToken(
+        request: Token
+    ){
+        try {
+            val response = client.patchToken("Bearer ${tokenStorage.getAccessToken().toString()}",request = request)
+            // 응답 처리
+            if (response.isSuccess) {
+                Log.d("fcm 갱신 성공!", response.message)
+            } else {
+                Log.d("fcm 갱신 실패!", response.message)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Log.d("fcm 갱신 실패!", e.message.toString())
+
+        }
+    }
+
 }

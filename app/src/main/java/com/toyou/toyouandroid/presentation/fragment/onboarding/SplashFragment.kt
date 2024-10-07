@@ -3,6 +3,7 @@ package com.toyou.toyouandroid.presentation.fragment.onboarding
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -72,20 +73,21 @@ class SplashFragment : Fragment() {
         // navController 초기화
         navController = findNavController()
 
-        userViewModel.getHomeEntry()
+        //userViewModel.getHomeEntry()
 
-        userViewModel.cardId.observe(viewLifecycleOwner) {
+        /*userViewModel.cardId.observe(viewLifecycleOwner) {
             Timber.tag("get home").d(userViewModel.cardId.value.toString())
-        }
+        }*/
 
         val refreshToken = TokenStorage(requireContext()).getRefreshToken()
+        val fcmToken = TokenStorage(requireContext()).getFcmToken()
         if (refreshToken != null) {
             loginViewModel.reissueJWT(refreshToken)
-            userViewModel.getHomeEntry()
+            //userViewModel.getHomeEntry()
 
-            userViewModel.cardId.observe(viewLifecycleOwner) { cardId ->
+            /*userViewModel.cardId.observe(viewLifecycleOwner) { cardId ->
                 Timber.tag("get home").d(cardId.toString())
-            }
+            }*/
         } else {
             // 토큰이 없으면 로그인 화면으로 이동
             Handler(Looper.getMainLooper()).postDelayed({
@@ -95,6 +97,8 @@ class SplashFragment : Fragment() {
 
         loginViewModel.navigationEvent.observe(viewLifecycleOwner) { isSuccess ->
             if (isSuccess) {
+                loginViewModel.patchFcm(fcmToken.toString())
+                Log.d("fcmtoken",fcmToken.toString())
                 navController.navigate(R.id.action_navigation_splash_to_home_fragment)
             } else {
                 navController.navigate(R.id.action_navigation_splash_to_login_fragment)
