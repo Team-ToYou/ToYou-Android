@@ -38,7 +38,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         // TokenStorage 초기화
         tokenStorage = TokenStorage(applicationContext)
 
-
     }
 
     override fun onNewToken(token: String) {
