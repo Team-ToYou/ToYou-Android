@@ -1,12 +1,18 @@
 package com.toyou.toyouandroid.presentation.base
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -67,6 +73,9 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
+
+        askNotificationPermission()
+
     }
 
     fun Context.statusBarHeight(): Int {
@@ -79,4 +88,27 @@ class MainActivity : AppCompatActivity() {
     fun hideBottomNavigation(state:Boolean){
         if(state) binding.bottomNavi.visibility = View.GONE else binding.bottomNavi.visibility=View.VISIBLE
     }
+
+    private fun askNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                Log.d("FCM", "알림 권한이 이미 허용되었습니다.")
+            } else {
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+    }
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+            if (isGranted) {
+                Toast.makeText(this, "알림 권한이 허용되었습니다.", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "알림 권한을 허용해야 알림을 받을 수 있습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
 }

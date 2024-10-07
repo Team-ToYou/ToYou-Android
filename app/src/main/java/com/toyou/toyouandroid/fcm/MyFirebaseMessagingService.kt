@@ -1,20 +1,27 @@
 package com.toyou.toyouandroid.fcm
 
+import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
+import android.provider.Settings
 import android.util.Log
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewModelScope
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.toyou.toyouandroid.R
-import com.toyou.toyouandroid.fcm.domain.FCMRepository
-import com.toyou.toyouandroid.fcm.dto.request.Token
-import com.toyou.toyouandroid.model.PreviewCardModel
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.utils.TokenStorage
 import kotlinx.coroutines.CoroutineScope
@@ -30,6 +37,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         super.onCreate()
         // TokenStorage 초기화
         tokenStorage = TokenStorage(applicationContext)
+
     }
 
     override fun onNewToken(token: String) {
@@ -39,17 +47,37 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         tokenStorage.saveFcmToken(token)
         Log.d("FCM Token 저장", "토큰이 저장되었습니다: $token")
 
-        //sendTokenToServer(token)
+        FirebaseMessaging.getInstance().subscribeToTopic("allUsers")
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.d("FCM", "topic 구독 성공'")
+                } else {
+                    Log.e("FCM",task.exception.toString())
+                }
+            }
+
+        /*FirebaseMessaging.getInstance().unsubscribeFromTopic("alarm")
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.d("FCM", "topic 구독 취소 성공")
+                } else {
+                    Log.e("FCM", task.exception.toString())
+                }
+            }*/
+
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        // 알림 메시지가 있을 경우 처리
-        remoteMessage.notification?.let {
-            val title = it.title ?: "No Title"
-            val body = it.body ?: "No Body"
-
-            // 받은 알림을 사용자에게 표시
-            sendNotification(title, body)
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            remoteMessage.notification?.let {
+                sendNotification(it.title, it.body)
+            }
+        } else {
+            Log.d("FCM", "알림 권한이 없어 알림을 표시할 수 없습니다.")
         }
     }
 
@@ -57,7 +85,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         // 알림 채널 생성
         createNotificationChannel()
 
-        // 알림 클릭 시 열릴 인텐트 설정 (MainActivity 예시)
         val intent = Intent(this, MainActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         }
@@ -77,9 +104,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .setPriority(NotificationCompat.PRIORITY_HIGH) // 알림 우선순위
             .setAutoCancel(true) // 클릭 시 자동 제거
             .setContentIntent(pendingIntent) // 인텐트 연결
-
-        Log.d("MyFirebaseMessagingService", "Notification Title: $title")
-        Log.d("MyFirebaseMessagingService", "Notification Message: $message")
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(0, notificationBuilder.build())

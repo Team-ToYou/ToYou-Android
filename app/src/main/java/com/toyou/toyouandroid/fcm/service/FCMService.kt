@@ -11,6 +11,7 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.HTTP
 import retrofit2.http.Header
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Query
 
@@ -31,6 +32,12 @@ interface FCMService {
     suspend fun postFCM(
         @Header("Authorization") id : String,
         @Body request: FCM
+    ) : BaseResponse<Unit>
+
+    @PATCH("/fcm/token")
+    suspend fun patchToken(
+        @Header("Authorization") id : String,
+        @Body request: Token
     ) : BaseResponse<Unit>
 
 }

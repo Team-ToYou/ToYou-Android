@@ -166,4 +166,17 @@ class LoginViewModel(private val authService: AuthService, private val tokenStor
         }
 
     }
+
+    fun patchFcm(token : String){
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val tokenRequest = Token(token)
+                fcmRepository.patchToken(tokenRequest)
+                Log.d("patchTokenToServer", "성공")
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Log.d("patchTokenToServer", "토큰 전송 실패: ${e.message}")
+            }
+        }
+    }
 }
