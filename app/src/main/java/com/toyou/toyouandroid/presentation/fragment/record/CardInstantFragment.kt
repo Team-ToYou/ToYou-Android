@@ -9,7 +9,6 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -17,9 +16,6 @@ import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentCardInstantBinding
 import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.presentation.base.MainActivity
-import com.toyou.toyouandroid.presentation.fragment.mypage.MypageDialog
-import com.toyou.toyouandroid.presentation.fragment.mypage.MypageDialogViewModel
-import com.toyou.toyouandroid.presentation.fragment.record.my.CalendarMyRecordFragment
 import com.toyou.toyouandroid.presentation.fragment.record.my.MyRecordViewModel
 import com.toyou.toyouandroid.presentation.fragment.record.network.RecordRepository
 import com.toyou.toyouandroid.presentation.fragment.record.network.RecordService
@@ -28,7 +24,6 @@ import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
-import com.toyou.toyouandroid.ui.home.CardFragment
 import com.toyou.toyouandroid.utils.TokenStorage
 import timber.log.Timber
 
@@ -38,13 +33,13 @@ class CardInstantFragment : Fragment(){
     private val binding: FragmentCardInstantBinding
         get() = requireNotNull(_binding){"FragmentCardInstantBinding -> null"}
 
-    private lateinit var cardViewModel: CardViewModel
+    private lateinit var cardInfoViewModel: CardInfoViewModel
     private lateinit var userViewModel: UserViewModel
 
     private val calendarDialogViewModel: CalendarDialogViewModel by activityViewModels()
     private var calendarDialog: CalendarDialog? = null
 
-    private val myRecordViewModel: MyRecordViewModel by viewModels {
+    private val myRecordViewModel: MyRecordViewModel by activityViewModels {
         RecordViewModelFactory(RecordRepository(AuthNetworkModule.getClient().create(RecordService::class.java)))
     }
 
@@ -57,20 +52,20 @@ class CardInstantFragment : Fragment(){
         _binding = FragmentCardInstantBinding.inflate(inflater, container, false)
 
         val tokenStorage = TokenStorage(requireContext())
-        cardViewModel = ViewModelProvider(
+
+        cardInfoViewModel = ViewModelProvider(
             requireActivity(),
-            CardViewModelFactory(tokenStorage)
-        )[CardViewModel::class.java]
+            CardInfoViewModelFactory(tokenStorage)
+        )[CardInfoViewModel::class.java]
+
         userViewModel = ViewModelProvider(
             requireActivity() ,
             UserViewModelFactory(tokenStorage)
         )[UserViewModel::class.java]
 
         if (savedInstanceState == null) {
-            // 프래그먼트 인스턴스 생성
             val fragment = CardInfoFragment()
 
-            // FragmentTransaction을 사용하여 프래그먼트를 추가
             childFragmentManager.beginTransaction()
                 .add(R.id.card_container, fragment)
                 .commit()
@@ -82,16 +77,14 @@ class CardInstantFragment : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // MainActivity의 메소드를 호출하여 바텀 네비게이션 뷰 숨기기
         (requireActivity() as MainActivity).hideBottomNavigation(true)
 
         navController = Navigation.findNavController(view)
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                cardViewModel.clearAll()
-
-                navController.navigate(R.id.action_navigation_card_instant_to_record_fragment)
+                cardInfoViewModel.clearAllData()
+                navController.popBackStack()
             }
         })
 
@@ -100,9 +93,10 @@ class CardInstantFragment : Fragment(){
         Timber.d("Received cardId: $cardId $date")
 
         userViewModel.nickname.observe(viewLifecycleOwner) { nickname ->
-            cardViewModel.receiver.observe(viewLifecycleOwner) { receiver ->
+            cardInfoViewModel.receiver.observe(viewLifecycleOwner) { receiver ->
                 if (receiver != nickname) {
                     Timber.tag("CardInfoFragment").d("$receiver $nickname")
+
                     binding.diarycardDeleteBtn.visibility = View.INVISIBLE
                 } else {
                     binding.diarycardDeleteBtn.visibility = View.VISIBLE
@@ -111,18 +105,19 @@ class CardInstantFragment : Fragment(){
         }
 
         if (cardId != null) {
-            cardViewModel.getCardDetail(cardId.toLong())
+            cardInfoViewModel.getCardDetail(cardId.toLong())
+            cardInfoViewModel.setCardId(cardId)
         }
 
         binding.closeBtn.setOnClickListener {
-            cardViewModel.clearAll()
+            cardInfoViewModel.clearAllData()
 
-            navController.navigate(R.id.action_navigation_card_instant_to_record_fragment)
+            navController.popBackStack()
         }
 
         binding.diarycardDeleteBtn.setOnClickListener {
-            cardViewModel.clearAll()
-            // 삭제 api 호출
+            cardInfoViewModel.clearAll()
+
             calendarDialogViewModel.setDialogData(
                 title = "정말 일기카드를\n삭제하시겠습니까?",
                 leftButtonText = "취소",
@@ -139,13 +134,23 @@ class CardInstantFragment : Fragment(){
 
     private fun dismissDialog() {
         Timber.tag("dismissDialog").d("dismissDialog")
+
         calendarDialog?.dismiss()
     }
 
     private fun deleteDiaryCards() {
-        cardViewModel.cardId.observe(viewLifecycleOwner) { cardId ->
+        val cardId = arguments?.getInt("cardId")
+        val date = arguments?.getString("date")
+
+        if (cardId != null) {
             myRecordViewModel.deleteDiaryCard(cardId)
         }
+
+        calendarDialog?.dismiss()
+
+        navController.navigate(R.id.action_navigation_card_instant_to_record_fragment)
+
+        Toast.makeText(requireContext(), "해당 날짜의 일기카드가 삭제되었습니다. $date", Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {

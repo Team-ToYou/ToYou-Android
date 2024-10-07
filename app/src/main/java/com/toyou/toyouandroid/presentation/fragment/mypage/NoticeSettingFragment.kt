@@ -33,7 +33,7 @@ class NoticeSettingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
 
-        binding.signupNicknameBackBtn.setOnClickListener {
+        binding.noticeSettingBackLayout.setOnClickListener {
             navController.navigate(R.id.action_navigation_notice_setting_to_mypage_fragment)
         }
     }

@@ -11,6 +11,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.toyou.toyouandroid.R
@@ -19,6 +20,8 @@ import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthService
 import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthViewModelFactory
+import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
 import com.toyou.toyouandroid.utils.TokenStorage
 
 class ProfileFragment : Fragment() {
@@ -37,6 +40,8 @@ class ProfileFragment : Fragment() {
         )
     }
 
+    private lateinit var userViewModel: UserViewModel
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -46,6 +51,12 @@ class ProfileFragment : Fragment() {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
+
+        val tokenStorage = TokenStorage(requireContext())
+        userViewModel = ViewModelProvider(
+            requireActivity(),
+            UserViewModelFactory(tokenStorage)
+        )[UserViewModel::class.java]
 
         viewModel.resetNicknameEditState()
 
@@ -67,7 +78,7 @@ class ProfileFragment : Fragment() {
             binding.signupNicknameInput.setText(nickname)
         }
 
-        binding.signupNicknameBackBtn.setOnClickListener {
+        binding.signupNicknameBackLayout.setOnClickListener {
             navController.navigate(R.id.action_navigation_profile_to_mypage_fragment)
         }
 
@@ -95,7 +106,9 @@ class ProfileFragment : Fragment() {
         }
 
         binding.signupAgreeNicknameDoublecheckBtn.setOnClickListener {
-            viewModel.checkDuplicate()
+            userViewModel.nickname.observe(viewLifecycleOwner) { nickname ->
+                viewModel.checkDuplicate(nickname)
+            }
             hideKeyboard()
         }
 

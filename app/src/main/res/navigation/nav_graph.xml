@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_navigation_home_to_modifyFragment"
             app:destination="@id/modifyFragment" />
+        <action
+            android:id="@+id/action_navigation_home_to_card_instant_fragment"
+            app:destination="@id/navigation_card_instant" />
     </fragment>
     <fragment
         android:id="@+id/navigation_splash"

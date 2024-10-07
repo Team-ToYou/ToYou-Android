@@ -41,6 +41,10 @@ class SignupAgreeFragment : Fragment() {
 
         navController = findNavController()
 
+        binding.signupAgreeBackLayout.setOnClickListener {
+            navController.popBackStack()
+        }
+
         val checkboxLayouts = listOf(
             binding.checkbox1Layout,
             binding.checkbox2Layout,

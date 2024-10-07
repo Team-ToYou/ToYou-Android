@@ -165,48 +165,13 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
         }
     }
 
-    private fun checkUserNone() {
-        Timber.tag("handleLogout").d("handleWithdraw")
-        noticeDialog?.dismiss()
-    }
-
-    override fun onShowDialog() {
-        noticeDialogViewModel.setDialogData(
-            title = "존재하지 않는 \n 사용자입니다",
-            leftButtonText = "확인",
-            leftButtonClickAction = { checkUserNone() },
-        )
-        noticeDialog = NoticeDialog()
-        noticeDialog?.show(parentFragmentManager, "CustomDialog")
-    }
-
-    override fun onFriendRequestApprove(name: String) {
-        val myName = userViewModel.nickname.value ?: ""
-        socialViewModel.patchApprove(name, myName)
-    }
-
-    override fun onDeleteNotice(alarmId: Int, position: Int) {
-        viewModel.deleteNotice(alarmId, position)
-        noticeAdapter.removeItem(position)
-
-        // RecyclerView 간격 재설정
-        binding.noticeRv.post {
-            binding.noticeRv.invalidateItemDecorations()
-        }
-    }
-
-    override fun onFriendRequestItemClick(item: NoticeItem.NoticeFriendRequestItem) {
-        navController.navigate(R.id.action_navigation_notice_to_social_fragment)
-    }
-
-    override fun onFriendRequestAcceptedItemClick(item: NoticeItem.NoticeFriendRequestAcceptedItem) {
-        navController.navigate(R.id.action_navigation_notice_to_social_fragment)
-    }
-
-    override fun onFriendCardItemClick(item: NoticeItem.NoticeCardCheckItem) {
-        navController.navigate(R.id.action_navigation_notice_to_home_fragment)
-    }
-
+    private fun checkUserNone() {}
+    override fun onShowDialog() {}
+    override fun onFriendRequestApprove(name: String) {}
+    override fun onDeleteNotice(alarmId: Int, position: Int) {}
+    override fun onFriendRequestItemClick(item: NoticeItem.NoticeFriendRequestItem) {}
+    override fun onFriendRequestAcceptedItemClick(item: NoticeItem.NoticeFriendRequestAcceptedItem) {}
+    override fun onFriendCardItemClick(item: NoticeItem.NoticeCardCheckItem) {}
 
     override fun onDestroyView() {
         super.onDestroyView()

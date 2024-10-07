@@ -19,4 +19,8 @@ class RecordRepository(private val recordService: RecordService) {
     fun deleteDiaryCard(cardId: Int): Call<DeleteDiaryCardResponse> {
         return recordService.deleteDiarycard(cardId)
     }
+
+    fun patchDiaryCard(cardId: Int): Call<PatchDiaryCardResponse> {
+        return recordService.patchDiarycardExposure(cardId)
+    }
 }

@@ -1,7 +1,6 @@
 package com.toyou.toyouandroid.presentation.fragment.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -12,7 +11,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -20,14 +18,18 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.data.UserDatabase
+import com.toyou.toyouandroid.data.home.dto.response.CardDetail
 import com.toyou.toyouandroid.databinding.FragmentHomeBinding
 import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.presentation.base.MainActivity
+import com.toyou.toyouandroid.presentation.fragment.emotionstamp.network.DiaryCard
 import com.toyou.toyouandroid.presentation.fragment.home.adapter.HomeBottomSheetAdapter
 import com.toyou.toyouandroid.presentation.fragment.notice.NoticeViewModel
 import com.toyou.toyouandroid.presentation.fragment.notice.network.NoticeRepository
 import com.toyou.toyouandroid.presentation.fragment.notice.network.NoticeService
 import com.toyou.toyouandroid.presentation.fragment.notice.network.NoticeViewModelFactory
+import com.toyou.toyouandroid.presentation.fragment.record.CardInfoViewModel
+import com.toyou.toyouandroid.presentation.fragment.record.CardInfoViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModel
@@ -53,8 +55,8 @@ class HomeFragment : Fragment() {
     private lateinit var database: UserDatabase
     private lateinit var cardViewModel: CardViewModel
 
-//    private lateinit var diaryAdapter: HomeBottomSheetAdapter
-
+    private lateinit var listener: HomeBottomSheetClickListener
+    private lateinit var cardInfoViewModel: CardInfoViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,7 +68,6 @@ class HomeFragment : Fragment() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        // onBackPressedCallback 등록
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 requireActivity().finish()
@@ -74,30 +75,52 @@ class HomeFragment : Fragment() {
         })
 
         val tokenStorage = TokenStorage(requireContext())
+
         cardViewModel = ViewModelProvider(
             requireActivity(),
             CardViewModelFactory(tokenStorage)
         )[CardViewModel::class.java]
+
         userViewModel = ViewModelProvider(
             requireActivity(),
             UserViewModelFactory(tokenStorage)
         )[UserViewModel::class.java]
 
+        cardInfoViewModel = ViewModelProvider(
+            requireActivity(),
+            CardInfoViewModelFactory(tokenStorage)
+        )[CardInfoViewModel::class.java]
+
         userViewModel.getHomeEntry()
         noticeViewModel.fetchNotices()
+
+        listener = object : HomeBottomSheetClickListener {
+            override fun onDiaryCardClick(cardId: Int?) {
+                Timber.tag("HomeFragment").d("$cardId")
+                cardId?.let {
+                    cardInfoViewModel.getCardDetail(cardId.toLong())
+                    val bundle = Bundle().apply {
+                        putInt("cardId", it)
+                    }
+                    navController.navigate(R.id.action_navigation_home_to_card_instant_fragment, bundle)
+                }
+            }
+        }
 
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         navController = Navigation.findNavController(view)
 
         (requireActivity() as MainActivity).hideBottomNavigation(false)
+
         database = UserDatabase.getDatabase(requireContext())
 
         userViewModel.cardNum.observe(viewLifecycleOwner) { cardNum ->
-            Timber.tag("get home").d(cardNum.toString())
+            Timber.tag("HomeFragment").d(cardNum.toString())
 
             val imageRes = when {
                 cardNum == 0 -> R.drawable.home_mailbox_none
@@ -108,12 +131,12 @@ class HomeFragment : Fragment() {
             binding.homeMailboxIv.setImageResource(imageRes)
         }
 
-
         val bottomSheet: ConstraintLayout = binding.homeBottomSheet
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         bottomSheetBehavior.peekHeight = resources.getDimensionPixelSize(R.dimen.bottom_sheet_peek_height)
 
+        // 작일 친구 일기카드 존재 여부 판단
         viewModel.isEmpty.observe(viewLifecycleOwner) { isEmpty ->
             if (isEmpty) {
                 binding.homeBottomsheetPseudo.visibility = View.VISIBLE
@@ -130,52 +153,51 @@ class HomeFragment : Fragment() {
             setOnTouchListener { v, event ->
                 when (event.action) {
                     MotionEvent.ACTION_UP, MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
-                        // 터치 시작 시 색깔 변경
+                        // 터치 시작 시 바텀 시트 핸들바 색깔 변경
                         binding.homeBottomSheetTouchBar.setBackgroundResource(R.drawable.next_button_enabled_roundly)
                         true
                     }
                     MotionEvent.ACTION_CANCEL -> {
-                        // 터치 종료 시 원래 색깔로 변경
+                        // 터치 종료 시 기본 색깔로 변경
                         binding.homeBottomSheetTouchBar.setBackgroundResource(R.drawable.next_button_roundly)
-                        v.performClick() // performClick 호출
+                        v.performClick()
                         true
                     }
                     else -> false
                 }
             }
 
-            setOnClickListener {
-                // performClick 시 수행할 작업
-            }
+            setOnClickListener {}
         }
 
         // 우체통 클릭시 일기카드 생성 화면으로 전환(임시)
         binding.homeMailboxIv.setOnClickListener {
-            userViewModel.emotion.observe(viewLifecycleOwner, Observer { emotion ->
+            userViewModel.emotion.observe(viewLifecycleOwner) { emotion ->
                 if (emotion != null){
-                    userViewModel.cardId.observe(viewLifecycleOwner, Observer { cardId ->
+                    userViewModel.cardId.observe(viewLifecycleOwner) { cardId ->
                         if (cardId == null) {
-
                             navController.navigate(R.id.action_navigation_home_to_create_fragment)
                         }
                         else {
-                        Log.d("mail", "click")
+                        Timber.tag("mail").d("click")
 
                         cardViewModel.getCardDetail(cardId.toLong())
                             navController.navigate(R.id.action_navigation_home_to_modifyFragment)
                         }
-                    })
+                    }
                 }
                 else{
                     Toast.makeText(requireContext(), "감정 우표를 먼저 선택해주세요", Toast.LENGTH_SHORT).show()
                 }
-            })
+            }
         }
 
+        // 홈 화면 -> 알림 화면
         binding.homeNoticeIv.setOnClickListener {
             navController.navigate(R.id.action_navigation_home_to_notice_fragment)
         }
 
+        // 홈 화면 -> 감정 선택 화면
         binding.homeEmotionIv.setOnClickListener {
             navController.navigate(R.id.action_navigation_home_to_home_option_fragment)
         }
@@ -226,26 +248,24 @@ class HomeFragment : Fragment() {
             }
         }
 
+        // 감정 선택에 따른 홈화면 변경
         viewModel.currentDate.observe(viewLifecycleOwner) { date ->
             binding.homeDateTv.text = date
         }
-
         viewModel.homeEmotion.observe(viewLifecycleOwner) { emotion ->
             binding.homeEmotionIv.setImageResource(emotion)
         }
-
         viewModel.text.observe(viewLifecycleOwner) { text ->
             binding.homeEmotionTv.text = text
         }
-
         viewModel.homeDateBackground.observe(viewLifecycleOwner) { date ->
             binding.homeDateTv.setBackgroundResource(date)
         }
-
         viewModel.homeBackground.observe(viewLifecycleOwner) { background ->
             binding.layoutHome.setBackgroundResource(background)
         }
 
+        // 알림 존재할 경우 알림 아이콘 빨간점 표시
         noticeViewModel.hasNotifications.observe(viewLifecycleOwner) { hasNotifications ->
             if (hasNotifications) {
                 binding.homeNoticeNew.visibility = View.VISIBLE
@@ -254,12 +274,17 @@ class HomeFragment : Fragment() {
             }
         }
 
-        setupRecyclerView()
+        // 홈 화면 바텀 시트 설정
+        viewModel.diaryCards.observe(viewLifecycleOwner) { diaryCards ->
+            if (diaryCards != null) {
+                setupRecyclerView(diaryCards)
+            }
+        }
     }
 
-    private fun setupRecyclerView() {
+    private fun setupRecyclerView(items: List<DiaryCard>) {
 
-        val adapter = HomeBottomSheetAdapter()
+        val adapter = HomeBottomSheetAdapter(items.toMutableList(), listener)
         binding.homeBottomSheetRv.layoutManager = GridLayoutManager(context, 2)
         binding.homeBottomSheetRv.adapter = adapter
 

@@ -3,12 +3,16 @@ package com.toyou.toyouandroid.presentation.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.toyou.toyouandroid.R
+import com.toyou.toyouandroid.data.home.dto.response.CardDetail
+import com.toyou.toyouandroid.model.PreviewCardModel
 import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.presentation.fragment.emotionstamp.network.DiaryCard
 import com.toyou.toyouandroid.presentation.fragment.emotionstamp.network.EmotionService
 import com.toyou.toyouandroid.presentation.fragment.emotionstamp.network.YesterdayFriendsResponse
 import com.toyou.toyouandroid.utils.getCurrentDate
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -31,8 +35,8 @@ class HomeViewModel : ViewModel() {
     private val _currentDate = MutableLiveData<String>()
     val currentDate: LiveData<String> get() = _currentDate
 
-    private val _diaryCards = MutableLiveData<List<DiaryCard>>()
-    val diaryCards: LiveData<List<DiaryCard>> get() = _diaryCards
+    private val _diaryCards = MutableLiveData<List<DiaryCard>?>()
+    val diaryCards: LiveData<List<DiaryCard>?> get() = _diaryCards
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> get() = _isLoading
@@ -42,6 +46,26 @@ class HomeViewModel : ViewModel() {
 
     private val apiService: EmotionService = AuthNetworkModule.getClient().create(EmotionService::class.java)
 
+    init {
+        _currentDate.value = getCurrentDate()
+    }
+
+    fun updateHomeEmotion(emotion: Int, text: String, date: Int, background: Int) {
+        _homeEmotion.value = emotion
+        _text.value = text
+        _homeDateBackground.value = date
+        _homeBackground.value = background
+    }
+
+    fun resetState() {
+        _homeEmotion.value = R.drawable.home_emotion_none
+        _text.value = "멘트"
+        _homeDateBackground.value = R.color.g00
+        _homeBackground.value = R.drawable.background_white
+    }
+
+//    private val _cardDetails = MutableLiveData<List<CardDetail>>()
+//    val cardDetails: LiveData<List<CardDetail>> get() = _cardDetails
 
     fun loadYesterdayDiaryCards() {
         _isLoading.value = true
@@ -61,6 +85,7 @@ class HomeViewModel : ViewModel() {
                             _isEmpty.value = true
                         } else {
                             _diaryCards.value = cards
+//                            getCardDetail(cards.map { it.cardId })
                             _isEmpty.value = false
                         }
                     } else {
@@ -81,22 +106,69 @@ class HomeViewModel : ViewModel() {
         })
     }
 
-
-    init {
-        _currentDate.value = getCurrentDate()
-    }
-
-    fun updateHomeEmotion(emotion: Int, text: String, date: Int, background: Int) {
-        _homeEmotion.value = emotion
-        _text.value = text
-        _homeDateBackground.value = date
-        _homeBackground.value = background
-    }
-
-    fun resetState() {
-        _homeEmotion.value = R.drawable.home_emotion_none
-        _text.value = "멘트"
-        _homeDateBackground.value = R.color.g00
-        _homeBackground.value = R.drawable.background_white
-    }
+//    fun getCardDetail(ids: List<Int>) {
+//        if (ids.isEmpty()) return  // 리스트가 비어 있을 경우 함수 종료
+//
+//        val detailsList = mutableListOf<CardDetail>()
+//
+//        ids.forEach { cardId ->
+//            viewModelScope.launch {
+//                try {
+//                    apiService.getDiaryCardDetail(cardId).enqueue(object : Callback<CardDetail> {
+//                        override fun onResponse(call: Call<CardDetail>, response: Response<CardDetail>) {
+//                            if (response.isSuccessful) {
+//                                response.body()?.let { detailCard ->
+//                                    val previewCardList = mutableListOf<PreviewCardModel>()
+//
+//                                    detailCard.questions?.forEach { question ->
+//                                        val previewCard = when (question.type) {
+//                                            "OPTIONAL" -> PreviewCardModel(
+//                                                question = question.content,
+//                                                fromWho = question.questioner,
+//                                                options = question.options,
+//                                                type = question.options?.size ?: 0,
+//                                                answer = question.answer,
+//                                                id = question.id
+//                                            )
+//
+//                                            "SHORT_ANSWER" -> PreviewCardModel(
+//                                                question = question.content,
+//                                                fromWho = question.questioner,
+//                                                options = question.options,
+//                                                type = 0,
+//                                                answer = question.answer,
+//                                                id = question.id
+//                                            )
+//
+//                                            else -> PreviewCardModel(
+//                                                question = question.content,
+//                                                fromWho = question.questioner,
+//                                                options = question.options,
+//                                                type = 1,
+//                                                answer = question.answer,
+//                                                id = question.id
+//                                            )
+//                                        }
+//                                        previewCardList.add(previewCard)
+//                                    }
+//
+//                                    detailsList.add(detailCard)
+//                                    _cardDetails.value = detailsList.toList() // 매번 최신 리스트로 반영
+//                                    Timber.tag("HomeViewModel").d("$detailsList")
+//                                }
+//                            } else {
+//                                Timber.tag("HomeViewModel").d("detail API 호출 실패: ${response.message()}")
+//                            }
+//                        }
+//
+//                        override fun onFailure(call: Call<CardDetail>, t: Throwable) {
+//                            Timber.tag("HomeViewModel").d("detail API 호출 실패: ${t.message}")
+//                        }
+//                    })
+//                } catch (e: Exception) {
+//                    Timber.tag("HomeViewModel").d("detail 예외 발생: ${e.message}")
+//                }
+//            }
+//        }
+//    }
 }

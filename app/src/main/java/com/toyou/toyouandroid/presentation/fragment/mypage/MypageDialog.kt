@@ -32,7 +32,7 @@ class MypageDialog : DialogFragment() {
         super.onResume()
         dialog?.window?.setLayout(
             convertDpToPx(300),
-            convertDpToPx(120)
+            convertDpToPx(140)
         )
     }
 

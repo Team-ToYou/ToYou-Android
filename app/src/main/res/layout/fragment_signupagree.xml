@@ -56,12 +56,14 @@
             app:layout_constraintGuide_begin="662dp" />
 
         <LinearLayout
+            android:id="@+id/signup_agree_back_layout"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            app:layout_constraintStart_toStartOf="@id/guideline_title_v"
+            app:layout_constraintStart_toStartOf="@+id/guideline_title_v"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
+                android:id="@+id/signup_agree_back_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"

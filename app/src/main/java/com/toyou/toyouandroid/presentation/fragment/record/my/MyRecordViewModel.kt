@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.toyou.toyouandroid.presentation.fragment.record.network.DeleteDiaryCardResponse
 import com.toyou.toyouandroid.presentation.fragment.record.network.DiaryCard
 import com.toyou.toyouandroid.presentation.fragment.record.network.DiaryCardResponse
+import com.toyou.toyouandroid.presentation.fragment.record.network.PatchDiaryCardResponse
 import com.toyou.toyouandroid.presentation.fragment.record.network.RecordRepository
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -76,6 +77,39 @@ class MyRecordViewModel(private val repository: RecordRepository) : ViewModel() 
                 }
 
                 override fun onFailure(call: Call<DeleteDiaryCardResponse>, t: Throwable) {
+                    // 네트워크 오류 처리
+                    val errorMessage = t.message ?: "Unknown error"
+                    handleError(errorMessage)
+                    Timber.tag("MyRecordViewModel").d("Network Failure: $errorMessage")
+                }
+            })
+        }
+    }
+
+    fun patchDiaryCard(cardId: Int) {
+        Timber.tag("MyRecordViewModel").d("$cardId")
+
+        viewModelScope.launch {
+            val response = repository.patchDiaryCard(cardId)
+            response.enqueue(object : Callback<PatchDiaryCardResponse> {
+                override fun onResponse(
+                    call: Call<PatchDiaryCardResponse>,
+                    response: Response<PatchDiaryCardResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        Timber.tag("MyRecordViewModel").d("API Success: Received $response")
+                    } else {
+                        // 오류 처리
+                        val errorMessage = response.message()
+                        val errorBody = response.errorBody()?.string() // 에러 본문을 읽기
+                        Timber.tag("MyRecordViewModel").d("API Error: $errorMessage")
+                        Timber.tag("MyRecordViewModel").d("Error Body: $errorBody")
+
+                        handleError(errorMessage)
+                    }
+                }
+
+                override fun onFailure(call: Call<PatchDiaryCardResponse>, t: Throwable) {
                     // 네트워크 오류 처리
                     val errorMessage = t.message ?: "Unknown error"
                     handleError(errorMessage)
