@@ -1,6 +1,6 @@
-package com.toyou.toyouandroid.utils
+package com.toyou.toyouandroid.utils.calendar
 
-import com.toyou.toyouandroid.model.MyDate
+import com.toyou.toyouandroid.model.calendar.MyDate
 import java.util.Calendar
 
 object MyDates {

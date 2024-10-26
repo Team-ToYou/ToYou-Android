@@ -1,4 +1,4 @@
-package com.toyou.toyouandroid.utils
+package com.toyou.toyouandroid.utils.notice
 
 import android.graphics.Canvas
 import android.view.View

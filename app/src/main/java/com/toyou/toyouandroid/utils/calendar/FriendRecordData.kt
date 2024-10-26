@@ -1,8 +1,8 @@
-package com.toyou.toyouandroid.utils
+package com.toyou.toyouandroid.utils.calendar
 
 import com.toyou.toyouandroid.R
-import com.toyou.toyouandroid.model.CalendarItem
-import com.toyou.toyouandroid.model.DateWithItems
+import com.toyou.toyouandroid.model.calendar.CalendarItem
+import com.toyou.toyouandroid.model.calendar.DateWithItems
 
 object FriendRecordData {
 

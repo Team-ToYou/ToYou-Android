@@ -1,4 +1,4 @@
-package com.toyou.toyouandroid.model
+package com.toyou.toyouandroid.model.calendar
 
 import java.util.Date
 
