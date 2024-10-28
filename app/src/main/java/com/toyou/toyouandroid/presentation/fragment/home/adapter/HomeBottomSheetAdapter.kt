@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.databinding.ItemHomeBottomSheetBinding
-import com.toyou.toyouandroid.presentation.fragment.emotionstamp.network.DiaryCard
+import com.toyou.toyouandroid.data.emotion.dto.DiaryCard
 import com.toyou.toyouandroid.presentation.fragment.home.HomeBottomSheetClickListener
 
 class HomeBottomSheetAdapter(

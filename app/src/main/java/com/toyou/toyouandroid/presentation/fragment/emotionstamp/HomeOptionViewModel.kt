@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.toyou.toyouandroid.network.AuthNetworkModule
-import com.toyou.toyouandroid.presentation.fragment.emotionstamp.network.EmotionRequest
-import com.toyou.toyouandroid.presentation.fragment.emotionstamp.network.EmotionResponse
-import com.toyou.toyouandroid.presentation.fragment.emotionstamp.network.EmotionService
+import com.toyou.toyouandroid.data.emotion.dto.EmotionRequest
+import com.toyou.toyouandroid.data.emotion.dto.EmotionResponse
+import com.toyou.toyouandroid.data.emotion.service.EmotionService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

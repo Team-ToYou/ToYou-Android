@@ -4,11 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.toyou.toyouandroid.presentation.fragment.record.network.DiaryCardNum
-import com.toyou.toyouandroid.presentation.fragment.record.network.DiaryCardNumResponse
-import com.toyou.toyouandroid.presentation.fragment.record.network.DiaryCardPerDay
-import com.toyou.toyouandroid.presentation.fragment.record.network.DiaryCardPerDayResponse
-import com.toyou.toyouandroid.presentation.fragment.record.network.RecordRepository
+import com.toyou.toyouandroid.data.record.dto.DiaryCardNum
+import com.toyou.toyouandroid.data.record.dto.DiaryCardNumResponse
+import com.toyou.toyouandroid.data.record.dto.DiaryCardPerDay
+import com.toyou.toyouandroid.data.record.dto.DiaryCardPerDayResponse
+import com.toyou.toyouandroid.domain.record.RecordRepository
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback

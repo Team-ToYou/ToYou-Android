@@ -12,10 +12,9 @@ import androidx.navigation.fragment.findNavController
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentSignupstatusBinding
 import com.toyou.toyouandroid.presentation.base.MainActivity
-import com.toyou.toyouandroid.presentation.fragment.notice.network.NetworkModule
-import com.toyou.toyouandroid.presentation.fragment.onboarding.data.dto.request.SignUpRequest
-import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthService
-import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthViewModelFactory
+import com.toyou.toyouandroid.network.NetworkModule
+import com.toyou.toyouandroid.data.onboarding.dto.request.SignUpRequest
+import com.toyou.toyouandroid.data.onboarding.service.AuthService
 import com.toyou.toyouandroid.utils.TokenStorage
 import timber.log.Timber
 

@@ -18,8 +18,8 @@ import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentProfileBinding
 import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.presentation.base.MainActivity
-import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthService
-import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthViewModelFactory
+import com.toyou.toyouandroid.data.onboarding.service.AuthService
+import com.toyou.toyouandroid.presentation.fragment.onboarding.AuthViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
 import com.toyou.toyouandroid.utils.TokenStorage

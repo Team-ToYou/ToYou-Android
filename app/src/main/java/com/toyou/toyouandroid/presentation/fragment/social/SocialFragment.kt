@@ -1,8 +1,6 @@
 package com.toyou.toyouandroid.presentation.fragment.social
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
@@ -22,11 +20,7 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentSocialBinding
-import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.presentation.fragment.home.RVMarginItemDecoration
-import com.toyou.toyouandroid.presentation.fragment.mypage.MypageViewModel
-import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthService
-import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
 import com.toyou.toyouandroid.presentation.fragment.social.adapter.SocialRVAdapter
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModelFactory

@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.databinding.CalendarPageBinding
-import com.toyou.toyouandroid.model.FriendDate
+import com.toyou.toyouandroid.model.calendar.FriendDate
 import com.toyou.toyouandroid.presentation.fragment.record.DayOfTheWeekAdapter
 
 class FriendCalendarPagerAdapter(

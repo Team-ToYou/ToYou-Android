@@ -17,11 +17,8 @@ import com.toyou.toyouandroid.databinding.FragmentCardInstantBinding
 import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.presentation.fragment.record.my.MyRecordViewModel
-import com.toyou.toyouandroid.presentation.fragment.record.network.RecordRepository
-import com.toyou.toyouandroid.presentation.fragment.record.network.RecordService
-import com.toyou.toyouandroid.presentation.fragment.record.network.RecordViewModelFactory
-import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
-import com.toyou.toyouandroid.presentation.viewmodel.CardViewModelFactory
+import com.toyou.toyouandroid.domain.record.RecordRepository
+import com.toyou.toyouandroid.data.record.service.RecordService
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
 import com.toyou.toyouandroid.utils.TokenStorage

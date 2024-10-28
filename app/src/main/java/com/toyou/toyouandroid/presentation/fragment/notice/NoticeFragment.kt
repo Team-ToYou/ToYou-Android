@@ -15,18 +15,16 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentNoticeBinding
-import com.toyou.toyouandroid.model.NoticeItem
 import com.toyou.toyouandroid.network.AuthNetworkModule
-import com.toyou.toyouandroid.presentation.fragment.notice.network.NoticeRepository
-import com.toyou.toyouandroid.presentation.fragment.notice.network.NoticeService
-import com.toyou.toyouandroid.presentation.fragment.notice.network.NoticeViewModelFactory
+import com.toyou.toyouandroid.domain.notice.NoticeRepository
+import com.toyou.toyouandroid.data.notice.service.NoticeService
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
-import com.toyou.toyouandroid.utils.SwipeToDeleteNotice
+import com.toyou.toyouandroid.utils.notice.SwipeToDeleteNotice
 import com.toyou.toyouandroid.utils.TokenStorage
 import timber.log.Timber
 
