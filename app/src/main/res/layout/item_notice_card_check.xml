@@ -5,7 +5,7 @@
     <data>
         <variable
             name="item_card_check"
-            type="com.toyou.toyouandroid.model.NoticeItem.NoticeCardCheckItem" />
+            type="com.toyou.toyouandroid.presentation.fragment.notice.NoticeItem" />
     </data>
 
     <FrameLayout

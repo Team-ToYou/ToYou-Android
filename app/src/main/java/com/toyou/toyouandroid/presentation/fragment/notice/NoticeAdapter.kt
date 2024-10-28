@@ -1,6 +1,5 @@
 package com.toyou.toyouandroid.presentation.fragment.notice
 
-import android.provider.Settings.Global.getString
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,7 +9,6 @@ import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.ItemNoticeCardCheckBinding
 import com.toyou.toyouandroid.databinding.ItemNoticeFriendRequestAcceptedBinding
 import com.toyou.toyouandroid.databinding.ItemNoticeFriendRequestBinding
-import com.toyou.toyouandroid.model.NoticeItem
 import timber.log.Timber
 
 class NoticeAdapter(

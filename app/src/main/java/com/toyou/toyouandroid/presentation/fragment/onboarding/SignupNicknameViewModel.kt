@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.toyou.toyouandroid.R
-import com.toyou.toyouandroid.presentation.fragment.notice.network.NetworkModule
-import com.toyou.toyouandroid.presentation.fragment.onboarding.network.NicknameCheckResponse
-import com.toyou.toyouandroid.presentation.fragment.onboarding.network.OnboardingService
+import com.toyou.toyouandroid.network.NetworkModule
+import com.toyou.toyouandroid.data.onboarding.dto.NicknameCheckResponse
+import com.toyou.toyouandroid.data.onboarding.service.OnboardingService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

@@ -13,8 +13,8 @@ import androidx.navigation.Navigation
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentHomeOptionBinding
 import com.toyou.toyouandroid.presentation.base.MainActivity
-import com.toyou.toyouandroid.presentation.fragment.emotionstamp.network.EmotionData
-import com.toyou.toyouandroid.presentation.fragment.emotionstamp.network.EmotionRequest
+import com.toyou.toyouandroid.data.emotion.dto.EmotionData
+import com.toyou.toyouandroid.data.emotion.dto.EmotionRequest
 import com.toyou.toyouandroid.presentation.fragment.notice.NoticeDialog
 import com.toyou.toyouandroid.presentation.fragment.notice.NoticeDialogViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModel

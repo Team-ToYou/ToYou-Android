@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.ItemCalendarFriendStampBinding
 import com.toyou.toyouandroid.presentation.fragment.record.friend.OnFriendDateClickListener
-import com.toyou.toyouandroid.presentation.fragment.record.network.DiaryCardPerDay
+import com.toyou.toyouandroid.data.record.dto.DiaryCardPerDay
 import timber.log.Timber
 
 class CalendarAdapter(

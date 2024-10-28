@@ -4,11 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.toyou.toyouandroid.presentation.fragment.record.network.DeleteDiaryCardResponse
-import com.toyou.toyouandroid.presentation.fragment.record.network.DiaryCard
-import com.toyou.toyouandroid.presentation.fragment.record.network.DiaryCardResponse
-import com.toyou.toyouandroid.presentation.fragment.record.network.PatchDiaryCardResponse
-import com.toyou.toyouandroid.presentation.fragment.record.network.RecordRepository
+import com.toyou.toyouandroid.data.record.dto.DeleteDiaryCardResponse
+import com.toyou.toyouandroid.data.record.dto.DiaryCard
+import com.toyou.toyouandroid.data.record.dto.DiaryCardResponse
+import com.toyou.toyouandroid.data.record.dto.PatchDiaryCardResponse
+import com.toyou.toyouandroid.domain.record.RecordRepository
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback

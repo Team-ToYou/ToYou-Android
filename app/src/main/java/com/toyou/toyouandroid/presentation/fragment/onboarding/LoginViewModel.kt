@@ -8,9 +8,9 @@ import androidx.lifecycle.viewModelScope
 import com.toyou.toyouandroid.fcm.domain.FCMRepository
 import com.toyou.toyouandroid.fcm.dto.request.Token
 import com.toyou.toyouandroid.network.AuthNetworkModule
-import com.toyou.toyouandroid.presentation.fragment.onboarding.data.dto.request.SignUpRequest
-import com.toyou.toyouandroid.presentation.fragment.onboarding.data.dto.response.SignUpResponse
-import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthService
+import com.toyou.toyouandroid.data.onboarding.dto.request.SignUpRequest
+import com.toyou.toyouandroid.data.onboarding.dto.response.SignUpResponse
+import com.toyou.toyouandroid.data.onboarding.service.AuthService
 import com.toyou.toyouandroid.utils.TokenStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

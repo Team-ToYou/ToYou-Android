@@ -7,7 +7,7 @@
     <data>
         <variable
             name="item_home_bottom_sheet"
-            type="com.toyou.toyouandroid.presentation.fragment.emotionstamp.network.DiaryCard" />
+            type="com.toyou.toyouandroid.data.emotion.dto.DiaryCard" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

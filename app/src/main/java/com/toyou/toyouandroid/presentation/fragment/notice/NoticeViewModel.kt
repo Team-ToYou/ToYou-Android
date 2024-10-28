@@ -4,10 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.toyou.toyouandroid.model.NoticeItem
-import com.toyou.toyouandroid.presentation.fragment.notice.network.AlarmDeleteResponse
-import com.toyou.toyouandroid.presentation.fragment.notice.network.AlarmResponse
-import com.toyou.toyouandroid.presentation.fragment.notice.network.NoticeRepository
+import com.toyou.toyouandroid.data.notice.dto.AlarmDeleteResponse
+import com.toyou.toyouandroid.data.notice.dto.AlarmResponse
+import com.toyou.toyouandroid.domain.notice.NoticeRepository
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback

@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.databinding.CalendarMyrecordItemBinding
-import com.toyou.toyouandroid.model.MyDate
+import com.toyou.toyouandroid.model.calendar.MyDate
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Calendar

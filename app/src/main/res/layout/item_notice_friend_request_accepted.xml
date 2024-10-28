@@ -5,7 +5,7 @@
     <data>
         <variable
             name="item_friend_request_accepted"
-            type="com.toyou.toyouandroid.model.NoticeItem.NoticeFriendRequestAcceptedItem" />
+            type="com.toyou.toyouandroid.presentation.fragment.notice.NoticeItem.NoticeFriendRequestAcceptedItem" />
     </data>
 
     <FrameLayout

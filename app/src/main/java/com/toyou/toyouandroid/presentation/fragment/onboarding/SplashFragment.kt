@@ -3,7 +3,6 @@ package com.toyou.toyouandroid.presentation.fragment.onboarding
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,13 +15,11 @@ import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.data.UserDatabase
 import com.toyou.toyouandroid.databinding.FragmentSplashBinding
 import com.toyou.toyouandroid.presentation.base.MainActivity
-import com.toyou.toyouandroid.presentation.fragment.notice.network.NetworkModule
-import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthService
-import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthViewModelFactory
+import com.toyou.toyouandroid.network.NetworkModule
+import com.toyou.toyouandroid.data.onboarding.service.AuthService
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
 import com.toyou.toyouandroid.utils.TokenStorage
-import timber.log.Timber
 
 class SplashFragment : Fragment() {
 

@@ -1,20 +1,15 @@
 package com.toyou.toyouandroid.presentation.fragment.mypage
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.toyou.toyouandroid.fcm.domain.FCMRepository
-import com.toyou.toyouandroid.fcm.dto.request.Token
 import com.toyou.toyouandroid.network.AuthNetworkModule
-import com.toyou.toyouandroid.presentation.fragment.mypage.network.MypageResponse
-import com.toyou.toyouandroid.presentation.fragment.mypage.network.MypageService
-import com.toyou.toyouandroid.presentation.fragment.onboarding.data.dto.response.SignUpResponse
-import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthService
+import com.toyou.toyouandroid.data.mypage.dto.MypageResponse
+import com.toyou.toyouandroid.data.mypage.service.MypageService
+import com.toyou.toyouandroid.data.onboarding.dto.response.SignUpResponse
+import com.toyou.toyouandroid.data.onboarding.service.AuthService
 import com.toyou.toyouandroid.utils.TokenStorage
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback

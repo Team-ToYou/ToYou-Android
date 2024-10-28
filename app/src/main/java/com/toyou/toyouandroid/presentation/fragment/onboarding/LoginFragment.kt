@@ -2,7 +2,6 @@ package com.toyou.toyouandroid.presentation.fragment.onboarding
 
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -20,9 +19,8 @@ import com.kakao.sdk.user.UserApiClient
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentLoginBinding
 import com.toyou.toyouandroid.presentation.base.MainActivity
-import com.toyou.toyouandroid.presentation.fragment.notice.network.NetworkModule
-import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthService
-import com.toyou.toyouandroid.presentation.fragment.onboarding.network.AuthViewModelFactory
+import com.toyou.toyouandroid.network.NetworkModule
+import com.toyou.toyouandroid.data.onboarding.service.AuthService
 import com.toyou.toyouandroid.utils.TokenStorage
 import com.toyou.toyouandroid.utils.TutorialStorage
 import timber.log.Timber

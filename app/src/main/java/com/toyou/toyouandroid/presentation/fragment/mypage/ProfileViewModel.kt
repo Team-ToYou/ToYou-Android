@@ -5,11 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.network.AuthNetworkModule
-import com.toyou.toyouandroid.presentation.fragment.onboarding.network.NicknameCheckResponse
-import com.toyou.toyouandroid.presentation.fragment.onboarding.network.OnboardingService
-import com.toyou.toyouandroid.presentation.fragment.onboarding.network.PatchNicknameRequest
-import com.toyou.toyouandroid.presentation.fragment.onboarding.network.PatchNicknameResponse
-import com.toyou.toyouandroid.presentation.fragment.onboarding.network.PatchStatusRequest
+import com.toyou.toyouandroid.data.onboarding.dto.NicknameCheckResponse
+import com.toyou.toyouandroid.data.onboarding.service.OnboardingService
+import com.toyou.toyouandroid.data.onboarding.dto.PatchNicknameRequest
+import com.toyou.toyouandroid.data.onboarding.dto.PatchNicknameResponse
+import com.toyou.toyouandroid.data.onboarding.dto.PatchStatusRequest
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -122,7 +122,8 @@ class ProfileViewModel : ViewModel() {
         _nicknameValidate.value = true
     }
 
-    private val apiService: OnboardingService = AuthNetworkModule.getClient().create(OnboardingService::class.java)
+    private val apiService: OnboardingService = AuthNetworkModule.getClient().create(
+        OnboardingService::class.java)
 
     // API를 호출하여 닉네임 중복 체크를 수행하는 함수
     fun checkDuplicate(userNickname: String) {

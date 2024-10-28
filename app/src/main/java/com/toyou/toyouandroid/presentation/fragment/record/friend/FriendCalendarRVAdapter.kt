@@ -6,11 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.databinding.CalendarFriendrecordItemBinding
-import com.toyou.toyouandroid.model.FriendDate
+import com.toyou.toyouandroid.model.calendar.FriendDate
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
 
 class FriendCalendarRVAdapter(

@@ -71,7 +71,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_tutorial"
-        android:name="com.toyou.toyouandroid.presentation.fragment.onboarding.tutorial.TutorialFragment"
+        android:name="com.toyou.toyouandroid.presentation.fragment.tutorial.TutorialFragment"
         android:label="fragment_tutorial"
         tools:layout="@layout/fragment_tutorial">
         <action
