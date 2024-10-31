@@ -23,6 +23,7 @@ import com.toyou.toyouandroid.presentation.fragment.onboarding.AuthViewModelFact
 import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.ViewModelManager
 import com.toyou.toyouandroid.utils.TokenStorage
+import com.toyou.toyouandroid.utils.TutorialStorage
 import timber.log.Timber
 
 class MypageFragment : Fragment() {
@@ -171,6 +172,9 @@ class MypageFragment : Fragment() {
                 navController.navigate(R.id.action_navigation_mypage_to_login_fragment)
             }
         }
+
+        // 회원 탈퇴 후 튜토리얼 다시 보이도록 설정
+        TutorialStorage(requireContext()).setTutorialNotShown()
     }
 
     // 회원 로그아웃
