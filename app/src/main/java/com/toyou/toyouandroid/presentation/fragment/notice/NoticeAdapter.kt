@@ -3,6 +3,7 @@ package com.toyou.toyouandroid.presentation.fragment.notice
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.R
@@ -93,6 +94,7 @@ class NoticeAdapter(
                 listener.onFriendRequestApprove(name)
                 viewModel.deleteNotice(item.alarmId, this.layoutPosition)
                 removeItem(this.layoutPosition)
+                Toast.makeText(requireNotNull(binding.root.context), "친구 요청을 수락했습니다.", Toast.LENGTH_SHORT).show()
             }
 
             binding.executePendingBindings()

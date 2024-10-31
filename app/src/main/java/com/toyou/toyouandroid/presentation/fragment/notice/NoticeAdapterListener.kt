@@ -7,5 +7,4 @@ interface NoticeAdapterListener {
     fun onFriendRequestItemClick(item: NoticeItem.NoticeFriendRequestItem)
     fun onFriendRequestAcceptedItemClick(item: NoticeItem.NoticeFriendRequestAcceptedItem)
     fun onFriendCardItemClick(item: NoticeItem.NoticeCardCheckItem)
-
 }
