@@ -37,7 +37,9 @@ class RecordFragment : Fragment() {
         _binding = FragmentRecordBinding.inflate(inflater, container, false)
 
         // 이전 상태에서 선택된 탭 인덱스 복원
-        selectedTabIndex = savedInstanceState?.getInt(SELECTED_TAB_INDEX) ?: 0
+        savedInstanceState?.let {
+            selectedTabIndex = it.getInt(SELECTED_TAB_INDEX, 0)
+        }
 
         return binding.root
     }
