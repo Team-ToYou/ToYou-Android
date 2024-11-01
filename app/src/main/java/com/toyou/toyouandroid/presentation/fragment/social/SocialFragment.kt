@@ -122,7 +122,7 @@ class SocialFragment : Fragment() {
                     addFriendLinearLayout.removeViewAt(addFriendLinearLayout.childCount - 1)
                 }
                 socialViewModel.resetFriendRequest()
-                Toast.makeText(requireContext(), "친구 요청이 성공적으로 전송되었습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "친구 요청을 보냈습니다.", Toast.LENGTH_SHORT).show()
 
             }
         })
@@ -134,7 +134,7 @@ class SocialFragment : Fragment() {
                     addFriendLinearLayout.removeViewAt(addFriendLinearLayout.childCount - 1)
                 }
                 socialViewModel.resetFriendRequestCanceled()
-                Toast.makeText(requireContext(), "친구 요청이 성공적으로 승인되었습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "친구 요청을 수락했습니다.", Toast.LENGTH_SHORT).show()
 
             }
         })
@@ -144,7 +144,7 @@ class SocialFragment : Fragment() {
                 // 친구 요청이 완료되었을 때 addFriendView 제거
                 if (addFriendLinearLayout.childCount > 0) {
                     addFriendLinearLayout.removeViewAt(addFriendLinearLayout.childCount - 1)
-                    Toast.makeText(requireContext(), "친구 요청이 성공적으로 취소되었습니다.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "친구 요청을 취소했습니다.", Toast.LENGTH_SHORT).show()
                 }
                 socialViewModel.resetFriendRequestRemove()
             }
