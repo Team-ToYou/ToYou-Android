@@ -40,7 +40,7 @@ class HomeResultFragment : Fragment() {
 
         // 번들에서 배경색 값을 가져와 설정
         val backgroundColor = arguments?.getInt("background_color") ?: R.drawable.background_white
-        val text = arguments?.getString("text") ?: getString(R.string.home_stamp_result_normal)
+        val text = arguments?.getString("text") ?: getString(R.string.home_stamp_result_normal_1)
 
         binding.root.setBackgroundResource(backgroundColor)
         binding.homeResultTv.text = text
