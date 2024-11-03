@@ -11,6 +11,7 @@ import androidx.navigation.Navigation
 import com.google.android.material.tabs.TabLayout
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentRecordBinding
+import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.presentation.fragment.record.friend.CalendarFriendRecordFragment
 import com.toyou.toyouandroid.presentation.fragment.record.my.CalendarMyRecordFragment
 
@@ -46,6 +47,8 @@ class RecordFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        (requireActivity() as MainActivity).hideBottomNavigation(false)
 
         navController = Navigation.findNavController(view)
 

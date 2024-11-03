@@ -43,10 +43,6 @@ class CardInfoViewModel(tokenStorage: TokenStorage) : ViewModel(){
     private val _isAllAnswersFilled = MutableLiveData(false)
     val isAllAnswersFilled: LiveData<Boolean> get() = _isAllAnswersFilled
 
-    init {
-        _exposure.value = true
-    }
-
     private val _date = MutableLiveData<String>()
     val date: LiveData<String> get() = _date
 
@@ -129,6 +125,7 @@ class CardInfoViewModel(tokenStorage: TokenStorage) : ViewModel(){
     fun clearAllData() {
         _previewCards.value = emptyList()
         _previewChoose.value = emptyList()
+        _exposure.value = false
     }
 
     fun clearAll(){
