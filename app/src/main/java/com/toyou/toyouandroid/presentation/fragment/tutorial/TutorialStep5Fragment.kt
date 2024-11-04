@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
@@ -44,6 +45,8 @@ class TutorialStep5Fragment : Fragment() {
                 requireActivity().finish()
             }
         })
+
+        binding.tutorialCompleteBtn.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in_2s))
 
         binding.tutorialCompleteBtn.setOnClickListener {
             navController.navigate(R.id.action_navigation_tutorial_to_home_fragment)
