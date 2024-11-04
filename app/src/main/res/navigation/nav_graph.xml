@@ -77,9 +77,7 @@
         <action
             android:id="@+id/action_navigation_tutorial_to_home_fragment"
             app:destination="@id/navigation_home"
-            app:popUpTo="@id/navigation_home"
-            app:enterAnim="@anim/fade_in_2s"
-            app:exitAnim="@anim/fade_out_2s"/>
+            app:popUpTo="@id/navigation_home" />
     </fragment>
     <fragment
         android:id="@+id/navigation_signup_agree"

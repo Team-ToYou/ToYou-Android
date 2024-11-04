@@ -35,6 +35,8 @@ class CardInfoFragment : Fragment() {
         RecordViewModelFactory(RecordRepository(AuthNetworkModule.getClient().create(RecordService::class.java)))
     }
 
+    private var isFirstExposureObservation = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -67,31 +69,13 @@ class CardInfoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        userViewModel.nickname.observe(viewLifecycleOwner) { nickname ->
-            cardInfoViewModel.receiver.observe(viewLifecycleOwner) { receiver ->
-                if (receiver != nickname) {
-                    Timber.tag("CardInfoFragment").d("$receiver $nickname")
-                    binding.lockFreeIv.visibility = View.INVISIBLE
-                } else {
-                    binding.lockFreeIv.visibility = View.VISIBLE
-                }
-            }
-        }
-
+        // 카드 미리 보기 설정
         cardInfoViewModel.previewCards.observe(viewLifecycleOwner) { previewCards ->
             listAdapter.setCards(previewCards)
             Timber.tag("CardInfoFragment").d(previewCards.toString())
         }
 
-        cardInfoViewModel.cardId.observe(viewLifecycleOwner) { cardId ->
-            if (cardId != null) {
-                binding.lockFreeIv.setOnClickListener {
-                    myRecordViewModel.patchDiaryCard(cardId)
-                    cardInfoViewModel.isLockSelected()
-                }
-            }
-        }
-
+        // 카드 주인 정보 설정
         cardInfoViewModel.receiver.observe(viewLifecycleOwner) { receiver ->
             binding.itemDetail.text = if (!receiver.isNullOrBlank()) {
                 "To.$receiver"
@@ -100,21 +84,36 @@ class CardInfoFragment : Fragment() {
             }
         }
 
+        // 카드 생성 날짜 표시
         cardInfoViewModel.date.observe(viewLifecycleOwner) { date ->
             binding.itemTitle.text = date.toString().replace("-", "")
         }
 
-        cardInfoViewModel.exposure.observe(viewLifecycleOwner) { exposure ->
-            if (exposure) {
-                binding.lockFreeIv.setImageResource(R.drawable.lock_btn2)
-                Toast.makeText(requireContext(),"일기카드를 비공개로 설정합니다", Toast.LENGTH_SHORT).show()
+        cardInfoViewModel.apply {
+            receiver.observe(viewLifecycleOwner) { receiver ->
+                userViewModel.nickname.value?.let { nickname ->
+                    binding.lockFreeIv.visibility = if (receiver != nickname) View.INVISIBLE else View.VISIBLE
+                    Timber.tag("CardInfoFragment").d("$receiver $nickname")
+                }
             }
-            else {
-                binding.lockFreeIv.setImageResource(R.drawable.lock_free2)
-                Toast.makeText(requireContext(), "일기카드를 공개로 설정합니다", Toast.LENGTH_SHORT).show()
+            cardId.observe(viewLifecycleOwner) { cardId ->
+                if (cardId != null) {
+                    binding.lockFreeIv.setOnClickListener {
+                        myRecordViewModel.patchDiaryCard(cardId)
+                        cardInfoViewModel.isLockSelected()
+                    }
+                }
+            }
+            exposure.observe(viewLifecycleOwner) { exposure ->
+                if (isFirstExposureObservation) {
+                    isFirstExposureObservation = false
+                    return@observe // Skip the first observation
+                }
+                setLockState(exposure)
             }
         }
 
+        // 감정 상태에 따른 이미지 및 배경색 설정
         cardInfoViewModel.emotion.observe(viewLifecycleOwner) { emotion ->
             listAdapter.setEmotion(emotion ?: "ANGRY")
             when(emotion){
@@ -145,6 +144,12 @@ class CardInfoFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun setLockState(isLocked: Boolean) {
+        binding.lockFreeIv.setImageResource(if (isLocked) R.drawable.lock_btn2 else R.drawable.lock_free2)
+        val message = if (isLocked) "일기카드를 비공개로 설정합니다" else "일기카드를 공개로 설정합니다"
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     private fun setupRecyclerView(recyclerView: RecyclerView, adapter: RecyclerView.Adapter<*>) {

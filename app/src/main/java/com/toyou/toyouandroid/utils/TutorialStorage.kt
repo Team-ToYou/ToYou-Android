@@ -16,4 +16,8 @@ class TutorialStorage(context: Context) {
     fun setTutorialShown() {
         preferences.edit().putBoolean(TUTORIAL_SHOWN, true).apply()
     }
+
+    fun setTutorialNotShown() {
+        preferences.edit().putBoolean(TUTORIAL_SHOWN, false).apply()
+    }
 }

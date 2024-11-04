@@ -123,8 +123,8 @@ class HomeFragment : Fragment() {
 
             val imageRes = when {
                 cardNum == 0 -> R.drawable.home_mailbox_none
-                cardNum in 1..9 -> R.drawable.home_mailbox_single
-                cardNum >= 10 -> R.drawable.home_mailbox_multiple
+                cardNum in 1..5 -> R.drawable.home_mailbox_single
+                cardNum >= 6 -> R.drawable.home_mailbox_multiple
                 else -> R.drawable.home_mailbox_none
             }
             binding.homeMailboxIv.setImageResource(imageRes)

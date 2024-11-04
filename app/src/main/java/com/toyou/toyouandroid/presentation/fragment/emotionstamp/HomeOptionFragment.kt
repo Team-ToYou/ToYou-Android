@@ -131,9 +131,54 @@ class HomeOptionFragment : Fragment() {
     }
 
     private fun updateEmotion(emotionData: EmotionData) {
+//        val bundle = Bundle().apply {
+//            putInt("background_color", emotionData.backgroundDrawable)
+//            putString("text", emotionData.homeEmotionTitle)
+//        }
+        // 랜덤 숫자 생성
+        val randomNumber = (1..3).random()
+
+        // 감정에 따라 리소스 ID를 매핑하는 맵
+        val emotionTitlesMap = mapOf(
+            "HAPPY" to when(randomNumber) {
+                1 -> R.string.home_stamp_result_happy_1
+                2 -> R.string.home_stamp_result_happy_2
+                3 -> R.string.home_stamp_result_happy_3
+                else -> R.string.home_stamp_result_happy_1 // 기본값
+            },
+            "EXCITED" to when (randomNumber) {
+                1 -> R.string.home_stamp_result_exciting_1
+                2 -> R.string.home_stamp_result_exciting_2
+                3 -> R.string.home_stamp_result_exciting_3
+                else -> R.string.home_stamp_result_exciting_1 // 기본값
+            },
+            "NORMAL" to when (randomNumber) {
+                1 -> R.string.home_stamp_result_normal_1
+                2 -> R.string.home_stamp_result_normal_2
+                3 -> R.string.home_stamp_result_normal_3
+                else -> R.string.home_stamp_result_normal_1 // 기본값
+            },
+            "NERVOUS" to when (randomNumber) {
+                1 -> R.string.home_stamp_result_anxiety_1
+                2 -> R.string.home_stamp_result_anxiety_2
+                3 -> R.string.home_stamp_result_anxiety_3
+                else -> R.string.home_stamp_result_anxiety_1 // 기본값
+            },
+            "ANGRY" to when (randomNumber) {
+                1 -> R.string.home_stamp_result_upset_1
+                2 -> R.string.home_stamp_result_upset_2
+                3 -> R.string.home_stamp_result_upset_3
+                else -> R.string.home_stamp_result_upset_1 // 기본값
+            }
+        )
+
+        // 선택된 감정에 해당하는 리소스 ID 가져오기
+        val emotionTitleResId = emotionTitlesMap[emotionData.emotion.emotion]
+            ?: R.string.home_stamp_result_normal_1 // 기본값
+
         val bundle = Bundle().apply {
             putInt("background_color", emotionData.backgroundDrawable)
-            putString("text", emotionData.homeEmotionTitle)
+            putString("text", getString(emotionTitleResId)) // 선택한 텍스트 전달
         }
 
         homeViewModel.updateHomeEmotion(

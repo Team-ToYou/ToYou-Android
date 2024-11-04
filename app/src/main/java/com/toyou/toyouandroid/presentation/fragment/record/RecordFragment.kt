@@ -11,6 +11,7 @@ import androidx.navigation.Navigation
 import com.google.android.material.tabs.TabLayout
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentRecordBinding
+import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.presentation.fragment.record.friend.CalendarFriendRecordFragment
 import com.toyou.toyouandroid.presentation.fragment.record.my.CalendarMyRecordFragment
 
@@ -37,13 +38,17 @@ class RecordFragment : Fragment() {
         _binding = FragmentRecordBinding.inflate(inflater, container, false)
 
         // 이전 상태에서 선택된 탭 인덱스 복원
-        selectedTabIndex = savedInstanceState?.getInt(SELECTED_TAB_INDEX) ?: 0
+        savedInstanceState?.let {
+            selectedTabIndex = it.getInt(SELECTED_TAB_INDEX, 0)
+        }
 
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        (requireActivity() as MainActivity).hideBottomNavigation(false)
 
         navController = Navigation.findNavController(view)
 

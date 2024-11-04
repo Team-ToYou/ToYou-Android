@@ -95,7 +95,9 @@ class SplashFragment : Fragment() {
         loginViewModel.navigationEvent.observe(viewLifecycleOwner) { isSuccess ->
             if (isSuccess) {
                 loginViewModel.patchFcm(fcmToken.toString())
-                navController.navigate(R.id.action_navigation_splash_to_home_fragment)
+                Handler(Looper.getMainLooper()).postDelayed({
+                    findNavController().navigate(R.id.action_navigation_splash_to_home_fragment)
+                }, 1000)
             } else {
                 navController.navigate(R.id.action_navigation_splash_to_login_fragment)
             }
