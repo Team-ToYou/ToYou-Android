@@ -1,5 +1,7 @@
 package com.toyou.toyouandroid.network
 
+import com.toyou.toyouandroid.data.onboarding.service.AuthService
+import com.toyou.toyouandroid.utils.TokenStorage
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -28,6 +30,13 @@ object AuthNetworkModule {
                 chain.proceed(request)
             }
             .build()
+    }
+
+    private fun createOkHttpClient(tokenStorage: TokenStorage, authService: AuthService): OkHttpClient {
+        val builder = OkHttpClient.Builder()
+        // ... (other interceptors)
+        builder.addInterceptor(TokenRefreshInterceptor(tokenStorage, authService)) // Add refresh interceptor
+        return builder.build()
     }
 
     fun getClient(): Retrofit {
