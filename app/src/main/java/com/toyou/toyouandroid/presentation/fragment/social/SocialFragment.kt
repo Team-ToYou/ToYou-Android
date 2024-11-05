@@ -86,7 +86,7 @@ class SocialFragment : Fragment() {
             val margin = (screenWidth * 0.02).toInt() // 화면 너비의 5%를 마진으로 사용
 
             // 아이템 데코레이션 추가
-            addItemDecoration(RVMarginItemDecoration(margin,false))
+//            addItemDecoration(RVMarginItemDecoration(margin,false))
         }
 
         socialViewModel.friends.observe(viewLifecycleOwner, Observer { friends ->
