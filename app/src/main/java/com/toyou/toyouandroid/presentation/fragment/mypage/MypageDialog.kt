@@ -31,7 +31,7 @@ class MypageDialog : DialogFragment() {
     override fun onResume() {
         super.onResume()
         dialog?.window?.setLayout(
-            convertDpToPx(300),
+            convertDpToPx(260),
             convertDpToPx(140)
         )
     }

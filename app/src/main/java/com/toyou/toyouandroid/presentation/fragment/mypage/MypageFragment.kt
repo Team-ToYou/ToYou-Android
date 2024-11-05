@@ -80,13 +80,29 @@ class MypageFragment : Fragment() {
             navController.navigate(R.id.action_navigation_mypage_to_notice_setting_fragment)
         }
 
+        binding.mypageNoticeSettingBtn.setOnClickListener{
+            navController.navigate(R.id.action_navigation_mypage_to_notice_setting_fragment)
+        }
+
         binding.mypageOpinion.setOnClickListener {
             val i = Intent(Intent.ACTION_VIEW)
             i.data = Uri.parse("https://forms.gle/fJweAP16cT4Tc3cA6")
             startActivity(i)
         }
 
+        binding.mypageOpinionBtn.setOnClickListener{
+            val i = Intent(Intent.ACTION_VIEW)
+            i.data = Uri.parse("https://forms.gle/fJweAP16cT4Tc3cA6")
+            startActivity(i)
+        }
+
         binding.mypageContact.setOnClickListener {
+            val i = Intent(Intent.ACTION_VIEW)
+            i.data = Uri.parse("http://pf.kakao.com/_xiuPIn/chat")
+            startActivity(i)
+        }
+
+        binding.mypageContactBtn.setOnClickListener{
             val i = Intent(Intent.ACTION_VIEW)
             i.data = Uri.parse("http://pf.kakao.com/_xiuPIn/chat")
             startActivity(i)
