@@ -26,6 +26,9 @@ class LoginViewModel(private val authService: AuthService, private val tokenStor
     val loginSuccess: LiveData<Boolean> get() = _loginSuccess
     private val fcmRepository by lazy { FCMRepository(tokenStorage) }
 
+    fun setLoginSuccess(value: Boolean) {
+        _loginSuccess.value = value
+    }
 
     fun kakaoLogin(accessToken: String) {
         viewModelScope.launch {

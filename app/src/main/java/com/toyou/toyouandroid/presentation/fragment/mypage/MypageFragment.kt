@@ -214,8 +214,8 @@ class MypageFragment : Fragment() {
 
         mypageViewModel.kakaoLogout()
         viewModelManager.resetAllViewModels()
-        navController.navigate(R.id.action_navigation_mypage_to_login_fragment)
         tokenStorage.clearTokens()
+        navController.navigate(R.id.action_navigation_mypage_to_login_fragment)
         mypageDialog?.dismiss()
     }
 

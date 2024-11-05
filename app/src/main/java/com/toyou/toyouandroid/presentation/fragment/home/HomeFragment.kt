@@ -118,8 +118,8 @@ class HomeFragment : Fragment() {
 
         database = UserDatabase.getDatabase(requireContext())
 
+        // 질문 개수에 따른 우체통 이미지 변경
         userViewModel.cardNum.observe(viewLifecycleOwner) { cardNum ->
-            Timber.tag("HomeFragment").d(cardNum.toString())
 
             val imageRes = when {
                 cardNum == 0 -> R.drawable.home_mailbox_none
@@ -146,8 +146,10 @@ class HomeFragment : Fragment() {
             }
         }
 
+        // 작일 친구 일기 카드 자동 조회
         viewModel.loadYesterdayDiaryCards()
 
+        // 바텀 시트 터치 이벤트 처리
         binding.homeBottomSheet.apply {
             setOnTouchListener { v, event ->
                 when (event.action) {
@@ -167,6 +169,13 @@ class HomeFragment : Fragment() {
             }
 
             setOnClickListener {}
+        }
+
+        // 홈 화면 바텀 시트 설정
+        viewModel.diaryCards.observe(viewLifecycleOwner) { diaryCards ->
+            if (diaryCards != null) {
+                setupRecyclerView(diaryCards)
+            }
         }
 
         // 우체통 클릭시 일기카드 생성 화면으로 전환(임시)
@@ -270,13 +279,6 @@ class HomeFragment : Fragment() {
                 binding.homeNoticeNew.visibility = View.VISIBLE
             } else {
                 binding.homeNoticeNew.visibility = View.GONE
-            }
-        }
-
-        // 홈 화면 바텀 시트 설정
-        viewModel.diaryCards.observe(viewLifecycleOwner) { diaryCards ->
-            if (diaryCards != null) {
-                setupRecyclerView(diaryCards)
             }
         }
     }
