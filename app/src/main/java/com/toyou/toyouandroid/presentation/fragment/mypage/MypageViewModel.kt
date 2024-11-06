@@ -18,26 +18,37 @@ import timber.log.Timber
 
 class MypageViewModel(private val authService: AuthService, private val tokenStorage: TokenStorage) : ViewModel() {
 
+    private val _logoutSuccess = MutableLiveData<Boolean>()
+    val logoutSuccess: LiveData<Boolean> get() = _logoutSuccess
+
+    fun setLogoutSuccess(value: Boolean) {
+        _logoutSuccess.value = value
+    }
 
     fun kakaoLogout() {
         viewModelScope.launch {
             val refreshToken = tokenStorage.getRefreshToken().toString()
+            val accessToken = tokenStorage.getAccessToken().toString()
             Timber.d("Attempting to logout in with refresh token: $refreshToken")
+            Timber.d("accessToken: $accessToken")
 
             authService.logout(refreshToken).enqueue(object : Callback<SignUpResponse> {
                 override fun onResponse(call: Call<SignUpResponse>, response: Response<SignUpResponse>) {
                     if (response.isSuccessful) {
                         Timber.i("Logout successfully")
+                        _logoutSuccess.value = true
                         tokenStorage.clearTokens()
                     } else {
                         val errorMessage = response.errorBody()?.string() ?: "Unknown error"
                         Timber.e("API Error: $errorMessage")
+                        _logoutSuccess.value = false
                     }
                 }
 
                 override fun onFailure(call: Call<SignUpResponse>, t: Throwable) {
                     val errorMessage = t.message ?: "Unknown error"
                     Timber.e("Network Failure: $errorMessage")
+                    _logoutSuccess.value = false
                 }
             })
         }

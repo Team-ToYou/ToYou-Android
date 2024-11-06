@@ -28,6 +28,7 @@ class LoginViewModel(private val authService: AuthService, private val tokenStor
 
     fun setLoginSuccess(value: Boolean) {
         _loginSuccess.value = value
+        Timber.d("Login Success value: $value")
     }
 
     fun kakaoLogin(accessToken: String) {

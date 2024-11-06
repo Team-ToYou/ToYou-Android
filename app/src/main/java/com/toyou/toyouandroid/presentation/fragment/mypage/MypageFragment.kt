@@ -19,7 +19,9 @@ import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.presentation.fragment.onboarding.SignupNicknameViewModel
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
+import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.fragment.onboarding.AuthViewModelFactory
+import com.toyou.toyouandroid.presentation.fragment.onboarding.LoginViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.ViewModelManager
 import com.toyou.toyouandroid.utils.TokenStorage
@@ -114,11 +116,12 @@ class MypageFragment : Fragment() {
 //            startActivity(i)
         }
 
-        // ViewModel에서 닉네임을 가져와서 TextView에 설정
+        // 사용자 닉네임 설정
         nicknameViewModel.nickname.observe(viewLifecycleOwner) { nickname ->
             binding.profileNickname.text = nickname
         }
 
+        // 사용자 친구 수 설정
         mypageViewModel.friendNum.observe(viewLifecycleOwner) {friendNum ->
             val friendText = if (friendNum != null) {
                 "친구 ${friendNum}명"
@@ -128,8 +131,22 @@ class MypageFragment : Fragment() {
             binding.profileFriendCount.text = friendText
         }
 
+        // 닉네임 변경시 프로필에 반영
         mypageViewModel.nickname.observe(viewLifecycleOwner) { nickname ->
             binding.profileNickname.text = nickname
+        }
+
+        mypageViewModel.logoutSuccess.observe(viewLifecycleOwner) { isSuccess ->
+            if (isSuccess) {
+                mypageViewModel.setLogoutSuccess(false)
+                viewModelManager.resetAllViewModels()
+
+                val accessToken = tokenStorage.getAccessToken().toString()
+                val refreshToken = tokenStorage.getRefreshToken().toString()
+                Timber.d("$accessToken $refreshToken")
+
+                navController.navigate(R.id.action_navigation_mypage_to_login_fragment)
+            }
         }
 
         binding.mypageSignoutBtn.setOnClickListener {
@@ -213,9 +230,6 @@ class MypageFragment : Fragment() {
         }
 
         mypageViewModel.kakaoLogout()
-        viewModelManager.resetAllViewModels()
-        tokenStorage.clearTokens()
-        navController.navigate(R.id.action_navigation_mypage_to_login_fragment)
         mypageDialog?.dismiss()
     }
 

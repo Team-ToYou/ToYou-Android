@@ -116,8 +116,8 @@ class LoginFragment : Fragment() {
 
         loginViewModel.loginSuccess.observe(viewLifecycleOwner) { isSuccess ->
             if (isSuccess) {
-                checkIfTokenExists()  // 토큰이 저장되었는지 확인 후 이동
                 loginViewModel.setLoginSuccess(false)
+                checkIfTokenExists()  // 토큰이 저장되었는지 확인 후 이동
             }
         }
     }
