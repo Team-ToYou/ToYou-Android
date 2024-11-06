@@ -1,7 +1,6 @@
 package com.toyou.toyouandroid.utils
 
 import android.content.Context
-import com.toyou.toyouandroid.fcm.dto.request.Token
 
 class TokenStorage(context: Context) {
     private val sharedPreferences = context.getSharedPreferences("token_prefs", Context.MODE_PRIVATE)

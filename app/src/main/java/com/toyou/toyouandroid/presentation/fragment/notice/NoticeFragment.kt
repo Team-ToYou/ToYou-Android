@@ -45,7 +45,7 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
 
     private val noticeDialogViewModel: NoticeDialogViewModel by activityViewModels()
     private lateinit var listener: NoticeAdapterListener
-    private lateinit var noticeAdapter: NoticeAdapter
+    private var noticeAdapter: NoticeAdapter? = null
 
     private lateinit var userViewModel: UserViewModel
     private lateinit var socialViewModel : SocialViewModel
@@ -57,6 +57,8 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentNoticeBinding.inflate(inflater, container, false)
+
+        noticeAdapter = NoticeAdapter(mutableListOf(), viewModel, this)
 
         val tokenStorage = TokenStorage(requireContext())
         cardViewModel = ViewModelProvider(
@@ -87,10 +89,10 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
                 viewModel.deleteNotice(alarmId, position)
             }
 
-            override fun onFriendRequestApprove(name: String) {
+            override fun onFriendRequestApprove(name: String, alarmId: Int, position: Int) {
                 val myName = userViewModel.nickname.value ?: ""
                 Timber.d(myName)
-                socialViewModel.patchApprove(name, myName)
+                socialViewModel.patchApproveNotice(name, myName, alarmId, position)
             }
 
             override fun onFriendRequestItemClick(item: NoticeItem.NoticeFriendRequestItem) {
@@ -135,6 +137,21 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
 
         viewModel.fetchNotices()
 
+        socialViewModel.approveSuccess.observe(viewLifecycleOwner) { result ->
+            if (result != null) {
+                if (result.isSuccess) {
+                    // API 호출이 성공했으므로 아이템 삭제
+                    viewModel.deleteNotice(result.alarmId, result.position) // 알림 삭제
+                    noticeAdapter?.removeItem(result.position) // 어댑터에 아이템 삭제 요청
+                    navController.navigate(R.id.action_navigation_notice_to_social_fragment)
+
+                    Toast.makeText(requireContext(), "친구 요청을 수락했습니다.", Toast.LENGTH_SHORT).show()
+
+                    socialViewModel.resetApproveSuccess() // 메서드 호출하여 상태 초기화
+                }
+            }
+        }
+
         binding.noticeBackLayout.setOnClickListener {
             navController.navigate(R.id.action_navigation_notice_to_home_fragment)
         }
@@ -165,7 +182,7 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
 
     private fun checkUserNone() {}
     override fun onShowDialog() {}
-    override fun onFriendRequestApprove(name: String) {}
+    override fun onFriendRequestApprove(name: String, alarmId: Int, position: Int) {}
     override fun onDeleteNotice(alarmId: Int, position: Int) {}
     override fun onFriendRequestItemClick(item: NoticeItem.NoticeFriendRequestItem) {}
     override fun onFriendRequestAcceptedItemClick(item: NoticeItem.NoticeFriendRequestAcceptedItem) {}

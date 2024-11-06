@@ -3,7 +3,6 @@ package com.toyou.toyouandroid.presentation.fragment.notice
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.R
@@ -85,16 +84,16 @@ class NoticeAdapter(
 
             binding.noticeLayout.setOnClickListener {
                 listener.onFriendRequestItemClick(item)
+                Timber.d("친구 요청 메시지 클릭")
             }
 
             binding.noticeFriendRequestBtn.setOnClickListener {
                 // 친구 요청 수락 버튼 클릭 후 알림 메시지 제거
                 val name = item.nickname
                 Timber.d(name)
-                listener.onFriendRequestApprove(name)
-                viewModel.deleteNotice(item.alarmId, this.layoutPosition)
-                removeItem(this.layoutPosition)
-                Toast.makeText(requireNotNull(binding.root.context), "친구 요청을 수락했습니다.", Toast.LENGTH_SHORT).show()
+                listener.onFriendRequestApprove(name, item.alarmId, this.layoutPosition)
+//                viewModel.deleteNotice(item.alarmId, this.layoutPosition)
+//                removeItem(this.layoutPosition)
             }
 
             binding.executePendingBindings()

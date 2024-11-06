@@ -12,12 +12,13 @@ import com.toyou.toyouandroid.domain.social.repostitory.SocialRepository
 import com.toyou.toyouandroid.fcm.domain.FCMRepository
 import com.toyou.toyouandroid.fcm.dto.request.FCM
 import com.toyou.toyouandroid.model.FriendListModel
+import com.toyou.toyouandroid.presentation.fragment.notice.ApprovalResult
 import com.toyou.toyouandroid.utils.TokenStorage
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
+import timber.log.Timber
 
 class SocialViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
     private val repository = SocialRepository(tokenStorage)
@@ -304,25 +305,76 @@ class SocialViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
 
     }
 
-    fun patchApprove(name: String, myName : String){
+    private val _approveSuccess = MutableLiveData<ApprovalResult?>()
+    val approveSuccess: LiveData<ApprovalResult?> get() = _approveSuccess
+
+    fun resetApproveSuccess() {
+        _approveSuccess.value = ApprovalResult(false, -1, -1) // 초기값으로 설정
+    }
+
+    fun patchApproveNotice(name: String, myName: String, alarmId: Int, position: Int) {
         _friendRequest.value = RequestFriend(name = name)
         viewModelScope.launch {
-            _friendRequest.value?.let { name ->
-                repository.patchApproveFriend(name)
-            } ?: run {
-                Log.e("api 실패!", "널")
-            }
-            Log.d("api 성공!", "성공")
-            _friendRequestCanceled.postValue(true)
-            retrieveTokenFromServer(name)
-            _retrieveToken.value?.let { tokens ->
-                for (token in tokens) {
-                    postFCM(myName, token, 2)
+            try {
+                _friendRequest.value?.let { request ->
+                    Timber.d("Sending friend approval request for: $name")
+                    repository.patchApproveFriend(request)
+                    Timber.d("Friend approval request sent successfully for: $name")
+
+                    _approveSuccess.postValue(ApprovalResult(true, alarmId, position)) // 성공 시 LiveData 업데이트
+                } ?: run {
+                    Timber.e("Friend request is null")
+                    _approveSuccess.postValue(ApprovalResult(false, alarmId, position))
                 }
-                //resetToken()
+
+                _friendRequestCanceled.postValue(true)
+                Timber.d("Friend request canceled state updated")
+
+                retrieveTokenFromServer(name)
+                _retrieveToken.value?.let { tokens ->
+                    Timber.d("Retrieved tokens: $tokens")
+                    for (token in tokens) {
+                        postFCM(myName, token, 2)
+                        Timber.d("FCM sent to token: $token")
+                    }
+                } ?: run {
+                    Timber.e("Token retrieval failed")
+                }
+            } catch (e: Exception) {
+                Timber.e("Exception occurred: ${e.message}")
+                _approveSuccess.postValue(ApprovalResult(false, alarmId, position)) // 실패 시 LiveData 업데이트
             }
         }
+    }
 
+    fun patchApprove(name: String, myName: String) {
+        _friendRequest.value = RequestFriend(name = name)
+        viewModelScope.launch {
+            try {
+                _friendRequest.value?.let { request ->
+                    Log.d("patchApprove", "Sending friend approval request for: $name")
+                    repository.patchApproveFriend(request)
+                    Log.d("patchApprove", "Friend approval request sent successfully for: $name")
+                } ?: run {
+                    Log.e("patchApprove", "Friend request is null")
+                }
+                _friendRequestCanceled.postValue(true)
+                Log.d("patchApprove", "Friend request canceled state updated")
+
+                retrieveTokenFromServer(name)
+                _retrieveToken.value?.let { tokens ->
+                    Log.d("patchApprove", "Retrieved tokens: $tokens")
+                    for (token in tokens) {
+                        postFCM(myName, token, 2)
+                        Log.d("patchApprove", "FCM sent to token: $token")
+                    }
+                } ?: run {
+                    Log.e("patchApprove", "Token retrieval failed")
+                }
+            } catch (e: Exception) {
+                Log.e("patchApprove", "Exception occurred: ${e.message}")
+            }
+        }
     }
 
     suspend fun retrieveTokenFromServer(name: String) {
