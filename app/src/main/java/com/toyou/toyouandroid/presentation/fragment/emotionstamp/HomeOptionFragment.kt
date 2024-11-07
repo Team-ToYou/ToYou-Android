@@ -15,8 +15,12 @@ import com.toyou.toyouandroid.databinding.FragmentHomeOptionBinding
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.data.emotion.dto.EmotionData
 import com.toyou.toyouandroid.data.emotion.dto.EmotionRequest
+import com.toyou.toyouandroid.data.onboarding.service.AuthService
+import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.fragment.notice.NoticeDialog
 import com.toyou.toyouandroid.presentation.fragment.notice.NoticeDialogViewModel
+import com.toyou.toyouandroid.presentation.fragment.onboarding.AuthViewModelFactory
+import com.toyou.toyouandroid.presentation.fragment.onboarding.LoginViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
@@ -28,12 +32,18 @@ class HomeOptionFragment : Fragment() {
     private var _binding: FragmentHomeOptionBinding? = null
     private val binding: FragmentHomeOptionBinding
         get() = requireNotNull(_binding){"FragmentHomeOptionBinding -> null"}
-    private val homeOptionViewModel: HomeOptionViewModel by activityViewModels()
     private val homeViewModel: HomeViewModel by activityViewModels()
     private val noticeDialogViewModel: NoticeDialogViewModel by activityViewModels()
     private var noticeDialog: NoticeDialog? = null
     private lateinit var userViewModel: UserViewModel
+    private lateinit var tokenStorage: TokenStorage
 
+    private val homeOptionViewModel: HomeOptionViewModel by activityViewModels {
+        AuthViewModelFactory(
+            NetworkModule.getClient().create(AuthService::class.java),
+            tokenStorage
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,10 +51,12 @@ class HomeOptionFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeOptionBinding.inflate(layoutInflater, container, false)
+        tokenStorage = TokenStorage(requireContext())
+
         binding.viewModel = homeOptionViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        val tokenStorage = TokenStorage(requireContext())
+        tokenStorage = TokenStorage(requireContext())
         userViewModel = ViewModelProvider(
             requireActivity(),
             UserViewModelFactory(tokenStorage)

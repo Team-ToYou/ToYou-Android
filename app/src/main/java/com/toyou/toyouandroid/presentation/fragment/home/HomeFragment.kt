@@ -26,6 +26,8 @@ import com.toyou.toyouandroid.presentation.fragment.home.adapter.HomeBottomSheet
 import com.toyou.toyouandroid.presentation.fragment.notice.NoticeViewModel
 import com.toyou.toyouandroid.domain.notice.NoticeRepository
 import com.toyou.toyouandroid.data.notice.service.NoticeService
+import com.toyou.toyouandroid.data.onboarding.service.AuthService
+import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.fragment.notice.NoticeViewModelFactory
 import com.toyou.toyouandroid.presentation.fragment.record.CardInfoViewModel
 import com.toyou.toyouandroid.presentation.fragment.record.CardInfoViewModelFactory
@@ -44,9 +46,7 @@ class HomeFragment : Fragment() {
     private val binding: FragmentHomeBinding
         get() = requireNotNull(_binding){"FragmentHomeBinding -> null"}
     private val viewModel: HomeViewModel by activityViewModels()
-    private val noticeViewModel: NoticeViewModel by viewModels {
-        NoticeViewModelFactory(NoticeRepository(AuthNetworkModule.getClient().create(NoticeService::class.java)))
-    }
+    private lateinit var noticeViewModel: NoticeViewModel
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
 
@@ -64,7 +64,17 @@ class HomeFragment : Fragment() {
     ): View {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        binding.viewModel = viewModel
+
+        val tokenStorage = TokenStorage(requireContext())
+        val noticeService = AuthNetworkModule.getClient().create(NoticeService::class.java)
+        val noticeRepository = NoticeRepository(noticeService)
+        val authService = NetworkModule.getClient().create(AuthService::class.java)
+
+        noticeViewModel = ViewModelProvider(
+            this,
+            NoticeViewModelFactory(noticeRepository, authService, tokenStorage)
+        )[NoticeViewModel::class.java]
+
         binding.lifecycleOwner = viewLifecycleOwner
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
@@ -72,8 +82,6 @@ class HomeFragment : Fragment() {
                 requireActivity().finish()
             }
         })
-
-        val tokenStorage = TokenStorage(requireContext())
 
         cardViewModel = ViewModelProvider(
             requireActivity(),

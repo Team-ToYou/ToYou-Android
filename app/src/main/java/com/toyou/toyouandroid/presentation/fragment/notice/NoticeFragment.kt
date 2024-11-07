@@ -18,6 +18,9 @@ import com.toyou.toyouandroid.databinding.FragmentNoticeBinding
 import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.domain.notice.NoticeRepository
 import com.toyou.toyouandroid.data.notice.service.NoticeService
+import com.toyou.toyouandroid.data.onboarding.service.AuthService
+import com.toyou.toyouandroid.domain.social.repostitory.SocialRepository
+import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
@@ -34,15 +37,10 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
 
     private var _binding: FragmentNoticeBinding? = null
 
-    private var noticeDialog: NoticeDialog? = null
-
     private val binding: FragmentNoticeBinding
         get() = requireNotNull(_binding){"FragmentNoticeBinding -> null"}
 
-    private val viewModel: NoticeViewModel by viewModels {
-        NoticeViewModelFactory(NoticeRepository(AuthNetworkModule.getClient().create(NoticeService::class.java)))
-    }
-
+    private lateinit var viewModel: NoticeViewModel
     private val noticeDialogViewModel: NoticeDialogViewModel by activityViewModels()
     private lateinit var listener: NoticeAdapterListener
     private var noticeAdapter: NoticeAdapter? = null
@@ -51,14 +49,14 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
     private lateinit var socialViewModel : SocialViewModel
     private lateinit var cardViewModel: CardViewModel
 
+    private var noticeDialog: NoticeDialog? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentNoticeBinding.inflate(inflater, container, false)
-
-        noticeAdapter = NoticeAdapter(mutableListOf(), viewModel, this)
 
         val tokenStorage = TokenStorage(requireContext())
         cardViewModel = ViewModelProvider(
@@ -73,6 +71,17 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
             requireActivity(),
             SocialViewModelFactory(tokenStorage)
         )[SocialViewModel::class.java]
+
+        val noticeService = AuthNetworkModule.getClient().create(NoticeService::class.java)
+        val noticeRepository = NoticeRepository(noticeService)
+        val authService = NetworkModule.getClient().create(AuthService::class.java)
+
+        viewModel = ViewModelProvider(
+            this,
+            NoticeViewModelFactory(noticeRepository, authService, tokenStorage)
+        )[NoticeViewModel::class.java]
+
+        noticeAdapter = NoticeAdapter(mutableListOf(), viewModel, this)
 
         listener = object : NoticeAdapterListener {
             override fun onShowDialog() {

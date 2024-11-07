@@ -82,8 +82,7 @@ class LoginFragment : Fragment() {
                     } else if (token != null) {
                         Log.i(TAG, "카카오계정으로 로그인 성공 ${token.accessToken}")
                         loginViewModel.setOAuthAccessToken(token.accessToken)
-                        loginViewModel.kakaoLogin(token.accessToken)
-                       
+
                         loginViewModel.kakaoLogin(token.accessToken)  // 로그인 성공 시 호출
                     }
                 }

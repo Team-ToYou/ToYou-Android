@@ -54,24 +54,37 @@ class MypageViewModel(private val authService: AuthService, private val tokenSto
         }
     }
 
+    private val _signOutSuccess = MutableLiveData<Boolean>()
+    val signOutSuccess: LiveData<Boolean> get() = _signOutSuccess
+
+    fun setSignOutSuccess(value: Boolean) {
+        _signOutSuccess.value = value
+    }
+
     fun kakaoSignOut() {
         viewModelScope.launch {
             val refreshToken = tokenStorage.getRefreshToken().toString()
+            val accessToken = tokenStorage.getAccessToken().toString()
             Timber.d("Attempting to signout in with refresh token: $refreshToken")
+            Timber.d("accessToken: $accessToken")
 
             authService.signOut(refreshToken).enqueue(object : Callback<SignUpResponse> {
                 override fun onResponse(call: Call<SignUpResponse>, response: Response<SignUpResponse>) {
                     if (response.isSuccessful) {
                         Timber.i("SignOut successfully")
+                        _signOutSuccess.value = true
+                        tokenStorage.clearTokens()
                     } else {
                         val errorMessage = response.errorBody()?.string() ?: "Unknown error"
                         Timber.e("API Error: $errorMessage")
+                        _signOutSuccess.value = false
                     }
                 }
 
                 override fun onFailure(call: Call<SignUpResponse>, t: Throwable) {
                     val errorMessage = t.message ?: "Unknown error"
                     Timber.e("Network Failure: $errorMessage")
+                    _signOutSuccess.value = false
                 }
             })
         }
@@ -117,7 +130,4 @@ class MypageViewModel(private val authService: AuthService, private val tokenSto
             }
         })
     }
-
-
-
 }

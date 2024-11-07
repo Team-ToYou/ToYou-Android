@@ -19,9 +19,7 @@ import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.presentation.fragment.onboarding.SignupNicknameViewModel
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
-import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.fragment.onboarding.AuthViewModelFactory
-import com.toyou.toyouandroid.presentation.fragment.onboarding.LoginViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.ViewModelManager
 import com.toyou.toyouandroid.utils.TokenStorage
@@ -136,9 +134,24 @@ class MypageFragment : Fragment() {
             binding.profileNickname.text = nickname
         }
 
+        // 로그아웃 성공시 로그인 화면으로 이동
         mypageViewModel.logoutSuccess.observe(viewLifecycleOwner) { isSuccess ->
             if (isSuccess) {
                 mypageViewModel.setLogoutSuccess(false)
+                viewModelManager.resetAllViewModels()
+
+                val accessToken = tokenStorage.getAccessToken().toString()
+                val refreshToken = tokenStorage.getRefreshToken().toString()
+                Timber.d("$accessToken $refreshToken")
+
+                navController.navigate(R.id.action_navigation_mypage_to_login_fragment)
+            }
+        }
+
+        // 회원 탈퇴 성공시 로그인 화면으로 이동
+        mypageViewModel.signOutSuccess.observe(viewLifecycleOwner) { isSuccess ->
+            if (isSuccess) {
+                mypageViewModel.setSignOutSuccess(false)
                 viewModelManager.resetAllViewModels()
 
                 val accessToken = tokenStorage.getAccessToken().toString()
@@ -198,16 +211,14 @@ class MypageFragment : Fragment() {
             else {
                 Timber.tag(TAG).i("연결 끊기 성공. SDK에서 토큰 삭제 됨")
                 //mypageViewModel.fcmTokenDelete(nicknameViewModel.nickname.toString())
-                mypageViewModel.kakaoSignOut()
-                tokenStorage.clearTokens()
-
-                // 탈퇴할 경우 사용자 정보 삭제 후 로그인 화면 이동
-                navController.navigate(R.id.action_navigation_mypage_to_login_fragment)
             }
         }
 
         // 회원 탈퇴 후 튜토리얼 다시 보이도록 설정
         TutorialStorage(requireContext()).setTutorialNotShown()
+
+        mypageViewModel.kakaoSignOut()
+        mypageDialog?.dismiss()
     }
 
     // 회원 로그아웃
