@@ -96,7 +96,7 @@
 
     <string name="mypage_title">마이페이지</string>
     <string name="mypage_nickname">테디</string>
-    <string name="mypage_friend_count">친구 4명</string>
+    <string name="mypage_friend_count">친구 n명</string>
     <string name="mypage_notice_setting">알림 설정</string>
     <string name="mypage_opinion">의견 보내기</string>
     <string name="mypage_contact">문의하기</string>

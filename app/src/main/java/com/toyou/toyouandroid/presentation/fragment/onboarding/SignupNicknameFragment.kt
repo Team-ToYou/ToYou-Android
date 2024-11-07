@@ -15,8 +15,8 @@ import androidx.navigation.fragment.findNavController
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentSignupnicknameBinding
 import com.toyou.toyouandroid.presentation.base.MainActivity
-import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModel
-import com.toyou.toyouandroid.presentation.viewmodel.ViewModelManager
+import com.toyou.toyouandroid.presentation.fragment.home.HomeViewModel
+import com.toyou.toyouandroid.utils.ViewModelManager
 
 class SignupNicknameFragment : Fragment() {
 

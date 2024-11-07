@@ -60,7 +60,7 @@ class CreateFragment : Fragment(){
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         _binding = FragmentCreateBinding.inflate(inflater, container, false)
 
 

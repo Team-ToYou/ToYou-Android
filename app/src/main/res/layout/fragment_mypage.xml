@@ -8,7 +8,7 @@
             type="com.toyou.toyouandroid.presentation.fragment.mypage.MypageViewModel" />
         <variable
             name="homeViewModel"
-            type="com.toyou.toyouandroid.presentation.viewmodel.HomeViewModel" />
+            type="com.toyou.toyouandroid.presentation.fragment.home.HomeViewModel" />
         <variable
             name="nicknameViewModel"
             type="com.toyou.toyouandroid.presentation.fragment.onboarding.SignupNicknameViewModel" />

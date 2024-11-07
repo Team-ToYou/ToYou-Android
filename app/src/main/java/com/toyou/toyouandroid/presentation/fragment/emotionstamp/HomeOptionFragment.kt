@@ -20,8 +20,7 @@ import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.fragment.notice.NoticeDialog
 import com.toyou.toyouandroid.presentation.fragment.notice.NoticeDialogViewModel
 import com.toyou.toyouandroid.presentation.fragment.onboarding.AuthViewModelFactory
-import com.toyou.toyouandroid.presentation.fragment.onboarding.LoginViewModel
-import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModel
+import com.toyou.toyouandroid.presentation.fragment.home.HomeViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
 import com.toyou.toyouandroid.utils.TokenStorage
