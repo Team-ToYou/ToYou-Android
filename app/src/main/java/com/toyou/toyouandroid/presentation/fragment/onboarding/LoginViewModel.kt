@@ -11,6 +11,8 @@ import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.data.onboarding.dto.request.SignUpRequest
 import com.toyou.toyouandroid.data.onboarding.dto.response.SignUpResponse
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
+import com.toyou.toyouandroid.network.TestNetworkModule
+import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -26,6 +28,10 @@ class LoginViewModel(private val authService: AuthService, private val tokenStor
     val loginSuccess: LiveData<Boolean> get() = _loginSuccess
     private val fcmRepository by lazy { FCMRepository(tokenStorage) }
 
+    fun setLoginSuccess(value: Boolean) {
+        _loginSuccess.value = value
+        Timber.d("Login Success value: $value")
+    }
 
     fun kakaoLogin(accessToken: String) {
         viewModelScope.launch {
@@ -40,10 +46,13 @@ class LoginViewModel(private val authService: AuthService, private val tokenStor
 
                                 // 암호화된 토큰 저장소에 저장
                                 tokenStorage.saveTokens(newAccessToken, newRefreshToken)
+                                TokenManager(authService, tokenStorage).setAccessToken(newAccessToken)
                                 sendTokenToServer(tokenStorage.getFcmToken().toString())
 
                                 // 인증 네트워크 모듈에 access token 저장
                                 AuthNetworkModule.setAccessToken(newAccessToken)
+
+                                TestNetworkModule.setAccessToken(newAccessToken)
 
                                 _loginSuccess.postValue(true)
 

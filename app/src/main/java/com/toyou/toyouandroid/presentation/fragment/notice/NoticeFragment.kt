@@ -18,6 +18,9 @@ import com.toyou.toyouandroid.databinding.FragmentNoticeBinding
 import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.domain.notice.NoticeRepository
 import com.toyou.toyouandroid.data.notice.service.NoticeService
+import com.toyou.toyouandroid.data.onboarding.service.AuthService
+import com.toyou.toyouandroid.domain.social.repostitory.SocialRepository
+import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
@@ -34,22 +37,19 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
 
     private var _binding: FragmentNoticeBinding? = null
 
-    private var noticeDialog: NoticeDialog? = null
-
     private val binding: FragmentNoticeBinding
         get() = requireNotNull(_binding){"FragmentNoticeBinding -> null"}
 
-    private val viewModel: NoticeViewModel by viewModels {
-        NoticeViewModelFactory(NoticeRepository(AuthNetworkModule.getClient().create(NoticeService::class.java)))
-    }
-
+    private lateinit var viewModel: NoticeViewModel
     private val noticeDialogViewModel: NoticeDialogViewModel by activityViewModels()
     private lateinit var listener: NoticeAdapterListener
-    private lateinit var noticeAdapter: NoticeAdapter
+    private var noticeAdapter: NoticeAdapter? = null
 
     private lateinit var userViewModel: UserViewModel
     private lateinit var socialViewModel : SocialViewModel
     private lateinit var cardViewModel: CardViewModel
+
+    private var noticeDialog: NoticeDialog? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -72,6 +72,17 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
             SocialViewModelFactory(tokenStorage)
         )[SocialViewModel::class.java]
 
+        val noticeService = AuthNetworkModule.getClient().create(NoticeService::class.java)
+        val noticeRepository = NoticeRepository(noticeService)
+        val authService = NetworkModule.getClient().create(AuthService::class.java)
+
+        viewModel = ViewModelProvider(
+            this,
+            NoticeViewModelFactory(noticeRepository, authService, tokenStorage)
+        )[NoticeViewModel::class.java]
+
+        noticeAdapter = NoticeAdapter(mutableListOf(), viewModel, this)
+
         listener = object : NoticeAdapterListener {
             override fun onShowDialog() {
                 noticeDialogViewModel.setDialogData(
@@ -87,10 +98,10 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
                 viewModel.deleteNotice(alarmId, position)
             }
 
-            override fun onFriendRequestApprove(name: String) {
+            override fun onFriendRequestApprove(name: String, alarmId: Int, position: Int) {
                 val myName = userViewModel.nickname.value ?: ""
                 Timber.d(myName)
-                socialViewModel.patchApprove(name, myName)
+                socialViewModel.patchApproveNotice(name, myName, alarmId, position)
             }
 
             override fun onFriendRequestItemClick(item: NoticeItem.NoticeFriendRequestItem) {
@@ -135,6 +146,21 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
 
         viewModel.fetchNotices()
 
+        socialViewModel.approveSuccess.observe(viewLifecycleOwner) { result ->
+            if (result != null) {
+                if (result.isSuccess) {
+                    // API 호출이 성공했으므로 아이템 삭제
+                    viewModel.deleteNotice(result.alarmId, result.position) // 알림 삭제
+                    noticeAdapter?.removeItem(result.position) // 어댑터에 아이템 삭제 요청
+                    navController.navigate(R.id.action_navigation_notice_to_social_fragment)
+
+                    Toast.makeText(requireContext(), "친구 요청을 수락했습니다.", Toast.LENGTH_SHORT).show()
+
+                    socialViewModel.resetApproveSuccess() // 메서드 호출하여 상태 초기화
+                }
+            }
+        }
+
         binding.noticeBackLayout.setOnClickListener {
             navController.navigate(R.id.action_navigation_notice_to_home_fragment)
         }
@@ -165,7 +191,7 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
 
     private fun checkUserNone() {}
     override fun onShowDialog() {}
-    override fun onFriendRequestApprove(name: String) {}
+    override fun onFriendRequestApprove(name: String, alarmId: Int, position: Int) {}
     override fun onDeleteNotice(alarmId: Int, position: Int) {}
     override fun onFriendRequestItemClick(item: NoticeItem.NoticeFriendRequestItem) {}
     override fun onFriendRequestAcceptedItemClick(item: NoticeItem.NoticeFriendRequestAcceptedItem) {}

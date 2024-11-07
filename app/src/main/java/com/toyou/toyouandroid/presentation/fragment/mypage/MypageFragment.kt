@@ -20,8 +20,8 @@ import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.presentation.fragment.onboarding.SignupNicknameViewModel
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
 import com.toyou.toyouandroid.presentation.fragment.onboarding.AuthViewModelFactory
-import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModel
-import com.toyou.toyouandroid.presentation.viewmodel.ViewModelManager
+import com.toyou.toyouandroid.presentation.fragment.home.HomeViewModel
+import com.toyou.toyouandroid.utils.ViewModelManager
 import com.toyou.toyouandroid.utils.TokenStorage
 import com.toyou.toyouandroid.utils.TutorialStorage
 import timber.log.Timber
@@ -114,11 +114,12 @@ class MypageFragment : Fragment() {
 //            startActivity(i)
         }
 
-        // ViewModel에서 닉네임을 가져와서 TextView에 설정
+        // 사용자 닉네임 설정
         nicknameViewModel.nickname.observe(viewLifecycleOwner) { nickname ->
             binding.profileNickname.text = nickname
         }
 
+        // 사용자 친구 수 설정
         mypageViewModel.friendNum.observe(viewLifecycleOwner) {friendNum ->
             val friendText = if (friendNum != null) {
                 "친구 ${friendNum}명"
@@ -128,8 +129,37 @@ class MypageFragment : Fragment() {
             binding.profileFriendCount.text = friendText
         }
 
+        // 닉네임 변경시 프로필에 반영
         mypageViewModel.nickname.observe(viewLifecycleOwner) { nickname ->
             binding.profileNickname.text = nickname
+        }
+
+        // 로그아웃 성공시 로그인 화면으로 이동
+        mypageViewModel.logoutSuccess.observe(viewLifecycleOwner) { isSuccess ->
+            if (isSuccess) {
+                mypageViewModel.setLogoutSuccess(false)
+                viewModelManager.resetAllViewModels()
+
+                val accessToken = tokenStorage.getAccessToken().toString()
+                val refreshToken = tokenStorage.getRefreshToken().toString()
+                Timber.d("$accessToken $refreshToken")
+
+                navController.navigate(R.id.action_navigation_mypage_to_login_fragment)
+            }
+        }
+
+        // 회원 탈퇴 성공시 로그인 화면으로 이동
+        mypageViewModel.signOutSuccess.observe(viewLifecycleOwner) { isSuccess ->
+            if (isSuccess) {
+                mypageViewModel.setSignOutSuccess(false)
+                viewModelManager.resetAllViewModels()
+
+                val accessToken = tokenStorage.getAccessToken().toString()
+                val refreshToken = tokenStorage.getRefreshToken().toString()
+                Timber.d("$accessToken $refreshToken")
+
+                navController.navigate(R.id.action_navigation_mypage_to_login_fragment)
+            }
         }
 
         binding.mypageSignoutBtn.setOnClickListener {
@@ -181,16 +211,14 @@ class MypageFragment : Fragment() {
             else {
                 Timber.tag(TAG).i("연결 끊기 성공. SDK에서 토큰 삭제 됨")
                 //mypageViewModel.fcmTokenDelete(nicknameViewModel.nickname.toString())
-                mypageViewModel.kakaoSignOut()
-                tokenStorage.clearTokens()
-
-                // 탈퇴할 경우 사용자 정보 삭제 후 로그인 화면 이동
-                navController.navigate(R.id.action_navigation_mypage_to_login_fragment)
             }
         }
 
         // 회원 탈퇴 후 튜토리얼 다시 보이도록 설정
         TutorialStorage(requireContext()).setTutorialNotShown()
+
+        mypageViewModel.kakaoSignOut()
+        mypageDialog?.dismiss()
     }
 
     // 회원 로그아웃
@@ -213,9 +241,6 @@ class MypageFragment : Fragment() {
         }
 
         mypageViewModel.kakaoLogout()
-        viewModelManager.resetAllViewModels()
-        navController.navigate(R.id.action_navigation_mypage_to_login_fragment)
-        tokenStorage.clearTokens()
         mypageDialog?.dismiss()
     }
 

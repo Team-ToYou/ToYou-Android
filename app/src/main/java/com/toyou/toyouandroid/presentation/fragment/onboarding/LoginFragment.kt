@@ -82,8 +82,7 @@ class LoginFragment : Fragment() {
                     } else if (token != null) {
                         Log.i(TAG, "카카오계정으로 로그인 성공 ${token.accessToken}")
                         loginViewModel.setOAuthAccessToken(token.accessToken)
-                        loginViewModel.kakaoLogin(token.accessToken)
-                       
+
                         loginViewModel.kakaoLogin(token.accessToken)  // 로그인 성공 시 호출
                     }
                 }
@@ -116,9 +115,8 @@ class LoginFragment : Fragment() {
 
         loginViewModel.loginSuccess.observe(viewLifecycleOwner) { isSuccess ->
             if (isSuccess) {
+                loginViewModel.setLoginSuccess(false)
                 checkIfTokenExists()  // 토큰이 저장되었는지 확인 후 이동
-            } else {
-                navController.navigate(R.id.action_navigation_login_to_signup_agree_fragment)
             }
         }
     }
@@ -126,13 +124,13 @@ class LoginFragment : Fragment() {
     private fun checkIfTokenExists() {
         tokenStorage.let { storage ->
             val accessToken = storage.getAccessToken()
-            if (accessToken != null) {
+            if (accessToken == "") {
+                // 액세스 토큰이 없으면 회원가입 동의 화면으로 이동
+                navController.navigate(R.id.action_navigation_login_to_signup_agree_fragment)
+                Timber.d("User Info Not Existed")
+            }else {
                 Timber.d("User Info Existed: $accessToken")
                 checkTutorial()
-            } else {
-                // 액세스 토큰이 없으면 회원가입 동의 화면으로 이동
-//                navController.navigate(R.id.action_navigation_login_to_signup_agree_fragment)
-                Timber.d("User Info Not Existed")
             }
         }
     }

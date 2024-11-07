@@ -10,7 +10,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -26,12 +25,13 @@ import com.toyou.toyouandroid.presentation.fragment.home.adapter.HomeBottomSheet
 import com.toyou.toyouandroid.presentation.fragment.notice.NoticeViewModel
 import com.toyou.toyouandroid.domain.notice.NoticeRepository
 import com.toyou.toyouandroid.data.notice.service.NoticeService
+import com.toyou.toyouandroid.data.onboarding.service.AuthService
+import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.fragment.notice.NoticeViewModelFactory
 import com.toyou.toyouandroid.presentation.fragment.record.CardInfoViewModel
 import com.toyou.toyouandroid.presentation.fragment.record.CardInfoViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModelFactory
-import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
 import com.toyou.toyouandroid.utils.TokenStorage
@@ -44,9 +44,7 @@ class HomeFragment : Fragment() {
     private val binding: FragmentHomeBinding
         get() = requireNotNull(_binding){"FragmentHomeBinding -> null"}
     private val viewModel: HomeViewModel by activityViewModels()
-    private val noticeViewModel: NoticeViewModel by viewModels {
-        NoticeViewModelFactory(NoticeRepository(AuthNetworkModule.getClient().create(NoticeService::class.java)))
-    }
+    private lateinit var noticeViewModel: NoticeViewModel
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
 
@@ -64,7 +62,17 @@ class HomeFragment : Fragment() {
     ): View {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        binding.viewModel = viewModel
+
+        val tokenStorage = TokenStorage(requireContext())
+        val noticeService = AuthNetworkModule.getClient().create(NoticeService::class.java)
+        val noticeRepository = NoticeRepository(noticeService)
+        val authService = NetworkModule.getClient().create(AuthService::class.java)
+
+        noticeViewModel = ViewModelProvider(
+            this,
+            NoticeViewModelFactory(noticeRepository, authService, tokenStorage)
+        )[NoticeViewModel::class.java]
+
         binding.lifecycleOwner = viewLifecycleOwner
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
@@ -72,8 +80,6 @@ class HomeFragment : Fragment() {
                 requireActivity().finish()
             }
         })
-
-        val tokenStorage = TokenStorage(requireContext())
 
         cardViewModel = ViewModelProvider(
             requireActivity(),
@@ -118,8 +124,8 @@ class HomeFragment : Fragment() {
 
         database = UserDatabase.getDatabase(requireContext())
 
+        // 질문 개수에 따른 우체통 이미지 변경
         userViewModel.cardNum.observe(viewLifecycleOwner) { cardNum ->
-            Timber.tag("HomeFragment").d(cardNum.toString())
 
             val imageRes = when {
                 cardNum == 0 -> R.drawable.home_mailbox_none
@@ -146,8 +152,10 @@ class HomeFragment : Fragment() {
             }
         }
 
+        // 작일 친구 일기 카드 자동 조회
         viewModel.loadYesterdayDiaryCards()
 
+        // 바텀 시트 터치 이벤트 처리
         binding.homeBottomSheet.apply {
             setOnTouchListener { v, event ->
                 when (event.action) {
@@ -167,6 +175,13 @@ class HomeFragment : Fragment() {
             }
 
             setOnClickListener {}
+        }
+
+        // 홈 화면 바텀 시트 설정
+        viewModel.diaryCards.observe(viewLifecycleOwner) { diaryCards ->
+            if (diaryCards != null) {
+                setupRecyclerView(diaryCards)
+            }
         }
 
         // 우체통 클릭시 일기카드 생성 화면으로 전환(임시)
@@ -270,13 +285,6 @@ class HomeFragment : Fragment() {
                 binding.homeNoticeNew.visibility = View.VISIBLE
             } else {
                 binding.homeNoticeNew.visibility = View.GONE
-            }
-        }
-
-        // 홈 화면 바텀 시트 설정
-        viewModel.diaryCards.observe(viewLifecycleOwner) { diaryCards ->
-            if (diaryCards != null) {
-                setupRecyclerView(diaryCards)
             }
         }
     }

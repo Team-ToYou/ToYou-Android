@@ -6,9 +6,6 @@
 
     <data>
         <variable
-            name="viewModel"
-            type="com.toyou.toyouandroid.presentation.viewmodel.HomeViewModel" />
-        <variable
             name="imgsetting"
             type="com.toyou.toyouandroid.utils.BindingAdaptersKt" />
     </data>

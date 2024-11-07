@@ -7,9 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 object AuthNetworkModule {
 
     private const val BASE_URL = "https://to-you.store"
-
     private var retrofit: Retrofit? = null
-
     private var accessToken: String? = null
 
     fun setAccessToken(token: String) {

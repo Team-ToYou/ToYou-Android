@@ -1,4 +1,4 @@
-package com.toyou.toyouandroid.presentation.viewmodel
+package com.toyou.toyouandroid.presentation.fragment.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
