@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentSignupstatusBinding
@@ -16,6 +15,7 @@ import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.data.onboarding.dto.request.SignUpRequest
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
 import com.toyou.toyouandroid.utils.TokenStorage
+import com.toyou.toyouandroid.utils.TutorialStorage
 import timber.log.Timber
 
 class SignupStatusFragment : Fragment() {
@@ -28,18 +28,12 @@ class SignupStatusFragment : Fragment() {
     private val signupNicknameViewModel: SignupNicknameViewModel by activityViewModels()
 
     private lateinit var tokenStorage: TokenStorage
+    private lateinit var tutorialStorage: TutorialStorage
     private val loginViewModel: LoginViewModel by activityViewModels {
         AuthViewModelFactory(
             NetworkModule.getClient().create(AuthService::class.java),
             tokenStorage
         )
-    }
-
-    // 회원가입 완료 후 온보딩 화면 백스택 제거를 위한 옵션
-    private val navOptions by lazy {
-        NavOptions.Builder()
-            .setPopUpTo(R.id.navigation_home, true)
-            .build()
     }
 
     override fun onCreateView(
@@ -109,7 +103,8 @@ class SignupStatusFragment : Fragment() {
             // request body 구성 후 login viewmodel 회원가입 api 호출
             loginViewModel.signUp(signUpRequest)
 
-            navController.navigate(R.id.action_navigation_signup_status_to_home_fragment, null, navOptions)
+            navController.navigate(R.id.action_navigation_signup_status_to_tutorial_fragment)
+            tutorialStorage.setTutorialShown()
         }
     }
 

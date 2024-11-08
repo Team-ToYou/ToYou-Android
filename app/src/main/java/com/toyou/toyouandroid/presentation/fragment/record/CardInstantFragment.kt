@@ -137,7 +137,6 @@ class CardInstantFragment : Fragment(){
 
     private fun deleteDiaryCards() {
         val cardId = arguments?.getInt("cardId")
-        val date = arguments?.getString("date")
 
         if (cardId != null) {
             myRecordViewModel.deleteDiaryCard(cardId)
@@ -147,7 +146,7 @@ class CardInstantFragment : Fragment(){
 
         navController.navigate(R.id.action_navigation_card_instant_to_record_fragment)
 
-        Toast.makeText(requireContext(), "해당 날짜의 일기카드가 삭제되었습니다. $date", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "일기카드가 삭제되었습니다", Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {

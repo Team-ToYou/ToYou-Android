@@ -77,7 +77,8 @@
         <action
             android:id="@+id/action_navigation_tutorial_to_home_fragment"
             app:destination="@id/navigation_home"
-            app:popUpTo="@id/navigation_home" />
+            app:popUpTo="@id/navigation_home"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/navigation_signup_agree"
@@ -133,6 +134,12 @@
             app:popUpTo="@id/navigation_signup_nickname"
             app:enterAnim="@anim/slide_in_left"
             app:exitAnim="@anim/slide_in_right"/>
+        <action
+            android:id="@+id/action_navigation_signup_status_to_tutorial_fragment"
+            app:destination="@id/navigation_tutorial"
+            app:popUpTo="@id/navigation_tutorial"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
     </fragment>
     <fragment
         android:id="@+id/navigation_home_option"

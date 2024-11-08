@@ -8,6 +8,7 @@ import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.data.emotion.dto.DiaryCard
 import com.toyou.toyouandroid.data.emotion.service.EmotionService
 import com.toyou.toyouandroid.data.emotion.dto.YesterdayFriendsResponse
+import com.toyou.toyouandroid.data.home.dto.response.CardDetail
 import com.toyou.toyouandroid.utils.calendar.getCurrentDate
 import retrofit2.Call
 import retrofit2.Callback
@@ -60,8 +61,8 @@ class HomeViewModel : ViewModel() {
         _homeBackground.value = R.drawable.background_white
     }
 
-//    private val _cardDetails = MutableLiveData<List<CardDetail>>()
-//    val cardDetails: LiveData<List<CardDetail>> get() = _cardDetails
+    private val _cardDetails = MutableLiveData<List<CardDetail>>()
+    val cardDetails: LiveData<List<CardDetail>> get() = _cardDetails
 
     fun loadYesterdayDiaryCards() {
         _isLoading.value = true

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentTutorialBinding
@@ -18,6 +19,13 @@ class TutorialFragment : Fragment() {
     private var _binding: FragmentTutorialBinding? = null
     private val binding: FragmentTutorialBinding
         get() = requireNotNull(_binding){"FragmentTutorialBinding -> null"}
+
+    // 튜토리얼 완료 후 화면 백스택 제거를 위한 옵션
+    private val navOptions by lazy {
+        NavOptions.Builder()
+            .setPopUpTo(R.id.navigation_home, true)
+            .build()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,7 +54,7 @@ class TutorialFragment : Fragment() {
         })
 
         binding.tutorialSkipBtn.setOnClickListener {
-            navController.navigate(R.id.action_navigation_tutorial_to_home_fragment)
+            navController.navigate(R.id.action_navigation_tutorial_to_home_fragment, null, navOptions)
         }
 
         val viewPager = binding.viewPager

@@ -8,6 +8,7 @@ import android.view.animation.AnimationUtils
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.presentation.base.MainActivity
@@ -19,6 +20,13 @@ class TutorialStep5Fragment : Fragment() {
     private var _binding: FragmentTutorialStep5Binding? = null
     private val binding: FragmentTutorialStep5Binding
         get() = requireNotNull(_binding){"FragmentTutorialStep5Binding -> null"}
+
+    // 튜토리얼 완료 후 화면 백스택 제거를 위한 옵션
+    private val navOptions by lazy {
+        NavOptions.Builder()
+            .setPopUpTo(R.id.navigation_home, true)
+            .build()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,10 +54,10 @@ class TutorialStep5Fragment : Fragment() {
             }
         })
 
-        binding.tutorialCompleteBtn.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in_2s))
+        binding.tutorialCompleteBtn.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in_4s))
 
         binding.tutorialCompleteBtn.setOnClickListener {
-            navController.navigate(R.id.action_navigation_tutorial_to_home_fragment)
+            navController.navigate(R.id.action_navigation_tutorial_to_home_fragment, null, navOptions)
         }
     }
 
