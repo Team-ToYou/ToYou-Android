@@ -229,6 +229,10 @@ class ProfileViewModel : ViewModel() {
     private val _selectedStatusButtonId = MutableLiveData<Int?>(null)
     val selectedStatusButtonId: LiveData<Int?> get() = _selectedStatusButtonId
 
+    fun setSelectedStatusButtonId(id: Int?) {
+        _selectedStatusButtonId.value = id
+    }
+
     private val _status = MutableLiveData<String>()
     val status: LiveData<String> get() = _status
 

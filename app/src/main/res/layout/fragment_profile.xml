@@ -181,57 +181,53 @@
             app:layout_constraintStart_toStartOf="@+id/guideline_title_v"
             app:layout_constraintTop_toBottomOf="@id/signup_agree_nickname_doublecheck_message" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <TextView
             android:id="@+id/signup_status_option_1"
             android:layout_width="250dp"
             android:layout_height="30dp"
-            android:background="@drawable/signupnickname_input"
             android:text="@string/signup_status_option_1"
             android:textColor="@color/black"
+            android:gravity="center"
             style="@style/sc_r10"
-            android:stateListAnimator="@null"
             android:layout_marginTop="7dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profile_status_title" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <TextView
             android:id="@+id/signup_status_option_2"
             android:layout_width="250dp"
             android:layout_height="30dp"
-            android:background="@drawable/signupnickname_input"
             android:text="@string/signup_status_option_2"
             android:textColor="@color/black"
+            android:gravity="center"
             style="@style/sc_r10"
-            android:stateListAnimator="@null"
             android:layout_marginTop="9dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/signup_status_option_1" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <TextView
             android:id="@+id/signup_status_option_3"
             android:layout_width="250dp"
             android:layout_height="30dp"
-            android:background="@drawable/signupnickname_input"
             android:text="@string/signup_status_option_3"
             android:textColor="@color/black"
+            android:gravity="center"
             style="@style/sc_r10"
-            android:stateListAnimator="@null"
             android:layout_marginTop="9dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/signup_status_option_2" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <TextView
             android:id="@+id/signup_status_option_4"
             android:layout_width="250dp"
             android:layout_height="30dp"
-            android:background="@drawable/signupnickname_input"
             android:text="@string/signup_status_option_4"
             android:textColor="@color/black"
+            android:gravity="center"
             style="@style/sc_r10"
-            android:stateListAnimator="@null"
             android:layout_marginTop="9dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
