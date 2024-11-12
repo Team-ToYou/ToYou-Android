@@ -154,7 +154,7 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
                     noticeAdapter?.removeItem(result.position) // 어댑터에 아이템 삭제 요청
                     navController.navigate(R.id.action_navigation_notice_to_social_fragment)
 
-                    Toast.makeText(requireContext(), "친구 요청을 수락했습니다.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "친구 요청을 수락했습니다", Toast.LENGTH_SHORT).show()
 
                     socialViewModel.resetApproveSuccess() // 메서드 호출하여 상태 초기화
                 }
