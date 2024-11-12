@@ -73,7 +73,7 @@
             android:layout_height="wrap_content"
             android:text="@string/home_stamp_subtitle"
             android:textColor="@color/black"
-            style="@style/sc_l8"
+            style="@style/sc_l10"
             android:layout_marginTop="25dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
