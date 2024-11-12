@@ -31,8 +31,8 @@ class CalendarDialog : DialogFragment() {
     override fun onResume() {
         super.onResume()
         dialog?.window?.setLayout(
-            convertDpToPx(300),
-            convertDpToPx(120)
+            convertDpToPx(280),
+            convertDpToPx(140)
         )
     }
 
