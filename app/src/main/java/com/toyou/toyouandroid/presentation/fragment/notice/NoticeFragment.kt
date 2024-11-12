@@ -84,15 +84,6 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
         noticeAdapter = NoticeAdapter(mutableListOf(), viewModel, this)
 
         listener = object : NoticeAdapterListener {
-            override fun onShowDialog() {
-                noticeDialogViewModel.setDialogData(
-                    title = "존재하지 않는 \n 사용자입니다",
-                    leftButtonText = "확인",
-                    leftButtonClickAction = { checkUserNone() },
-                )
-                noticeDialog = NoticeDialog()
-                noticeDialog?.show(parentFragmentManager, "CustomDialog")
-            }
 
             override fun onDeleteNotice(alarmId: Int, position: Int) {
                 viewModel.deleteNotice(alarmId, position)
@@ -104,8 +95,24 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
                 socialViewModel.patchApproveNotice(name, myName, alarmId, position)
             }
 
-            override fun onFriendRequestItemClick(item: NoticeItem.NoticeFriendRequestItem) {
-                navController.navigate(R.id.action_navigation_notice_to_social_fragment)
+            override fun onFriendRequestAcceptClick(item: NoticeItem.NoticeFriendRequestItem) {
+                socialViewModel.approveSuccess.observe(viewLifecycleOwner) { result ->
+                    if (result != null) {
+                        if (result.isSuccess) {
+                            navController.navigate(R.id.action_navigation_notice_to_social_fragment)
+
+                            socialViewModel.resetApproveSuccess() // 메서드 호출하여 상태 초기화
+                        } else {
+                            noticeDialogViewModel.setDialogData(
+                                title = "존재하지 않는 \n 사용자입니다",
+                                leftButtonText = "확인",
+                                leftButtonClickAction = { checkUserNone() },
+                            )
+                            noticeDialog = NoticeDialog()
+                            noticeDialog?.show(parentFragmentManager, "CustomDialog")
+                        }
+                    }
+                }
             }
 
             override fun onFriendRequestAcceptedItemClick(item: NoticeItem.NoticeFriendRequestAcceptedItem) {
@@ -189,11 +196,13 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
         }
     }
 
-    private fun checkUserNone() {}
-    override fun onShowDialog() {}
+    private fun checkUserNone() {
+        noticeDialog?.dismiss()
+    }
+
     override fun onFriendRequestApprove(name: String, alarmId: Int, position: Int) {}
     override fun onDeleteNotice(alarmId: Int, position: Int) {}
-    override fun onFriendRequestItemClick(item: NoticeItem.NoticeFriendRequestItem) {}
+    override fun onFriendRequestAcceptClick(item: NoticeItem.NoticeFriendRequestItem) {}
     override fun onFriendRequestAcceptedItemClick(item: NoticeItem.NoticeFriendRequestAcceptedItem) {}
     override fun onFriendCardItemClick(item: NoticeItem.NoticeCardCheckItem) {}
 

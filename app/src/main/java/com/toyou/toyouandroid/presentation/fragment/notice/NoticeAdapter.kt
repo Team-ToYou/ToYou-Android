@@ -76,6 +76,15 @@ class NoticeAdapter(
     inner class FriendRequestViewHolder(private val binding: ItemNoticeFriendRequestBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: NoticeItem.NoticeFriendRequestItem) {
             binding.itemFriendRequest = item
+
+            val nickname = if (item.nickname.length > 7) {
+                TextUtils.ellipsize(item.nickname, binding.noticeBox.paint, 7 * binding.noticeBox.textSize, TextUtils.TruncateAt.END).toString()
+            } else {
+                item.nickname
+            }
+            val formattedMessage = binding.root.context.getString(R.string.notice_friend_request, nickname)
+            binding.noticeBox.text = formattedMessage
+
             binding.noticeCardCheckDelete.setOnClickListener {
                 // 삭제 API 호출
                 viewModel.deleteNotice(item.alarmId, this.layoutPosition)
@@ -83,8 +92,7 @@ class NoticeAdapter(
             }
 
             binding.noticeLayout.setOnClickListener {
-                listener.onFriendRequestItemClick(item)
-                Timber.d("친구 요청 메시지 클릭")
+                listener.onFriendRequestAcceptClick(item)
             }
 
             binding.noticeFriendRequestBtn.setOnClickListener {
@@ -92,8 +100,6 @@ class NoticeAdapter(
                 val name = item.nickname
                 Timber.d(name)
                 listener.onFriendRequestApprove(name, item.alarmId, this.layoutPosition)
-//                viewModel.deleteNotice(item.alarmId, this.layoutPosition)
-//                removeItem(this.layoutPosition)
             }
 
             binding.executePendingBindings()
@@ -103,6 +109,15 @@ class NoticeAdapter(
     inner class FriendRequestAcceptedViewHolder(private val binding: ItemNoticeFriendRequestAcceptedBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: NoticeItem.NoticeFriendRequestAcceptedItem) {
             binding.itemFriendRequestAccepted = item
+
+            val nickname = if (item.nickname.length > 7) {
+                TextUtils.ellipsize(item.nickname, binding.noticeBox.paint, 7 * binding.noticeBox.textSize, TextUtils.TruncateAt.END).toString()
+            } else {
+                item.nickname
+            }
+            val formattedMessage = binding.root.context.getString(R.string.notice_friend_request_accepted, nickname)
+            binding.noticeBox.text = formattedMessage
+
             binding.noticeCardCheckDelete.setOnClickListener {
                 // 삭제 API 호출
                 viewModel.deleteNotice(item.alarmId, this.layoutPosition)
