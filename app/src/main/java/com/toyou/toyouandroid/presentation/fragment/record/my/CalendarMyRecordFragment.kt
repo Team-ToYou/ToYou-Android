@@ -188,7 +188,7 @@ class CalendarMyRecordFragment : Fragment(), OnMyDateClickListener {
                 putInt("cardId", it)
                 putString("date", date.toString())
             }
-            navController.navigate(R.id.action_navigation_record_to_card_instant_fragment, bundle)
+            navController.navigate(R.id.action_navigation_record_to_my_card_container_fragment, bundle)
         }
     }
 

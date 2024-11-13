@@ -57,8 +57,7 @@
                 android:id="@+id/lock_free_iv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:src="@drawable/lock_selector" />
+                android:layout_alignParentEnd="true" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/card_list"
