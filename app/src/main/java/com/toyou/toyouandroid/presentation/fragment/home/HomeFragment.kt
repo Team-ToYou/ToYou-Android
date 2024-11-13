@@ -107,7 +107,7 @@ class HomeFragment : Fragment() {
                     val bundle = Bundle().apply {
                         putInt("cardId", it)
                     }
-                    navController.navigate(R.id.action_navigation_home_to_card_instant_fragment, bundle)
+                    navController.navigate(R.id.action_navigation_home_to_friend_card_container_fragment, bundle)
                 }
             }
         }
