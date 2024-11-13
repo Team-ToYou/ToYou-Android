@@ -158,10 +158,8 @@ class CreateFragment : Fragment(){
         cardViewModel.resetSelect()
         val mainActivity = activity as MainActivity
         mainActivity.hideBottomNavigation(false)
-        navController.popBackStack()
+        navController.navigate(R.id.action_create_fragment_to_navigation_home)
         val fragmentManager = requireActivity().supportFragmentManager
         fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-
     }
-
 }
