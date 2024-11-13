@@ -78,7 +78,7 @@ class CalendarFriendRecordFragment : Fragment(), OnFriendDateClickListener {
                     val bundle = Bundle().apply {
                         putInt("cardId", it)
                     }
-                    navController.navigate(R.id.action_navigation_record_to_card_instant_fragment, bundle)
+                    navController.navigate(R.id.action_navigation_record_to_friend_card_container_fragment, bundle)
                 }
             }
         }
@@ -241,7 +241,7 @@ class CalendarFriendRecordFragment : Fragment(), OnFriendDateClickListener {
             val bundle = Bundle().apply {
                 putInt("cardId", it)
             }
-            navController.navigate(R.id.action_navigation_record_to_card_instant_fragment, bundle)
+            navController.navigate(R.id.action_navigation_record_to_friend_card_container_fragment, bundle)
         }
     }
 
