@@ -14,6 +14,7 @@ import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.data.onboarding.dto.request.SignUpRequest
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
+import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
 import com.toyou.toyouandroid.utils.TutorialStorage
 import timber.log.Timber
@@ -27,12 +28,16 @@ class SignupStatusFragment : Fragment() {
     private val signUpStatusViewModel: SignupStatusViewModel by activityViewModels()
     private val signupNicknameViewModel: SignupNicknameViewModel by activityViewModels()
 
-    private lateinit var tokenStorage: TokenStorage
     private lateinit var tutorialStorage: TutorialStorage
+    private val authService: AuthService = NetworkModule.getClient().create(AuthService::class.java)
+    private lateinit var tokenStorage: TokenStorage
+    private val tokenManager = TokenManager(authService, tokenStorage)
+
     private val loginViewModel: LoginViewModel by activityViewModels {
         AuthViewModelFactory(
-            NetworkModule.getClient().create(AuthService::class.java),
-            tokenStorage
+            authService,
+            tokenStorage,
+            tokenManager
         )
     }
 

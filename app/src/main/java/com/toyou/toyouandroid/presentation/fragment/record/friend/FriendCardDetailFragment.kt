@@ -10,11 +10,17 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.R
+import com.toyou.toyouandroid.data.onboarding.service.AuthService
+import com.toyou.toyouandroid.data.record.service.RecordService
 import com.toyou.toyouandroid.databinding.CardLayoutRecordBinding
-import com.toyou.toyouandroid.presentation.fragment.record.CardInfoViewModelFactory
+import com.toyou.toyouandroid.domain.record.RecordRepository
+import com.toyou.toyouandroid.network.AuthNetworkModule
+import com.toyou.toyouandroid.network.NetworkModule
+import com.toyou.toyouandroid.presentation.fragment.record.RecordViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
 import com.toyou.toyouandroid.ui.home.adapter.CardPreviewListAdapter
+import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
 import timber.log.Timber
 
@@ -31,10 +37,14 @@ class FriendCardDetailFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         val tokenStorage = TokenStorage(requireContext())
+        val authService = NetworkModule.getClient().create(AuthService::class.java)
+        val tokenManager = TokenManager(authService, tokenStorage)
+        val recordService = AuthNetworkModule.getClient().create(RecordService::class.java)
+        val recordRepository = RecordRepository(recordService)
 
         friendCardViewModel = ViewModelProvider(
             requireActivity(),
-            CardInfoViewModelFactory(tokenStorage)
+            RecordViewModelFactory(recordRepository, tokenManager)
         )[FriendCardViewModel::class.java]
 
         userViewModel = ViewModelProvider(

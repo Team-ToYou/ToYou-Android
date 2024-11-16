@@ -9,6 +9,7 @@ import com.toyou.toyouandroid.data.mypage.dto.MypageResponse
 import com.toyou.toyouandroid.data.mypage.service.MypageService
 import com.toyou.toyouandroid.data.onboarding.dto.response.SignUpResponse
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
+import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -16,7 +17,11 @@ import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
 
-class MypageViewModel(private val authService: AuthService, private val tokenStorage: TokenStorage) : ViewModel() {
+class MypageViewModel(
+    private val authService: AuthService,
+    private val tokenStorage: TokenStorage,
+    private val tokenManager: TokenManager
+) : ViewModel() {
 
     private val _logoutSuccess = MutableLiveData<Boolean>()
     val logoutSuccess: LiveData<Boolean> get() = _logoutSuccess
@@ -42,6 +47,10 @@ class MypageViewModel(private val authService: AuthService, private val tokenSto
                         val errorMessage = response.errorBody()?.string() ?: "Unknown error"
                         Timber.e("API Error: $errorMessage")
                         _logoutSuccess.value = false
+                        tokenManager.refreshToken(
+                            onSuccess = { kakaoLogout() },
+                            onFailure = { Timber.e("Failed to refresh token and kakao logout") }
+                        )
                     }
                 }
 
@@ -62,38 +71,35 @@ class MypageViewModel(private val authService: AuthService, private val tokenSto
     }
 
     fun kakaoSignOut() {
-        viewModelScope.launch {
-            val refreshToken = tokenStorage.getRefreshToken().toString()
-            val accessToken = tokenStorage.getAccessToken().toString()
-            Timber.d("Attempting to signout in with refresh token: $refreshToken")
-            Timber.d("accessToken: $accessToken")
+        val refreshToken = tokenStorage.getRefreshToken().toString()
+        val accessToken = tokenStorage.getAccessToken().toString()
+        Timber.d("Attempting to signout in with refresh token: $refreshToken")
+        Timber.d("accessToken: $accessToken")
 
-            authService.signOut(refreshToken).enqueue(object : Callback<SignUpResponse> {
-                override fun onResponse(call: Call<SignUpResponse>, response: Response<SignUpResponse>) {
-                    if (response.isSuccessful) {
-                        Timber.i("SignOut successfully")
-                        _signOutSuccess.value = true
-                        tokenStorage.clearTokens()
-                    } else {
-                        val errorMessage = response.errorBody()?.string() ?: "Unknown error"
-                        Timber.e("API Error: $errorMessage")
-                        _signOutSuccess.value = false
-                    }
-                }
-
-                override fun onFailure(call: Call<SignUpResponse>, t: Throwable) {
-                    val errorMessage = t.message ?: "Unknown error"
-                    Timber.e("Network Failure: $errorMessage")
+        authService.signOut(refreshToken).enqueue(object : Callback<SignUpResponse> {
+            override fun onResponse(call: Call<SignUpResponse>, response: Response<SignUpResponse>) {
+                if (response.isSuccessful) {
+                    Timber.i("SignOut successfully")
+                    _signOutSuccess.value = true
+                    tokenStorage.clearTokens()
+                } else {
+                    val errorMessage = response.errorBody()?.string() ?: "Unknown error"
+                    Timber.e("API Error: $errorMessage")
                     _signOutSuccess.value = false
+                    tokenManager.refreshToken(
+                        onSuccess = { kakaoSignOut() },
+                        onFailure = { Timber.e("Failed to refresh token and kakao signout") }
+                    )
                 }
-            })
-        }
-    }
+            }
 
-//    private val myPageService: MypageService = TestNetworkModule.getClient(
-//        TokenManager(authService, tokenStorage),
-//        tokenStorage
-//    ).create(MypageService::class.java)
+            override fun onFailure(call: Call<SignUpResponse>, t: Throwable) {
+                val errorMessage = t.message ?: "Unknown error"
+                Timber.e("Network Failure: $errorMessage")
+                _signOutSuccess.value = false
+            }
+        })
+    }
 
     private val myPageService: MypageService = AuthNetworkModule.getClient().create(MypageService::class.java)
 
@@ -128,6 +134,10 @@ class MypageViewModel(private val authService: AuthService, private val tokenSto
                 } else {
                     Timber.tag("API Error").e("Failed to update FriendNum. Code: ${response.code()}, Message: ${response.message()}")
                     Timber.tag("API Error").e("Response Body: ${response.errorBody()?.string()}")
+                    tokenManager.refreshToken(
+                        onSuccess = { updateMypage() }, // 토큰 갱신 후 다시 요청
+                        onFailure = { Timber.e("Failed to refresh token and get notices") }
+                    )
                 }
             }
 

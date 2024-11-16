@@ -3,6 +3,7 @@ package com.toyou.toyouandroid.network
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import timber.log.Timber
 
 object AuthNetworkModule {
 
@@ -23,7 +24,9 @@ object AuthNetworkModule {
                     requestBuilder.header("Authorization", "Bearer $it")
                 }
                 val request = requestBuilder.build()
-                chain.proceed(request)
+                val response = chain.proceed(request)
+                Timber.d("Response code: ${response.code}")
+                response
             }
             .build()
     }

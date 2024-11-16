@@ -1,11 +1,13 @@
 package com.toyou.toyouandroid.domain.record
 
+import com.toyou.toyouandroid.data.home.dto.response.CardDetail
 import com.toyou.toyouandroid.data.record.dto.DeleteDiaryCardResponse
 import com.toyou.toyouandroid.data.record.dto.DiaryCardNumResponse
 import com.toyou.toyouandroid.data.record.dto.DiaryCardPerDayResponse
 import com.toyou.toyouandroid.data.record.dto.DiaryCardResponse
 import com.toyou.toyouandroid.data.record.dto.PatchDiaryCardResponse
 import com.toyou.toyouandroid.data.record.service.RecordService
+import com.toyou.toyouandroid.network.BaseResponse
 import retrofit2.Call
 
 class RecordRepository(private val recordService: RecordService) {
@@ -28,5 +30,9 @@ class RecordRepository(private val recordService: RecordService) {
 
     fun patchDiaryCard(cardId: Int): Call<PatchDiaryCardResponse> {
         return recordService.patchDiarycardExposure(cardId)
+    }
+
+    suspend fun getCardDetails(cardId: Long): BaseResponse<CardDetail> {
+        return recordService.getCardDetail(cardId)
     }
 }

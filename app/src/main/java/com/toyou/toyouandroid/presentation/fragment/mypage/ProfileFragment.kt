@@ -16,12 +16,13 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentProfileBinding
-import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
+import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.fragment.onboarding.AuthViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
+import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
 import timber.log.Timber
 
@@ -31,17 +32,17 @@ class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding: FragmentProfileBinding
         get() = requireNotNull(_binding){"FragmentProfileBinding -> null"}
-    private val viewModel: ProfileViewModel by activityViewModels()
-    private lateinit var tokenStorage: TokenStorage
 
-    private val mypageViewModel: MypageViewModel by activityViewModels {
-        AuthViewModelFactory(
-            AuthNetworkModule.getClient().create(AuthService::class.java),
-            tokenStorage
-        )
-    }
+    private lateinit var viewModel: ProfileViewModel
 
     private lateinit var userViewModel: UserViewModel
+
+    private val mypageViewModel: MypageViewModel by activityViewModels {
+        val tokenStorage = TokenStorage(requireContext())
+        val authService: AuthService = NetworkModule.getClient().create(AuthService::class.java)
+        val tokenManager = TokenManager(authService, tokenStorage)
+        AuthViewModelFactory(authService, tokenStorage, tokenManager)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,14 +51,27 @@ class ProfileFragment : Fragment() {
     ): View {
 
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = viewLifecycleOwner
 
-        tokenStorage = TokenStorage(requireContext())
+        val tokenStorage = TokenStorage(requireContext())
+        val authService: AuthService = NetworkModule.getClient().create(AuthService::class.java)
+        val tokenManager = TokenManager(authService, tokenStorage)
+
+        viewModel = ViewModelProvider(
+            this,
+            AuthViewModelFactory(
+                authService,
+                tokenStorage,
+                tokenManager
+            )
+        )[ProfileViewModel::class.java]
+
         userViewModel = ViewModelProvider(
             requireActivity(),
             UserViewModelFactory(tokenStorage)
         )[UserViewModel::class.java]
+
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
         viewModel.resetNicknameEditState()
 

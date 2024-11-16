@@ -19,6 +19,7 @@ import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
+import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
 
 class SplashFragment : Fragment() {
@@ -43,9 +44,10 @@ class SplashFragment : Fragment() {
 
         val tokenStorage = TokenStorage(requireContext())
         val authService = NetworkModule.getClient().create(AuthService::class.java)
+        val tokenManager = TokenManager(authService, tokenStorage)
         loginViewModel = ViewModelProvider(
             this,
-            AuthViewModelFactory(authService, tokenStorage)
+            AuthViewModelFactory(authService, tokenStorage, tokenManager)
         )[LoginViewModel::class.java]
         userViewModel = ViewModelProvider(
             requireActivity(),

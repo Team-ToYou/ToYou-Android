@@ -26,14 +26,18 @@ import com.toyou.toyouandroid.presentation.fragment.notice.NoticeViewModel
 import com.toyou.toyouandroid.domain.notice.NoticeRepository
 import com.toyou.toyouandroid.data.notice.service.NoticeService
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
+import com.toyou.toyouandroid.data.record.service.RecordService
+import com.toyou.toyouandroid.domain.record.RecordRepository
 import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.fragment.notice.NoticeViewModelFactory
+import com.toyou.toyouandroid.presentation.fragment.onboarding.AuthViewModelFactory
 import com.toyou.toyouandroid.presentation.fragment.record.CardInfoViewModel
-import com.toyou.toyouandroid.presentation.fragment.record.CardInfoViewModelFactory
+import com.toyou.toyouandroid.presentation.fragment.record.RecordViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
+import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
 import timber.log.Timber
 
@@ -43,8 +47,8 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding: FragmentHomeBinding
         get() = requireNotNull(_binding){"FragmentHomeBinding -> null"}
-    private val viewModel: HomeViewModel by activityViewModels()
     private lateinit var noticeViewModel: NoticeViewModel
+    private lateinit var viewModel: HomeViewModel
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
 
@@ -64,14 +68,22 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         val tokenStorage = TokenStorage(requireContext())
+        val authService = NetworkModule.getClient().create(AuthService::class.java)
+        val tokenManager = TokenManager(authService, tokenStorage)
         val noticeService = AuthNetworkModule.getClient().create(NoticeService::class.java)
         val noticeRepository = NoticeRepository(noticeService)
-        val authService = NetworkModule.getClient().create(AuthService::class.java)
+        val recordService = AuthNetworkModule.getClient().create(RecordService::class.java)
+        val recordRepository = RecordRepository(recordService)
 
         noticeViewModel = ViewModelProvider(
             this,
-            NoticeViewModelFactory(noticeRepository, authService, tokenStorage)
+            NoticeViewModelFactory(noticeRepository, tokenManager)
         )[NoticeViewModel::class.java]
+
+        viewModel = ViewModelProvider(
+            this,
+            AuthViewModelFactory(authService, tokenStorage, tokenManager)
+        )[HomeViewModel::class.java]
 
         binding.lifecycleOwner = viewLifecycleOwner
 
@@ -93,7 +105,7 @@ class HomeFragment : Fragment() {
 
         cardInfoViewModel = ViewModelProvider(
             requireActivity(),
-            CardInfoViewModelFactory(tokenStorage)
+            RecordViewModelFactory(recordRepository, tokenManager)
         )[CardInfoViewModel::class.java]
 
         userViewModel.getHomeEntry()

@@ -3,7 +3,6 @@ package com.toyou.toyouandroid.utils
 import com.toyou.toyouandroid.data.onboarding.dto.response.SignUpResponse
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
 import com.toyou.toyouandroid.network.AuthNetworkModule
-import com.toyou.toyouandroid.network.TestNetworkModule
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -11,8 +10,7 @@ import timber.log.Timber
 
 class TokenManager(private val authService: AuthService, private val tokenStorage: TokenStorage) {
 
-    var accessToken: String? = null
-        private set // 외부에서 접근할 수 없도록 setter를 private으로 설정
+    private var accessToken: String? = null
 
     fun setAccessToken(token: String) {
         accessToken = token
@@ -29,14 +27,14 @@ class TokenManager(private val authService: AuthService, private val tokenStorag
 
                             // 암호화된 토큰 저장소에 저장
                             tokenStorage.saveTokens(newAccessToken, newRefreshToken)
+                            Timber.i("Tokens saved successfully")
 
-                            // 인증 네트워크 모듈에 access token 저장
+                            // 인증 네트워크 모듈에 재발급받은 access token 저장
                             AuthNetworkModule.setAccessToken(newAccessToken)
-                            TestNetworkModule.setAccessToken(newAccessToken)
 
+                            // 성공 콜백 실행
                             onSuccess(newAccessToken)
 
-                            Timber.i("Tokens saved successfully")
                         } ?: Timber.e("Refresh token missing in response headers")
                     } ?: Timber.e("Access token missing in response headers")
                 } else {

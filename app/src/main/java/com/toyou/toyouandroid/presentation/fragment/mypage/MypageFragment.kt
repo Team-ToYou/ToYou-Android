@@ -10,17 +10,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.kakao.sdk.user.UserApiClient
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentMypageBinding
-import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.presentation.fragment.onboarding.SignupNicknameViewModel
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
+import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.fragment.onboarding.AuthViewModelFactory
 import com.toyou.toyouandroid.presentation.fragment.home.HomeViewModel
+import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.ViewModelManager
 import com.toyou.toyouandroid.utils.TokenStorage
 import com.toyou.toyouandroid.utils.TutorialStorage
@@ -33,18 +35,20 @@ class MypageFragment : Fragment() {
     private var _binding: FragmentMypageBinding? = null
     private val binding: FragmentMypageBinding
         get() = requireNotNull(_binding){"FragmentMypageBinding -> null"}
-    private val nicknameViewModel: SignupNicknameViewModel by activityViewModels()
-    private val homeViewModel: HomeViewModel by activityViewModels()
-    private val mypageDialogViewModel: MypageDialogViewModel by activityViewModels()
+
     private lateinit var viewModelManager: ViewModelManager
+
+    private val nicknameViewModel: SignupNicknameViewModel by activityViewModels()
+    private val mypageDialogViewModel: MypageDialogViewModel by activityViewModels()
     private var mypageDialog: MypageDialog? = null
-    private lateinit var tokenStorage: TokenStorage
+
+    private lateinit var homeViewModel: HomeViewModel
 
     private val mypageViewModel: MypageViewModel by activityViewModels {
-        AuthViewModelFactory(
-            AuthNetworkModule.getClient().create(AuthService::class.java),
-            tokenStorage
-        )
+        val tokenStorage = TokenStorage(requireContext())
+        val authService: AuthService = NetworkModule.getClient().create(AuthService::class.java)
+        val tokenManager = TokenManager(authService, tokenStorage)
+        AuthViewModelFactory(authService, tokenStorage, tokenManager)
     }
 
     override fun onCreateView(
@@ -52,13 +56,20 @@ class MypageFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-
         _binding = FragmentMypageBinding.inflate(inflater, container, false)
 
-        tokenStorage = TokenStorage(requireContext())
+        val tokenStorage = TokenStorage(requireContext())
+        val authService: AuthService = NetworkModule.getClient().create(AuthService::class.java)
+        val tokenManager = TokenManager(authService, tokenStorage)
 
-        binding.viewModel = mypageViewModel
-        binding.lifecycleOwner = viewLifecycleOwner
+        homeViewModel = ViewModelProvider(
+            this,
+            AuthViewModelFactory(
+                authService,
+                tokenStorage,
+                tokenManager
+            )
+        )[HomeViewModel::class.java]
 
         return binding.root
     }
@@ -108,11 +119,7 @@ class MypageFragment : Fragment() {
             startActivity(i)
         }
 
-        binding.mypageTermsOfUse.setOnClickListener {
-//            val i = Intent(Intent.ACTION_VIEW)
-//            i.data = Uri.parse("http://pf.kakao.com/_xiuPIn/chat")
-//            startActivity(i)
-        }
+        binding.mypageTermsOfUse.setOnClickListener {}
 
         // 사용자 닉네임 설정
         nicknameViewModel.nickname.observe(viewLifecycleOwner) { nickname ->
@@ -140,10 +147,6 @@ class MypageFragment : Fragment() {
                 mypageViewModel.setLogoutSuccess(false)
                 viewModelManager.resetAllViewModels()
 
-                val accessToken = tokenStorage.getAccessToken().toString()
-                val refreshToken = tokenStorage.getRefreshToken().toString()
-                Timber.d("$accessToken $refreshToken")
-
                 navController.navigate(R.id.action_navigation_mypage_to_login_fragment)
             }
         }
@@ -153,10 +156,6 @@ class MypageFragment : Fragment() {
             if (isSuccess) {
                 mypageViewModel.setSignOutSuccess(false)
                 viewModelManager.resetAllViewModels()
-
-                val accessToken = tokenStorage.getAccessToken().toString()
-                val refreshToken = tokenStorage.getRefreshToken().toString()
-                Timber.d("$accessToken $refreshToken")
 
                 navController.navigate(R.id.action_navigation_mypage_to_login_fragment)
             }
@@ -198,12 +197,6 @@ class MypageFragment : Fragment() {
     private fun handleSignout() {
         Timber.tag("handleSignout").d("handleSignout")
 
-        val refreshToken = tokenStorage.getRefreshToken()
-        if (refreshToken.isNullOrEmpty()) {
-            Timber.e("No valid refresh token found.")
-            return
-        }
-
         UserApiClient.instance.unlink { error ->
             if (error != null) {
                 Timber.tag(TAG).e(error, "연결 끊기 실패")
@@ -224,12 +217,6 @@ class MypageFragment : Fragment() {
     // 회원 로그아웃
     private fun handleLogout() {
         Timber.tag("handleLogout").d("handleWithdraw")
-
-        val refreshToken = tokenStorage.getRefreshToken()
-        if (refreshToken.isNullOrEmpty()) {
-            Timber.e("No valid refresh token found.")
-            return
-        }
 
         UserApiClient.instance.logout { error ->
             if (error != null) {

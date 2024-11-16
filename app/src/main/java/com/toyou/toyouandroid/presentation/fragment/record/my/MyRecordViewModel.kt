@@ -9,13 +9,17 @@ import com.toyou.toyouandroid.data.record.dto.DiaryCard
 import com.toyou.toyouandroid.data.record.dto.DiaryCardResponse
 import com.toyou.toyouandroid.data.record.dto.PatchDiaryCardResponse
 import com.toyou.toyouandroid.domain.record.RecordRepository
+import com.toyou.toyouandroid.utils.TokenManager
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
 
-class MyRecordViewModel(private val repository: RecordRepository) : ViewModel() {
+class MyRecordViewModel(
+    private val repository: RecordRepository,
+    private val tokenManager: TokenManager
+) : ViewModel() {
 
     private val _diaryCards = MutableLiveData<List<DiaryCard>>()
     val diaryCards: LiveData<List<DiaryCard>> get() = _diaryCards
@@ -42,6 +46,10 @@ class MyRecordViewModel(private val repository: RecordRepository) : ViewModel() 
                         handleError(errorMessage)
                         Timber.tag("MyRecordViewModel").d("API Error: $errorMessage")
 
+                        tokenManager.refreshToken(
+                            onSuccess = { loadDiaryCards(year, month) },
+                            onFailure = { Timber.e("loadDiaryCards API call failed") }
+                        )
                     }
                 }
 
@@ -73,6 +81,10 @@ class MyRecordViewModel(private val repository: RecordRepository) : ViewModel() 
                         handleError(errorMessage)
                         Timber.tag("MyRecordViewModel").d("API Error: $errorMessage")
 
+                        tokenManager.refreshToken(
+                            onSuccess = { deleteDiaryCard(cardId) },
+                            onFailure = { Timber.e("deleteDiaryCard API call failed") }
+                        )
                     }
                 }
 
@@ -106,6 +118,11 @@ class MyRecordViewModel(private val repository: RecordRepository) : ViewModel() 
                         Timber.tag("MyRecordViewModel").d("Error Body: $errorBody")
 
                         handleError(errorMessage)
+
+                        tokenManager.refreshToken(
+                            onSuccess = { patchDiaryCard(cardId) },
+                            onFailure = { Timber.e("patchDiaryCard API call failed") }
+                        )
                     }
                 }
 

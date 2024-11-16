@@ -10,9 +10,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.toyou.toyouandroid.R
+import com.toyou.toyouandroid.data.onboarding.service.AuthService
+import com.toyou.toyouandroid.data.record.service.RecordService
 import com.toyou.toyouandroid.databinding.FragmentFriendCardContainerBinding
+import com.toyou.toyouandroid.domain.record.RecordRepository
+import com.toyou.toyouandroid.network.AuthNetworkModule
+import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.base.MainActivity
-import com.toyou.toyouandroid.presentation.fragment.record.CardInfoViewModelFactory
+import com.toyou.toyouandroid.presentation.fragment.record.RecordViewModelFactory
+import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
 import timber.log.Timber
 
@@ -33,10 +39,14 @@ class FriendCardContainerFragment : Fragment() {
         _binding = FragmentFriendCardContainerBinding.inflate(inflater, container, false)
 
         val tokenStorage = TokenStorage(requireContext())
+        val authService = NetworkModule.getClient().create(AuthService::class.java)
+        val tokenManager = TokenManager(authService, tokenStorage)
+        val recordService = AuthNetworkModule.getClient().create(RecordService::class.java)
+        val recordRepository = RecordRepository(recordService)
 
         friendCardViewModel = ViewModelProvider(
             requireActivity(),
-            CardInfoViewModelFactory(tokenStorage)
+            RecordViewModelFactory(recordRepository, tokenManager)
         )[FriendCardViewModel::class.java]
 
         if (savedInstanceState == null) {

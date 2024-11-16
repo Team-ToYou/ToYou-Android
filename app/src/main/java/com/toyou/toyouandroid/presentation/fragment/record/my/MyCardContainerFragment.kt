@@ -13,17 +13,19 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.toyou.toyouandroid.R
+import com.toyou.toyouandroid.data.onboarding.service.AuthService
 import com.toyou.toyouandroid.data.record.service.RecordService
 import com.toyou.toyouandroid.databinding.FragmentCardInstantBinding
 import com.toyou.toyouandroid.domain.record.RecordRepository
 import com.toyou.toyouandroid.network.AuthNetworkModule
+import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.presentation.fragment.record.CalendarDialog
 import com.toyou.toyouandroid.presentation.fragment.record.CalendarDialogViewModel
-import com.toyou.toyouandroid.presentation.fragment.record.CardInfoViewModelFactory
 import com.toyou.toyouandroid.presentation.fragment.record.RecordViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
+import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
 import timber.log.Timber
 
@@ -33,15 +35,13 @@ class MyCardContainerFragment : Fragment() {
     private val binding: FragmentCardInstantBinding
         get() = requireNotNull(_binding){"FragmentCardInstantBinding -> null"}
 
-    private lateinit var myCardViewModel: MyCardViewModel
     private lateinit var userViewModel: UserViewModel
 
     private val calendarDialogViewModel: CalendarDialogViewModel by activityViewModels()
     private var calendarDialog: CalendarDialog? = null
 
-    private val myRecordViewModel: MyRecordViewModel by activityViewModels {
-        RecordViewModelFactory(RecordRepository(AuthNetworkModule.getClient().create(RecordService::class.java)))
-    }
+    private lateinit var myRecordViewModel: MyRecordViewModel
+    private lateinit var myCardViewModel: MyCardViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,10 +52,19 @@ class MyCardContainerFragment : Fragment() {
         _binding = FragmentCardInstantBinding.inflate(inflater, container, false)
 
         val tokenStorage = TokenStorage(requireContext())
+        val authService = NetworkModule.getClient().create(AuthService::class.java)
+        val tokenManager = TokenManager(authService, tokenStorage)
+        val recordService = AuthNetworkModule.getClient().create(RecordService::class.java)
+        val recordRepository = RecordRepository(recordService)
+
+        myRecordViewModel = ViewModelProvider(
+            this,
+            RecordViewModelFactory(recordRepository, tokenManager)
+        )[MyRecordViewModel::class.java]
 
         myCardViewModel = ViewModelProvider(
             requireActivity(),
-            CardInfoViewModelFactory(tokenStorage)
+            RecordViewModelFactory(recordRepository, tokenManager)
         )[MyCardViewModel::class.java]
 
         userViewModel = ViewModelProvider(
