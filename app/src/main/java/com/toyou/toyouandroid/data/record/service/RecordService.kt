@@ -1,10 +1,12 @@
 package com.toyou.toyouandroid.data.record.service
 
+import com.toyou.toyouandroid.data.home.dto.response.CardDetail
 import com.toyou.toyouandroid.data.record.dto.DeleteDiaryCardResponse
 import com.toyou.toyouandroid.data.record.dto.DiaryCardNumResponse
 import com.toyou.toyouandroid.data.record.dto.DiaryCardPerDayResponse
 import com.toyou.toyouandroid.data.record.dto.DiaryCardResponse
 import com.toyou.toyouandroid.data.record.dto.PatchDiaryCardResponse
+import com.toyou.toyouandroid.network.BaseResponse
 import retrofit2.Call
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -41,4 +43,9 @@ interface RecordService {
     fun patchDiarycardExposure(
         @Path("cardId") cardId: Int
     ): Call<PatchDiaryCardResponse>
+
+    @GET("/diarycards/{cardId}")
+    suspend fun getCardDetail(
+        @Path("cardId") card : Long
+    ): BaseResponse<CardDetail>
 }

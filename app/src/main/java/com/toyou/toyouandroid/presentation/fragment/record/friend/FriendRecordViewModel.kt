@@ -9,13 +9,17 @@ import com.toyou.toyouandroid.data.record.dto.DiaryCardNumResponse
 import com.toyou.toyouandroid.data.record.dto.DiaryCardPerDay
 import com.toyou.toyouandroid.data.record.dto.DiaryCardPerDayResponse
 import com.toyou.toyouandroid.domain.record.RecordRepository
+import com.toyou.toyouandroid.utils.TokenManager
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
 
-class FriendRecordViewModel(private val repository: RecordRepository): ViewModel() {
+class FriendRecordViewModel(
+    private val repository: RecordRepository,
+    private val tokenManager: TokenManager
+): ViewModel() {
 
     private val _diaryCardsNum = MutableLiveData<List<DiaryCardNum>>()
     val diaryCardsNum: LiveData<List<DiaryCardNum>> get() = _diaryCardsNum
@@ -42,6 +46,10 @@ class FriendRecordViewModel(private val repository: RecordRepository): ViewModel
                         handleError(errorMessage)
                         Timber.tag("FriendRecordViewModel").d("API Error: $errorMessage")
 
+                        tokenManager.refreshToken(
+                            onSuccess = { loadDiaryCardsNum(year, month) },
+                            onFailure = { Timber.e("loadDiaryCards API call failed") }
+                        )
                     }
                 }
 
@@ -80,6 +88,10 @@ class FriendRecordViewModel(private val repository: RecordRepository): ViewModel
                         handleError(errorMessage)
                         Timber.tag("FriendRecordViewModel").d("API Error: $errorMessage")
 
+                        tokenManager.refreshToken(
+                            onSuccess = { loadDiaryCardPerDay(year, month, day) },
+                            onFailure = { Timber.e("loadDiaryCards API call failed") }
+                        )
                     }
                 }
 

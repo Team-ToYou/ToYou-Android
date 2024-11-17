@@ -23,6 +23,7 @@ import com.toyou.toyouandroid.presentation.fragment.onboarding.AuthViewModelFact
 import com.toyou.toyouandroid.presentation.fragment.home.HomeViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
+import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
 
 class HomeOptionFragment : Fragment() {
@@ -31,18 +32,13 @@ class HomeOptionFragment : Fragment() {
     private var _binding: FragmentHomeOptionBinding? = null
     private val binding: FragmentHomeOptionBinding
         get() = requireNotNull(_binding){"FragmentHomeOptionBinding -> null"}
-    private val homeViewModel: HomeViewModel by activityViewModels()
+
     private val noticeDialogViewModel: NoticeDialogViewModel by activityViewModels()
     private var noticeDialog: NoticeDialog? = null
-    private lateinit var userViewModel: UserViewModel
-    private lateinit var tokenStorage: TokenStorage
 
-    private val homeOptionViewModel: HomeOptionViewModel by activityViewModels {
-        AuthViewModelFactory(
-            NetworkModule.getClient().create(AuthService::class.java),
-            tokenStorage
-        )
-    }
+    private lateinit var userViewModel: UserViewModel
+    private lateinit var homeOptionViewModel: HomeOptionViewModel
+    private lateinit var homeViewModel: HomeViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,12 +46,29 @@ class HomeOptionFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeOptionBinding.inflate(layoutInflater, container, false)
-        tokenStorage = TokenStorage(requireContext())
 
-        binding.viewModel = homeOptionViewModel
-        binding.lifecycleOwner = viewLifecycleOwner
+        val tokenStorage = TokenStorage(requireContext())
+        val authService = NetworkModule.getClient().create(AuthService::class.java)
+        val tokenManager = TokenManager(authService, tokenStorage)
 
-        tokenStorage = TokenStorage(requireContext())
+        homeOptionViewModel = ViewModelProvider(
+            this,
+            AuthViewModelFactory(
+                authService,
+                tokenStorage,
+                tokenManager
+            )
+        )[HomeOptionViewModel::class.java]
+
+        homeViewModel = ViewModelProvider(
+            this,
+            AuthViewModelFactory(
+                authService,
+                tokenStorage,
+                tokenManager
+            )
+        )[HomeViewModel::class.java]
+
         userViewModel = ViewModelProvider(
             requireActivity(),
             UserViewModelFactory(tokenStorage)
@@ -142,10 +155,6 @@ class HomeOptionFragment : Fragment() {
     }
 
     private fun updateEmotion(emotionData: EmotionData) {
-//        val bundle = Bundle().apply {
-//            putInt("background_color", emotionData.backgroundDrawable)
-//            putString("text", emotionData.homeEmotionTitle)
-//        }
         // 랜덤 숫자 생성
         val randomNumber = (1..3).random()
 

@@ -16,13 +16,15 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentProfileBinding
-import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
+import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.fragment.onboarding.AuthViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
+import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
+import timber.log.Timber
 
 class ProfileFragment : Fragment() {
 
@@ -30,17 +32,17 @@ class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding: FragmentProfileBinding
         get() = requireNotNull(_binding){"FragmentProfileBinding -> null"}
-    private val viewModel: ProfileViewModel by activityViewModels()
-    private lateinit var tokenStorage: TokenStorage
 
-    private val mypageViewModel: MypageViewModel by activityViewModels {
-        AuthViewModelFactory(
-            AuthNetworkModule.getClient().create(AuthService::class.java),
-            tokenStorage
-        )
-    }
+    private lateinit var viewModel: ProfileViewModel
 
     private lateinit var userViewModel: UserViewModel
+
+    private val mypageViewModel: MypageViewModel by activityViewModels {
+        val tokenStorage = TokenStorage(requireContext())
+        val authService: AuthService = NetworkModule.getClient().create(AuthService::class.java)
+        val tokenManager = TokenManager(authService, tokenStorage)
+        AuthViewModelFactory(authService, tokenStorage, tokenManager)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,14 +51,27 @@ class ProfileFragment : Fragment() {
     ): View {
 
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = viewLifecycleOwner
 
         val tokenStorage = TokenStorage(requireContext())
+        val authService: AuthService = NetworkModule.getClient().create(AuthService::class.java)
+        val tokenManager = TokenManager(authService, tokenStorage)
+
+        viewModel = ViewModelProvider(
+            this,
+            AuthViewModelFactory(
+                authService,
+                tokenStorage,
+                tokenManager
+            )
+        )[ProfileViewModel::class.java]
+
         userViewModel = ViewModelProvider(
             requireActivity(),
             UserViewModelFactory(tokenStorage)
         )[UserViewModel::class.java]
+
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
         viewModel.resetNicknameEditState()
 
@@ -66,22 +81,58 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // tokenStorage 초기화
-        tokenStorage = TokenStorage(requireContext())
-
         (requireActivity() as MainActivity).hideBottomNavigation(true)
 
         // navController 초기화
         navController = findNavController()
 
+        // 닉네임 변경시 기존 닉네임 불러오기
         mypageViewModel.nickname.observe(viewLifecycleOwner) { nickname ->
             binding.signupNicknameInput.setText(nickname)
         }
 
+        // 상태에 따른 배경 변경
+        mypageViewModel.status.observe(viewLifecycleOwner) { status ->
+            Timber.d("Status changed: $status")  // 상태 변경 시 로그 출력
+
+            when (status) {
+                "SCHOOL" -> {
+                    Timber.d("Setting background for SCHOOL status")  // SCHOOL 상태에 맞는 배경 설정 전 로그
+                    binding.signupStatusOption1.setBackgroundResource(R.drawable.signupnickname_doublecheck_activate)
+                    binding.signupStatusOption2.setBackgroundResource(R.drawable.signupnickname_input)
+                    binding.signupStatusOption3.setBackgroundResource(R.drawable.signupnickname_input)
+                    binding.signupStatusOption4.setBackgroundResource(R.drawable.signupnickname_input)
+                }
+                "COLLEGE" -> {
+                    Timber.d("Setting background for COLLEGE status")  // COLLEGE 상태에 맞는 배경 설정 전 로그
+                    binding.signupStatusOption1.setBackgroundResource(R.drawable.signupnickname_input)
+                    binding.signupStatusOption2.setBackgroundResource(R.drawable.signupnickname_doublecheck_activate)
+                    binding.signupStatusOption3.setBackgroundResource(R.drawable.signupnickname_input)
+                    binding.signupStatusOption4.setBackgroundResource(R.drawable.signupnickname_input)
+                }
+                "OFFICE" -> {
+                    Timber.d("Setting background for OFFICE status")  // OFFICE 상태에 맞는 배경 설정 전 로그
+                    binding.signupStatusOption1.setBackgroundResource(R.drawable.signupnickname_input)
+                    binding.signupStatusOption2.setBackgroundResource(R.drawable.signupnickname_input)
+                    binding.signupStatusOption3.setBackgroundResource(R.drawable.signupnickname_doublecheck_activate)
+                    binding.signupStatusOption4.setBackgroundResource(R.drawable.signupnickname_input)
+                }
+                "ETC" -> {
+                    Timber.d("Setting background for ETC status")  // ETC 상태에 맞는 배경 설정 전 로그
+                    binding.signupStatusOption1.setBackgroundResource(R.drawable.signupnickname_input)
+                    binding.signupStatusOption2.setBackgroundResource(R.drawable.signupnickname_input)
+                    binding.signupStatusOption3.setBackgroundResource(R.drawable.signupnickname_input)
+                    binding.signupStatusOption4.setBackgroundResource(R.drawable.signupnickname_doublecheck_activate)
+                }
+            }
+        }
+
+        // 이전 버튼
         binding.signupNicknameBackLayout.setOnClickListener {
             navController.navigate(R.id.action_navigation_profile_to_mypage_fragment)
         }
 
+        // 닉네임 입력
         binding.signupNicknameInput.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
@@ -98,6 +149,7 @@ class ProfileFragment : Fragment() {
             }
         })
 
+        // 프로필 최종 변경 버튼
         binding.signupNicknameBtn.setOnClickListener{
             viewModel.changeNickname()
             viewModel.changeStatus()
@@ -105,40 +157,12 @@ class ProfileFragment : Fragment() {
             Toast.makeText(requireContext(), "프로필 수정이 완료되었습니다", Toast.LENGTH_SHORT).show()
         }
 
+        // 닉네임 중복 확인
         binding.signupAgreeNicknameDoublecheckBtn.setOnClickListener {
             userViewModel.nickname.observe(viewLifecycleOwner) { nickname ->
                 viewModel.checkDuplicate(nickname)
             }
             hideKeyboard()
-        }
-
-        mypageViewModel.status.observe(viewLifecycleOwner) { status ->
-            when (status) {
-                "SCHOOL" -> {
-                    binding.signupStatusOption1.setBackgroundResource(R.drawable.signupnickname_doublecheck_activate)
-                    binding.signupStatusOption2.setBackgroundResource(R.drawable.signupnickname_input)
-                    binding.signupStatusOption3.setBackgroundResource(R.drawable.signupnickname_input)
-                    binding.signupStatusOption4.setBackgroundResource(R.drawable.signupnickname_input)
-                }
-                "COLLEGE" -> {
-                    binding.signupStatusOption1.setBackgroundResource(R.drawable.signupnickname_input)
-                    binding.signupStatusOption2.setBackgroundResource(R.drawable.signupnickname_doublecheck_activate)
-                    binding.signupStatusOption3.setBackgroundResource(R.drawable.signupnickname_input)
-                    binding.signupStatusOption4.setBackgroundResource(R.drawable.signupnickname_input)
-                }
-                "OFFICE" -> {
-                    binding.signupStatusOption1.setBackgroundResource(R.drawable.signupnickname_input)
-                    binding.signupStatusOption2.setBackgroundResource(R.drawable.signupnickname_input)
-                    binding.signupStatusOption3.setBackgroundResource(R.drawable.signupnickname_doublecheck_activate)
-                    binding.signupStatusOption4.setBackgroundResource(R.drawable.signupnickname_input)
-                }
-                "ETC" -> {
-                    binding.signupStatusOption1.setBackgroundResource(R.drawable.signupnickname_input)
-                    binding.signupStatusOption2.setBackgroundResource(R.drawable.signupnickname_input)
-                    binding.signupStatusOption3.setBackgroundResource(R.drawable.signupnickname_input)
-                    binding.signupStatusOption4.setBackgroundResource(R.drawable.signupnickname_doublecheck_activate)
-                }
-            }
         }
 
         val buttonList = listOf(
@@ -155,8 +179,10 @@ class ProfileFragment : Fragment() {
             }
         }
 
-        viewModel.selectedStatusButtonId.observe(viewLifecycleOwner) {
-            updateButtonBackgrounds()
+        viewModel.selectedStatusButtonId.observe(viewLifecycleOwner) { id ->
+            id?.let {
+                updateButtonBackgrounds()
+            }
         }
 
         // 완료 버튼 활성화
@@ -171,7 +197,6 @@ class ProfileFragment : Fragment() {
             }
             false
         }
-
         binding.root.setOnClickListener {
             hideKeyboard()
         }
@@ -196,6 +221,7 @@ class ProfileFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        viewModel.setSelectedStatusButtonId(null)
         _binding = null
     }
 }

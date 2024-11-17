@@ -1,4 +1,4 @@
-package com.toyou.toyouandroid.presentation.fragment.record
+package com.toyou.toyouandroid.presentation.fragment.record.my
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -6,26 +6,41 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.toyou.toyouandroid.domain.record.RecordRepository
 import com.toyou.toyouandroid.model.CardModel
+import com.toyou.toyouandroid.model.CardShortModel
+import com.toyou.toyouandroid.model.ChooseModel
 import com.toyou.toyouandroid.model.PreviewCardModel
+import com.toyou.toyouandroid.model.PreviewChooseModel
 import com.toyou.toyouandroid.utils.TokenManager
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class CardInfoViewModel(
+class MyCardViewModel(
     private val recordRepository: RecordRepository,
     private val tokenManager: TokenManager
-) : ViewModel(){
+) : ViewModel() {
     private val _cards = MutableLiveData<List<CardModel>>()
     val cards: LiveData<List<CardModel>> get() = _cards
+    private val _shortCards = MutableLiveData<List<CardShortModel>>()
+    val shortCards: LiveData<List<CardShortModel>> get() = _shortCards
     private val _previewCards = MutableLiveData<List<PreviewCardModel>>()
     val previewCards : LiveData<List<PreviewCardModel>> get() = _previewCards
 
+    private val _chooseCards = MutableLiveData<List<ChooseModel>>()
+    val chooseCards : LiveData<List<ChooseModel>> get() = _chooseCards
+    private val _previewChoose = MutableLiveData<List<PreviewChooseModel>>()
+    val previewChoose : LiveData<List<PreviewChooseModel>> get() = _previewChoose
+
+    val _exposure = MutableLiveData<Boolean>()
     val exposure : LiveData<Boolean> get() = _exposure
-    private val _exposure = MutableLiveData<Boolean>()
 
     val answer = MutableLiveData<String>()
     private val _cardId = MutableLiveData<Int>().apply { value = 0 }
     val cardId: LiveData<Int> get() = _cardId
+
+    // cardId 설정을 위한 함수 추가
+    fun setCardId(cardId: Int) {
+        _cardId.value = cardId
+    }
 
     private val _date = MutableLiveData<String>()
     val date: LiveData<String> get() = _date
@@ -106,5 +121,22 @@ class CardInfoViewModel(
 
     fun getAnswerLength(answer: String): Int {
         return answer.length
+    }
+
+    fun isLockSelected() {
+        _exposure.value = _exposure.value?.not()
+        Timber.tag("isLockSelected").d(_exposure.value.toString())
+    }
+
+    fun clearAllData() {
+        _previewCards.value = emptyList()
+        _previewChoose.value = emptyList()
+        _exposure.value = false
+    }
+
+    fun clearAll(){
+        _cards.value = emptyList()
+        _chooseCards.value = emptyList()
+        _shortCards.value = emptyList()
     }
 }

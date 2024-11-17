@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable
-            name="viewModel"
-            type="com.toyou.toyouandroid.presentation.fragment.emotionstamp.HomeOptionViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -73,7 +70,7 @@
             android:layout_height="wrap_content"
             android:text="@string/home_stamp_subtitle"
             android:textColor="@color/black"
-            style="@style/sc_l8"
+            style="@style/sc_l10"
             android:layout_marginTop="25dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

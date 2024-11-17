@@ -5,12 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.toyou.toyouandroid.R
+import com.toyou.toyouandroid.data.onboarding.service.AuthService
 import com.toyou.toyouandroid.databinding.FragmentCalendarFriendrecordBinding
 import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.presentation.fragment.record.CalendarAdapter
@@ -19,7 +20,10 @@ import com.toyou.toyouandroid.data.record.dto.DiaryCardNum
 import com.toyou.toyouandroid.domain.record.RecordRepository
 import com.toyou.toyouandroid.data.record.service.RecordService
 import com.toyou.toyouandroid.model.calendar.FriendDate
+import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.fragment.record.RecordViewModelFactory
+import com.toyou.toyouandroid.utils.TokenManager
+import com.toyou.toyouandroid.utils.TokenStorage
 import com.toyou.toyouandroid.utils.calendar.FriendDates
 import timber.log.Timber
 import java.text.SimpleDateFormat
@@ -34,9 +38,7 @@ class CalendarFriendRecordFragment : Fragment(), OnFriendDateClickListener {
     private val binding: FragmentCalendarFriendrecordBinding
         get() = requireNotNull(_binding){"FragmentCalendarFriendrecordBinding -> null"}
 
-    private val friendRecordViewModel: FriendRecordViewModel by viewModels {
-        RecordViewModelFactory(RecordRepository(AuthNetworkModule.getClient().create(RecordService::class.java)))
-    }
+    private lateinit var friendRecordViewModel: FriendRecordViewModel
 
     private var calendar = Calendar.getInstance()
     private val startCalendar: Calendar = Calendar.getInstance().apply {
@@ -54,8 +56,18 @@ class CalendarFriendRecordFragment : Fragment(), OnFriendDateClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentCalendarFriendrecordBinding.inflate(inflater, container, false)
+
+        val tokenStorage = TokenStorage(requireContext())
+        val authService = NetworkModule.getClient().create(AuthService::class.java)
+        val tokenManager = TokenManager(authService, tokenStorage)
+        val recordService = AuthNetworkModule.getClient().create(RecordService::class.java)
+        val recordRepository = RecordRepository(recordService)
+
+        friendRecordViewModel = ViewModelProvider(
+            this,
+            RecordViewModelFactory(recordRepository, tokenManager)
+        )[FriendRecordViewModel::class.java]
 
         listener = object : OnFriendDateClickListener {
             override fun onDateClick(date: Date) {
@@ -78,7 +90,7 @@ class CalendarFriendRecordFragment : Fragment(), OnFriendDateClickListener {
                     val bundle = Bundle().apply {
                         putInt("cardId", it)
                     }
-                    navController.navigate(R.id.action_navigation_record_to_card_instant_fragment, bundle)
+                    navController.navigate(R.id.action_navigation_record_to_friend_card_container_fragment, bundle)
                 }
             }
         }
@@ -241,7 +253,7 @@ class CalendarFriendRecordFragment : Fragment(), OnFriendDateClickListener {
             val bundle = Bundle().apply {
                 putInt("cardId", it)
             }
-            navController.navigate(R.id.action_navigation_record_to_card_instant_fragment, bundle)
+            navController.navigate(R.id.action_navigation_record_to_friend_card_container_fragment, bundle)
         }
     }
 

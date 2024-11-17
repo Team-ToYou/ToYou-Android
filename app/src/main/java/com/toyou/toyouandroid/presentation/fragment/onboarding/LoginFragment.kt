@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.kakao.sdk.auth.model.OAuthToken
@@ -21,9 +21,9 @@ import com.toyou.toyouandroid.databinding.FragmentLoginBinding
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
+import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
 import com.toyou.toyouandroid.utils.TutorialStorage
-import timber.log.Timber
 
 class LoginFragment : Fragment() {
 
@@ -32,14 +32,8 @@ class LoginFragment : Fragment() {
     private val binding: FragmentLoginBinding
         get() = requireNotNull(_binding){"FragmentLoginBinding -> null"}
 
-    private lateinit var tokenStorage: TokenStorage
     private lateinit var tutorialStorage: TutorialStorage
-    private val loginViewModel: LoginViewModel by activityViewModels {
-        AuthViewModelFactory(
-            NetworkModule.getClient().create(AuthService::class.java),
-            tokenStorage
-        )
-    }
+    private lateinit var loginViewModel: LoginViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,7 +43,19 @@ class LoginFragment : Fragment() {
 
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
 
-        tokenStorage = TokenStorage(requireContext())
+        val tokenStorage = TokenStorage(requireContext())
+        val authService = NetworkModule.getClient().create(AuthService::class.java)
+        val tokenManager = TokenManager(authService, tokenStorage)
+
+        loginViewModel = ViewModelProvider(
+            this,
+            AuthViewModelFactory(
+                authService,
+                tokenStorage,
+                tokenManager
+            )
+        )[LoginViewModel::class.java]
+
         tutorialStorage = TutorialStorage(requireContext())
 
         return binding.root
@@ -116,21 +122,17 @@ class LoginFragment : Fragment() {
         loginViewModel.loginSuccess.observe(viewLifecycleOwner) { isSuccess ->
             if (isSuccess) {
                 loginViewModel.setLoginSuccess(false)
-                checkIfTokenExists()  // 토큰이 저장되었는지 확인 후 이동
+                loginViewModel.checkIfTokenExists()  // 토큰이 저장되었는지 확인 후 이동
             }
         }
-    }
 
-    private fun checkIfTokenExists() {
-        tokenStorage.let { storage ->
-            val accessToken = storage.getAccessToken()
-            if (accessToken == "") {
-                // 액세스 토큰이 없으면 회원가입 동의 화면으로 이동
-                navController.navigate(R.id.action_navigation_login_to_signup_agree_fragment)
-                Timber.d("User Info Not Existed")
-            }else {
-                Timber.d("User Info Existed: $accessToken")
+        loginViewModel.checkIfTokenExists.observe(viewLifecycleOwner) { isChecked ->
+            if (isChecked) {
+                // 서비스 이용자일 경우 튜토리얼 테스트
                 checkTutorial()
+            } else {
+                // 토큰이 존재하지 않을 경우 신규 가입
+                navController.navigate(R.id.action_navigation_login_to_signup_agree_fragment)
             }
         }
     }

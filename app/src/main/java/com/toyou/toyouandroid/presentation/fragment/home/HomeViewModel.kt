@@ -9,13 +9,14 @@ import com.toyou.toyouandroid.data.emotion.dto.DiaryCard
 import com.toyou.toyouandroid.data.emotion.service.EmotionService
 import com.toyou.toyouandroid.data.emotion.dto.YesterdayFriendsResponse
 import com.toyou.toyouandroid.data.home.dto.response.CardDetail
+import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.calendar.getCurrentDate
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(private val tokenManager: TokenManager) : ViewModel() {
 
     private val _homeEmotion = MutableLiveData<Int>()
     val homeEmotion: LiveData<Int> get() = _homeEmotion
@@ -86,9 +87,17 @@ class HomeViewModel : ViewModel() {
                             _isEmpty.value = false
                         }
                     } else {
+                        tokenManager.refreshToken(
+                            onSuccess = { loadYesterdayDiaryCards() },
+                            onFailure = { Timber.e("loadYesterdayDiaryCards API call failed") }
+                        )
                         Timber.e("API 호출 실패 - 응답이 성공하지 않음. 메시지: ${diaryResponse?.message}")
                     }
                 } else {
+                    tokenManager.refreshToken(
+                        onSuccess = { loadYesterdayDiaryCards() },
+                        onFailure = { Timber.e("loadYesterdayDiaryCards API call failed") }
+                    )
                     Timber.e("API 호출 실패 - 코드: ${response.code()}, 메시지: ${response.message()}")
                 }
 

@@ -11,7 +11,6 @@ import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.data.onboarding.dto.request.SignUpRequest
 import com.toyou.toyouandroid.data.onboarding.dto.response.SignUpResponse
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
-import com.toyou.toyouandroid.network.TestNetworkModule
 import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
 import kotlinx.coroutines.CoroutineScope
@@ -22,15 +21,36 @@ import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
 
-class LoginViewModel(private val authService: AuthService, private val tokenStorage: TokenStorage) : ViewModel() {
+class LoginViewModel(
+    private val authService: AuthService,
+    private val tokenStorage: TokenStorage
+) : ViewModel() {
 
     private val _loginSuccess = MutableLiveData<Boolean>()
     val loginSuccess: LiveData<Boolean> get() = _loginSuccess
+
     private val fcmRepository by lazy { FCMRepository(tokenStorage) }
 
     fun setLoginSuccess(value: Boolean) {
         _loginSuccess.value = value
         Timber.d("Login Success value: $value")
+    }
+
+    private val _checkIfTokenExists = MutableLiveData<Boolean>()
+    val checkIfTokenExists: LiveData<Boolean> get() = _checkIfTokenExists
+
+    fun checkIfTokenExists() {
+        tokenStorage.let { storage ->
+            val accessToken = storage.getAccessToken()
+            if (accessToken == "") {
+                // 액세스 토큰이 없으면 회원가입 동의 화면으로 이동
+                Timber.d("User Info Not Existed")
+                _checkIfTokenExists.value = false
+            }else {
+                Timber.d("User Info Existed: $accessToken")
+                _checkIfTokenExists.value = true
+            }
+        }
     }
 
     fun kakaoLogin(accessToken: String) {
@@ -51,8 +71,6 @@ class LoginViewModel(private val authService: AuthService, private val tokenStor
 
                                 // 인증 네트워크 모듈에 access token 저장
                                 AuthNetworkModule.setAccessToken(newAccessToken)
-
-                                TestNetworkModule.setAccessToken(newAccessToken)
 
                                 _loginSuccess.postValue(true)
 
@@ -136,6 +154,7 @@ class LoginViewModel(private val authService: AuthService, private val tokenStor
 
                                 // 암호화된 토큰 저장소에 저장
                                 tokenStorage.saveTokens(newAccessToken, newRefreshToken)
+                                Timber.i("Tokens saved successfully")
 
                                 // 인증 네트워크 모듈에 access token 저장
                                 AuthNetworkModule.setAccessToken(newAccessToken)
@@ -143,7 +162,6 @@ class LoginViewModel(private val authService: AuthService, private val tokenStor
                                 tokenStorage.saveTokens(newAccessToken, newRefreshToken)
                                 _navigationEvent.value = true  // 성공하면 홈 화면으로 이동
 
-                                Timber.i("Tokens saved successfully")
                             } ?: Timber.e("Refresh token missing in response headers")
                         } ?: Timber.e("Access token missing in response headers")
                     } else {

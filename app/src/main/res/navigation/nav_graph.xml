@@ -26,8 +26,8 @@
             android:id="@+id/action_navigation_home_to_modifyFragment"
             app:destination="@id/modifyFragment" />
         <action
-            android:id="@+id/action_navigation_home_to_card_instant_fragment"
-            app:destination="@id/navigation_card_instant" />
+            android:id="@+id/action_navigation_home_to_friend_card_container_fragment"
+            app:destination="@id/navigation_friend_card_container" />
     </fragment>
     <fragment
         android:id="@+id/navigation_splash"
@@ -179,12 +179,22 @@
             app:destination="@id/questionTypeFragment" />
     </fragment>
     <fragment
-        android:id="@+id/navigation_card_instant"
-        android:name="com.toyou.toyouandroid.presentation.fragment.record.CardInstantFragment"
-        android:label="fragment_card_instant"
-        tools:layout="@layout/fragment_card_instant">
+        android:id="@+id/navigation_my_card_container"
+        android:name="com.toyou.toyouandroid.presentation.fragment.record.my.MyCardContainerFragment"
+        android:label="fragment_my_card_container"
+        tools:layout="@layout/fragment_my_card_container">
         <action
-            android:id="@+id/action_navigation_card_instant_to_record_fragment"
+            android:id="@+id/action_navigation_my_card_container_to_record_fragment"
+            app:destination="@id/navigation_record"
+            app:popUpTo="@id/navigation_record" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_friend_card_container"
+        android:name="com.toyou.toyouandroid.presentation.fragment.record.friend.FriendCardContainerFragment"
+        android:label="fragment_friend_card_container"
+        tools:layout="@layout/fragment_friend_card_container">
+        <action
+            android:id="@+id/action_navigation_friend_card_container_to_record_fragment"
             app:destination="@id/navigation_record"
             app:popUpTo="@id/navigation_record" />
     </fragment>
@@ -194,9 +204,13 @@
         android:label="fragment_record"
         tools:layout="@layout/fragment_record">
         <action
-            android:id="@+id/action_navigation_record_to_card_instant_fragment"
-            app:destination="@id/navigation_card_instant"
-            app:popUpTo="@id/navigation_card_instant" />
+            android:id="@+id/action_navigation_record_to_my_card_container_fragment"
+            app:destination="@id/navigation_my_card_container"
+            app:popUpTo="@id/navigation_my_card_container" />
+        <action
+            android:id="@+id/action_navigation_record_to_friend_card_container_fragment"
+            app:destination="@id/navigation_friend_card_container"
+            app:popUpTo="@id/navigation_friend_card_container" />
     </fragment>
     <fragment
         android:id="@+id/navigation_mypage"
@@ -249,6 +263,10 @@
         <action
             android:id="@+id/action_create_fragment_to_createWriteFragment"
             app:destination="@id/createWriteFragment" />
+        <action
+            android:id="@+id/action_create_fragment_to_navigation_home"
+            app:destination="@id/navigation_home"
+            app:popUpTo="@id/navigation_home" />
     </fragment>
     <fragment
         android:id="@+id/previewFragment"

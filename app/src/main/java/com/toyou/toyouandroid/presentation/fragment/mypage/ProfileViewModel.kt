@@ -10,12 +10,13 @@ import com.toyou.toyouandroid.data.onboarding.service.OnboardingService
 import com.toyou.toyouandroid.data.onboarding.dto.PatchNicknameRequest
 import com.toyou.toyouandroid.data.onboarding.dto.PatchNicknameResponse
 import com.toyou.toyouandroid.data.onboarding.dto.PatchStatusRequest
+import com.toyou.toyouandroid.utils.TokenManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
 
-class ProfileViewModel : ViewModel() {
+class ProfileViewModel(private val tokenManager: TokenManager) : ViewModel() {
     private val _title = MutableLiveData<String>()
     val title: LiveData<String> get() = _title
 
@@ -159,6 +160,11 @@ class ProfileViewModel : ViewModel() {
                     _nicknameValidate.value = false
                     nextButtonDisable()
                     nextButtonEnableCheck()
+
+                    tokenManager.refreshToken(
+                        onSuccess = { checkDuplicate(userNickname) }, // 토큰 갱신 후 다시 요청
+                        onFailure = { Timber.e("Failed to refresh token and get notices") }
+                    )
                 }
             }
 
@@ -194,6 +200,11 @@ class ProfileViewModel : ViewModel() {
                     _duplicateCheckMessage.value = "닉네임 변경에 실패했습니다."
                     _duplicateCheckMessageColor.value = 0xFFFF0000.toInt()
                     Timber.tag("changeNickname").d("$response")
+
+                    tokenManager.refreshToken(
+                        onSuccess = { changeNickname() }, // 토큰 갱신 후 다시 요청
+                        onFailure = { Timber.e("Failed to refresh token and get notices") }
+                    )
                 }
             }
 
@@ -216,6 +227,11 @@ class ProfileViewModel : ViewModel() {
             ) {
                 if (response.isSuccessful) {
                     Timber.tag("changeStatus").d("${response.body()}")
+                } else {
+                    tokenManager.refreshToken(
+                        onSuccess = { changeStatus() }, // 토큰 갱신 후 다시 요청
+                        onFailure = { Timber.e("Failed to refresh token and get notices") }
+                    )
                 }
             }
 
@@ -228,6 +244,10 @@ class ProfileViewModel : ViewModel() {
 
     private val _selectedStatusButtonId = MutableLiveData<Int?>(null)
     val selectedStatusButtonId: LiveData<Int?> get() = _selectedStatusButtonId
+
+    fun setSelectedStatusButtonId(id: Int?) {
+        _selectedStatusButtonId.value = id
+    }
 
     private val _status = MutableLiveData<String>()
     val status: LiveData<String> get() = _status
