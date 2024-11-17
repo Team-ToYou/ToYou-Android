@@ -19,11 +19,13 @@ import com.toyou.toyouandroid.databinding.FragmentMypageBinding
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.presentation.fragment.onboarding.SignupNicknameViewModel
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
+import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.network.NetworkModule
-import com.toyou.toyouandroid.presentation.fragment.onboarding.AuthViewModelFactory
+import com.toyou.toyouandroid.presentation.viewmodel.AuthViewModelFactory
 import com.toyou.toyouandroid.presentation.fragment.home.HomeViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModelFactory
 import com.toyou.toyouandroid.utils.TokenManager
-import com.toyou.toyouandroid.utils.ViewModelManager
+import com.toyou.toyouandroid.presentation.viewmodel.ViewModelManager
 import com.toyou.toyouandroid.utils.TokenStorage
 import com.toyou.toyouandroid.utils.TutorialStorage
 import timber.log.Timber
@@ -48,7 +50,9 @@ class MypageFragment : Fragment() {
         val tokenStorage = TokenStorage(requireContext())
         val authService: AuthService = NetworkModule.getClient().create(AuthService::class.java)
         val tokenManager = TokenManager(authService, tokenStorage)
-        AuthViewModelFactory(authService, tokenStorage, tokenManager)
+
+        val authService2: AuthService = AuthNetworkModule.getClient().create(AuthService::class.java)
+        AuthViewModelFactory(authService2, tokenStorage, tokenManager)
     }
 
     override fun onCreateView(
@@ -64,9 +68,7 @@ class MypageFragment : Fragment() {
 
         homeViewModel = ViewModelProvider(
             this,
-            AuthViewModelFactory(
-                authService,
-                tokenStorage,
+            HomeViewModelFactory(
                 tokenManager
             )
         )[HomeViewModel::class.java]
@@ -146,6 +148,8 @@ class MypageFragment : Fragment() {
             if (isSuccess) {
                 mypageViewModel.setLogoutSuccess(false)
                 viewModelManager.resetAllViewModels()
+
+                Timber.d("로그아웃 후 로그인 화면으로 이동")
 
                 navController.navigate(R.id.action_navigation_mypage_to_login_fragment)
             }

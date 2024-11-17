@@ -10,13 +10,19 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.toyou.toyouandroid.R
+import com.toyou.toyouandroid.data.onboarding.service.AuthService
 import com.toyou.toyouandroid.databinding.FragmentSignupnicknameBinding
+import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.presentation.fragment.home.HomeViewModel
-import com.toyou.toyouandroid.utils.ViewModelManager
+import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModelFactory
+import com.toyou.toyouandroid.presentation.viewmodel.ViewModelManager
+import com.toyou.toyouandroid.utils.TokenManager
+import com.toyou.toyouandroid.utils.TokenStorage
 
 class SignupNicknameFragment : Fragment() {
 
@@ -24,9 +30,11 @@ class SignupNicknameFragment : Fragment() {
     private var _binding: FragmentSignupnicknameBinding? = null
     private val binding: FragmentSignupnicknameBinding
         get() = requireNotNull(_binding){"FragmentSignupnicknameBinding -> null"}
+
     private val viewModel: SignupNicknameViewModel by activityViewModels()
     private val nicknameViewModel: SignupNicknameViewModel by activityViewModels()
-    private val homeViewModel: HomeViewModel by activityViewModels()
+
+    private lateinit var homeViewModel: HomeViewModel
     private lateinit var viewModelManager: ViewModelManager
 
     override fun onCreateView(
@@ -34,8 +42,17 @@ class SignupNicknameFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentSignupnicknameBinding.inflate(inflater, container, false)
+
+        val tokenStorage = TokenStorage(requireContext())
+        val authService: AuthService = NetworkModule.getClient().create(AuthService::class.java)
+        val tokenManager = TokenManager(authService, tokenStorage)
+
+        homeViewModel = ViewModelProvider(
+            this,
+            HomeViewModelFactory(tokenManager)
+        )[HomeViewModel::class.java]
+
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
 
@@ -72,7 +89,6 @@ class SignupNicknameFragment : Fragment() {
         })
 
         binding.signupNicknameBtn.setOnClickListener{
-//            nicknameViewModel.changeNickname(1)
             navController.navigate(R.id.action_navigation_signup_nickname_to_signup_status_fragment)
         }
 

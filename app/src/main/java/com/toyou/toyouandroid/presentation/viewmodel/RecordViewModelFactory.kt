@@ -1,8 +1,9 @@
-package com.toyou.toyouandroid.presentation.fragment.record
+package com.toyou.toyouandroid.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.toyou.toyouandroid.domain.record.RecordRepository
+import com.toyou.toyouandroid.presentation.fragment.record.CardInfoViewModel
 import com.toyou.toyouandroid.presentation.fragment.record.friend.FriendCardViewModel
 import com.toyou.toyouandroid.presentation.fragment.record.friend.FriendRecordViewModel
 import com.toyou.toyouandroid.presentation.fragment.record.my.MyCardViewModel

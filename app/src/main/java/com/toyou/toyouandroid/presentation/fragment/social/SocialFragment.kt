@@ -122,7 +122,7 @@ class SocialFragment : Fragment() {
                     addFriendLinearLayout.removeViewAt(addFriendLinearLayout.childCount - 1)
                 }
                 socialViewModel.resetFriendRequest()
-                Toast.makeText(requireContext(), "친구 요청을 보냈습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "친구 요청을 보냈습니다", Toast.LENGTH_SHORT).show()
 
             }
         })
@@ -134,7 +134,7 @@ class SocialFragment : Fragment() {
                     addFriendLinearLayout.removeViewAt(addFriendLinearLayout.childCount - 1)
                 }
                 socialViewModel.resetFriendRequestCanceled()
-                Toast.makeText(requireContext(), "친구 요청을 수락했습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "친구 요청을 수락했습니다", Toast.LENGTH_SHORT).show()
 
             }
         })

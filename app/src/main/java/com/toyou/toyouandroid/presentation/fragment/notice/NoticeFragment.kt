@@ -21,6 +21,7 @@ import com.toyou.toyouandroid.data.onboarding.service.AuthService
 import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModelFactory
+import com.toyou.toyouandroid.presentation.viewmodel.NoticeViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
@@ -39,16 +40,15 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
     private val binding: FragmentNoticeBinding
         get() = requireNotNull(_binding){"FragmentNoticeBinding -> null"}
 
-    private lateinit var viewModel: NoticeViewModel
     private val noticeDialogViewModel: NoticeDialogViewModel by activityViewModels()
     private lateinit var listener: NoticeAdapterListener
     private var noticeAdapter: NoticeAdapter? = null
+    private var noticeDialog: NoticeDialog? = null
 
+    private lateinit var viewModel: NoticeViewModel
     private lateinit var userViewModel: UserViewModel
     private lateinit var socialViewModel : SocialViewModel
     private lateinit var cardViewModel: CardViewModel
-
-    private var noticeDialog: NoticeDialog? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,14 +67,17 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
             this,
             NoticeViewModelFactory(noticeRepository, tokenManager)
         )[NoticeViewModel::class.java]
+
         cardViewModel = ViewModelProvider(
             requireActivity(),
             CardViewModelFactory(tokenStorage)
         )[CardViewModel::class.java]
+
         userViewModel = ViewModelProvider(
             requireActivity(),
             UserViewModelFactory(tokenStorage)
         )[UserViewModel::class.java]
+
         socialViewModel = ViewModelProvider(
             requireActivity(),
             SocialViewModelFactory(tokenStorage)
