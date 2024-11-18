@@ -11,7 +11,6 @@ import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.data.onboarding.dto.request.SignUpRequest
 import com.toyou.toyouandroid.data.onboarding.dto.response.SignUpResponse
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
-import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -39,7 +38,7 @@ class LoginViewModel(
     private val _checkIfTokenExists = MutableLiveData<Boolean>()
     val checkIfTokenExists: LiveData<Boolean> get() = _checkIfTokenExists
 
-    private val _isInitialization = MutableLiveData(false)
+    private val _isInitialization = MutableLiveData<Boolean>()
     val isInitialization: LiveData<Boolean> get() = _isInitialization
 
     fun setIfTokenExists(value: Boolean) {

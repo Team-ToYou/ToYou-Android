@@ -130,11 +130,12 @@ class LoginFragment : Fragment() {
                     // 서비스 이용자일 경우 튜토리얼 검증
                     Timber.d("서비스 이용자이므로 튜토리얼 검증")
                     checkTutorial()
-                    loginViewModel.setInitialization(true)  // 초기화 완료
+                    loginViewModel.setInitialization(true)  // 초기화
                     loginViewModel.setIfTokenExists(false)  // 토큰 상태 초기화
                 } else {
                     // 토큰이 존재하지 않을 경우 신규 가입
                     Timber.d("토큰이 존재하지 않으므로 신규 가입")
+                    loginViewModel.setInitialization(true)  // 초기화
                     navController.navigate(R.id.action_navigation_login_to_signup_agree_fragment)
                 }
             }
