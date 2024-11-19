@@ -207,7 +207,6 @@ class MypageFragment : Fragment() {
             }
             else {
                 Timber.tag(TAG).i("연결 끊기 성공. SDK에서 토큰 삭제 됨")
-                //mypageViewModel.fcmTokenDelete(nicknameViewModel.nickname.toString())
             }
         }
 

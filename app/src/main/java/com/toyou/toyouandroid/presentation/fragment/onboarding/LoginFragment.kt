@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.kakao.sdk.auth.model.OAuthToken
@@ -27,7 +26,6 @@ import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
 import com.toyou.toyouandroid.utils.TutorialStorage
 import timber.log.Timber
-import java.util.concurrent.atomic.AtomicBoolean
 
 class LoginFragment : Fragment() {
 
