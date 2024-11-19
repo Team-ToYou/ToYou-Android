@@ -121,7 +121,11 @@ class MypageFragment : Fragment() {
             startActivity(i)
         }
 
-        binding.mypageTermsOfUse.setOnClickListener {}
+        binding.mypageTermsOfUse.setOnClickListener {
+            val i = Intent(Intent.ACTION_VIEW)
+            i.data = Uri.parse("https://sumptuous-metacarpal-d3a.notion.site/1437c09ca64e80fb88f6d8ab881ffee3")
+            startActivity(i)
+        }
 
         // 사용자 닉네임 설정
         nicknameViewModel.nickname.observe(viewLifecycleOwner) { nickname ->

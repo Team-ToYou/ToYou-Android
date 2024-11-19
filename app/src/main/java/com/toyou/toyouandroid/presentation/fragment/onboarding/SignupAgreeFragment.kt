@@ -1,5 +1,7 @@
 package com.toyou.toyouandroid.presentation.fragment.onboarding
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -43,6 +45,18 @@ class SignupAgreeFragment : Fragment() {
 
         binding.signupAgreeBackLayout.setOnClickListener {
             navController.popBackStack()
+        }
+
+        binding.signupAgreeDetails3.setOnClickListener{
+            val i = Intent(Intent.ACTION_VIEW)
+            i.data = Uri.parse("https://sumptuous-metacarpal-d3a.notion.site/1437c09ca64e80fb88f6d8ab881ffee3")
+            startActivity(i)
+        }
+
+        binding.signupAgreeDetails4.setOnClickListener{
+            val i = Intent(Intent.ACTION_VIEW)
+            i.data = Uri.parse("https://sumptuous-metacarpal-d3a.notion.site/1437c09ca64e80fb88f6d8ab881ffee3")
+            startActivity(i)
         }
 
         val checkboxLayouts = listOf(
