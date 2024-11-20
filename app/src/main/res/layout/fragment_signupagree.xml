@@ -121,8 +121,8 @@
 
             <ImageView
                 android:id="@+id/checkbox_1"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:src="@drawable/checkbox_uncheck"
                 android:layout_marginStart="11dp" />
@@ -328,7 +328,8 @@
             android:text="@string/next_button"
             android:textColor="@{viewModel.nextButtonTextColor}"
             style="@style/sc_m13"
-            app:layout_constraintStart_toStartOf="@id/guideline_next_v"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/guideline_next_h" />
 
 
