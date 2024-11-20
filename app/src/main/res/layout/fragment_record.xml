@@ -39,6 +39,20 @@
 
         </com.google.android.material.tabs.TabLayout>
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.06" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.94" />
+
         <View
             android:id="@+id/seperator_screen_bar"
             android:layout_width="420dp"
@@ -51,8 +65,8 @@
             android:id="@+id/record_fragment_Container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline_start"
+            app:layout_constraintEnd_toEndOf="@+id/guideline_end"
             app:layout_constraintTop_toBottomOf="@+id/seperator_screen_bar" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

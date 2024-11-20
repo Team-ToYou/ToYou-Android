@@ -21,6 +21,7 @@ import com.toyou.toyouandroid.data.onboarding.service.AuthService
 import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModelFactory
+import com.toyou.toyouandroid.presentation.viewmodel.NoticeViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
@@ -39,16 +40,15 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
     private val binding: FragmentNoticeBinding
         get() = requireNotNull(_binding){"FragmentNoticeBinding -> null"}
 
-    private lateinit var viewModel: NoticeViewModel
     private val noticeDialogViewModel: NoticeDialogViewModel by activityViewModels()
     private lateinit var listener: NoticeAdapterListener
     private var noticeAdapter: NoticeAdapter? = null
+    private var noticeDialog: NoticeDialog? = null
 
+    private lateinit var viewModel: NoticeViewModel
     private lateinit var userViewModel: UserViewModel
     private lateinit var socialViewModel : SocialViewModel
     private lateinit var cardViewModel: CardViewModel
-
-    private var noticeDialog: NoticeDialog? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,14 +67,17 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
             this,
             NoticeViewModelFactory(noticeRepository, tokenManager)
         )[NoticeViewModel::class.java]
+
         cardViewModel = ViewModelProvider(
             requireActivity(),
             CardViewModelFactory(tokenStorage)
         )[CardViewModel::class.java]
+
         userViewModel = ViewModelProvider(
             requireActivity(),
             UserViewModelFactory(tokenStorage)
         )[UserViewModel::class.java]
+
         socialViewModel = ViewModelProvider(
             requireActivity(),
             SocialViewModelFactory(tokenStorage)
@@ -92,26 +95,6 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
                 val myName = userViewModel.nickname.value ?: ""
                 Timber.d(myName)
                 socialViewModel.patchApproveNotice(name, myName, alarmId, position)
-            }
-
-            override fun onFriendRequestAcceptClick(item: NoticeItem.NoticeFriendRequestItem) {
-                socialViewModel.approveSuccess.observe(viewLifecycleOwner) { result ->
-                    if (result != null) {
-                        if (result.isSuccess) {
-                            navController.navigate(R.id.action_navigation_notice_to_social_fragment)
-
-                            socialViewModel.resetApproveSuccess() // 메서드 호출하여 상태 초기화
-                        } else {
-                            noticeDialogViewModel.setDialogData(
-                                title = "존재하지 않는 \n 사용자입니다",
-                                leftButtonText = "확인",
-                                leftButtonClickAction = { checkUserNone() },
-                            )
-                            noticeDialog = NoticeDialog()
-                            noticeDialog?.show(parentFragmentManager, "CustomDialog")
-                        }
-                    }
-                }
             }
 
             override fun onFriendRequestAcceptedItemClick(item: NoticeItem.NoticeFriendRequestAcceptedItem) {
@@ -155,14 +138,17 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
         socialViewModel.approveSuccess.observe(viewLifecycleOwner) { result ->
             if (result != null) {
                 if (result.isSuccess) {
-                    // API 호출이 성공했으므로 아이템 삭제
-                    viewModel.deleteNotice(result.alarmId, result.position) // 알림 삭제
-                    noticeAdapter?.removeItem(result.position) // 어댑터에 아이템 삭제 요청
                     navController.navigate(R.id.action_navigation_notice_to_social_fragment)
 
-                    Toast.makeText(requireContext(), "친구 요청을 수락했습니다", Toast.LENGTH_SHORT).show()
-
                     socialViewModel.resetApproveSuccess() // 메서드 호출하여 상태 초기화
+                } else {
+                    noticeDialogViewModel.setDialogData(
+                        title = "존재하지 않는 \n 사용자입니다",
+                        leftButtonText = "확인",
+                        leftButtonClickAction = { checkUserNone() },
+                    )
+                    noticeDialog = NoticeDialog()
+                    noticeDialog?.show(parentFragmentManager, "CustomDialog")
                 }
             }
         }
@@ -201,7 +187,6 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
 
     override fun onFriendRequestApprove(name: String, alarmId: Int, position: Int) {}
     override fun onDeleteNotice(alarmId: Int, position: Int) {}
-    override fun onFriendRequestAcceptClick(item: NoticeItem.NoticeFriendRequestItem) {}
     override fun onFriendRequestAcceptedItemClick(item: NoticeItem.NoticeFriendRequestAcceptedItem) {}
     override fun onFriendCardItemClick(item: NoticeItem.NoticeCardCheckItem) {}
 

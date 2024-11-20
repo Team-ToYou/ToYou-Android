@@ -19,7 +19,7 @@ import com.toyou.toyouandroid.domain.record.RecordRepository
 import com.toyou.toyouandroid.data.record.service.RecordService
 import com.toyou.toyouandroid.model.calendar.MyDate
 import com.toyou.toyouandroid.network.NetworkModule
-import com.toyou.toyouandroid.presentation.fragment.record.RecordViewModelFactory
+import com.toyou.toyouandroid.presentation.viewmodel.RecordViewModelFactory
 import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
 import com.toyou.toyouandroid.utils.calendar.MyDates

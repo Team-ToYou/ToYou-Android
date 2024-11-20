@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.kakao.sdk.auth.model.OAuthToken
@@ -21,9 +21,11 @@ import com.toyou.toyouandroid.databinding.FragmentLoginBinding
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
+import com.toyou.toyouandroid.presentation.viewmodel.AuthViewModelFactory
 import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
 import com.toyou.toyouandroid.utils.TutorialStorage
+import timber.log.Timber
 
 class LoginFragment : Fragment() {
 
@@ -33,28 +35,21 @@ class LoginFragment : Fragment() {
         get() = requireNotNull(_binding){"FragmentLoginBinding -> null"}
 
     private lateinit var tutorialStorage: TutorialStorage
-    private lateinit var loginViewModel: LoginViewModel
+
+    private val loginViewModel: LoginViewModel by activityViewModels{
+        val tokenStorage = TokenStorage(requireContext())
+        val authService = NetworkModule.getClient().create(AuthService::class.java)
+        val tokenManager = TokenManager(authService, tokenStorage)
+
+        AuthViewModelFactory(authService, tokenStorage, tokenManager)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
-
-        val tokenStorage = TokenStorage(requireContext())
-        val authService = NetworkModule.getClient().create(AuthService::class.java)
-        val tokenManager = TokenManager(authService, tokenStorage)
-
-        loginViewModel = ViewModelProvider(
-            this,
-            AuthViewModelFactory(
-                authService,
-                tokenStorage,
-                tokenManager
-            )
-        )[LoginViewModel::class.java]
 
         tutorialStorage = TutorialStorage(requireContext())
 
@@ -64,7 +59,6 @@ class LoginFragment : Fragment() {
     @SuppressLint("LogNotTimber")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 
         // MainActivity의 메소드를 호출하여 바텀 네비게이션 뷰 숨기기
         (requireActivity() as MainActivity).hideBottomNavigation(true)
@@ -121,18 +115,27 @@ class LoginFragment : Fragment() {
 
         loginViewModel.loginSuccess.observe(viewLifecycleOwner) { isSuccess ->
             if (isSuccess) {
-                loginViewModel.setLoginSuccess(false)
+                Timber.d("로그인 성공했으므로 토큰 존재 여부 검사")
+                loginViewModel.setLoginSuccess(false)  // 초기화
+                loginViewModel.setInitialization(false)  // 초기화
                 loginViewModel.checkIfTokenExists()  // 토큰이 저장되었는지 확인 후 이동
             }
         }
 
         loginViewModel.checkIfTokenExists.observe(viewLifecycleOwner) { isChecked ->
-            if (isChecked) {
-                // 서비스 이용자일 경우 튜토리얼 테스트
-                checkTutorial()
-            } else {
-                // 토큰이 존재하지 않을 경우 신규 가입
-                navController.navigate(R.id.action_navigation_login_to_signup_agree_fragment)
+            if (loginViewModel.isInitialization.value == false) {  // 초기화 상태에서만 관찰
+                if (isChecked) {
+                    // 서비스 이용자일 경우 튜토리얼 검증
+                    Timber.d("서비스 이용자이므로 튜토리얼 검증")
+                    checkTutorial()
+                    loginViewModel.setInitialization(true)  // 초기화
+                    loginViewModel.setIfTokenExists(false)  // 토큰 상태 초기화
+                } else {
+                    // 토큰이 존재하지 않을 경우 신규 가입
+                    Timber.d("토큰이 존재하지 않으므로 신규 가입")
+                    loginViewModel.setInitialization(true)  // 초기화
+                    navController.navigate(R.id.action_navigation_login_to_signup_agree_fragment)
+                }
             }
         }
     }
@@ -144,6 +147,7 @@ class LoginFragment : Fragment() {
         } else {
             // 튜토리얼을 본 적이 있으면 홈 화면으로 바로 이동
             // 액세스 토큰이 있으면 홈 화면으로 이동
+            Timber.d("액세스 토큰이 있으므로 홈 화면으로 이동")
             navController.navigate(R.id.action_navigation_login_to_home_fragment)
         }
     }

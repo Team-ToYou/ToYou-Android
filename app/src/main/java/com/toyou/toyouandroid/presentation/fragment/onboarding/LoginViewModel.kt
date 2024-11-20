@@ -11,7 +11,6 @@ import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.data.onboarding.dto.request.SignUpRequest
 import com.toyou.toyouandroid.data.onboarding.dto.response.SignUpResponse
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
-import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -38,6 +37,18 @@ class LoginViewModel(
 
     private val _checkIfTokenExists = MutableLiveData<Boolean>()
     val checkIfTokenExists: LiveData<Boolean> get() = _checkIfTokenExists
+
+    private val _isInitialization = MutableLiveData<Boolean>()
+    val isInitialization: LiveData<Boolean> get() = _isInitialization
+
+    fun setIfTokenExists(value: Boolean) {
+        _checkIfTokenExists.value = value
+        Timber.d("checkIfTokenExists: $value")
+    }
+
+    fun setInitialization(value: Boolean) {
+        _isInitialization.value = value
+    }
 
     fun checkIfTokenExists() {
         tokenStorage.let { storage ->
@@ -66,7 +77,6 @@ class LoginViewModel(
 
                                 // 암호화된 토큰 저장소에 저장
                                 tokenStorage.saveTokens(newAccessToken, newRefreshToken)
-                                TokenManager(authService, tokenStorage).setAccessToken(newAccessToken)
                                 sendTokenToServer(tokenStorage.getFcmToken().toString())
 
                                 // 인증 네트워크 모듈에 access token 저장
