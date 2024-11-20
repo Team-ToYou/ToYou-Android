@@ -89,6 +89,7 @@ class PreviewFragment : Fragment(){
             if (userViewModel.cardId.value == null) {
                 cardViewModel.sendData(previewCards, exposure)
                 userViewModel.updateCardIdFromOtherViewModel(cardViewModel)
+                cardViewModel.disableLock(true)
                 Toast.makeText(requireContext(), "일기카드가 저장되었습니다", Toast.LENGTH_SHORT).show()
             }
             else {

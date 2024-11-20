@@ -203,12 +203,12 @@ class HomeFragment : Fragment() {
                     userViewModel.cardId.observe(viewLifecycleOwner) { cardId ->
                         if (cardId == null) {
                             navController.navigate(R.id.action_navigation_home_to_create_fragment)
+                            cardViewModel.disableLock(false)
                         }
                         else {
-                        Timber.tag("mail").d("click")
-
-                        cardViewModel.getCardDetail(cardId.toLong())
+                            cardViewModel.getCardDetail(cardId.toLong())
                             navController.navigate(R.id.action_navigation_home_to_modifyFragment)
+                            cardViewModel.disableLock(true)
                         }
                     }
                 }
