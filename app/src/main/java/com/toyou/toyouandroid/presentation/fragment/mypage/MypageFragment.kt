@@ -1,7 +1,9 @@
 package com.toyou.toyouandroid.presentation.fragment.mypage
 
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
@@ -46,6 +48,8 @@ class MypageFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
 
+    private var sharedPreferences: SharedPreferences? = null
+
     private val mypageViewModel: MypageViewModel by activityViewModels {
         val tokenStorage = TokenStorage(requireContext())
         val authService: AuthService = NetworkModule.getClient().create(AuthService::class.java)
@@ -73,6 +77,8 @@ class MypageFragment : Fragment() {
             )
         )[HomeViewModel::class.java]
 
+        sharedPreferences = requireActivity().getSharedPreferences("FCM_PREFERENCES", Context.MODE_PRIVATE)
+
         return binding.root
     }
 
@@ -98,33 +104,23 @@ class MypageFragment : Fragment() {
         }
 
         binding.mypageOpinion.setOnClickListener {
-            val i = Intent(Intent.ACTION_VIEW)
-            i.data = Uri.parse("https://forms.gle/fJweAP16cT4Tc3cA6")
-            startActivity(i)
+            redirectLink("https://forms.gle/fJweAP16cT4Tc3cA6")
         }
 
         binding.mypageOpinionBtn.setOnClickListener{
-            val i = Intent(Intent.ACTION_VIEW)
-            i.data = Uri.parse("https://forms.gle/fJweAP16cT4Tc3cA6")
-            startActivity(i)
+            redirectLink("https://forms.gle/fJweAP16cT4Tc3cA6")
         }
 
         binding.mypageContact.setOnClickListener {
-            val i = Intent(Intent.ACTION_VIEW)
-            i.data = Uri.parse("http://pf.kakao.com/_xiuPIn/chat")
-            startActivity(i)
+            redirectLink("http://pf.kakao.com/_xiuPIn/chat")
         }
 
         binding.mypageContactBtn.setOnClickListener{
-            val i = Intent(Intent.ACTION_VIEW)
-            i.data = Uri.parse("http://pf.kakao.com/_xiuPIn/chat")
-            startActivity(i)
+            redirectLink("http://pf.kakao.com/_xiuPIn/chat")
         }
 
         binding.mypageTermsOfUse.setOnClickListener {
-            val i = Intent(Intent.ACTION_VIEW)
-            i.data = Uri.parse("https://sumptuous-metacarpal-d3a.notion.site/1437c09ca64e80fb88f6d8ab881ffee3")
-            startActivity(i)
+            redirectLink("https://sumptuous-metacarpal-d3a.notion.site/1437c09ca64e80fb88f6d8ab881ffee3")
         }
 
         // 사용자 닉네임 설정
@@ -216,6 +212,7 @@ class MypageFragment : Fragment() {
 
         // 회원 탈퇴 후 튜토리얼 다시 보이도록 설정
         TutorialStorage(requireContext()).setTutorialNotShown()
+        sharedPreferences?.edit()?.putBoolean("isSubscribed", true)?.apply()
 
         mypageViewModel.kakaoSignOut()
         mypageDialog?.dismiss()
@@ -243,6 +240,11 @@ class MypageFragment : Fragment() {
         mypageDialog?.dismiss()
     }
 
+    private fun redirectLink(uri: String) {
+        val i = Intent(Intent.ACTION_VIEW)
+        i.data = Uri.parse(uri)
+        startActivity(i)
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
