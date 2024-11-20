@@ -91,15 +91,12 @@ class NoticeAdapter(
                 removeItem(this.layoutPosition)
             }
 
-            binding.noticeLayout.setOnClickListener {
-                listener.onFriendRequestAcceptClick(item)
-            }
-
             binding.noticeFriendRequestBtn.setOnClickListener {
                 // 친구 요청 수락 버튼 클릭 후 알림 메시지 제거
-                val name = item.nickname
-                Timber.d(name)
-                listener.onFriendRequestApprove(name, item.alarmId, this.layoutPosition)
+                Timber.d(item.nickname)
+                listener.onFriendRequestApprove(item.nickname, item.alarmId, this.layoutPosition)
+                viewModel.deleteNotice(item.alarmId, this.layoutPosition)
+                removeItem(this.layoutPosition)
             }
 
             binding.executePendingBindings()

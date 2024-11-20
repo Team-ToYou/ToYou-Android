@@ -13,21 +13,20 @@ class SocialRepository(private val tokenStorage: TokenStorage) {
 
     suspend fun getFriendsData() = client.getFriends("Bearer ${tokenStorage.getAccessToken().toString()}")
 
-    suspend fun patchApproveFriend(
-        request: RequestFriend
-    ){
-        try {
+    suspend fun patchApproveFriend(request: RequestFriend): Boolean {
+        return try {
             val response = client.patchApprove("Bearer ${tokenStorage.getAccessToken().toString()}", friend = request)
-            // 응답 처리
             if (response.isSuccess) {
-                Log.d("친구승인 성공!", response.message)
+                Log.d("SocialRepository", "친구승인 성공: ${response.message}")
+                true // 성공하면 true 반환
             } else {
-                Log.d("친구승인 실패!", response.message)
+                Log.d("SocialRepository", "친구승인 실패: ${response.message}")
+                false // 실패하면 false 반환
             }
         } catch (e: Exception) {
             e.printStackTrace()
             Log.d("친구승인 실패!", e.message.toString())
-
+            false // 예외 발생 시 false 반환
         }
     }
 

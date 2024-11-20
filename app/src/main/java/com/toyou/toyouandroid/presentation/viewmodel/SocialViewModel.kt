@@ -317,32 +317,35 @@ class SocialViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
         viewModelScope.launch {
             try {
                 _friendRequest.value?.let { request ->
-                    Timber.d("Sending friend approval request for: $name")
-                    repository.patchApproveFriend(request)
-                    Timber.d("Friend approval request sent successfully for: $name")
 
-                    _approveSuccess.postValue(ApprovalResult(true, alarmId, position)) // 성공 시 LiveData 업데이트
+                    val isApproved = repository.patchApproveFriend(request)
+
+                    if (isApproved) {
+                        _approveSuccess.postValue(ApprovalResult(true, alarmId, position))
+                    } else {
+                        _approveSuccess.postValue(ApprovalResult(false, alarmId, position))
+                    }
+
+                    _friendRequestCanceled.postValue(true)
+                    Timber.d("Friend request canceled state updated")
+
+                    retrieveTokenFromServer(name)
+                    _retrieveToken.value?.let { tokens ->
+                        Timber.d("Retrieved tokens: $tokens")
+                        for (token in tokens) {
+                            postFCM(myName, token, 2)
+                            Timber.d("FCM sent to token: $token")
+                        }
+                    } ?: run {
+                        Timber.e("Token retrieval failed")
+                    }
                 } ?: run {
                     Timber.e("Friend request is null")
                     _approveSuccess.postValue(ApprovalResult(false, alarmId, position))
                 }
-
-                _friendRequestCanceled.postValue(true)
-                Timber.d("Friend request canceled state updated")
-
-                retrieveTokenFromServer(name)
-                _retrieveToken.value?.let { tokens ->
-                    Timber.d("Retrieved tokens: $tokens")
-                    for (token in tokens) {
-                        postFCM(myName, token, 2)
-                        Timber.d("FCM sent to token: $token")
-                    }
-                } ?: run {
-                    Timber.e("Token retrieval failed")
-                }
             } catch (e: Exception) {
                 Timber.e("Exception occurred: ${e.message}")
-                _approveSuccess.postValue(ApprovalResult(false, alarmId, position)) // 실패 시 LiveData 업데이트
+                _approveSuccess.postValue(ApprovalResult(false, alarmId, position))
             }
         }
     }
