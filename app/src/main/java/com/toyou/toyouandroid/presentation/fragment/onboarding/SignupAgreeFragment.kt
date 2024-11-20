@@ -48,15 +48,16 @@ class SignupAgreeFragment : Fragment() {
         }
 
         binding.signupAgreeDetails3.setOnClickListener{
-            val i = Intent(Intent.ACTION_VIEW)
-            i.data = Uri.parse("https://sumptuous-metacarpal-d3a.notion.site/1437c09ca64e80fb88f6d8ab881ffee3")
-            startActivity(i)
+            termsOfUseLink()
         }
-
         binding.signupAgreeDetails4.setOnClickListener{
-            val i = Intent(Intent.ACTION_VIEW)
-            i.data = Uri.parse("https://sumptuous-metacarpal-d3a.notion.site/1437c09ca64e80fb88f6d8ab881ffee3")
-            startActivity(i)
+            termsOfUseLink()
+        }
+        binding.signupAgreeArrow3.setOnClickListener{
+            termsOfUseLink()
+        }
+        binding.signupAgreeArrow4.setOnClickListener{
+            termsOfUseLink()
         }
 
         val checkboxLayouts = listOf(
@@ -108,6 +109,12 @@ class SignupAgreeFragment : Fragment() {
         binding.signupagreeNextBtn.setOnClickListener{
             navController.navigate(R.id.action_navigation_signup_agree_to_signup_nickname_fragment)
         }
+    }
+
+    private fun termsOfUseLink() {
+        val i = Intent(Intent.ACTION_VIEW)
+        i.data = Uri.parse("https://sumptuous-metacarpal-d3a.notion.site/1437c09ca64e80fb88f6d8ab881ffee3")
+        startActivity(i)
     }
 
     override fun onDestroyView() {
