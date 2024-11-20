@@ -61,29 +61,31 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline20"
         app:layout_constraintStart_toStartOf="@+id/guideline19"
         app:layout_constraintTop_toTopOf="parent" />
-    
-    <CheckBox
-        android:id="@+id/checkbox_btn"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        app:layout_constraintBottom_toTopOf="@id/next_btn"
-        app:layout_constraintEnd_toStartOf="@id/check_tv"
-        android:layout_marginBottom="19dp"
-        android:layout_marginRight="5dp"
-        android:button="@null"
-        android:background="@drawable/custom_checkbox"
-        />
 
-    <TextView
-        android:id="@+id/check_tv"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="익명으로 보내기"
-        style="@style/gangwon15"
-        app:layout_constraintEnd_toEndOf="@id/guideline20"
-        app:layout_constraintStart_toStartOf="@id/guideline19"
+        android:layout_marginBottom="21dp"
         app:layout_constraintBottom_toTopOf="@id/next_btn"
-        android:layout_marginBottom="21dp"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <CheckBox
+            android:id="@+id/checkbox_btn"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginBottom="1dp"
+            android:background="@drawable/custom_checkbox"
+            android:button="@null" />
+
+        <TextView
+            android:id="@+id/check_tv"
+            style="@style/gangwon15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="익명으로 보내기" />
+
+    </LinearLayout>
 
     
     <androidx.appcompat.widget.AppCompatButton
@@ -98,7 +100,8 @@
         app:layout_constraintEnd_toEndOf="@id/guideline20"
         app:layout_constraintStart_toStartOf="@id/guideline19"
         app:layout_constraintTop_toBottomOf="@id/guideline4"
-        android:enabled="true"/>
+        android:enabled="true"
+        android:stateListAnimator="@null"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline7"
@@ -144,6 +147,7 @@
         android:layout_height="wrap_content"
         android:text="비방 및 욕설은 처벌받을 수 있습니다."
         app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/r02"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/next_btn"
         android:layout_marginTop="15dp"/>

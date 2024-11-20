@@ -46,11 +46,6 @@ class SendFinalFragment: Fragment() {
     ): View? {
         _binding = FragmentSendFinalBinding.inflate(inflater, container, false)
 
-        val translate: Animation =
-            AnimationUtils.loadAnimation(requireContext(), R.anim.translate)
-
-        binding.cardIv.startAnimation(translate)
-
         return binding.root
 
     }

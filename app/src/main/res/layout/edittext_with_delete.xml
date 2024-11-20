@@ -10,7 +10,7 @@
     <EditText
         android:id="@+id/edit_text"
         android:layout_width="0dp"
-        style="@style/sc_l10"
+        style="@style/sc_r10"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:padding="10dp"

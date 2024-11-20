@@ -240,7 +240,7 @@
 
         <TextView
             android:id="@+id/detail1_tv"
-            style="@style/gangwon15"
+            style="@style/gangwon10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="(보기를 만들 수 있어요)"
@@ -254,7 +254,7 @@
 
         <TextView
             android:id="@+id/detail2_tv"
-            style="@style/gangwon15"
+            style="@style/gangwon10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="(간단하게 물어보세요)"
@@ -268,7 +268,7 @@
 
         <TextView
             android:id="@+id/detail3_tv"
-            style="@style/gangwon15"
+            style="@style/gangwon10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="(긴 답변을 원해요)"
@@ -291,7 +291,8 @@
         app:layout_constraintEnd_toEndOf="@id/guideline20"
         app:layout_constraintStart_toStartOf="@id/guideline19"
         app:layout_constraintTop_toBottomOf="@id/guideline4"
-        android:enabled="false"/>
+        android:enabled="false"
+        android:stateListAnimator="@null"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline7"

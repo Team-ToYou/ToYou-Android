@@ -49,6 +49,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="질문 내용을 입력해주세요"
+        android:layout_marginTop="3dp"
         app:layout_constraintTop_toBottomOf="@id/title_tv"
         app:layout_constraintStart_toStartOf="@id/guideline19"
         android:textColor="@color/black" />
@@ -57,7 +58,7 @@
         android:id="@+id/view"
         android:layout_width="0dp"
         android:layout_height="1px"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="9dp"
         android:background="#939292"
         app:layout_constraintEnd_toEndOf="@id/guideline20"
         app:layout_constraintStart_toEndOf="@id/guideline19"
@@ -120,7 +121,8 @@
         app:layout_constraintEnd_toEndOf="@id/guideline20"
         app:layout_constraintStart_toStartOf="@id/guideline19"
         app:layout_constraintTop_toBottomOf="@id/guideline4"
-        android:enabled="false"/>
+        android:enabled="false"
+        android:stateListAnimator="@null"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline7"
@@ -170,6 +172,7 @@
         android:layout_marginTop="25dp"
         android:padding="10dp"
         android:gravity="top"
+        android:textColor="@color/black"
         android:text="@={viewModel.questionDto.content}"
         style="@style/sc_r10"
         android:maxLength="50"/>
