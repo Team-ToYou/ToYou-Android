@@ -64,6 +64,8 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
     private val _countSelection = MutableLiveData<Int>()
     val countSelection : LiveData<Int>get() = _countSelection
     var toastShow : Boolean = false
+    private val _lockDisabled = MutableLiveData(false)
+    val lockDisabled : LiveData<Boolean> get() = _lockDisabled
 
     init {
         _exposure.value = true
@@ -71,6 +73,13 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
 
     private fun initializeCountSelection() {
         _countSelection.value = _previewCards.value?.size ?: 0
+    }
+
+    fun disableLock(lock : Boolean){
+        if (lock)
+            _lockDisabled.value = true
+        else
+            _lockDisabled.value = false
     }
 
     fun setCardCount(count: Int, count2 : Int, count3 : Int) {
