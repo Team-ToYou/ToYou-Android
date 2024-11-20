@@ -13,14 +13,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentSocialBinding
-import com.toyou.toyouandroid.presentation.fragment.home.RVMarginItemDecoration
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
 import com.toyou.toyouandroid.presentation.fragment.social.adapter.SocialRVAdapter
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModelFactory
@@ -54,15 +52,13 @@ class SocialFragment : Fragment() {
         )[UserViewModel::class.java]
 
         socialViewModel.getFriendsData()
-
-
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentSocialBinding.inflate(inflater, container, false)
 
         addFriendLinearLayout = binding.addFriendLinear
@@ -89,10 +85,10 @@ class SocialFragment : Fragment() {
 //            addItemDecoration(RVMarginItemDecoration(margin,false))
         }
 
-        socialViewModel.friends.observe(viewLifecycleOwner, Observer { friends ->
+        socialViewModel.friends.observe(viewLifecycleOwner) { friends ->
             socialAdapter.setFriendData(friends)
             socialAdapter.notifyDataSetChanged()
-        })
+        }
 
 
         binding.searchBtn.setOnClickListener {
@@ -103,7 +99,7 @@ class SocialFragment : Fragment() {
             socialViewModel.getSearchData(searchName)
         }
 
-        socialViewModel.isFriend.observe(viewLifecycleOwner, Observer { isFriend ->
+        socialViewModel.isFriend.observe(viewLifecycleOwner) { isFriend ->
             if (isFriend == "400" || isFriend == "401") {
                 addNotExist(isFriend)
             }else if (isFriend == "no"){
@@ -113,9 +109,9 @@ class SocialFragment : Fragment() {
             else {
                 addFriendView(isFriend, binding.searchEt.text.toString())
             }
-        })
+        }
 
-        socialViewModel.friendRequestCompleted.observe(viewLifecycleOwner, Observer { isCompleted ->
+        socialViewModel.friendRequestCompleted.observe(viewLifecycleOwner) { isCompleted ->
             if (isCompleted) {
                 // 친구 요청이 완료되었을 때 addFriendView 제거
                 if (addFriendLinearLayout.childCount > 0) {
@@ -125,9 +121,9 @@ class SocialFragment : Fragment() {
                 Toast.makeText(requireContext(), "친구 요청을 보냈습니다", Toast.LENGTH_SHORT).show()
 
             }
-        })
+        }
 
-        socialViewModel.friendRequestCanceled.observe(viewLifecycleOwner, Observer { isCanceled ->
+        socialViewModel.friendRequestCanceled.observe(viewLifecycleOwner) { isCanceled ->
             if (isCanceled) {
                 // 친구 요청이 완료되었을 때 addFriendView 제거
                 if (addFriendLinearLayout.childCount > 0) {
@@ -137,9 +133,9 @@ class SocialFragment : Fragment() {
                 Toast.makeText(requireContext(), "친구 요청을 수락했습니다", Toast.LENGTH_SHORT).show()
 
             }
-        })
+        }
 
-        socialViewModel.friendRequestRemove.observe(viewLifecycleOwner, Observer { isCanceled ->
+        socialViewModel.friendRequestRemove.observe(viewLifecycleOwner) { isCanceled ->
             if (isCanceled) {
                 // 친구 요청이 완료되었을 때 addFriendView 제거
                 if (addFriendLinearLayout.childCount > 0) {
@@ -148,7 +144,7 @@ class SocialFragment : Fragment() {
                 }
                 socialViewModel.resetFriendRequestRemove()
             }
-        })
+        }
 
         val dialog = CustomDialogFragment()
         val btn = arrayOf("취소", "확인")
@@ -214,18 +210,18 @@ class SocialFragment : Fragment() {
         stateBtn.apply {
             when(isFriend) {
                 "REQUEST_SENT" -> {
-                    stateBtn.setText("취소하기")
+                    stateBtn.text = "취소하기"
                     stateBtn.setBackgroundResource(R.drawable.r10_red_container)
                 }
                 "REQUEST_RECEIVED" -> {
-                    stateBtn.setText("친구 수락")
+                    stateBtn.text = "친구 수락"
                     stateBtn.setBackgroundResource(R.drawable.r10_red_container)
                 }
                 "FRIEND" -> {
-                    stateBtn.setText("친구")
+                    stateBtn.text = "친구"
                 }
                 "NOT_FRIEND" -> {
-                    stateBtn.setText("친구 요청")
+                    stateBtn.text = "친구 요청"
                 }
             }
         }
