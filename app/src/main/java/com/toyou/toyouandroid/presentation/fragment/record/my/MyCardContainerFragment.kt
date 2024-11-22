@@ -131,7 +131,7 @@ class MyCardContainerFragment : Fragment() {
                 title = "정말 일기카드를\n삭제하시겠습니까?",
                 leftButtonText = "취소",
                 rightButtonText = "삭제",
-                leftButtonTextColor = R.color.black,
+                leftButtonTextColor = Color.BLACK,
                 rightButtonTextColor = Color.RED,
                 leftButtonClickAction = { dismissDialog() },
                 rightButtonClickAction = { deleteDiaryCards() }

@@ -172,7 +172,7 @@ class MypageFragment : Fragment() {
                 leftButtonText = "탈퇴하기",
                 rightButtonText = "취소",
                 leftButtonTextColor = Color.RED,
-                rightButtonTextColor = R.color.black,
+                rightButtonTextColor = Color.BLACK,
                 leftButtonClickAction = { handleSignout() },
                 rightButtonClickAction = { dismissDialog() }
             )
@@ -187,7 +187,7 @@ class MypageFragment : Fragment() {
                 subTitle = "",
                 leftButtonText = "취소",
                 rightButtonText = "로그아웃",
-                leftButtonTextColor = R.color.black,
+                leftButtonTextColor = Color.BLACK,
                 rightButtonTextColor = Color.RED,
                 leftButtonClickAction = { dismissDialog() },
                 rightButtonClickAction = { handleLogout() }
