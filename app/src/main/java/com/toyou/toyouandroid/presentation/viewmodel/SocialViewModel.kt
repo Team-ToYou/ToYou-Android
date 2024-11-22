@@ -291,7 +291,7 @@ class SocialViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
     fun postFCM(name: String, token : String, type : Int){
         when(type){
             1 -> _fcm.value = FCM(token = token, title = "친구 요청", body = "${name}님이 친구 요청을 보냈습니다.")
-            2 -> _fcm.value = FCM(token = token, title = "친구 요청 승인", body = "${name}님이 친구 요청을 수락했습니다.")
+            2 -> _fcm.value = FCM(token = token, title = "친구 수락", body = "${name}님이 친구 요청을 수락했습니다.")
             3 -> _fcm.value = FCM(token = token, title = "질문 전송", body = "${name}님이 질문을 보냈습니다. 확인보세요!")
         }
         viewModelScope.launch {
