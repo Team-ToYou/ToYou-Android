@@ -19,8 +19,8 @@ import com.toyou.toyouandroid.data.onboarding.service.AuthService
 import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.fragment.notice.NoticeDialog
 import com.toyou.toyouandroid.presentation.fragment.notice.NoticeDialogViewModel
-import com.toyou.toyouandroid.presentation.fragment.onboarding.AuthViewModelFactory
 import com.toyou.toyouandroid.presentation.fragment.home.HomeViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
 import com.toyou.toyouandroid.utils.TokenManager
@@ -53,18 +53,14 @@ class HomeOptionFragment : Fragment() {
 
         homeOptionViewModel = ViewModelProvider(
             this,
-            AuthViewModelFactory(
-                authService,
-                tokenStorage,
+            HomeViewModelFactory(
                 tokenManager
             )
         )[HomeOptionViewModel::class.java]
 
         homeViewModel = ViewModelProvider(
             this,
-            AuthViewModelFactory(
-                authService,
-                tokenStorage,
+            HomeViewModelFactory(
                 tokenManager
             )
         )[HomeViewModel::class.java]

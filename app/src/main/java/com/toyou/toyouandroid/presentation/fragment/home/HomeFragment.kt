@@ -9,7 +9,6 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -29,12 +28,12 @@ import com.toyou.toyouandroid.data.onboarding.service.AuthService
 import com.toyou.toyouandroid.data.record.service.RecordService
 import com.toyou.toyouandroid.domain.record.RecordRepository
 import com.toyou.toyouandroid.network.NetworkModule
-import com.toyou.toyouandroid.presentation.fragment.notice.NoticeViewModelFactory
-import com.toyou.toyouandroid.presentation.fragment.onboarding.AuthViewModelFactory
+import com.toyou.toyouandroid.presentation.viewmodel.NoticeViewModelFactory
 import com.toyou.toyouandroid.presentation.fragment.record.CardInfoViewModel
-import com.toyou.toyouandroid.presentation.fragment.record.RecordViewModelFactory
+import com.toyou.toyouandroid.presentation.viewmodel.RecordViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModelFactory
+import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
 import com.toyou.toyouandroid.utils.TokenManager
@@ -70,8 +69,10 @@ class HomeFragment : Fragment() {
         val tokenStorage = TokenStorage(requireContext())
         val authService = NetworkModule.getClient().create(AuthService::class.java)
         val tokenManager = TokenManager(authService, tokenStorage)
+
         val noticeService = AuthNetworkModule.getClient().create(NoticeService::class.java)
         val noticeRepository = NoticeRepository(noticeService)
+
         val recordService = AuthNetworkModule.getClient().create(RecordService::class.java)
         val recordRepository = RecordRepository(recordService)
 
@@ -82,7 +83,7 @@ class HomeFragment : Fragment() {
 
         viewModel = ViewModelProvider(
             this,
-            AuthViewModelFactory(authService, tokenStorage, tokenManager)
+            HomeViewModelFactory(tokenManager)
         )[HomeViewModel::class.java]
 
         binding.lifecycleOwner = viewLifecycleOwner
@@ -203,12 +204,12 @@ class HomeFragment : Fragment() {
                     userViewModel.cardId.observe(viewLifecycleOwner) { cardId ->
                         if (cardId == null) {
                             navController.navigate(R.id.action_navigation_home_to_create_fragment)
+                            cardViewModel.disableLock(false)
                         }
                         else {
-                        Timber.tag("mail").d("click")
-
-                        cardViewModel.getCardDetail(cardId.toLong())
+                            cardViewModel.getCardDetail(cardId.toLong())
                             navController.navigate(R.id.action_navigation_home_to_modifyFragment)
+                            cardViewModel.disableLock(true)
                         }
                     }
                 }

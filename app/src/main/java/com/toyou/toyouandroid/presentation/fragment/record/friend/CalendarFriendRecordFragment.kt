@@ -21,7 +21,7 @@ import com.toyou.toyouandroid.domain.record.RecordRepository
 import com.toyou.toyouandroid.data.record.service.RecordService
 import com.toyou.toyouandroid.model.calendar.FriendDate
 import com.toyou.toyouandroid.network.NetworkModule
-import com.toyou.toyouandroid.presentation.fragment.record.RecordViewModelFactory
+import com.toyou.toyouandroid.presentation.viewmodel.RecordViewModelFactory
 import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
 import com.toyou.toyouandroid.utils.calendar.FriendDates
@@ -38,8 +38,6 @@ class CalendarFriendRecordFragment : Fragment(), OnFriendDateClickListener {
     private val binding: FragmentCalendarFriendrecordBinding
         get() = requireNotNull(_binding){"FragmentCalendarFriendrecordBinding -> null"}
 
-    private lateinit var friendRecordViewModel: FriendRecordViewModel
-
     private var calendar = Calendar.getInstance()
     private val startCalendar: Calendar = Calendar.getInstance().apply {
         time = Date()
@@ -50,6 +48,8 @@ class CalendarFriendRecordFragment : Fragment(), OnFriendDateClickListener {
 
     private var currentYear: Int = -1
     private var currentMonth: Int = -1
+
+    private lateinit var friendRecordViewModel: FriendRecordViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,

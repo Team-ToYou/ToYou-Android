@@ -1,4 +1,4 @@
-package com.toyou.toyouandroid.utils
+package com.toyou.toyouandroid.presentation.viewmodel
 
 import com.toyou.toyouandroid.presentation.fragment.onboarding.SignupNicknameViewModel
 import com.toyou.toyouandroid.presentation.fragment.home.HomeViewModel

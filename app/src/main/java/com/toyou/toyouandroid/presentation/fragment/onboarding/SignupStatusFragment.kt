@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.toyou.toyouandroid.R
@@ -14,6 +15,7 @@ import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.data.onboarding.dto.request.SignUpRequest
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
+import com.toyou.toyouandroid.presentation.viewmodel.AuthViewModelFactory
 import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
 import com.toyou.toyouandroid.utils.TutorialStorage
@@ -25,20 +27,18 @@ class SignupStatusFragment : Fragment() {
     private var _binding: FragmentSignupstatusBinding? = null
     private val binding: FragmentSignupstatusBinding
         get() = requireNotNull(_binding){"FragmentSignupstatusBinding -> null"}
+
     private val signUpStatusViewModel: SignupStatusViewModel by activityViewModels()
     private val signupNicknameViewModel: SignupNicknameViewModel by activityViewModels()
 
     private lateinit var tutorialStorage: TutorialStorage
-    private val authService: AuthService = NetworkModule.getClient().create(AuthService::class.java)
-    private lateinit var tokenStorage: TokenStorage
-    private val tokenManager = TokenManager(authService, tokenStorage)
 
-    private val loginViewModel: LoginViewModel by activityViewModels {
-        AuthViewModelFactory(
-            authService,
-            tokenStorage,
-            tokenManager
-        )
+    private val loginViewModel: LoginViewModel by activityViewModels{
+        val tokenStorage = TokenStorage(requireContext())
+        val authService = NetworkModule.getClient().create(AuthService::class.java)
+        val tokenManager = TokenManager(authService, tokenStorage)
+
+        AuthViewModelFactory(authService, tokenStorage, tokenManager)
     }
 
     override fun onCreateView(
@@ -46,12 +46,12 @@ class SignupStatusFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentSignupstatusBinding.inflate(inflater, container, false)
+
         binding.viewModel = signUpStatusViewModel
         binding.lifecycleOwner = this
 
-        tokenStorage = TokenStorage(requireContext())
+        tutorialStorage = TutorialStorage(requireContext())
 
         return binding.root
     }

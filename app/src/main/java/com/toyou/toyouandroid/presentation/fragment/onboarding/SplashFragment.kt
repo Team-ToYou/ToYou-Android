@@ -17,6 +17,7 @@ import com.toyou.toyouandroid.databinding.FragmentSplashBinding
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
+import com.toyou.toyouandroid.presentation.viewmodel.AuthViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
 import com.toyou.toyouandroid.utils.TokenManager
@@ -26,13 +27,12 @@ class SplashFragment : Fragment() {
 
     private lateinit var navController: NavController
     private var _binding: FragmentSplashBinding? = null
+    private val binding: FragmentSplashBinding
+        get() = requireNotNull(_binding){"FragmentSplashBinding -> null"}
+
     private lateinit var database: UserDatabase
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var userViewModel: UserViewModel
-
-
-    private val binding: FragmentSplashBinding
-        get() = requireNotNull(_binding){"FragmentSplashBinding -> null"}
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,10 +45,16 @@ class SplashFragment : Fragment() {
         val tokenStorage = TokenStorage(requireContext())
         val authService = NetworkModule.getClient().create(AuthService::class.java)
         val tokenManager = TokenManager(authService, tokenStorage)
+
         loginViewModel = ViewModelProvider(
             this,
-            AuthViewModelFactory(authService, tokenStorage, tokenManager)
+            AuthViewModelFactory(
+                authService,
+                tokenStorage,
+                tokenManager
+            )
         )[LoginViewModel::class.java]
+
         userViewModel = ViewModelProvider(
             requireActivity(),
             UserViewModelFactory(tokenStorage)
