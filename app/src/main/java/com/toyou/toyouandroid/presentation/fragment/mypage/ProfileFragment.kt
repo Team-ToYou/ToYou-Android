@@ -18,8 +18,10 @@ import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentProfileBinding
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
+import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.network.NetworkModule
-import com.toyou.toyouandroid.presentation.fragment.onboarding.AuthViewModelFactory
+import com.toyou.toyouandroid.presentation.viewmodel.AuthViewModelFactory
+import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
 import com.toyou.toyouandroid.utils.TokenManager
@@ -41,7 +43,9 @@ class ProfileFragment : Fragment() {
         val tokenStorage = TokenStorage(requireContext())
         val authService: AuthService = NetworkModule.getClient().create(AuthService::class.java)
         val tokenManager = TokenManager(authService, tokenStorage)
-        AuthViewModelFactory(authService, tokenStorage, tokenManager)
+
+        val authService2: AuthService = AuthNetworkModule.getClient().create(AuthService::class.java)
+        AuthViewModelFactory(authService2, tokenStorage, tokenManager)
     }
 
     override fun onCreateView(
@@ -58,9 +62,7 @@ class ProfileFragment : Fragment() {
 
         viewModel = ViewModelProvider(
             this,
-            AuthViewModelFactory(
-                authService,
-                tokenStorage,
+            HomeViewModelFactory(
                 tokenManager
             )
         )[ProfileViewModel::class.java]

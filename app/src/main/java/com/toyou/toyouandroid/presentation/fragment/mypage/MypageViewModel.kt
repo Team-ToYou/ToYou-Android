@@ -44,13 +44,19 @@ class MypageViewModel(
                         _logoutSuccess.value = true
                         tokenStorage.clearTokens()
                     } else {
-                        val errorMessage = response.errorBody()?.string() ?: "Unknown error"
+                        val errorMessage = response.errorBody()?.string() ?: "Unknown error: ${response.message()}"
                         Timber.e("API Error: $errorMessage")
                         _logoutSuccess.value = false
-                        tokenManager.refreshToken(
-                            onSuccess = { kakaoLogout() },
-                            onFailure = { Timber.e("Failed to refresh token and kakao logout") }
-                        )
+
+                        // 토큰 만료 시 토큰 갱신 후 로그아웃 재시도
+                        if (response.code() == 401) {
+                            tokenManager.refreshToken(
+                                onSuccess = { kakaoLogout() },  // 토큰 갱신 후 로그아웃 재시도
+                                onFailure = { Timber.e("Failed to refresh token and kakao logout") }
+                            )
+                        } else {
+                            _logoutSuccess.value = false
+                        }
                     }
                 }
 

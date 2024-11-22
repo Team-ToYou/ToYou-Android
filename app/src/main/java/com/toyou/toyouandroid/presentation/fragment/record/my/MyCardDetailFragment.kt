@@ -17,7 +17,7 @@ import com.toyou.toyouandroid.databinding.CardLayoutRecordBinding
 import com.toyou.toyouandroid.domain.record.RecordRepository
 import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.network.NetworkModule
-import com.toyou.toyouandroid.presentation.fragment.record.RecordViewModelFactory
+import com.toyou.toyouandroid.presentation.viewmodel.RecordViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
 import com.toyou.toyouandroid.ui.home.adapter.CardPreviewListAdapter

@@ -16,8 +16,7 @@
         android:id="@+id/login_container"
         android:layout_width="360dp"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:background="@drawable/signupnickname_input"
+        android:background="@drawable/background_calendar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -28,8 +27,11 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:padding="16dp"
             android:visibility="visible"
+            android:paddingStart="30dp"
+            android:paddingEnd="30dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">

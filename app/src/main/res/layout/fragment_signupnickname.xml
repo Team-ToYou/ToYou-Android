@@ -160,7 +160,8 @@
             android:textColor="@{viewModel.nextButtonTextColor}"
             style="@style/sc_m13"
             android:enabled="@{viewModel.isNextButtonEnabled}"
-            app:layout_constraintStart_toStartOf="@id/guideline_next_v"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/guideline_next_h" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

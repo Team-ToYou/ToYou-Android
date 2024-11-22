@@ -6,65 +6,65 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
-import android.provider.Settings
-import android.util.Log
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.viewModelScope
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.utils.TokenStorage
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
-
     private lateinit var tokenStorage: TokenStorage
+    private var sharedPreferences: SharedPreferences? = null
 
     override fun onCreate() {
         super.onCreate()
-        // TokenStorage 초기화
         tokenStorage = TokenStorage(applicationContext)
-
+        sharedPreferences = getSharedPreferences("FCM_PREFERENCES", Context.MODE_PRIVATE)
     }
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        Log.d("FCM Token", "FCM 토큰: $token")
-
+        Timber.d("FCM 토큰: %s", token)
         tokenStorage.saveFcmToken(token)
-        Log.d("FCM Token 저장", "토큰이 저장되었습니다: $token")
+        Timber.d("토큰이 저장되었습니다: %s", token)
 
+        // 구독 여부가 저장되어 있으면 구독
+        val isSubscribed = sharedPreferences?.getBoolean("isSubscribed", true)
+        if (isSubscribed == true) {
+            subscribeToTopic()
+        }
+    }
+
+    fun subscribeToTopic() {
         FirebaseMessaging.getInstance().subscribeToTopic("allUsers")
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    Log.d("FCM", "topic 구독 성공'")
+                    Timber.d("topic 구독 성공")
+                    sharedPreferences?.edit()?.putBoolean("isSubscribed", true)?.apply()
                 } else {
-                    Log.e("FCM",task.exception.toString())
+                    Timber.e(task.exception, "구독 실패")
                 }
             }
+    }
 
-        /*FirebaseMessaging.getInstance().unsubscribeFromTopic("alarm")
+    fun unsubscribeFromTopic() {
+        FirebaseMessaging.getInstance().unsubscribeFromTopic("allUsers")
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    Log.d("FCM", "topic 구독 취소 성공")
+                    Timber.d("topic 구독 취소 성공")
+                    sharedPreferences?.edit()?.putBoolean("isSubscribed", false)?.apply()
                 } else {
-                    Log.e("FCM", task.exception.toString())
+                    Timber.e(task.exception, "구독 취소 실패")
                 }
-            }*/
-
+            }
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
@@ -77,7 +77,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 sendNotification(it.title, it.body)
             }
         } else {
-            Log.d("FCM", "알림 권한이 없어 알림을 표시할 수 없습니다.")
+            Timber.tag("FCM").d("알림 권한이 없어 알림을 표시할 수 없습니다.")
         }
     }
 

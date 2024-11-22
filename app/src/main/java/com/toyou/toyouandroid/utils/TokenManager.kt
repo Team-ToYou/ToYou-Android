@@ -10,12 +10,6 @@ import timber.log.Timber
 
 class TokenManager(private val authService: AuthService, private val tokenStorage: TokenStorage) {
 
-    private var accessToken: String? = null
-
-    fun setAccessToken(token: String) {
-        accessToken = token
-    }
-
     fun refreshToken(onSuccess: (String) -> Unit, onFailure: () -> Unit) {
         authService.reissue(tokenStorage.getRefreshToken().toString()).enqueue(object :
             Callback<SignUpResponse> {
