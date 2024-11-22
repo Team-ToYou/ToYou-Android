@@ -5,6 +5,19 @@
     android:layout_height="match_parent"
     android:background="@drawable/create_bg">
 
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/NestedScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/next_btn">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
@@ -175,6 +188,17 @@
         app:layout_constraintTop_toBottomOf="@id/type3_tv" />
 
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.96" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/next_btn"
         style="@style/sc_m13"
@@ -184,19 +208,25 @@
         android:enabled="false"
         android:text="다음"
         android:textColor="@drawable/next_txt_color"
-        app:layout_constraintEnd_toEndOf="@id/guideline3"
-        app:layout_constraintStart_toStartOf="@id/guideline6"
+        app:layout_constraintEnd_toEndOf="@id/guideline9"
+        app:layout_constraintStart_toStartOf="@id/guideline10"
         app:layout_constraintBottom_toBottomOf="parent"
         android:stateListAnimator="@null"
         android:layout_marginBottom="30dp"/>
 
-
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline8"
+        android:id="@+id/guideline9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.96" />
+        app:layout_constraintGuide_percent="0.94" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.06" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
