@@ -128,32 +128,26 @@ class QuestionContentFragment : Fragment() {
                 1 -> {
                     binding.balloonTv.setBackgroundResource(R.drawable.balloon_happy)
                     binding.imogeIv.setBackgroundResource(R.drawable.imoge_happy)
-                    binding.imageView2.setBackgroundResource(R.drawable.balloon_happy2)
                 }
                 2 -> {
                     binding.balloonTv.setBackgroundResource(R.drawable.balloon_excited)
                     binding.imogeIv.setBackgroundResource(R.drawable.imoge_excited)
-                    binding.imageView2.setBackgroundResource(R.drawable.balloon_excited2)
                 }
                 3 -> {
-                    binding.balloonTv.setBackgroundResource(R.drawable.social_ballon)
+                    binding.balloonTv.setBackgroundResource(R.drawable.balloon_normal)
                     binding.imogeIv.setBackgroundResource(R.drawable.social_imoge)
-                    binding.imageView2.setBackgroundResource(R.drawable.social_balloon)
                 }
                 4 -> {
                     binding.balloonTv.setBackgroundResource(R.drawable.balloon_anxiety)
                     binding.imogeIv.setBackgroundResource(R.drawable.imoge_anxiety)
-                    binding.imageView2.setBackgroundResource(R.drawable.balloon_anxiety2)
                 }
                 5 -> {
                     binding.balloonTv.setBackgroundResource(R.drawable.balloon_angry)
                     binding.imogeIv.setBackgroundResource(R.drawable.imoge_angry)
-                    binding.imageView2.setBackgroundResource(R.drawable.balloon_angry2)
                 }
                 else -> {
                     binding.balloonTv.setBackgroundResource(R.drawable.balloon_no)
                     binding.imogeIv.setBackgroundResource(0)
-                    binding.imageView2.setBackgroundResource(R.drawable.balloon_no2)
                     binding.normalTv.text = "친구가 아직 감정우표를 선택하지 않았어요"
                 }
             }

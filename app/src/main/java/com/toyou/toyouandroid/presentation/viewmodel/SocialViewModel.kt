@@ -184,7 +184,6 @@ class SocialViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
     fun updateQuestionOptions(newOptions: List<String>) {
         _questionDto.value?.let { currentQuestionDto ->
             _questionDto.value = currentQuestionDto.copy(options = newOptions)
-            Log.d("옵션", _questionDto.value.toString())
         }
 
     }
