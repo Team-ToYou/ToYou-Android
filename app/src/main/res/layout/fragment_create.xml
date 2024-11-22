@@ -118,10 +118,9 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/card_rv"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toTopOf="@id/guideline16"
         app:layout_constraintEnd_toEndOf="@id/guideline8"
         app:layout_constraintStart_toStartOf="@id/guideline"
         app:layout_constraintTop_toBottomOf="@id/type1_tv"/>
@@ -144,10 +143,9 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cardShort_rv"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toTopOf="@id/guideline17"
         app:layout_constraintEnd_toEndOf="@id/guideline8"
         app:layout_constraintStart_toStartOf="@id/guideline"
         app:layout_constraintTop_toBottomOf="@id/type2_tv" />
@@ -170,9 +168,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/card_choose_rv"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        app:layout_constraintBottom_toTopOf="@id/guideline18"
         app:layout_constraintEnd_toEndOf="@id/guideline8"
         app:layout_constraintStart_toStartOf="@id/guideline"
         app:layout_constraintTop_toBottomOf="@id/type3_tv" />
@@ -182,23 +179,17 @@
         android:id="@+id/next_btn"
         style="@style/sc_m13"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="40dp"
         android:background="@drawable/create_next_btn"
         android:enabled="false"
         android:text="다음"
         android:textColor="@drawable/next_txt_color"
-        app:layout_constraintBottom_toTopOf="@id/guideline7"
         app:layout_constraintEnd_toEndOf="@id/guideline3"
         app:layout_constraintStart_toStartOf="@id/guideline6"
-        app:layout_constraintTop_toBottomOf="@id/guideline4"
-        android:stateListAnimator="@null"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:stateListAnimator="@null"
+        android:layout_marginBottom="30dp"/>
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.95" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline8"
@@ -206,27 +197,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.96" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.325" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline17"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline18"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.75" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

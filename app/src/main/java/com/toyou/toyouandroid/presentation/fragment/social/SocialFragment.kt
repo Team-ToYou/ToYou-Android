@@ -215,7 +215,6 @@ class SocialFragment : Fragment() {
                 }
                 "REQUEST_RECEIVED" -> {
                     stateBtn.text = "친구 수락"
-                    stateBtn.setBackgroundResource(R.drawable.r10_red_container)
                 }
                 "FRIEND" -> {
                     stateBtn.text = "친구"
