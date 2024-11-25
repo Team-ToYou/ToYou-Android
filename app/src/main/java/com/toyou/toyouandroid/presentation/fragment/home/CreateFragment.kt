@@ -17,15 +17,17 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.R
+import com.toyou.toyouandroid.data.onboarding.service.AuthService
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.databinding.FragmentCreateBinding
+import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.fragment.home.adapter.CardAdapter
 import com.toyou.toyouandroid.presentation.fragment.home.adapter.CardChooseAdapter
 import com.toyou.toyouandroid.presentation.fragment.home.adapter.CardShortAdapter
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
-import com.toyou.toyouandroid.presentation.viewmodel.CardViewModelFactory
+import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
-import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
+import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
 import timber.log.Timber
 
@@ -45,10 +47,14 @@ class CreateFragment : Fragment(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         val tokenStorage = TokenStorage(requireContext())
+        val authService = NetworkModule.getClient().create(AuthService::class.java)
+        val tokenManager = TokenManager(authService, tokenStorage)
+
         cardViewModel = ViewModelProvider(
             requireActivity(),
-            CardViewModelFactory(tokenStorage)
+            HomeViewModelFactory(tokenManager)
         )[CardViewModel::class.java]
 
         //cardViewModel.loadCardData()

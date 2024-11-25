@@ -32,10 +32,8 @@ import com.toyou.toyouandroid.presentation.viewmodel.NoticeViewModelFactory
 import com.toyou.toyouandroid.presentation.fragment.record.CardInfoViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.RecordViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
-import com.toyou.toyouandroid.presentation.viewmodel.CardViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
-import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
 import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
 import timber.log.Timber
@@ -96,12 +94,12 @@ class HomeFragment : Fragment() {
 
         cardViewModel = ViewModelProvider(
             requireActivity(),
-            CardViewModelFactory(tokenStorage)
+            HomeViewModelFactory(tokenManager)
         )[CardViewModel::class.java]
 
         userViewModel = ViewModelProvider(
             requireActivity(),
-            UserViewModelFactory(tokenStorage)
+            HomeViewModelFactory(tokenManager)
         )[UserViewModel::class.java]
 
         cardInfoViewModel = ViewModelProvider(

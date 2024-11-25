@@ -10,14 +10,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.toyou.toyouandroid.R
+import com.toyou.toyouandroid.data.onboarding.service.AuthService
 import com.toyou.toyouandroid.databinding.FragmentModifyBinding
-import com.toyou.toyouandroid.databinding.FragmentPreviewBinding
+import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
-import com.toyou.toyouandroid.presentation.viewmodel.CardViewModelFactory
-import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
-import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
-import com.toyou.toyouandroid.ui.home.CardFragment
-import com.toyou.toyouandroid.ui.home.adapter.CardPreviewListAdapter
+import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModelFactory
+import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
 
 class ModifyFragment: Fragment() {
@@ -30,10 +28,14 @@ class ModifyFragment: Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         val tokenStorage = TokenStorage(requireContext())
+        val authService = NetworkModule.getClient().create(AuthService::class.java)
+        val tokenManager = TokenManager(authService, tokenStorage)
+
         cardViewModel = ViewModelProvider(
             requireActivity(),
-            CardViewModelFactory(tokenStorage)
+            HomeViewModelFactory(tokenManager)
         )[CardViewModel::class.java]
 
     }
@@ -42,7 +44,7 @@ class ModifyFragment: Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentModifyBinding.inflate(inflater, container, false)
 
         if (savedInstanceState == null) {

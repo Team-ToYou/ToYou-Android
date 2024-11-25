@@ -72,9 +72,7 @@ class MypageFragment : Fragment() {
 
         homeViewModel = ViewModelProvider(
             this,
-            HomeViewModelFactory(
-                tokenManager
-            )
+            HomeViewModelFactory(tokenManager)
         )[HomeViewModel::class.java]
 
         sharedPreferences = requireActivity().getSharedPreferences("FCM_PREFERENCES", Context.MODE_PRIVATE)

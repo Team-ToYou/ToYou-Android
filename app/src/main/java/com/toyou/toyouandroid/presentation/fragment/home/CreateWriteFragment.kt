@@ -3,28 +3,25 @@ package com.toyou.toyouandroid.presentation.fragment.home
 import ShortCardAdapter
 import android.os.Bundle
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.R
+import com.toyou.toyouandroid.data.onboarding.service.AuthService
 import com.toyou.toyouandroid.databinding.FragmentCreateWriteBinding
-import com.toyou.toyouandroid.model.ChooseModel
-import com.toyou.toyouandroid.presentation.fragment.home.adapter.CardChooseAdapter
+import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.fragment.home.adapter.ChooseCardAdapter
 import com.toyou.toyouandroid.presentation.fragment.home.adapter.WriteCardAdapter
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
-import com.toyou.toyouandroid.presentation.viewmodel.CardViewModelFactory
-import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
-import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
+import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModelFactory
+import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
 
 class CreateWriteFragment: Fragment() {
@@ -40,10 +37,14 @@ class CreateWriteFragment: Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         val tokenStorage = TokenStorage(requireContext())
+        val authService = NetworkModule.getClient().create(AuthService::class.java)
+        val tokenManager = TokenManager(authService, tokenStorage)
+
         cardViewModel = ViewModelProvider(
             requireActivity(),
-            CardViewModelFactory(tokenStorage)
+            HomeViewModelFactory(tokenManager)
         )[CardViewModel::class.java]
 
     }
@@ -52,17 +53,17 @@ class CreateWriteFragment: Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentCreateWriteBinding.inflate(inflater, container, false)
 
-        cardViewModel.previewCards.observe(viewLifecycleOwner, Observer { cards ->
+        cardViewModel.previewCards.observe(viewLifecycleOwner) { cards ->
             longAdapter.setCards(cards)
             shortAdapter.setCards(cards)
-        })
+        }
 
-        cardViewModel.previewCards.observe(viewLifecycleOwner, Observer { cards ->
+        cardViewModel.previewCards.observe(viewLifecycleOwner) { cards ->
             chooseAdapter.setCards(cards)
-        })
+        }
 
         longAdapter = WriteCardAdapter(cardViewModel)
         shortAdapter = ShortCardAdapter(cardViewModel)
@@ -86,16 +87,16 @@ class CreateWriteFragment: Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 cardViewModel.clearAllData()
-                navController.popBackStack()            }
-
+                navController.popBackStack()
+            }
         })
         binding.nextBtn.setOnClickListener {
             navController.navigate(R.id.action_createWriteFragment_to_previewFragment)
         }
 
-        cardViewModel.isAllAnswersFilled.observe(viewLifecycleOwner, Observer { isFilled ->
+        cardViewModel.isAllAnswersFilled.observe(viewLifecycleOwner) { isFilled ->
             binding.nextBtn.isEnabled = isFilled
-        })
+        }
 
     }
 

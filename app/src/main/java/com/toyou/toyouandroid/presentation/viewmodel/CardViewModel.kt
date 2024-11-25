@@ -1,18 +1,10 @@
 package com.toyou.toyouandroid.presentation.viewmodel
 
-import android.util.Log
-import android.widget.ImageView
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.toyou.toyouandroid.data.UserDatabase
-import com.toyou.toyouandroid.data.UserEntity
-import com.toyou.toyouandroid.data.create.dto.request.AnswerDto
 import com.toyou.toyouandroid.data.create.dto.response.QuestionsDto
-import com.toyou.toyouandroid.data.social.dto.request.RequestFriend
-
 import com.toyou.toyouandroid.domain.create.repository.CreateRepository
 import com.toyou.toyouandroid.domain.home.repository.HomeRepository
 import com.toyou.toyouandroid.model.CardModel
@@ -20,14 +12,11 @@ import com.toyou.toyouandroid.model.CardShortModel
 import com.toyou.toyouandroid.model.ChooseModel
 import com.toyou.toyouandroid.model.PreviewCardModel
 import com.toyou.toyouandroid.model.PreviewChooseModel
-import com.toyou.toyouandroid.network.BaseResponse
-import com.toyou.toyouandroid.utils.TokenStorage
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import com.toyou.toyouandroid.utils.TokenManager
 import kotlinx.coroutines.launch
-import java.time.LocalDate
+import timber.log.Timber
 
-class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
+class CardViewModel(private val tokenManager: TokenManager) : ViewModel(){
     private val _cards = MutableLiveData<List<CardModel>>()
     val cards: LiveData<List<CardModel>> get() = _cards
     private val _shortCards = MutableLiveData<List<CardShortModel>>()
@@ -39,8 +28,8 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
     val chooseCards : LiveData<List<ChooseModel>> get() = _chooseCards
     private val _previewChoose = MutableLiveData<List<PreviewChooseModel>>()
     val previewChoose : LiveData<List<PreviewChooseModel>> get() = _previewChoose
-    private val repository = CreateRepository(tokenStorage)
-    private val homeRepository = HomeRepository(tokenStorage)
+    private val repository = CreateRepository(tokenManager)
+    private val homeRepository = HomeRepository()
 
     val exposure : LiveData<Boolean> get() = _exposure
     private val _exposure = MutableLiveData<Boolean>()
@@ -106,29 +95,35 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
         _isAllAnswersFilled.value = inputStatus.count { it } == inputStatus.size && inputLongStatus.count { it } == inputLongStatus.size && inputChooseStatus.count { it } == inputChooseStatus.size
     }
 
-    fun sendData(previewCardModels: List<PreviewCardModel>, exposure: Boolean,) {
+    fun sendData(previewCardModels: List<PreviewCardModel>, exposure: Boolean) {
         viewModelScope.launch {
             _cardId.value = repository.postCardData(previewCardModels, exposure)
-            Log.d("카드 아이디", _cardId.value.toString())
+            Timber.tag("카드 아이디").d(_cardId.value.toString())
         }
     }
 
-    fun getAllData() = viewModelScope.launch {
-        try {
-            val response = repository.getAllData()
-            if (response.isSuccess) {
-                val questionsDto = response.result
-                if (previewCards.value == null)
-                    questionsDto?.let {
-                        mapToModels(it)
-                        Log.d("get", questionsDto.toString())
-                    }
-                else
-                    questionsDto?.let { mapToPatchModels(it) }
-            } else {
-                // 오류 처리
+    fun getAllData() {
+        viewModelScope.launch {
+            try {
+                val response = repository.getAllData()
+                if (response.isSuccess) {
+                    val questionsDto = response.result
+                    if (previewCards.value == null)
+                        questionsDto.let {
+                            mapToModels(it)
+                            Timber.tag("get").d(questionsDto.toString())
+                        }
+                    else
+                        mapToPatchModels(questionsDto)
+                } else {
+                    // 오류 처리
+                    tokenManager.refreshToken(
+                        onSuccess = { getAllData() },
+                        onFailure = { Timber.tag("CardViewModel").d("refresh error")}
+                    )
+                }
+            } catch (_: Exception) {
             }
-        } catch (e: Exception) {
         }
     }
 
@@ -141,62 +136,70 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
     private val _receiver = MutableLiveData<String>()
     val receiver: LiveData<String> get() = _receiver
 
-    fun getCardDetail(id : Long) = viewModelScope.launch {
-        try {
-            val response = homeRepository.getCardDetail(id)
-            if (response.isSuccess) {
-                val detailCard = response.result
-                val previewCardList = mutableListOf<PreviewCardModel>()
-                _exposure.value = detailCard.exposure
-                _date.value = detailCard.date
-                _emotion.value = detailCard.emotion
-                _receiver.value = detailCard.receiver
+    fun getCardDetail(id : Long) {
+        viewModelScope.launch {
+            try {
+                val response = homeRepository.getCardDetail(id)
+                if (response.isSuccess) {
+                    val detailCard = response.result
+                    val previewCardList = mutableListOf<PreviewCardModel>()
+                    _exposure.value = detailCard.exposure
+                    _date.value = detailCard.date
+                    _emotion.value = detailCard.emotion
+                    _receiver.value = detailCard.receiver
 
-                detailCard?.questions?.let { questionList ->
-                    questionList.forEach { question ->
-                        val previewCard = when(question.type) {
-                            "OPTIONAL" -> {
-                                PreviewCardModel(
-                                    question = question.content,
-                                    fromWho = question.questioner,
-                                    options = question.options,
-                                    type = question.options!!.size,
-                                    answer = question.answer,
-                                    id = question.id
-                                )
+                    detailCard.questions.let { questionList ->
+                        questionList.forEach { question ->
+                            val previewCard = when(question.type) {
+                                "OPTIONAL" -> {
+                                    PreviewCardModel(
+                                        question = question.content,
+                                        fromWho = question.questioner,
+                                        options = question.options,
+                                        type = question.options!!.size,
+                                        answer = question.answer,
+                                        id = question.id
+                                    )
+                                }
+
+                                "SHORT_ANSWER" -> {
+                                    PreviewCardModel(
+                                        question = question.content,
+                                        fromWho = question.questioner,
+                                        options = question.options,
+                                        type = 0,
+                                        answer = question.answer,
+                                        id = question.id
+                                    )
+                                }
+
+                                else -> {
+                                    PreviewCardModel(
+                                        question = question.content,
+                                        fromWho = question.questioner,
+                                        options = question.options,
+                                        type = 1,
+                                        answer = question.answer,
+                                        id = question.id
+                                    )
+                                }
                             }
-                            "SHORT_ANSWER" -> {
-                                PreviewCardModel(
-                                    question = question.content,
-                                    fromWho = question.questioner,
-                                    options = question.options,
-                                    type = 0,
-                                    answer = question.answer,
-                                    id = question.id
-                                )
-                            }
-                            else -> {
-                                PreviewCardModel(
-                                    question = question.content,
-                                    fromWho = question.questioner,
-                                    options = question.options,
-                                    type = 1,
-                                    answer = question.answer,
-                                    id = question.id
-                                )
-                            }
+                            previewCardList.add(previewCard)
+                            _previewCards.value = previewCardList
                         }
-                        previewCardList.add(previewCard)
-                    _previewCards.value = previewCardList
                     }
-                }
 
-            } else {
-                // 오류 처리
-                Log.e("CardViewModel", "detail API 호출 실패: ${response.message}")
+                } else {
+                    // 오류 처리
+                    Timber.tag("CardViewModel").d("detail API 호출 실패: ${response.message}")
+                    tokenManager.refreshToken(
+                        onSuccess = { getCardDetail(id) },
+                        onFailure = { Timber.tag("CardViewModel").d("refresh error")}
+                    )
+                }
+            } catch (e: Exception) {
+                Timber.tag("CardViewModel").d("detail 예외 발생: ${e.message}")
             }
-        } catch (e: Exception) {
-            Log.e("CardViewModel", "detail 예외 발생: ${e.message}")
         }
     }
 
@@ -217,7 +220,7 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
                         ChooseModel(
                             message = question.content,
                             fromWho = question.questioner,
-                            options = question.options ?: emptyList(),
+                            options = question.options,
                             type = question.options.size,
                             id = question.id,
                             isButtonSelected = isSelected,
@@ -258,7 +261,6 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
         _cards.value = cardModels
         _chooseCards.value = chooseModels
         _shortCards.value = cardShortModel
-
     }
 
 
@@ -276,7 +278,7 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
                         ChooseModel(
                             message = question.content,
                             fromWho = question.questioner,
-                            options = question.options ?: emptyList(),
+                            options = question.options,
                             type = question.options.size,
                             id = question.id
 
@@ -320,7 +322,7 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
 
     fun isLockSelected() {
         _exposure.value = _exposure.value?.not() ?: true
-        Log.d("lock", _exposure.value.toString())
+        Timber.tag("lock").d(_exposure.value.toString())
         //toastShow = true
     }
 
@@ -388,7 +390,7 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
         val newShortCardsCount = selectedNewShortCards.size + existingCards.filter { it.type == 0 }.size
         val newChooseCardsCount = selectedNewChooseCards.size + existingCards.filter { it.type == 2 || it.type ==3 }.size
 
-        Log.d("카드 선택 개수", "New Cards: $newCardsCount, Short Cards: $newShortCardsCount, Choose Cards: $newChooseCardsCount")
+        Timber.tag("카드 선택 개수").d("New Cards: $newCardsCount, Short Cards: $newShortCardsCount, Choose Cards: $newChooseCardsCount")
 
         setCardCount(newShortCardsCount, newCardsCount, newChooseCardsCount)
 
@@ -410,7 +412,7 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
             it.copy(isButtonSelected = false)
         }
 
-            Log.d("미리보기", previewCards.value.toString())
+        Timber.tag("미리보기").d(previewCards.value.toString())
     }
 
     fun clearAllData() {
@@ -429,8 +431,7 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
             viewModelScope.launch {
                 repository.patchCardData(previewCardModels, exposure, id)
         }
-
-    }
+   }
 
     fun countSelect(selection : Boolean){
 
@@ -445,12 +446,10 @@ class CardViewModel(private val tokenStorage: TokenStorage) : ViewModel(){
             }
         }
 
-        Log.d("선택5", countSelection.value.toString())
-
+        Timber.tag("선택5").d(countSelection.value.toString())
     }
 
     fun resetSelect(){
         _countSelection.value = 0
     }
-
 }
