@@ -15,25 +15,19 @@ import retrofit2.http.Path
 interface CreateService {
 
     @GET("/questions")
-    suspend fun getQuestions(
-        @Header("Authorization") id : String
-    ) : BaseResponse<QuestionsDto>
+    suspend fun getQuestions() : BaseResponse<QuestionsDto>
 
     @POST("/diarycards")
     suspend fun postCard(
-        @Header("Authorization") id : String,
         @Body request : AnswerDto
     ) : BaseResponse<AnswerPost>
 
     @PATCH("/diarycards/{cardId}")
     suspend fun patchCard(
-        @Header("Authorization") id : String,
         @Path("cardId") card : Int,
         @Body request : AnswerDto
-        ) : BaseResponse<Unit>
+    ) : BaseResponse<Unit>
 
     @GET("/users/home")
-    suspend fun getHomeEntry(
-        @Header("Authorization") id : String,
-    ) : BaseResponse<HomeDto>
+    suspend fun getHomeEntry() : BaseResponse<HomeDto>
 }
