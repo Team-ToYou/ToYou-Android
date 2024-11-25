@@ -16,10 +16,7 @@ class AuthViewModelFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return LoginViewModel(authService, tokenStorage) as T
-        } else if (modelClass.isAssignableFrom(UserViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return UserViewModel(tokenStorage) as T
+            return LoginViewModel(authService, tokenStorage, tokenManager) as T
         } else if (modelClass.isAssignableFrom(MypageViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return MypageViewModel(authService, tokenStorage, tokenManager) as T
