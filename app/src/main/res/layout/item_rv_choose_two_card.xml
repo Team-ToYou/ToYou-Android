@@ -69,6 +69,7 @@
         style="@style/sc_l12"
         android:layout_marginTop="35dp"
         android:layout_width="wrap_content"
+        android:textColor="@color/black"
         android:layout_height="wrap_content"
         android:text="From."
         app:layout_constraintEnd_toEndOf="@id/choose_option2"

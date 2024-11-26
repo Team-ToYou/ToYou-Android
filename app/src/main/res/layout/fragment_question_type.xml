@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_paper">
@@ -54,21 +55,13 @@
         app:layout_constraintStart_toEndOf="@id/guideline19"
         app:layout_constraintTop_toBottomOf="@id/subTitle_tv" />
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        android:background="@drawable/social_balloon"
-        app:layout_constraintEnd_toStartOf="@id/balloon_tv"
-        app:layout_constraintTop_toBottomOf="@id/view" />
 
 
     <ImageView
         android:id="@+id/balloon_tv"
         android:layout_width="0dp"
         android:layout_height="30dp"
-        android:background="@drawable/social_ballon"
+        android:background="@drawable/balloon_normal"
         app:layout_constraintEnd_toEndOf="@id/guideline20"
         app:layout_constraintStart_toEndOf="@id/guideline19"
         app:layout_constraintTop_toBottomOf="@id/view"
@@ -80,11 +73,13 @@
         style="@style/gangwon15"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
         android:text="평범한 하루였어요 "
         android:textColor="@color/black"
-        android:layout_marginLeft="8dp"
+        android:layout_marginStart="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/balloon_tv"
-        app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintStart_toEndOf="@+id/balloon_tv"
+        app:layout_constraintStart_toStartOf="@+id/balloon_tv"
         app:layout_constraintTop_toTopOf="@+id/balloon_tv" />
 
     <ImageView
@@ -92,6 +87,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
+        android:layout_marginStart="10dp"
         android:background="@drawable/social_imoge"
         app:layout_constraintStart_toEndOf="@+id/normal_tv"
         app:layout_constraintBottom_toBottomOf="@+id/balloon_tv"
@@ -240,7 +236,7 @@
 
         <TextView
             android:id="@+id/detail1_tv"
-            style="@style/gangwon15"
+            style="@style/gangwon10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="(보기를 만들 수 있어요)"
@@ -254,7 +250,7 @@
 
         <TextView
             android:id="@+id/detail2_tv"
-            style="@style/gangwon15"
+            style="@style/gangwon10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="(간단하게 물어보세요)"
@@ -268,7 +264,7 @@
 
         <TextView
             android:id="@+id/detail3_tv"
-            style="@style/gangwon15"
+            style="@style/gangwon10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="(긴 답변을 원해요)"
@@ -278,34 +274,20 @@
     </LinearLayout>
 
 
-
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/next_btn"
         style="@style/sc_m13"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="40dp"
         android:background="@drawable/create_next_btn"
         android:text="다음"
         android:textColor="@drawable/next_txt_color"
-        app:layout_constraintBottom_toTopOf="@id/guideline7"
         app:layout_constraintEnd_toEndOf="@id/guideline20"
         app:layout_constraintStart_toStartOf="@id/guideline19"
-        app:layout_constraintTop_toBottomOf="@id/guideline4"
-        android:enabled="false"/>
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.93" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.86" />
+        android:enabled="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="80dp"
+        android:stateListAnimator="@null"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline18"
