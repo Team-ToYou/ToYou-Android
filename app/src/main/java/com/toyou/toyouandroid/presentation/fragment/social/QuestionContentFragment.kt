@@ -168,9 +168,10 @@ class QuestionContentFragment : Fragment() {
 
             val newOption = optionView.findViewById<EditText>(R.id.edit_text)
             val deleteButton = optionView.findViewById<ImageView>(R.id.delete_button)
+            val newOptionLimit = optionView.findViewById<TextView>(R.id.limit_option)
 
             newOption.apply {
-                setPadding(10, 30, 5, 30)
+                setPadding(10, 10, 5, 10)
                 setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
                 textSize = 12f
                 optionText?.let {
@@ -196,6 +197,7 @@ class QuestionContentFragment : Fragment() {
                         optionsList.add(s.toString())
                     }
                     socialViewModel.updateQuestionOptions(optionsList)
+                    newOptionLimit.text = String.format("(%d/20)", s?.length ?: 0)
 
                     checkNextButtonState()
                 }
@@ -232,7 +234,6 @@ class QuestionContentFragment : Fragment() {
             if (optionCount == 3) {
                 addOptionButton.isEnabled = false
             }
-            Log.d("AddOption", "Current optionCount: $optionCount")
 
         }
     }

@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.room.util.TableInfo
 import com.toyou.toyouandroid.data.social.dto.request.QuestionDto
 import com.toyou.toyouandroid.data.social.dto.request.RequestFriend
 import com.toyou.toyouandroid.data.social.dto.response.FriendsDto
@@ -60,6 +61,9 @@ class SocialViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
     val friendRequestCanceled : LiveData<Boolean> get() = _friendRequestCanceled
     private val _friendRequestRemove = MutableLiveData<Boolean>()
     val friendRequestRemove : LiveData<Boolean> get() = _friendRequestRemove
+    private val _optionIndex = MutableLiveData<Int>()
+    val optionIndex : LiveData<Int> get() = _optionIndex
+
 
 
 
@@ -186,6 +190,11 @@ class SocialViewModel(private val tokenStorage: TokenStorage) : ViewModel() {
             _questionDto.value = currentQuestionDto.copy(options = newOptions)
         }
 
+    }
+
+    fun getOptionLength(index: Int): Int {
+        val options = questionDto.value?.options ?: return 0
+        return if (index in options.indices) options[index].length else 0
     }
 
     fun updateOption() {
