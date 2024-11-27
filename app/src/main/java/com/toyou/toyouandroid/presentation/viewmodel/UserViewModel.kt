@@ -48,6 +48,10 @@ class UserViewModel(private val tokenManager: TokenManager) : ViewModel() {
                 }
             } catch (e: Exception) {
                 Timber.tag("getHomeEntry").d("예외 발생: ${e.message}")
+                tokenManager.refreshToken(
+                    onSuccess = { getHomeEntry() },
+                    onFailure = { Timber.e("getHomeEntry API call failed") }
+                )
             }
         }
     }

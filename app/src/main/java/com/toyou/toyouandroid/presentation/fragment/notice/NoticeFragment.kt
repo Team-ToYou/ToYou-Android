@@ -18,11 +18,14 @@ import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.domain.notice.NoticeRepository
 import com.toyou.toyouandroid.data.notice.service.NoticeService
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
+import com.toyou.toyouandroid.data.social.service.SocialService
+import com.toyou.toyouandroid.domain.social.repostitory.SocialRepository
 import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.NoticeViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
 import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.notice.SwipeToDeleteNotice
@@ -62,6 +65,9 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
         val noticeService = AuthNetworkModule.getClient().create(NoticeService::class.java)
         val noticeRepository = NoticeRepository(noticeService)
 
+        val socialService = AuthNetworkModule.getClient().create(SocialService::class.java)
+        val socialRepository = SocialRepository(socialService)
+
         viewModel = ViewModelProvider(
             this,
             NoticeViewModelFactory(noticeRepository, tokenManager)
@@ -79,7 +85,7 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
 
         socialViewModel = ViewModelProvider(
             requireActivity(),
-            HomeViewModelFactory(tokenManager)
+            SocialViewModelFactory(socialRepository, tokenManager)
         )[SocialViewModel::class.java]
 
         noticeAdapter = NoticeAdapter(mutableListOf(), viewModel, this)
