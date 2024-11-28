@@ -18,10 +18,8 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
-import com.toyou.toyouandroid.data.record.service.RecordService
 import com.toyou.toyouandroid.data.social.service.SocialService
 import com.toyou.toyouandroid.databinding.FragmentSocialBinding
-import com.toyou.toyouandroid.domain.record.RecordRepository
 import com.toyou.toyouandroid.domain.social.repostitory.SocialRepository
 import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.network.NetworkModule

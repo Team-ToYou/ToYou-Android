@@ -231,37 +231,52 @@ class SocialViewModel(
         else _questionDto.value?.anonymous = false
     }
 
+    // 토큰 재발급 정상 호출 완료
     fun sendQuestion(myName: String) {
         viewModelScope.launch {
             try {
                 _questionDto.value?.let { currentQuestionDto ->
-                    repository.postQuestionData(currentQuestionDto)
-                } ?: run {
-                    Timber.tag("SocialViewModel").d("api 실패!")
-                }
-                Timber.tag("SocialViewModel").e("api 실패!")
+                    val response = repository.postQuestionData(currentQuestionDto)
+                    if (response.isSuccess) {
+                        Timber.tag("SocialViewModel").d("질문 전송 성공")
 
-                retrieveTokenFromServer(questionDto.value!!.target)
-                if (_questionDto.value!!.anonymous){
-                    _retrieveToken.value?.let { tokens ->
-                        for (token in tokens) {
-                            postFCM("익명", token, 3)
+                        retrieveTokenFromServer(questionDto.value!!.target)
+                        if (_questionDto.value!!.anonymous){
+                            _retrieveToken.value?.let { tokens ->
+                                for (token in tokens) {
+                                    postFCM("익명", token, 3)
+                                }
+                            }
+                        }else {
+                            _retrieveToken.value?.let { tokens ->
+                                for (token in tokens) {
+                                    postFCM(myName, token, 3)
+                                }
+                            }
                         }
+                    } else {
+                        Timber.tag("SocialViewModel").d("질문 전송 실패")
+
+                        tokenManager.refreshToken(
+                            onSuccess = { sendQuestion(myName) },
+                            onFailure = { Timber.e("sendQuestion API Call Failed")}
+                        )
                     }
-                }else {
-                    _retrieveToken.value?.let { tokens ->
-                        for (token in tokens) {
-                            postFCM(myName, token, 3)
-                        }
-                    }
+                } ?: run {
+                    Timber.tag("SocialViewModel").d("questionDto null")
                 }
             } catch (e: Exception) {
                 Timber.tag("SocialViewModel").e(e.message.toString())
+                tokenManager.refreshToken(
+                    onSuccess = { sendQuestion(myName) },
+                    onFailure = { Timber.e("sendQuestion API Call Failed")}
+                )
             }
         }
 
     }
 
+    // 토큰 재발급 정상 호출 완료
     fun sendFriendRequest(name: String, myName: String) {
         _friendRequest.value = RequestFriend(name = name)
         viewModelScope.launch {
@@ -283,11 +298,11 @@ class SocialViewModel(
                         Timber.tag("SocialViewModel").d("친구 삭제 실패: ${response.message}")
                         tokenManager.refreshToken(
                             onSuccess = { sendFriendRequest(name.toString(), myName)},
-                            onFailure = { }
+                            onFailure = { Timber.e("sendFriendRequest Failed")}
                         )
                     }
                 } ?: run {
-                    Timber.tag("api 실패!").e("널")
+                    Timber.tag("SocialViewModel").e("friend Request null")
                 }
             } catch (e: Exception) {
                 // 오류 처리
@@ -295,7 +310,7 @@ class SocialViewModel(
                 _friendRequestCompleted.postValue(false)
                 tokenManager.refreshToken(
                     onSuccess = { sendFriendRequest(name, myName)},
-                    onFailure = { }
+                    onFailure = { Timber.e("sendFriendRequest Failed")}
                 )
             }
         }

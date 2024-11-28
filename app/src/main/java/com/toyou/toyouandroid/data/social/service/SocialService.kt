@@ -18,7 +18,7 @@ interface SocialService {
     @POST("/questions")
     suspend fun postQuestion(
         @Body request : QuestionDto
-    ) : BaseResponse<ResponseFriend>
+    ): BaseResponse<ResponseFriend>
 
     @GET("/friends")
     suspend fun getFriends() : BaseResponse<FriendsDto>
@@ -31,16 +31,16 @@ interface SocialService {
     @POST("/friends/requests")
     suspend fun postFriendRequest(
         @Body friend : RequestFriend
-    ) : BaseResponse<ResponseFriend>
+    ): BaseResponse<ResponseFriend>
 
     @HTTP(method = "DELETE", path = "/friends", hasBody = true)
     suspend fun deleteFriend(
         @Body friend : RequestFriend
-    ) : BaseResponse<Unit>
+    ): BaseResponse<Unit>
 
     @PATCH("/friends/requests/approve")
     suspend fun patchApprove(
         @Body friend : RequestFriend
-    ) : BaseResponse<ResponseFriend>
+    ): BaseResponse<ResponseFriend>
 }
 

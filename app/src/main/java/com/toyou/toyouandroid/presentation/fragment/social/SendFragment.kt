@@ -11,10 +11,14 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
+import com.toyou.toyouandroid.data.social.service.SocialService
 import com.toyou.toyouandroid.databinding.FragmentSendBinding
+import com.toyou.toyouandroid.domain.social.repostitory.SocialRepository
+import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
 import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
@@ -35,10 +39,14 @@ class SendFragment: Fragment() {
         val authService = NetworkModule.getClient().create(AuthService::class.java)
         val tokenManager = TokenManager(authService, tokenStorage)
 
+        val socialService = AuthNetworkModule.getClient().create(SocialService::class.java)
+        val socialRepository = SocialRepository(socialService)
+
         socialViewModel = ViewModelProvider(
             requireActivity(),
-            HomeViewModelFactory(tokenManager)
+            SocialViewModelFactory(socialRepository, tokenManager)
         )[SocialViewModel::class.java]
+
         userViewModel = ViewModelProvider(
             requireActivity(),
             HomeViewModelFactory(tokenManager)
