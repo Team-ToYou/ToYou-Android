@@ -137,32 +137,26 @@ class QuestionContentFragment : Fragment() {
                 1 -> {
                     binding.balloonTv.setBackgroundResource(R.drawable.balloon_happy)
                     binding.imogeIv.setBackgroundResource(R.drawable.imoge_happy)
-                    binding.imageView2.setBackgroundResource(R.drawable.balloon_happy2)
                 }
                 2 -> {
                     binding.balloonTv.setBackgroundResource(R.drawable.balloon_excited)
                     binding.imogeIv.setBackgroundResource(R.drawable.imoge_excited)
-                    binding.imageView2.setBackgroundResource(R.drawable.balloon_excited2)
                 }
                 3 -> {
-                    binding.balloonTv.setBackgroundResource(R.drawable.social_ballon)
+                    binding.balloonTv.setBackgroundResource(R.drawable.balloon_normal)
                     binding.imogeIv.setBackgroundResource(R.drawable.social_imoge)
-                    binding.imageView2.setBackgroundResource(R.drawable.social_balloon)
                 }
                 4 -> {
                     binding.balloonTv.setBackgroundResource(R.drawable.balloon_anxiety)
                     binding.imogeIv.setBackgroundResource(R.drawable.imoge_anxiety)
-                    binding.imageView2.setBackgroundResource(R.drawable.balloon_anxiety2)
                 }
                 5 -> {
                     binding.balloonTv.setBackgroundResource(R.drawable.balloon_angry)
                     binding.imogeIv.setBackgroundResource(R.drawable.imoge_angry)
-                    binding.imageView2.setBackgroundResource(R.drawable.balloon_angry2)
                 }
                 else -> {
                     binding.balloonTv.setBackgroundResource(R.drawable.balloon_no)
                     binding.imogeIv.setBackgroundResource(0)
-                    binding.imageView2.setBackgroundResource(R.drawable.balloon_no2)
                     binding.normalTv.text = "친구가 아직 감정우표를 선택하지 않았어요"
                 }
             }
@@ -183,9 +177,10 @@ class QuestionContentFragment : Fragment() {
 
             val newOption = optionView.findViewById<EditText>(R.id.edit_text)
             val deleteButton = optionView.findViewById<ImageView>(R.id.delete_button)
+            val newOptionLimit = optionView.findViewById<TextView>(R.id.limit_option)
 
             newOption.apply {
-                setPadding(10, 30, 5, 30)
+                setPadding(10, 10, 5, 10)
                 setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
                 textSize = 12f
                 optionText?.let {
@@ -211,6 +206,7 @@ class QuestionContentFragment : Fragment() {
                         optionsList.add(s.toString())
                     }
                     socialViewModel.updateQuestionOptions(optionsList)
+                    newOptionLimit.text = String.format("(%d/20)", s?.length ?: 0)
 
                     checkNextButtonState()
                 }
@@ -247,7 +243,6 @@ class QuestionContentFragment : Fragment() {
             if (optionCount == 3) {
                 addOptionButton.isEnabled = false
             }
-            Log.d("AddOption", "Current optionCount: $optionCount")
 
         }
     }

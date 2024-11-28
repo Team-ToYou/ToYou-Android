@@ -49,37 +49,29 @@
             android:text="질문 내용을 입력해주세요"
             app:layout_constraintTop_toBottomOf="@id/title_tv"
             app:layout_constraintStart_toStartOf="@id/guideline19"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:layout_marginTop="3dp"
+            />
 
         <View
             android:id="@+id/view"
             android:layout_width="0dp"
             android:layout_height="1px"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="9dp"
             android:background="#939292"
             app:layout_constraintEnd_toEndOf="@id/guideline20"
             app:layout_constraintStart_toEndOf="@id/guideline19"
             app:layout_constraintTop_toBottomOf="@id/subTitle_tv" />
 
         <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:background="@drawable/social_balloon"
-            app:layout_constraintEnd_toStartOf="@id/balloon_tv"
-            app:layout_constraintTop_toBottomOf="@id/view" />
-
-
-        <ImageView
             android:id="@+id/balloon_tv"
             android:layout_width="0dp"
             android:layout_height="30dp"
-            android:background="@drawable/social_ballon"
+            android:background="@drawable/balloon_normal"
             app:layout_constraintEnd_toEndOf="@id/guideline20"
             app:layout_constraintStart_toEndOf="@id/guideline19"
             app:layout_constraintTop_toBottomOf="@id/view"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="14dp"
             android:layout_marginLeft="10dp"/>
 
         <TextView
@@ -87,12 +79,16 @@
             style="@style/gangwon15"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
             android:text="평범한 하루였어요 "
+            android:layout_marginStart="20dp"
             android:textColor="@color/black"
-            android:layout_marginLeft="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/balloon_tv"
-            app:layout_constraintStart_toEndOf="@+id/imageView2"
+            app:layout_constraintStart_toEndOf="@+id/balloon_tv"
+            app:layout_constraintStart_toStartOf="@+id/balloon_tv"
             app:layout_constraintTop_toTopOf="@+id/balloon_tv" />
+
+
 
         <ImageView
             android:id="@+id/imoge_iv"
@@ -110,29 +106,16 @@
             android:id="@+id/next_btn"
             style="@style/sc_m13"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="40dp"
             android:background="@drawable/create_next_btn"
             android:text="다음"
             android:textColor="@drawable/next_txt_color"
-            app:layout_constraintBottom_toTopOf="@id/guideline7"
             app:layout_constraintEnd_toEndOf="@id/guideline20"
             app:layout_constraintStart_toStartOf="@id/guideline19"
-            app:layout_constraintTop_toBottomOf="@id/guideline4"
-            />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.93" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.86" />
+            android:enabled="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="80dp"
+            android:stateListAnimator="@null"/>
 
 
         <androidx.constraintlayout.widget.Guideline
@@ -169,6 +152,7 @@
             android:layout_marginTop="25dp"
             android:gravity="top"
             android:padding="10dp"
+            android:textColor="@color/black"
             android:text="@={viewModel.questionDto.content}"
             style="@style/sc_r10"
             android:maxLength="50"/>

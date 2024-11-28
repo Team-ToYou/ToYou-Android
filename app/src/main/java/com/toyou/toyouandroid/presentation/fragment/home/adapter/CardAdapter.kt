@@ -23,7 +23,6 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit, private val c
 
     fun setCards(cards: List<CardModel>) {
         this.cardList = cards.filter { it.questionType == 1 }
-        Log.d("CardAdapter", "setCards called with: $cards")
         notifyDataSetChanged()
     }
 
@@ -52,7 +51,6 @@ class CardAdapter(private val onItemClick: (Int, Boolean) -> Unit, private val c
                     isSelected = !isSelected
                     updateButtonBackground(isSelected)
                     onItemClick(adapterPosition, isSelected)
-                    Log.d("선택7", isSelected.toString())
 
                 } else if (currentCount < 5) {
                     isSelected = !isSelected
