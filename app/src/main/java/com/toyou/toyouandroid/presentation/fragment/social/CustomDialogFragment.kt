@@ -67,7 +67,9 @@ class CustomDialogFragment : DialogFragment() {
         val window = dialog.window ?: return
         // 너비와 높이 설정
         val width = resources.getDimensionPixelSize(R.dimen.dialog_width)
-        window.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
+        val height = resources.getDimensionPixelSize(R.dimen.dialog_height)
+        //window.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
+        window.setLayout(width, height)
     }
 
 
