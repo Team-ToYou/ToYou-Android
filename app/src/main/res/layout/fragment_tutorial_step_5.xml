@@ -21,11 +21,10 @@
 
     <ImageView
         android:id="@+id/tutorial_step_5_device"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/tutorial_step_5"
-        android:layout_marginTop="33dp"
-        android:layout_marginStart="20dp"
+        android:layout_width="330dp"
+        android:layout_height="730dp"
+        android:src="@drawable/tutorial_step_5_3x"
+        android:layout_marginStart="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tutorial_step_5_title" />
@@ -37,9 +36,8 @@
         style="@style/sc_r20"
         android:text="@string/tutorial_complete"
         android:textColor="@color/black"
-        android:layout_marginTop="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tutorial_step_5_device" />
+        app:layout_constraintBottom_toBottomOf="@+id/tutorial_step_5_device" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
