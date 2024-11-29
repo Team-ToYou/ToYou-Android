@@ -49,11 +49,11 @@
             app:layout_constraintGuide_begin="136dp" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline_next_h"
+            android:id="@+id/login_btn_h"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="662dp" />
+            app:layout_constraintGuide_percent="0.87" />
 
         <LinearLayout
             android:id="@+id/signup_agree_back_layout"
@@ -273,51 +273,6 @@
                 android:layout_gravity="center" />
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/checkbox5_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_marginTop="140dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/seperator_agree">
-
-<!--            <ImageView-->
-<!--                android:id="@+id/checkbox_5"-->
-<!--                android:layout_width="24dp"-->
-<!--                android:layout_height="24dp"-->
-<!--                android:layout_marginStart="15dp"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:src="@drawable/checkbox_uncheck" />-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/signup_agree_select_5"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginStart="6dp"-->
-<!--                android:text="@string/signup_agree_select_5"-->
-<!--                android:textColor="@color/black"-->
-<!--                android:layout_gravity="center"-->
-<!--                style="@style/sc_r15" />-->
-
-<!--            <androidx.appcompat.widget.AppCompatButton-->
-<!--                android:id="@+id/signup_agree_details_5"-->
-<!--                android:layout_width="33dp"-->
-<!--                android:layout_height="17dp"-->
-<!--                android:text="@string/signup_agree_choose"-->
-<!--                android:textColor="@color/r01"-->
-<!--                style="@style/sc_r10"-->
-<!--                android:background="@drawable/signupagree_choose"-->
-<!--                android:layout_marginStart="6dp"-->
-<!--                android:layout_gravity="center"/>-->
-
-<!--            <ImageView-->
-<!--                android:id="@+id/signup_agree_arrow_5"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:src="@drawable/signupagree_arrow"-->
-<!--                android:layout_gravity="center"/>-->
-        </LinearLayout>
-
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/signupagree_next_btn"
             android:layout_width="360dp"
@@ -330,7 +285,7 @@
             style="@style/sc_m13"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/guideline_next_h" />
+            app:layout_constraintTop_toTopOf="@id/login_btn_h" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

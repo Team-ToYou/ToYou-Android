@@ -18,7 +18,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="19dp" />
+            app:layout_constraintGuide_percent="0.05" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_title_v_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.75" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_double_check_v_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.95" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline_next_v"
@@ -42,11 +56,11 @@
             app:layout_constraintGuide_begin="136dp" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline_next_h"
+            android:id="@+id/login_btn_h"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="662dp" />
+            app:layout_constraintGuide_percent="0.87" />
 
         <LinearLayout
             android:id="@+id/signup_nickname_back_layout"
@@ -130,6 +144,7 @@
             android:imeOptions="actionDone"
             android:inputType="text"
             app:layout_constraintStart_toStartOf="@id/guideline_title_v"
+            app:layout_constraintEnd_toEndOf="@+id/guideline_title_v_end"
             app:layout_constraintTop_toBottomOf="@+id/signup_nickname_title"
             android:autofillHints="name" />
 
@@ -154,9 +169,8 @@
             android:stateListAnimator="@null"
             android:textColor="@{viewModel.duplicateCheckButtonTextColor}"
             android:setBackground="@{viewModel.duplicateCheckButtonBackground}"
-            android:layout_marginStart="10dp"
             android:layout_marginTop="7dp"
-            app:layout_constraintStart_toEndOf="@+id/signup_nickname_input"
+            app:layout_constraintEnd_toEndOf="@+id/guideline_double_check_v_end"
             app:layout_constraintTop_toBottomOf="@+id/signup_nickname_title" />
 
         <TextView
@@ -244,7 +258,7 @@
             style="@style/sc_m13"
             android:enabled="@{viewModel.isNextButtonEnabled}"
             app:layout_constraintStart_toStartOf="@id/guideline_next_v"
-            app:layout_constraintTop_toBottomOf="@id/guideline_next_h" />
+            app:layout_constraintTop_toTopOf="@id/login_btn_h" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
