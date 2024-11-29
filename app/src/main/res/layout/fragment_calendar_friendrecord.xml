@@ -113,16 +113,22 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/record_title_v"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
     <TextView
         android:id="@+id/record_title"
         style="@style/gangwon22"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_marginStart="20dp"
         android:text="@string/calendar_my_record_date"
         android:textColor="@color/black"
-        app:layout_constraintStart_toStartOf="@+id/login_container"
+        app:layout_constraintStart_toStartOf="@+id/record_title_v"
         app:layout_constraintTop_toBottomOf="@+id/login_container" />
 
     <androidx.recyclerview.widget.RecyclerView
