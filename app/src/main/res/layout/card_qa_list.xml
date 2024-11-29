@@ -32,7 +32,8 @@
             android:layout_height="wrap_content"
             android:text="그냥 저냥.. 일하고 사랑하고 짜증도 내고.."
             style="@style/gangwon16"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            />
     </LinearLayout>
 
 
