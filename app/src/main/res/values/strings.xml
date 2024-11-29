@@ -78,7 +78,7 @@
     <string name="home_stamp_result_anxiety_3">불안한 감정을 이겨내는 데는 시간이 필요해요. \n 하루하루 차분히 걸어가보세요</string>
     <string name="home_stamp_result_upset_1">화가 나는 날도 있죠. \n 함께 해결책을 찾아봐요</string>
     <string name="home_stamp_result_upset_2">화를 내는 것도 자연스러운 감정이에요. \n 함께 그 감정을 이해하고 해결책을 찾아봐요</string>
-    <string name="home_stamp_result_upset_3">화가 난다는 것은 당신이 중요한 문제를 마주했다는 증거에요. \n 함께 그 문제를 해결해나가봐요</string>
+    <string name="home_stamp_result_upset_3">화가 난다는 것은 당신이 중요한 문제를 \n 마주했다는 증거에요. \n 함께 그 문제를 해결해나가봐요</string>
 
     <string name="home_date">20240503</string>
     <string name="home_bottom_sheet_title">따끈따끈한 친구들의 일기카드를 확인해보세요!</string>

@@ -42,11 +42,11 @@
             app:layout_constraintGuide_begin="136dp" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline_next_h"
+            android:id="@+id/login_btn_h"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="662dp" />
+            app:layout_constraintGuide_percent="0.87" />
 
         <LinearLayout
             android:id="@+id/signup_nickname_back_layout"
@@ -162,7 +162,7 @@
             android:enabled="@{viewModel.isNextButtonEnabled}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/guideline_next_h" />
+            app:layout_constraintTop_toTopOf="@id/login_btn_h" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
