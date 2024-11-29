@@ -16,7 +16,8 @@ import com.toyou.toyouandroid.utils.TokenManager
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class CardViewModel(private val tokenManager: TokenManager) : ViewModel(){
+class CardViewModel(private val tokenManager: TokenManager,
+    private val repository: CreateRepository) : ViewModel(){
     private val _cards = MutableLiveData<List<CardModel>>()
     val cards: LiveData<List<CardModel>> get() = _cards
     private val _shortCards = MutableLiveData<List<CardShortModel>>()
@@ -28,7 +29,7 @@ class CardViewModel(private val tokenManager: TokenManager) : ViewModel(){
     val chooseCards : LiveData<List<ChooseModel>> get() = _chooseCards
     private val _previewChoose = MutableLiveData<List<PreviewChooseModel>>()
     val previewChoose : LiveData<List<PreviewChooseModel>> get() = _previewChoose
-    private val repository = CreateRepository(tokenManager)
+    //private val repository = CreateRepository(tokenManager)
     private val homeRepository = HomeRepository()
 
     val exposure : LiveData<Boolean> get() = _exposure
@@ -95,10 +96,43 @@ class CardViewModel(private val tokenManager: TokenManager) : ViewModel(){
         _isAllAnswersFilled.value = inputStatus.count { it } == inputStatus.size && inputLongStatus.count { it } == inputLongStatus.size && inputChooseStatus.count { it } == inputChooseStatus.size
     }
 
-    fun sendData(previewCardModels: List<PreviewCardModel>, exposure: Boolean) {
+    /*fun sendData(previewCardModels: List<PreviewCardModel>, exposure: Boolean) {
         viewModelScope.launch {
             _cardId.value = repository.postCardData(previewCardModels, exposure)
             Timber.tag("카드 아이디").d(_cardId.value.toString())
+        }
+    }*/
+
+    fun sendData(previewCardModels: List<PreviewCardModel>, exposure: Boolean) {
+        viewModelScope.launch {
+            try {
+                val response = repository.postCardData(previewCardModels, exposure)
+
+                if (response.isSuccess) {
+                    Timber.tag("sendData").d("카드 전송 성공")
+                    response.result?.let { answerPost ->
+                        // ID 값이 필요한 추가 작업 수행
+                        _cardId.value = answerPost.id
+                        Timber.tag("sendData").d("카드 ID: ${_cardId.value}")
+                    } ?: run {
+                        Timber.tag("sendData").d("응답 데이터가 없습니다.")
+                    }
+                } else {
+                    Timber.tag("sendData").d("카드 전송 실패: ${response.message}")
+
+                    tokenManager.refreshToken(
+                        onSuccess = { sendData(previewCardModels, exposure) },
+                        onFailure = { Timber.e("sendData API Call Failed") }
+                    )
+                }
+            } catch (e: Exception) {
+                Timber.tag("sendData").e("Exception: ${e.message}")
+
+                tokenManager.refreshToken(
+                    onSuccess = { sendData(previewCardModels, exposure) },
+                    onFailure = { Timber.e("sendData API Call Failed") }
+                )
+            }
         }
     }
 
@@ -427,11 +461,28 @@ class CardViewModel(private val tokenManager: TokenManager) : ViewModel(){
         _chooseCards.value = emptyList()
         _shortCards.value = emptyList()
     }
-   fun patchCard(previewCardModels: List<PreviewCardModel>, exposure: Boolean, id : Int){
-            viewModelScope.launch {
-                repository.patchCardData(previewCardModels, exposure, id)
+    fun patchCard(previewCardModels: List<PreviewCardModel>, exposure: Boolean, id: Int) {
+        viewModelScope.launch {
+            try {
+                val response = repository.patchCardData(previewCardModels, exposure, id)
+                if (response.isSuccess) {
+                    Timber.tag("patchCard").d("카드 수정 성공: ${response.message}")
+                } else {
+                    Timber.tag("patchCard").d("카드 수정 실패: ${response.message}")
+                    tokenManager.refreshToken(
+                        onSuccess = { patchCard(previewCardModels, exposure, id) },
+                        onFailure = { Timber.e("patchCard API Call Failed") }
+                    )
+                }
+            } catch (e: Exception) {
+                Timber.e("patchCard 예외 발생: ${e.message}")
+                tokenManager.refreshToken(
+                    onSuccess = { patchCard(previewCardModels, exposure, id) },
+                    onFailure = { Timber.e("patchCard API Call Failed") }
+                )
+            }
         }
-   }
+    }
 
     fun countSelect(selection : Boolean){
 

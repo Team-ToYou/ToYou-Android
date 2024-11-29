@@ -171,6 +171,7 @@ class LoginViewModel(
                                 AuthNetworkModule.setAccessToken(newAccessToken)
 
                                 tokenStorage.saveTokens(newAccessToken, newRefreshToken)
+                                sendTokenToServer(tokenStorage.getFcmToken().toString())
                                 _navigationEvent.value = true  // 성공하면 홈 화면으로 이동
 
                             } ?: Timber.e("Refresh token missing in response headers")
