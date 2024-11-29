@@ -9,16 +9,20 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.toyou.toyouandroid.R
-import com.toyou.toyouandroid.databinding.FragmentSendBinding
+import com.toyou.toyouandroid.data.onboarding.service.AuthService
+import com.toyou.toyouandroid.data.social.service.SocialService
 import com.toyou.toyouandroid.databinding.FragmentSendFinalBinding
+import com.toyou.toyouandroid.domain.social.repostitory.SocialRepository
+import com.toyou.toyouandroid.network.AuthNetworkModule
+import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModelFactory
+import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
 
 class SendFinalFragment: Fragment() {
@@ -32,10 +36,17 @@ class SendFinalFragment: Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         val tokenStorage = TokenStorage(requireContext())
+        val authService = NetworkModule.getClient().create(AuthService::class.java)
+        val tokenManager = TokenManager(authService, tokenStorage)
+
+        val socialService = AuthNetworkModule.getClient().create(SocialService::class.java)
+        val socialRepository = SocialRepository(socialService)
+
         socialViewModel = ViewModelProvider(
             requireActivity(),
-            SocialViewModelFactory(tokenStorage)
+            SocialViewModelFactory(socialRepository, tokenManager)
         )[SocialViewModel::class.java]
     }
 
@@ -43,7 +54,7 @@ class SendFinalFragment: Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentSendFinalBinding.inflate(inflater, container, false)
 
         return binding.root

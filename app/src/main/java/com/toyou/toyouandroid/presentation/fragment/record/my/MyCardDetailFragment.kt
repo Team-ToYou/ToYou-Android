@@ -17,9 +17,9 @@ import com.toyou.toyouandroid.databinding.CardLayoutRecordBinding
 import com.toyou.toyouandroid.domain.record.RecordRepository
 import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.network.NetworkModule
+import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.RecordViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
-import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
 import com.toyou.toyouandroid.ui.home.adapter.CardPreviewListAdapter
 import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
@@ -57,7 +57,7 @@ class MyCardDetailFragment : Fragment() {
 
         userViewModel = ViewModelProvider(
             requireActivity(),
-            UserViewModelFactory(tokenStorage)
+            HomeViewModelFactory(tokenManager)
         )[UserViewModel::class.java]
 
     }

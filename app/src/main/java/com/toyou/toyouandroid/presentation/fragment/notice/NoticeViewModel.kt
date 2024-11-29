@@ -51,7 +51,7 @@ class NoticeViewModel(
                                 )
                                 else -> null
                             }
-                        } ?: emptyList()
+                        }?.reversed() ?: emptyList()
 
                         _hasNotifications.value = items.isNotEmpty()
                         _noticeItems.value = items

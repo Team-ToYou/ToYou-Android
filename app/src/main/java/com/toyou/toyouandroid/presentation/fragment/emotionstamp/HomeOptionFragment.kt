@@ -22,7 +22,6 @@ import com.toyou.toyouandroid.presentation.fragment.notice.NoticeDialogViewModel
 import com.toyou.toyouandroid.presentation.fragment.home.HomeViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
-import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
 import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
 
@@ -67,7 +66,7 @@ class HomeOptionFragment : Fragment() {
 
         userViewModel = ViewModelProvider(
             requireActivity(),
-            UserViewModelFactory(tokenStorage)
+            HomeViewModelFactory(tokenManager)
         )[UserViewModel::class.java]
 
         return binding.root

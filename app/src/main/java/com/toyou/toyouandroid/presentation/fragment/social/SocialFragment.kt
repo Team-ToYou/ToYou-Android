@@ -2,7 +2,6 @@ package com.toyou.toyouandroid.presentation.fragment.social
 
 import android.os.Bundle
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,13 +17,20 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.toyou.toyouandroid.R
+import com.toyou.toyouandroid.data.onboarding.service.AuthService
+import com.toyou.toyouandroid.data.social.service.SocialService
 import com.toyou.toyouandroid.databinding.FragmentSocialBinding
+import com.toyou.toyouandroid.domain.social.repostitory.SocialRepository
+import com.toyou.toyouandroid.network.AuthNetworkModule
+import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
 import com.toyou.toyouandroid.presentation.fragment.social.adapter.SocialRVAdapter
+import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
-import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
+import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
+import timber.log.Timber
 
 class SocialFragment : Fragment() {
 
@@ -42,13 +48,20 @@ class SocialFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         val tokenStorage = TokenStorage(requireContext())
+        val authService = NetworkModule.getClient().create(AuthService::class.java)
+        val tokenManager = TokenManager(authService, tokenStorage)
+
+        val socialService = AuthNetworkModule.getClient().create(SocialService::class.java)
+        val socialRepository = SocialRepository(socialService)
+
         socialViewModel = ViewModelProvider(
             requireActivity(),
-            SocialViewModelFactory(tokenStorage)
+            SocialViewModelFactory(socialRepository, tokenManager)
         )[SocialViewModel::class.java]
+
         userViewModel = ViewModelProvider(
             requireActivity(),
-            UserViewModelFactory(tokenStorage)
+            HomeViewModelFactory(tokenManager)
         )[UserViewModel::class.java]
 
         socialViewModel.getFriendsData()
@@ -57,7 +70,7 @@ class SocialFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentSocialBinding.inflate(inflater, container, false)
 
@@ -67,7 +80,7 @@ class SocialFragment : Fragment() {
         //어탭터 초기화 후 뷰모델 데이터 관찰
         socialAdapter = SocialRVAdapter(socialViewModel, { position ->
             navController.navigate(R.id.action_navigation_social_to_questionTypeFragment)
-            Log.d("아이템", position.toString())
+            Timber.tag("아이템").d(position.toString())
         }) { friendName ->
             showDeleteDialog(friendName) // 다이얼로그 표시 함수 호출
         }
@@ -103,7 +116,7 @@ class SocialFragment : Fragment() {
             if (isFriend == "400" || isFriend == "401") {
                 addNotExist(isFriend)
             }else if (isFriend == "no"){
-                Log.d("destroy2", isFriend)
+                Timber.tag("destroy2").d(isFriend)
                 addFriendLinearLayout.removeAllViews()
             }
             else {
@@ -172,7 +185,7 @@ class SocialFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
 
-        binding.searchEt.setOnEditorActionListener { v, actionId, event ->
+        binding.searchEt.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH){
                 val searchName = binding.searchEt.text.toString()
                 addFriendLinearLayout.removeAllViews()  // 뷰를 초기화
@@ -204,7 +217,7 @@ class SocialFragment : Fragment() {
 
 
         friendName.apply {
-            friendName?.setText(name)
+            friendName?.text = name
         }
 
         stateBtn.apply {
@@ -247,12 +260,12 @@ class SocialFragment : Fragment() {
 
         if (isFriend == "401") {
             ment.apply {
-                ment?.setText("스스로에게 요청할 수 없습니다. 다시 입력해주세요")
+                ment?.text = "스스로에게 요청할 수 없습니다. 다시 입력해주세요"
             }
         }
         else{
             ment.apply {
-                ment?.setText("찾으시는 닉네임이 존재하지 않아요. 다시 입력해주세요")
+                ment?.text = "찾으시는 닉네임이 존재하지 않아요. 다시 입력해주세요"
             }
         }
 

@@ -1,6 +1,5 @@
 package com.toyou.toyouandroid.presentation.fragment.onboarding
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,6 +10,7 @@ import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.data.onboarding.dto.request.SignUpRequest
 import com.toyou.toyouandroid.data.onboarding.dto.response.SignUpResponse
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
+import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -22,13 +22,14 @@ import timber.log.Timber
 
 class LoginViewModel(
     private val authService: AuthService,
-    private val tokenStorage: TokenStorage
+    private val tokenStorage: TokenStorage,
+    private val tokenManager: TokenManager
 ) : ViewModel() {
 
     private val _loginSuccess = MutableLiveData<Boolean>()
     val loginSuccess: LiveData<Boolean> get() = _loginSuccess
 
-    private val fcmRepository by lazy { FCMRepository(tokenStorage) }
+    private val fcmRepository by lazy { FCMRepository(tokenManager) }
 
     fun setLoginSuccess(value: Boolean) {
         _loginSuccess.value = value
@@ -195,10 +196,10 @@ class LoginViewModel(
             try {
                 val tokenRequest = Token(token)
                 fcmRepository.postToken(tokenRequest)
-                Log.d("sendTokenToServer", "성공")
+                Timber.tag("sendTokenToServer").d("성공")
             } catch (e: Exception) {
                 e.printStackTrace()
-                Log.d("sendTokenToServer", "토큰 전송 실패: ${e.message}")
+                Timber.tag("sendTokenToServer").d("토큰 전송 실패: ${e.message}")
             }
         }
 
@@ -209,10 +210,10 @@ class LoginViewModel(
             try {
                 val tokenRequest = Token(token)
                 fcmRepository.patchToken(tokenRequest)
-                Log.d("patchTokenToServer", "성공")
+                Timber.tag("patchTokenToServer").d("성공")
             } catch (e: Exception) {
                 e.printStackTrace()
-                Log.d("patchTokenToServer", "토큰 전송 실패: ${e.message}")
+                Timber.tag("patchTokenToServer").d("토큰 전송 실패: ${e.message}")
             }
         }
     }

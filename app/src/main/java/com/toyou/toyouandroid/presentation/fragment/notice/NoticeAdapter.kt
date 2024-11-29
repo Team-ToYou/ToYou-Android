@@ -27,6 +27,7 @@ class NoticeAdapter(
             is NoticeItem.NoticeFriendRequestItem -> TYPE_FRIEND_REQUEST
             is NoticeItem.NoticeFriendRequestAcceptedItem -> TYPE_FRIEND_REQUEST_ACCEPTED
             is NoticeItem.NoticeCardCheckItem -> TYPE_CARD_CHECK
+            else -> {TYPE_CARD_CHECK}
         }
     }
 

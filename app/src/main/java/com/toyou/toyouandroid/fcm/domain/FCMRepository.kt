@@ -1,56 +1,68 @@
 package com.toyou.toyouandroid.fcm.domain
 
-import android.util.Log
-import com.toyou.toyouandroid.data.social.dto.request.QuestionDto
-import com.toyou.toyouandroid.data.social.dto.request.RequestFriend
 import com.toyou.toyouandroid.fcm.dto.request.FCM
 import com.toyou.toyouandroid.fcm.dto.request.Token
 import com.toyou.toyouandroid.fcm.service.FCMService
-import com.toyou.toyouandroid.network.RetrofitInstance
-import com.toyou.toyouandroid.utils.TokenStorage
+import com.toyou.toyouandroid.network.AuthNetworkModule
+import com.toyou.toyouandroid.utils.TokenManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
-class FCMRepository(private val tokenStorage: TokenStorage) {
+class FCMRepository(private val tokenManager: TokenManager) {
 
-    private val client = RetrofitInstance.getInstance().create(FCMService::class.java)
+    private val client = AuthNetworkModule.getClient().create(FCMService::class.java)
 
     suspend fun postToken(
-        token: Token,
+        token: Token
     ) {
         try {
-            val response = client.postToken("Bearer ${tokenStorage.getAccessToken().toString()}", token)
-            Log.d("로그인","Bearer ${tokenStorage.getAccessToken().toString()}")
+            val response = client.postToken(token)
             // 응답 처리
             if (response.isSuccess) {
-                Log.d("post성공!", response.message)
+                Timber.tag("post 성공!").d(response.message)
             } else {
-                Log.d("post실패!", "Response Code: ${response.code}, Message: ${response.message}")
-                response.result?.let {
-                    Log.d("post실패!", "Response Body: ${it}")
-                }
+                Timber.tag("post 실패!").d(response.message)
+                tokenManager.refreshToken(
+                    onSuccess = {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            postToken(token)
+                        }
+                    },
+                    onFailure = { Timber.e("postToken API call failed") }
+                )
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.d("post실패!", e.message.toString())
+            Timber.tag("post 실패!").d(e.message.toString())
         }
     }
 
-    suspend fun getToken(name : String) = client.getToken("Bearer ${tokenStorage.getAccessToken().toString()}", name)
+    suspend fun getToken(name : String) = client.getToken(name)
 
     suspend fun postFCM(
-        request : FCM
+        request: FCM
     ){
         try {
-            val response = client.postFCM("Bearer ${tokenStorage.getAccessToken().toString()}",request = request)
+            val response = client.postFCM(request)
             // 응답 처리
             if (response.isSuccess) {
-                Log.d("fcm 성공!", response.message)
+                Timber.tag("fcm 성공!").d(response.message)
             } else {
-                Log.d("fcm 실패!", response.message)
+                Timber.tag("fcm 실패!").d(response.message)
+                tokenManager.refreshToken(
+                    onSuccess = {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            postFCM(request)
+                        }
+                    },
+                    onFailure = { Timber.e("postFCM API call failed") }
+                )
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.d("fcm 실패!", e.message.toString())
-
+            Timber.tag("fcm 실패!").d(e.message.toString())
         }
     }
 
@@ -58,18 +70,24 @@ class FCMRepository(private val tokenStorage: TokenStorage) {
         request: Token
     ){
         try {
-            val response = client.patchToken("Bearer ${tokenStorage.getAccessToken().toString()}",request = request)
+            val response = client.patchToken(request)
             // 응답 처리
             if (response.isSuccess) {
-                Log.d("fcm 갱신 성공!", response.message)
+                Timber.tag("fcm 갱신 성공!").d(response.message)
             } else {
-                Log.d("fcm 갱신 실패!", response.message)
+                Timber.tag("fcm 갱신 실패!").d(response.message)
+                tokenManager.refreshToken(
+                    onSuccess = {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            patchToken(request)
+                        }
+                    },
+                    onFailure = { Timber.e("patchToken API call failed") }
+                )
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.d("fcm 갱신 실패!", e.message.toString())
-
+            Timber.tag("fcm 갱신 실패!").d(e.message.toString())
         }
     }
-
 }

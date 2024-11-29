@@ -22,9 +22,9 @@ import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.presentation.fragment.record.CalendarDialog
 import com.toyou.toyouandroid.presentation.fragment.record.CalendarDialogViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.RecordViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
-import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
 import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
 import timber.log.Timber
@@ -69,7 +69,7 @@ class MyCardContainerFragment : Fragment() {
 
         userViewModel = ViewModelProvider(
             requireActivity() ,
-            UserViewModelFactory(tokenStorage)
+            HomeViewModelFactory(tokenManager)
         )[UserViewModel::class.java]
 
         if (savedInstanceState == null) {
@@ -131,7 +131,7 @@ class MyCardContainerFragment : Fragment() {
                 title = "정말 일기카드를\n삭제하시겠습니까?",
                 leftButtonText = "취소",
                 rightButtonText = "삭제",
-                leftButtonTextColor = R.color.black,
+                leftButtonTextColor = Color.BLACK,
                 rightButtonTextColor = Color.RED,
                 leftButtonClickAction = { dismissDialog() },
                 rightButtonClickAction = { deleteDiaryCards() }
