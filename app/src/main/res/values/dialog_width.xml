@@ -2,5 +2,5 @@
 <resources>
     <!-- 다이얼로그 너비를 300dp로 설정 -->
     <dimen name="dialog_width">226dp</dimen>
-    <dimen name="dialog_height">200dp</dimen>
+    <dimen name="dialog_height">120dp</dimen>
 </resources>

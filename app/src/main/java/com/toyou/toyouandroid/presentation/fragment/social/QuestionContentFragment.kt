@@ -177,7 +177,6 @@ class QuestionContentFragment : Fragment() {
 
             val newOption = optionView.findViewById<EditText>(R.id.edit_text)
             val deleteButton = optionView.findViewById<ImageView>(R.id.delete_button)
-            val newOptionLimit = optionView.findViewById<TextView>(R.id.limit_option)
 
             newOption.apply {
                 setPadding(10, 10, 5, 10)
@@ -206,7 +205,6 @@ class QuestionContentFragment : Fragment() {
                         optionsList.add(s.toString())
                     }
                     socialViewModel.updateQuestionOptions(optionsList)
-                    newOptionLimit.text = String.format("(%d/20)", s?.length ?: 0)
 
                     checkNextButtonState()
                 }

@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <data>
-        <variable
-            name="viewModel"
-            type="com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel" />
-    </data>
 
-<LinearLayout
-    android:id="@+id/optionsContainer"
+
+<LinearLayout android:id="@+id/optionsContainer"
     android:layout_width="match_parent"
     android:layout_height="40dp"
     android:orientation="horizontal"
     android:background="@drawable/search_container"
-    android:layout_marginTop="20dp">
+    android:layout_marginTop="20dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <EditText
         android:id="@+id/edit_text"
@@ -27,14 +21,6 @@
         android:maxLength="20"
         android:background="@android:color/transparent" />
 
-    <TextView
-        android:id="@+id/limit_option"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text='@{String.format("(%d/50)", viewModel.getOptionLength(viewModel.optionIndex))}'
-        style="@style/sc_l8"
-        android:layout_marginRight="10dp"
-        />
 
     <ImageView
         android:id="@+id/delete_button"
@@ -45,4 +31,3 @@
         android:contentDescription="Delete option" />
 
 </LinearLayout>
-</layout>

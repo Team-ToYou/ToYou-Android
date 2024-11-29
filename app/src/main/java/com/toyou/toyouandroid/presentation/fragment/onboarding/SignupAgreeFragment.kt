@@ -65,7 +65,7 @@ class SignupAgreeFragment : Fragment() {
             binding.checkbox2Layout,
             binding.checkbox3Layout,
             binding.checkbox4Layout,
-            binding.checkbox5Layout
+            //binding.checkbox5Layout
         )
 
         val imageViews = listOf(
