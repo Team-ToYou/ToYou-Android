@@ -59,19 +59,35 @@
         app:layout_constraintTop_toTopOf="@+id/linearLayout3"
         android:layout_marginRight="13dp">
 
-        <ImageButton
+        <FrameLayout
             android:id="@+id/friend_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/send_btn"
-            android:layout_marginRight="7dp"/>
+            android:padding="10dp">
 
         <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/send_btn"
+            android:layout_marginRight="7dp"
+            android:clickable="false"
+            />
+        </FrameLayout>
+
+        <FrameLayout
             android:id="@+id/trash_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="10dp">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="@drawable/ph_trash"
+            android:clickable="false"
             />
+        </FrameLayout>
+
 
     </LinearLayout>
 

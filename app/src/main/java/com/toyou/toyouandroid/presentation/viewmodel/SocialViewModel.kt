@@ -63,9 +63,6 @@ class SocialViewModel(
     val friendRequestCanceled : LiveData<Boolean> get() = _friendRequestCanceled
     private val _friendRequestRemove = MutableLiveData<Boolean>()
     val friendRequestRemove : LiveData<Boolean> get() = _friendRequestRemove
-    private val _optionIndex = MutableLiveData<Int>()
-    val optionIndex : LiveData<Int> get() = _optionIndex
-
 
 
     init {
@@ -218,10 +215,6 @@ class SocialViewModel(
         }
     }
 
-    fun getOptionLength(index: Int): Int {
-        val options = questionDto.value?.options ?: return 0
-        return if (index in options.indices) options[index].length else 0
-    }
 
     fun updateOption() {
         _optionList.value = _questionDto.value!!.options!!

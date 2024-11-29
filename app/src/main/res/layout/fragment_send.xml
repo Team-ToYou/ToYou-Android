@@ -75,12 +75,14 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginBottom="1dp"
+            android:layout_marginRight="5px"
             android:background="@drawable/custom_checkbox"
             android:button="@null" />
 
         <TextView
             android:id="@+id/check_tv"
             style="@style/gangwon15"
+            android:layout_marginLeft="5px"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="익명으로 보내기" />

@@ -3,6 +3,7 @@ package com.toyou.toyouandroid.presentation.fragment.social.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -42,11 +43,11 @@ class SocialRVAdapter(private val viewModel: SocialViewModel, private val onItem
 
         private val friendName : TextView = itemView.findViewById(R.id.friendName_tv)
         private val friendMessage : TextView = itemView.findViewById(R.id.friendMessage_tv)
-        private val friendDetailBtn : ImageButton = itemView.findViewById(R.id.friend_btn)
+        private val friendDetailBtn : FrameLayout = itemView.findViewById(R.id.friend_btn)
         private val friendEmotionIcon: ImageView = itemView.findViewById(R.id.imageView)
         private var emotion : Int? = null
         private var ment : String? = null
-        private val deleteBtn : ImageButton = itemView.findViewById(R.id.trash_btn)
+        private val deleteBtn : FrameLayout = itemView.findViewById(R.id.trash_btn)
 
         init {
             friendDetailBtn.setOnClickListener {
