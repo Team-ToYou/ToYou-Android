@@ -15,6 +15,7 @@ import com.toyou.toyouandroid.utils.TokenStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,13 +24,15 @@ import timber.log.Timber
 class LoginViewModel(
     private val authService: AuthService,
     private val tokenStorage: TokenStorage,
-    private val tokenManager: TokenManager
+    private val tokenManager: TokenManager,
+    private val fcmRepository: FCMRepository
+
 ) : ViewModel() {
 
     private val _loginSuccess = MutableLiveData<Boolean>()
     val loginSuccess: LiveData<Boolean> get() = _loginSuccess
 
-    private val fcmRepository by lazy { FCMRepository(tokenManager) }
+    //private val fcmRepository by lazy { FCMRepository(tokenManager) }
 
     fun setLoginSuccess(value: Boolean) {
         _loginSuccess.value = value
@@ -75,7 +78,6 @@ class LoginViewModel(
                         response.headers()["access_token"]?.let { newAccessToken ->
                             response.headers()["refresh_token"]?.let { newRefreshToken ->
                                 Timber.d("Tokens received from server - Access: $newAccessToken, Refresh: $newRefreshToken")
-
                                 // 암호화된 토큰 저장소에 저장
                                 tokenStorage.saveTokens(newAccessToken, newRefreshToken)
                                 sendTokenToServer(tokenStorage.getFcmToken().toString())
@@ -171,7 +173,7 @@ class LoginViewModel(
                                 AuthNetworkModule.setAccessToken(newAccessToken)
 
                                 tokenStorage.saveTokens(newAccessToken, newRefreshToken)
-                                sendTokenToServer(tokenStorage.getFcmToken().toString())
+                                //sendTokenToServer(tokenStorage.getFcmToken().toString())
                                 _navigationEvent.value = true  // 성공하면 홈 화면으로 이동
 
                             } ?: Timber.e("Refresh token missing in response headers")
@@ -191,31 +193,77 @@ class LoginViewModel(
             })
         }
     }
+    private var isSendingToken = false // 호출 여부를 추적하는 플래그
+
     private fun sendTokenToServer(token: String) {
+        if (isSendingToken) {
+            Timber.d("sendTokenToServer is already in progress, skipping this call.")
+            return
+        }
+
+        isSendingToken = true // 호출 시작 시 플래그 설정
+        val tokenRequest = Token(token)
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val tokenRequest = Token(token)
-                fcmRepository.postToken(tokenRequest)
-                Timber.tag("sendTokenToServer").d("성공")
+                val response = fcmRepository.postToken(tokenRequest)
+                if (response.isSuccess) {
+                    Timber.tag("sendTokenToServer").d("토큰 전송 성공")
+                } else {
+                    Timber.tag("sendTokenToServer").d("토큰 전송 실패: ${response.message}")
+                    tokenManager.refreshToken(
+                        onSuccess = {
+                            Timber.d("Token refreshed successfully. Retrying sendTokenToServer.")
+                            sendTokenToServer(token) // 재시도
+                        },
+                        onFailure = {
+                            Timber.e("sendTokenToServer API Call Failed - Refresh token failed.")
+                            isSendingToken = false // 플래그 초기화
+                        }
+                    )
+                }
             } catch (e: Exception) {
-                e.printStackTrace()
-                Timber.tag("sendTokenToServer").d("토큰 전송 실패: ${e.message}")
+                Timber.tag("sendTokenToServer").e("Exception occurred: ${e.message}")
+                tokenManager.refreshToken(
+                    onSuccess = {
+                        Timber.d("Token refreshed successfully. Retrying sendTokenToServer.")
+                        sendTokenToServer(token) // 재시도
+                    },
+                    onFailure = {
+                        Timber.e("sendTokenToServer API Call Failed - Refresh token failed.")
+                        isSendingToken = false // 플래그 초기화
+                    }
+                )
+            } finally {
+                isSendingToken = false // 호출 완료 후 플래그 초기화
             }
         }
-
     }
 
-    fun patchFcm(token : String){
-        CoroutineScope(Dispatchers.IO).launch {
+    fun patchFcm(token: String) {
+        val tokenRequest = Token(token)
+        viewModelScope.launch {
             try {
-                val tokenRequest = Token(token)
-                fcmRepository.patchToken(tokenRequest)
-                Timber.tag("patchTokenToServer").d("성공")
+                val response = withContext(Dispatchers.IO) {
+                    fcmRepository.patchToken(tokenRequest)
+                }
+                if (response.isSuccess) {
+                    Timber.tag("patchTokenToServer").d("토큰 전송 성공")
+                } else {
+                    Timber.tag("patchTokenToServer").d("토큰 전송 실패: ${response.message}")
+                    tokenManager.refreshToken(
+                        onSuccess = { patchFcm(token) },
+                        onFailure = { Timber.e("patchFcm API Call Failed - Refresh token failed") }
+                    )
+                }
             } catch (e: Exception) {
-                e.printStackTrace()
-                Timber.tag("patchTokenToServer").d("토큰 전송 실패: ${e.message}")
+                Timber.tag("patchTokenToServer").e("Exception occurred: ${e.message}")
+                tokenManager.refreshToken(
+                    onSuccess = { patchFcm(token) },
+                    onFailure = { Timber.e("patchFcm API Call Failed - Refresh token failed") }
+                )
             }
         }
     }
+
 }

@@ -16,12 +16,18 @@ import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
+import com.toyou.toyouHoandroid.data.create.service.CreateService
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentLoginBinding
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
+import com.toyou.toyouandroid.domain.create.repository.CreateRepository
+import com.toyou.toyouandroid.fcm.domain.FCMRepository
+import com.toyou.toyouandroid.fcm.service.FCMService
+import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.presentation.viewmodel.AuthViewModelFactory
+import com.toyou.toyouandroid.presentation.viewmodel.LoginViewModelFactory
 import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
 import com.toyou.toyouandroid.utils.TutorialStorage
@@ -40,9 +46,14 @@ class LoginFragment : Fragment() {
         val tokenStorage = TokenStorage(requireContext())
         val authService = NetworkModule.getClient().create(AuthService::class.java)
         val tokenManager = TokenManager(authService, tokenStorage)
+        val fcmService = AuthNetworkModule.getClient().create(FCMService::class.java)
+        val fcmRepository = FCMRepository(fcmService)
 
-        AuthViewModelFactory(authService, tokenStorage, tokenManager)
+        LoginViewModelFactory(authService, tokenStorage, tokenManager,fcmRepository)
     }
+
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater,

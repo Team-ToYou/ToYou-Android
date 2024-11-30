@@ -14,6 +14,7 @@ import com.toyou.toyouandroid.fcm.dto.request.FCM
 import com.toyou.toyouandroid.model.FriendListModel
 import com.toyou.toyouandroid.presentation.fragment.notice.ApprovalResult
 import com.toyou.toyouandroid.utils.TokenManager
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -22,9 +23,10 @@ import timber.log.Timber
 
 class SocialViewModel(
     private val repository: SocialRepository,
-    private val tokenManager: TokenManager
+    private val tokenManager: TokenManager,
+    private val fcmRepository: FCMRepository
 ) : ViewModel() {
-    private val fcmRepository = FCMRepository(tokenManager)
+    //private val fcmRepository = FCMRepository(tokenManager)
 
     private val _friends = MutableLiveData<List<FriendListModel>>()
     val friends: LiveData<List<FriendListModel>> get() = _friends
@@ -363,22 +365,34 @@ class SocialViewModel(
         }
     }
 
-    fun postFCM(name: String, token : String, type : Int){
-        when(type){
-            1 -> _fcm.value = FCM(token = token, title = "친구 요청", body = "${name}님이 친구 요청을 보냈습니다.")
-            2 -> _fcm.value = FCM(token = token, title = "친구 수락", body = "${name}님이 친구 요청을 수락했습니다.")
-            3 -> _fcm.value = FCM(token = token, title = "질문 전송", body = "${name}님이 질문을 보냈습니다. 확인보세요!")
-        }
-        viewModelScope.launch {
-            _fcm.value?.let {fcm ->
-                fcmRepository.postFCM(fcm)
-            } ?: run {
-                Timber.tag("fcm api 실패!").e("널")
-            }
-            Timber.tag("fcm api 성공!").d("성공")
+    fun postFCM(name: String, token: String, type: Int) {
+        val fcm = when (type) {
+            1 -> FCM(token = token, title = "친구 요청", body = "${name}님이 친구 요청을 보냈습니다.")
+            2 -> FCM(token = token, title = "친구 수락", body = "${name}님이 친구 요청을 수락했습니다.")
+            3 -> FCM(token = token, title = "질문 전송", body = "${name}님이 질문을 보냈습니다. 확인보세요!")
+            else -> null
         }
 
+        if (fcm == null) {
+            Timber.tag("fcm api 실패!").e("Invalid type: $type")
+            return
+        }
+
+        viewModelScope.launch {
+            try {
+                fcmRepository.postFCM(fcm).let {
+                    Timber.tag("fcm api 성공!").d("성공")
+                }
+            } catch (e: Exception) {
+                Timber.tag("fcm api 실패!").e("Exception occurred: ${e.message}")
+                tokenManager.refreshToken(
+                    onSuccess = { postFCM(name, token, type) },
+                    onFailure = { Timber.e("FCM API Call Failed - Refresh token failed") }
+                )
+            }
+        }
     }
+
 
     private val _approveSuccess = MutableLiveData<ApprovalResult?>()
     val approveSuccess: LiveData<ApprovalResult?> get() = _approveSuccess
@@ -461,7 +475,7 @@ class SocialViewModel(
         }
     }
 
-    private suspend fun retrieveTokenFromServer(name: String) {
+    /*private suspend fun retrieveTokenFromServer(name: String) {
         resetToken()
         try {
             // IO 스레드에서 네트워크 호출을 처리
@@ -479,7 +493,45 @@ class SocialViewModel(
         } catch (e: Exception) {
             Timber.tag("Token Retrieval").e(e.message.toString())
         }
+    }*/
+
+    private suspend fun retrieveTokenFromServer(name: String) {
+        resetToken() // 기존 데이터를 초기화
+        try {
+            val response = withContext(Dispatchers.IO) {
+                fcmRepository.getToken(name)
+            }
+
+            if (response.isSuccess) {
+                _retrieveToken.value = response.result.tokens
+                Timber.tag("Token Retrieval").d(_retrieveToken.value.toString())
+            } else {
+                Timber.tag("Token Retrieval").d("토큰 조회 실패: ${response.message}")
+                tryRefreshToken(name)
+            }
+        } catch (e: Exception) {
+            Timber.tag("Token Retrieval").e("Exception occurred: ${e.message}")
+            tryRefreshToken(name)
+        }
     }
+
+    private suspend fun tryRefreshToken(name: String) {
+        withContext(Dispatchers.IO) {
+            tokenManager.refreshToken(
+                onSuccess = {
+                    CoroutineScope(Dispatchers.Default).launch {
+                        retrieveTokenFromServer(name) // Retry after token refresh
+                    }
+                },
+                onFailure = {
+                    Timber.e("Token Retrieval failed - Refresh token failed")
+                }
+            )
+        }
+    }
+
+
+
 
     fun resetQuestionData() {
         _selectedChar.value = -1
@@ -488,7 +540,6 @@ class SocialViewModel(
         _selectedEmotion.value = 0
         _selectedEmotionMent.value = ""
         _optionList.value = emptyList()
-        Timber.tag("fcm").d("호출")
 
     }
 

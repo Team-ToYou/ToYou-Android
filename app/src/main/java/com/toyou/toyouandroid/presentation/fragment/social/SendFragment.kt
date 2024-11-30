@@ -16,6 +16,8 @@ import com.toyou.toyouandroid.data.social.service.SocialService
 import com.toyou.toyouandroid.databinding.FragmentSendBinding
 import com.toyou.toyouandroid.domain.create.repository.CreateRepository
 import com.toyou.toyouandroid.domain.social.repostitory.SocialRepository
+import com.toyou.toyouandroid.fcm.domain.FCMRepository
+import com.toyou.toyouandroid.fcm.service.FCMService
 import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModelFactory
@@ -46,11 +48,13 @@ class SendFragment: Fragment() {
         val socialRepository = SocialRepository(socialService)
         val createService = AuthNetworkModule.getClient().create(CreateService::class.java)
         val createRepository = CreateRepository(createService)
+        val fcmService = AuthNetworkModule.getClient().create(FCMService::class.java)
+        val fcmRepository = FCMRepository(fcmService)
 
 
         socialViewModel = ViewModelProvider(
             requireActivity(),
-            SocialViewModelFactory(socialRepository, tokenManager)
+            SocialViewModelFactory(socialRepository, tokenManager, fcmRepository)
         )[SocialViewModel::class.java]
 
         userViewModel = ViewModelProvider(
