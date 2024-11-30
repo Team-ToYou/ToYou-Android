@@ -16,10 +16,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.toyou.toyouHoandroid.data.create.service.CreateService
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
 import com.toyou.toyouandroid.data.social.service.SocialService
 import com.toyou.toyouandroid.databinding.FragmentSocialBinding
+import com.toyou.toyouandroid.domain.create.repository.CreateRepository
 import com.toyou.toyouandroid.domain.social.repostitory.SocialRepository
 import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.network.NetworkModule
@@ -28,6 +30,7 @@ import com.toyou.toyouandroid.presentation.fragment.social.adapter.SocialRVAdapt
 import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
 import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
 import timber.log.Timber
@@ -53,6 +56,9 @@ class SocialFragment : Fragment() {
 
         val socialService = AuthNetworkModule.getClient().create(SocialService::class.java)
         val socialRepository = SocialRepository(socialService)
+        val createService = AuthNetworkModule.getClient().create(CreateService::class.java)
+        val createRepository = CreateRepository(createService)
+
 
         socialViewModel = ViewModelProvider(
             requireActivity(),
@@ -61,7 +67,7 @@ class SocialFragment : Fragment() {
 
         userViewModel = ViewModelProvider(
             requireActivity(),
-            HomeViewModelFactory(tokenManager)
+            UserViewModelFactory(createRepository,tokenManager)
         )[UserViewModel::class.java]
 
         socialViewModel.getFriendsData()

@@ -20,13 +20,16 @@ class HomeViewModelFactory(
         } else if (modelClass.isAssignableFrom(ProfileViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return ProfileViewModel(tokenManager) as T
-        } else if (modelClass.isAssignableFrom(CardViewModel::class.java)) {
+        }
+        /*else if (modelClass.isAssignableFrom(CardViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return CardViewModel(tokenManager) as T
-        } else if (modelClass.isAssignableFrom(UserViewModel::class.java)) {
+        }
+        else if (modelClass.isAssignableFrom(UserViewModel::class.java)) {
+
             @Suppress("UNCHECKED_CAST")
             return UserViewModel(tokenManager) as T
-        }
+        }*/
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

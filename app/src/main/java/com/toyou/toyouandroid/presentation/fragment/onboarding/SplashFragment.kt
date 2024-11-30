@@ -11,15 +11,19 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import com.toyou.toyouHoandroid.data.create.service.CreateService
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.data.UserDatabase
 import com.toyou.toyouandroid.databinding.FragmentSplashBinding
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
+import com.toyou.toyouandroid.domain.create.repository.CreateRepository
+import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.presentation.viewmodel.AuthViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
 import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
 
@@ -45,6 +49,9 @@ class SplashFragment : Fragment() {
         val tokenStorage = TokenStorage(requireContext())
         val authService = NetworkModule.getClient().create(AuthService::class.java)
         val tokenManager = TokenManager(authService, tokenStorage)
+        val createService = AuthNetworkModule.getClient().create(CreateService::class.java)
+        val createRepository = CreateRepository(createService)
+
 
         loginViewModel = ViewModelProvider(
             this,
@@ -57,7 +64,7 @@ class SplashFragment : Fragment() {
 
         userViewModel = ViewModelProvider(
             requireActivity(),
-            HomeViewModelFactory(tokenManager)
+            UserViewModelFactory(createRepository,tokenManager)
         )[UserViewModel::class.java]
 
         return binding.root

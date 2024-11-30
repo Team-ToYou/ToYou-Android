@@ -14,15 +14,18 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import com.toyou.toyouHoandroid.data.create.service.CreateService
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentProfileBinding
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
+import com.toyou.toyouandroid.domain.create.repository.CreateRepository
 import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.viewmodel.AuthViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
 import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
 import timber.log.Timber
@@ -58,6 +61,9 @@ class ProfileFragment : Fragment() {
         val tokenStorage = TokenStorage(requireContext())
         val authService: AuthService = NetworkModule.getClient().create(AuthService::class.java)
         val tokenManager = TokenManager(authService, tokenStorage)
+        val createService = AuthNetworkModule.getClient().create(CreateService::class.java)
+        val createRepository = CreateRepository(createService)
+
 
         viewModel = ViewModelProvider(
             this,
@@ -68,7 +74,7 @@ class ProfileFragment : Fragment() {
 
         userViewModel = ViewModelProvider(
             requireActivity(),
-            HomeViewModelFactory(tokenManager)
+            UserViewModelFactory(createRepository,tokenManager)
         )[UserViewModel::class.java]
 
         binding.viewModel = viewModel

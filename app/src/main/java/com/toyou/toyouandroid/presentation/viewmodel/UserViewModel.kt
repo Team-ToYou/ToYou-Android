@@ -4,14 +4,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.toyou.toyouHoandroid.data.create.service.CreateService
 import com.toyou.toyouandroid.domain.create.repository.CreateRepository
 import com.toyou.toyouandroid.utils.TokenManager
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class UserViewModel(private val tokenManager: TokenManager) : ViewModel() {
+class UserViewModel(
+    private val tokenManager: TokenManager,
+    private val repository: CreateRepository
+) : ViewModel() {
 
-    private val repository = CreateRepository(tokenManager)
 
     private val _cardId = MutableLiveData<Int?>()
     val cardId: LiveData<Int?> get() = _cardId

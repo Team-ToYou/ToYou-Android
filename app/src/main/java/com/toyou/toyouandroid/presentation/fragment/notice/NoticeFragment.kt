@@ -12,6 +12,7 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
+import com.toyou.toyouHoandroid.data.create.service.CreateService
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentNoticeBinding
 import com.toyou.toyouandroid.network.AuthNetworkModule
@@ -19,14 +20,17 @@ import com.toyou.toyouandroid.domain.notice.NoticeRepository
 import com.toyou.toyouandroid.data.notice.service.NoticeService
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
 import com.toyou.toyouandroid.data.social.service.SocialService
+import com.toyou.toyouandroid.domain.create.repository.CreateRepository
 import com.toyou.toyouandroid.domain.social.repostitory.SocialRepository
 import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.CardViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.NoticeViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
 import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.notice.SwipeToDeleteNotice
 import com.toyou.toyouandroid.utils.TokenStorage
@@ -67,6 +71,9 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
 
         val socialService = AuthNetworkModule.getClient().create(SocialService::class.java)
         val socialRepository = SocialRepository(socialService)
+        val createService = AuthNetworkModule.getClient().create(CreateService::class.java)
+        val createRepository = CreateRepository(createService)
+
 
         viewModel = ViewModelProvider(
             this,
@@ -75,12 +82,12 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
 
         cardViewModel = ViewModelProvider(
             requireActivity(),
-            HomeViewModelFactory(tokenManager)
+            CardViewModelFactory(createRepository,tokenManager)
         )[CardViewModel::class.java]
 
         userViewModel = ViewModelProvider(
             requireActivity(),
-            HomeViewModelFactory(tokenManager)
+            UserViewModelFactory(createRepository,tokenManager)
         )[UserViewModel::class.java]
 
         socialViewModel = ViewModelProvider(
