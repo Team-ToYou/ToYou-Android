@@ -15,6 +15,8 @@ import com.toyou.toyouandroid.data.onboarding.service.AuthService
 import com.toyou.toyouandroid.data.social.service.SocialService
 import com.toyou.toyouandroid.databinding.FragmentQuestionTypeBinding
 import com.toyou.toyouandroid.domain.social.repostitory.SocialRepository
+import com.toyou.toyouandroid.fcm.domain.FCMRepository
+import com.toyou.toyouandroid.fcm.service.FCMService
 import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.base.MainActivity
@@ -38,10 +40,12 @@ class QuestionTypeFragment : Fragment(){
 
         val socialService = AuthNetworkModule.getClient().create(SocialService::class.java)
         val socialRepository = SocialRepository(socialService)
+        val fcmService = AuthNetworkModule.getClient().create(FCMService::class.java)
+        val fcmRepository = FCMRepository(fcmService)
 
         socialViewModel = ViewModelProvider(
             requireActivity(),
-            SocialViewModelFactory(socialRepository, tokenManager)
+            SocialViewModelFactory(socialRepository, tokenManager, fcmRepository)
         )[SocialViewModel::class.java]
     }
 

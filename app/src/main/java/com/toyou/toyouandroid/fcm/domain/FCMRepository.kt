@@ -2,19 +2,37 @@ package com.toyou.toyouandroid.fcm.domain
 
 import com.toyou.toyouandroid.fcm.dto.request.FCM
 import com.toyou.toyouandroid.fcm.dto.request.Token
+import com.toyou.toyouandroid.fcm.dto.response.GetToken
 import com.toyou.toyouandroid.fcm.service.FCMService
 import com.toyou.toyouandroid.network.AuthNetworkModule
+import com.toyou.toyouandroid.network.BaseResponse
 import com.toyou.toyouandroid.utils.TokenManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class FCMRepository(private val tokenManager: TokenManager) {
+class FCMRepository(private val fcmService: FCMService) {
 
-    private val client = AuthNetworkModule.getClient().create(FCMService::class.java)
+    //private val client = AuthNetworkModule.getClient().create(FCMService::class.java)
 
-    suspend fun postToken(
+
+    suspend fun postToken(token: Token): BaseResponse<Unit> {
+        return fcmService.postToken(token)
+    }
+    suspend fun getToken(name: String): BaseResponse<GetToken> {
+        return fcmService.getToken(name)
+    }
+
+
+    suspend fun postFCM(request: FCM): BaseResponse<Unit> {
+        return fcmService.postFCM(request)
+    }
+
+    suspend fun patchToken(request: Token): BaseResponse<Unit> {
+        return fcmService.patchToken(request)
+    }
+    /*suspend fun postToken(
         token: Token
     ) {
         try {
@@ -89,5 +107,5 @@ class FCMRepository(private val tokenManager: TokenManager) {
             e.printStackTrace()
             Timber.tag("fcm 갱신 실패!").d(e.message.toString())
         }
-    }
+    }*/
 }
