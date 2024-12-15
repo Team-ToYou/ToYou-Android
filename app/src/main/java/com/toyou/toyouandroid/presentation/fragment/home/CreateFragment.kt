@@ -139,6 +139,7 @@ class CreateFragment : Fragment(){
 
         binding.nextBtn.setOnClickListener {
             cardViewModel.updateAllPreviews()
+            //cardViewModel.initialize()
             cardViewModel.resetSelect()
             cardViewModel.disableLock(false)
             navController.navigate(R.id.action_create_fragment_to_createWriteFragment)

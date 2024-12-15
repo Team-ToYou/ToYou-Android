@@ -196,12 +196,19 @@ class LoginViewModel(
     private var isSendingToken = false // 호출 여부를 추적하는 플래그
 
     private fun sendTokenToServer(token: String) {
+
+        if (tokenStorage.isTokenSent()) {
+            Timber.d("Token already sent, skipping sendTokenToServer call.")
+            return
+        }
+
         if (isSendingToken) {
             Timber.d("sendTokenToServer is already in progress, skipping this call.")
             return
         }
 
-        isSendingToken = true // 호출 시작 시 플래그 설정
+        isSendingToken = true
+
         val tokenRequest = Token(token)
 
         CoroutineScope(Dispatchers.IO).launch {
@@ -209,6 +216,7 @@ class LoginViewModel(
                 val response = fcmRepository.postToken(tokenRequest)
                 if (response.isSuccess) {
                     Timber.tag("sendTokenToServer").d("토큰 전송 성공")
+                    tokenStorage.setTokenSent(true) // 전송 성공 상태 저장
                 } else {
                     Timber.tag("sendTokenToServer").d("토큰 전송 실패: ${response.message}")
                     tokenManager.refreshToken(

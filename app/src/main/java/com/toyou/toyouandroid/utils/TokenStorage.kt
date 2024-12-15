@@ -32,4 +32,17 @@ class TokenStorage(context: Context) {
             apply()
         }
     }
+
+    companion object {
+        private const val KEY_IS_TOKEN_SENT = "is_token_sent"
+    }
+
+    fun isTokenSent(): Boolean {
+        return sharedPreferences.getBoolean(KEY_IS_TOKEN_SENT, false)
+    }
+
+    fun setTokenSent(value: Boolean) {
+        sharedPreferences.edit().putBoolean(KEY_IS_TOKEN_SENT, value).apply()
+    }
+
 }

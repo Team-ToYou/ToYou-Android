@@ -63,6 +63,7 @@ class CardViewModel(private val tokenManager: TokenManager,
 
     private fun initializeCountSelection() {
         _countSelection.value = _previewCards.value?.size ?: 0
+        Timber.tag("선택9 초기화")
     }
 
     fun disableLock(lock : Boolean){
@@ -94,6 +95,7 @@ class CardViewModel(private val tokenManager: TokenManager,
 
     private fun checkIfAllAnswersFilled() {
         _isAllAnswersFilled.value = inputStatus.count { it } == inputStatus.size && inputLongStatus.count { it } == inputLongStatus.size && inputChooseStatus.count { it } == inputChooseStatus.size
+        Timber.tag("선택9${isAllAnswersFilled.value.toString()}")
     }
 
     /*fun sendData(previewCardModels: List<PreviewCardModel>, exposure: Boolean) {
@@ -101,6 +103,14 @@ class CardViewModel(private val tokenManager: TokenManager,
             _cardId.value = repository.postCardData(previewCardModels, exposure)
             Timber.tag("카드 아이디").d(_cardId.value.toString())
         }
+    }*/
+
+    /*fun initialize() {
+        if (_countSelection.value != null && _countSelection.value!! > 0) {
+            _isAllAnswersFilled.value = true
+            Timber.tag("initialize1${_isAllAnswersFilled.value}")
+        }
+        Timber.tag("initialize2${_isAllAnswersFilled.value}")
     }*/
 
     fun sendData(previewCardModels: List<PreviewCardModel>, exposure: Boolean) {
@@ -501,6 +511,7 @@ class CardViewModel(private val tokenManager: TokenManager,
     }
 
     fun resetSelect(){
+        Timber.tag("initialize3${_countSelection.value}")
         _countSelection.value = 0
     }
 }
