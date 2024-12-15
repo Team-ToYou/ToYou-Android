@@ -3,6 +3,7 @@ package com.toyou.toyouandroid.presentation.fragment.home
 import ShortCardAdapter
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -101,6 +102,7 @@ class CreateWriteFragment: Fragment() {
         }
 
         cardViewModel.isAllAnswersFilled.observe(viewLifecycleOwner) { isFilled ->
+            Log.d("카드수", isFilled.toString())
             binding.nextBtn.isEnabled = isFilled
         }
 

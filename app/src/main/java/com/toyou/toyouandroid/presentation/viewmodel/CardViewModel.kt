@@ -98,21 +98,6 @@ class CardViewModel(private val tokenManager: TokenManager,
         Timber.tag("선택9${isAllAnswersFilled.value.toString()}")
     }
 
-    /*fun sendData(previewCardModels: List<PreviewCardModel>, exposure: Boolean) {
-        viewModelScope.launch {
-            _cardId.value = repository.postCardData(previewCardModels, exposure)
-            Timber.tag("카드 아이디").d(_cardId.value.toString())
-        }
-    }*/
-
-    /*fun initialize() {
-        if (_countSelection.value != null && _countSelection.value!! > 0) {
-            _isAllAnswersFilled.value = true
-            Timber.tag("initialize1${_isAllAnswersFilled.value}")
-        }
-        Timber.tag("initialize2${_isAllAnswersFilled.value}")
-    }*/
-
     fun sendData(previewCardModels: List<PreviewCardModel>, exposure: Boolean) {
         viewModelScope.launch {
             try {
@@ -462,14 +447,14 @@ class CardViewModel(private val tokenManager: TokenManager,
     fun clearAllData() {
         _previewCards.value = emptyList()
         _previewChoose.value = emptyList()
+        _isAllAnswersFilled.value = false
     }
 
     fun clearAll(){
-        //_previewCards.value = emptyList()
-        //_previewChoose.value = emptyList()
         _cards.value = emptyList()
         _chooseCards.value = emptyList()
         _shortCards.value = emptyList()
+        _isAllAnswersFilled.value = false
     }
     fun patchCard(previewCardModels: List<PreviewCardModel>, exposure: Boolean, id: Int) {
         viewModelScope.launch {
