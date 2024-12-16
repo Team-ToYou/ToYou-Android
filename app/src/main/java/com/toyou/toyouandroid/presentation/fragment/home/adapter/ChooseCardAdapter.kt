@@ -100,6 +100,12 @@ class ChooseCardAdapter(private val cardViewModel: CardViewModel) : RecyclerView
             txtOption2.text = item.options!![1]
             fromWho.text = "From. ${item.fromWho}"
 
+            val isNotEmpty = item.answer.isNotEmpty()
+
+            if (isNotEmpty) {
+                cardViewModel.updateCardInputStatusChoose(adapterPosition, isNotEmpty)
+            }
+
             when (item.answer) {
                 txtOption1.text.toString() -> handleOptionSelection(txtOption1)
                 txtOption2.text.toString() -> handleOptionSelection(txtOption2)
@@ -149,7 +155,10 @@ class ChooseCardAdapter(private val cardViewModel: CardViewModel) : RecyclerView
 
 
             val isNotEmpty = item.answer.isNotEmpty()
+            Log.d("선택옵션2", isNotEmpty.toString())
+            Log.d("선택옵션3", item.toString())
             if (isNotEmpty) {
+                Log.d("선택옵션", isNotEmpty.toString())
                 cardViewModel.updateCardInputStatusChoose(adapterPosition, isNotEmpty)
             }
 

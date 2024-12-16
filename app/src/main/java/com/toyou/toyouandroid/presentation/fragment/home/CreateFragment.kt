@@ -92,15 +92,12 @@ class CreateFragment : Fragment(){
         cardAdapter = CardAdapter({ position, isSelected ->
             cardViewModel.updateButtonState(position, isSelected)
             cardViewModel.countSelect(isSelected)
-            Log.d("선택0", position.toString()+isSelected.toString())
         }, cardViewModel)
         cardShortAdapter = CardShortAdapter({ position, isSelected ->
-            Log.d("선택2", position.toString()+isSelected.toString())
             cardViewModel.updateShortButtonState(position, isSelected)
             cardViewModel.countSelect(isSelected)
         }, cardViewModel)
         cardChooseAdapter = CardChooseAdapter({ position, isSelected ->
-            Log.d("선택1", position.toString()+isSelected.toString())
             cardViewModel.updateChooseButton(position, isSelected)
             cardViewModel.countSelect(isSelected)
         }, cardViewModel)
@@ -139,6 +136,7 @@ class CreateFragment : Fragment(){
 
         binding.nextBtn.setOnClickListener {
             cardViewModel.updateAllPreviews()
+            //cardViewModel.initialize()
             cardViewModel.resetSelect()
             cardViewModel.disableLock(false)
             navController.navigate(R.id.action_create_fragment_to_createWriteFragment)
