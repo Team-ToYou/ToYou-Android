@@ -476,26 +476,6 @@ class SocialViewModel(
         }
     }
 
-    /*private suspend fun retrieveTokenFromServer(name: String) {
-        resetToken()
-        try {
-            // IO 스레드에서 네트워크 호출을 처리
-            val response = withContext(Dispatchers.IO) {
-                fcmRepository.getToken(name)
-            }
-
-            if (response.isSuccess) {
-                _retrieveToken.value = response.result.tokens
-                // 서버에서 받은 토큰을 사용해 로직을 처리
-                Timber.tag("Token Retrieval").d(_retrieveToken.value.toString())
-            } else {
-                Timber.tag("Token Retrieval").d("토큰 조회 실패: ${response.message}")
-            }
-        } catch (e: Exception) {
-            Timber.tag("Token Retrieval").e(e.message.toString())
-        }
-    }*/
-
     private var retryCount = 0 // 재시도 횟수 관리
     private val maxRetryCount = 1 // 최대 재시도 횟수
 
@@ -540,11 +520,6 @@ class SocialViewModel(
             }
         }
     }
-
-
-
-
-
 
     fun resetQuestionData() {
         _selectedChar.value = -1
