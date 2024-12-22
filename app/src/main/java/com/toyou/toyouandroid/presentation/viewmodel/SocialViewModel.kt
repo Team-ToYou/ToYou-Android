@@ -1,5 +1,6 @@
 package com.toyou.toyouandroid.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -55,8 +56,8 @@ class SocialViewModel(
 
     private val _friendRequest = MutableLiveData<RequestFriend>()
     val friendRequest: LiveData<RequestFriend> get() = _friendRequest
-    private val _retrieveToken = MutableLiveData<List<String>>()
-    val retrieveToken : LiveData<List<String>> get() = _retrieveToken
+    private val _retrieveToken = MutableLiveData<List<String>?>()
+    val retrieveToken: LiveData<List<String>?> get() = _retrieveToken
     private val _fcm = MutableLiveData<FCM>()
     val fcm : LiveData<FCM> get() = _fcm
     private val _friendRequestCompleted = MutableLiveData<Boolean>()
@@ -281,8 +282,8 @@ class SocialViewModel(
     }
 
     // 토큰 재발급 정상 호출 완료
-    fun sendFriendRequest(name: String, myName: String) {
-        _friendRequest.value = RequestFriend(name = name)
+    fun sendFriendRequest(friendName: String, myName: String) {
+        _friendRequest.value = RequestFriend(name = friendName)
         viewModelScope.launch {
             try {
                 _friendRequest.value?.let { name ->
@@ -291,7 +292,7 @@ class SocialViewModel(
                         Timber.tag("SocialViewModel").d("친구 요청 전송 성공")
 
                         // 작업이 성공적으로 완료되었음을 표시
-                        retrieveTokenFromServer(name.toString())
+                        retrieveTokenFromServer(friendName)
                         _retrieveToken.value?.let { tokens ->
                             for (token in tokens) {
                                 postFCM(myName, token, 1)
@@ -313,7 +314,7 @@ class SocialViewModel(
                 Timber.tag("api 실패!").e(e.message.toString())
                 _friendRequestCompleted.postValue(false)
                 tokenManager.refreshToken(
-                    onSuccess = { sendFriendRequest(name, myName)},
+                    onSuccess = { sendFriendRequest(friendName, myName)},
                     onFailure = { Timber.e("sendFriendRequest Failed")}
                 )
             }
@@ -495,40 +496,52 @@ class SocialViewModel(
         }
     }*/
 
-    private suspend fun retrieveTokenFromServer(name: String) {
-        resetToken() // 기존 데이터를 초기화
-        try {
-            val response = withContext(Dispatchers.IO) {
-                fcmRepository.getToken(name)
-            }
+    private var retryCount = 0 // 재시도 횟수 관리
+    private val maxRetryCount = 1 // 최대 재시도 횟수
 
-            if (response.isSuccess) {
-                _retrieveToken.value = response.result.tokens
-                Timber.tag("Token Retrieval").d(_retrieveToken.value.toString())
-            } else {
-                Timber.tag("Token Retrieval").d("토큰 조회 실패: ${response.message}")
-                tryRefreshToken(name)
-            }
-        } catch (e: Exception) {
-            Timber.tag("Token Retrieval").e("Exception occurred: ${e.message}")
-            tryRefreshToken(name)
-        }
-    }
-
-    private suspend fun tryRefreshToken(name: String) {
-        withContext(Dispatchers.IO) {
-            tokenManager.refreshToken(
-                onSuccess = {
-                    CoroutineScope(Dispatchers.Default).launch {
-                        retrieveTokenFromServer(name) // Retry after token refresh
-                    }
-                },
-                onFailure = {
-                    Timber.e("Token Retrieval failed - Refresh token failed")
+    private fun retrieveTokenFromServer(name: String) {
+        resetToken()
+        viewModelScope.launch {
+            try {
+                val response = withContext(Dispatchers.IO) {
+                    Log.d("name", name)
+                    fcmRepository.getToken(name)
                 }
-            )
+
+                if (response.isSuccess) {
+                    withContext(Dispatchers.Main) {
+                        _retrieveToken.value = response.result.tokens
+                    }
+                    Timber.tag("Token Retrieval").d(_retrieveToken.value.toString())
+                    retryCount = 0
+                } else {
+                    Timber.tag("Token Retrieval").d("토큰 조회 실패: ${response.message}")
+                    if (retryCount < maxRetryCount) {
+                        retryCount++
+                        tokenManager.refreshToken(
+                            onSuccess = { retrieveTokenFromServer(name) },
+                            onFailure = { Timber.e("Token Retrieval failed - Refresh token failed") }
+                        )
+                    } else {
+                        Timber.tag("Token Retrieval").e("최대 재시도 도달, 추가 호출 중단")
+                    }
+                }
+            } catch (e: Exception) {
+                Timber.tag("Token Retrieval").e("Exception occurred: ${e.message}")
+                if (retryCount < maxRetryCount) {
+                    retryCount++
+                    tokenManager.refreshToken(
+                        onSuccess = { retrieveTokenFromServer(name) },
+                        onFailure = { Timber.e("Token Retrieval failed - Refresh token failed") }
+                    )
+                } else {
+                    Timber.tag("Token Retrieval").e("최대 재시도 도달, 추가 호출 중단")
+                }
+            }
         }
     }
+
+
 
 
 
@@ -543,9 +556,8 @@ class SocialViewModel(
 
     }
 
-    private fun resetToken(){
-        _retrieveToken.value = emptyList()
-        Timber.tag("fcm").d("호출")
+    private fun resetToken() {
+        _retrieveToken.postValue(null) // 백그라운드에서도 안전하게 실행
     }
 
 }
