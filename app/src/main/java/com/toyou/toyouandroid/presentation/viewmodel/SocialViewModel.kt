@@ -115,7 +115,6 @@ class SocialViewModel(
         }
     }
 
-    // 토큰 재발급 정상 호출 완료
     fun getSearchData(name: String) {
         viewModelScope.launch {
             try {
@@ -126,31 +125,41 @@ class SocialViewModel(
                         _searchName.value = result.name
                         Timber.tag("search API 성공").d(_isFriend.value.toString())
                     }
+                    retryCount = 0 // 성공 시 재시도 횟수 초기화
                 } else {
                     Timber.tag("search API 실패").d("API 호출 실패: ${response.message}")
-                    tokenManager.refreshToken(
-                        onSuccess = { getSearchData(name) },
-                        onFailure = { Timber.e("getSearchData API call failed") }
-                    )
+
+                    if (retryCount < maxRetryCount) {
+                        retryCount++
+                        tokenManager.refreshToken(
+                            onSuccess = { getSearchData(name) },
+                            onFailure = { Timber.e("getSearchData API call failed") }
+                        )
+                    } else {
+                        Timber.e("최대 재시도 도달, 추가 호출 중단")
+                    }
                 }
             } catch (e: HttpException) {
                 val errorBody = e.response()?.errorBody()?.string()
                 Timber.tag("search API 실패").e("서버 응답 메시지: $errorBody")
 
-                tokenManager.refreshToken(
-                    onSuccess = { getSearchData(name) },
-                    onFailure = { Timber.e("getSearchData API call failed") }
-                )
+                if (retryCount < maxRetryCount) {
+                    retryCount++
+                    tokenManager.refreshToken(
+                        onSuccess = { getSearchData(name) },
+                        onFailure = { Timber.e("getSearchData API call failed") }
+                    )
+                } else {
+                    Timber.e("최대 재시도 도달, 추가 호출 중단")
+                }
 
                 when {
                     errorBody?.contains("USER400") == true -> {
                         _isFriend.value = "400"
                     }
-
                     errorBody?.contains("USER401") == true -> {
                         _isFriend.value = "401"
                     }
-
                     else -> {
                         _isFriend.value = "400"
                     }
@@ -159,13 +168,21 @@ class SocialViewModel(
                 Timber.tag("search API 실패").e("예외 발생: ${e.message}")
                 _isFriend.value = "예상치 못한 오류가 발생했습니다."
                 e.printStackTrace()
-                tokenManager.refreshToken(
-                    onSuccess = { getSearchData(name) },
-                    onFailure = { Timber.e("getSearchData API call failed") }
-                )
+
+                if (retryCount < maxRetryCount) {
+                    retryCount++
+                    tokenManager.refreshToken(
+                        onSuccess = { getSearchData(name) },
+                        onFailure = { Timber.e("getSearchData API call failed") }
+                    )
+                } else {
+                    Timber.e("최대 재시도 도달, 추가 호출 중단")
+                    retryCount = 0;
+                }
             }
         }
     }
+
 
     private fun mapToFriendModels(friendsDto: FriendsDto) {
         val friendListModel = mutableListOf<FriendListModel>()
@@ -337,31 +354,45 @@ class SocialViewModel(
     }
 
     // 토큰 재발급 정상 호출 완료
-    fun deleteFriend(name: String){
+    fun deleteFriend(name: String) {
         _friendRequest.value = RequestFriend(name = name)
         viewModelScope.launch {
             try {
-                _friendRequest.value?.let { name ->
-                    val response = repository.deleteFriendData(name)
+                _friendRequest.value?.let { friendRequest ->
+                    val response = repository.deleteFriendData(friendRequest)
                     if (response.isSuccess) {
                         Timber.tag("SocialViewModel").d("친구 삭제 성공")
                         _friendRequestRemove.postValue(true)
+                        retryCount = 0 // 성공 시 재시도 횟수 초기화
                     } else {
                         Timber.tag("SocialViewModel").d("친구 삭제 실패: ${response.message}")
-                        tokenManager.refreshToken(
-                            onSuccess = { deleteFriend(name.toString()) },
-                            onFailure = { Timber.e("deleteFriend APO Call Failed")}
-                        )
+
+                        if (retryCount < maxRetryCount) {
+                            retryCount++
+                            tokenManager.refreshToken(
+                                onSuccess = { deleteFriend(name) },
+                                onFailure = { Timber.e("deleteFriend API Call Failed") }
+                            )
+                        } else {
+                            Timber.e("최대 재시도 도달, 추가 호출 중단")
+                        }
                     }
                 } ?: run {
                     Timber.tag("SocialViewModel").e("friendRequest null")
                 }
             } catch (e: Exception) {
                 Timber.e("Exception occurred: ${e.message}")
-                tokenManager.refreshToken(
-                    onSuccess = { deleteFriend(name) },
-                    onFailure = { Timber.e("deleteFriend APO Call Failed")}
-                )
+
+                if (retryCount < maxRetryCount) {
+                    retryCount++
+                    tokenManager.refreshToken(
+                        onSuccess = { deleteFriend(name) },
+                        onFailure = { Timber.e("deleteFriend API Call Failed") }
+                    )
+                } else {
+                    Timber.e("최대 재시도 도달, 추가 호출 중단")
+                    retryCount = 0;
+                }
             }
         }
     }
