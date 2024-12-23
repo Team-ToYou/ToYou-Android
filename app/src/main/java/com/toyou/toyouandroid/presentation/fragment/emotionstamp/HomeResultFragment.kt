@@ -57,7 +57,7 @@ class HomeResultFragment : Fragment() {
             navController.navigate(R.id.action_navigation_home_result_to_home_fragment)
         }
 
-        handler.postDelayed(navigateRunnable, 1500)
+        handler.postDelayed(navigateRunnable, 3000)
 
         binding.root.setOnClickListener {
             handler.removeCallbacks(navigateRunnable)
