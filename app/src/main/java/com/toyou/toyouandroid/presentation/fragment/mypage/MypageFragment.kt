@@ -25,6 +25,7 @@ import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.viewmodel.AuthViewModelFactory
 import com.toyou.toyouandroid.presentation.fragment.home.HomeViewModel
+import com.toyou.toyouandroid.presentation.fragment.record.CalendarDialog
 import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModelFactory
 import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.presentation.viewmodel.ViewModelManager
@@ -45,6 +46,7 @@ class MypageFragment : Fragment() {
     private val nicknameViewModel: SignupNicknameViewModel by activityViewModels()
     private val mypageDialogViewModel: MypageDialogViewModel by activityViewModels()
     private var mypageDialog: MypageDialog? = null
+    private var calendarDialog: CalendarDialog? = null
 
     private lateinit var homeViewModel: HomeViewModel
 
@@ -190,8 +192,8 @@ class MypageFragment : Fragment() {
                 leftButtonClickAction = { dismissDialog() },
                 rightButtonClickAction = { handleLogout() }
             )
-            mypageDialog = MypageDialog()
-            mypageDialog?.show(parentFragmentManager, "CustomDialog")
+            calendarDialog = CalendarDialog()
+            calendarDialog?.show(parentFragmentManager, "CustomDialog")
         }
     }
 
