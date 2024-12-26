@@ -165,8 +165,10 @@ class HomeFragment : Fragment() {
                 binding.homeBottomsheetPseudo.visibility = View.VISIBLE
                 binding.homeBottomSheetRv.visibility = View.GONE
             } else {
-                binding.homeBottomsheetPseudo.visibility = View.GONE
-                binding.homeBottomSheetRv.visibility = View.VISIBLE
+//                binding.homeBottomsheetPseudo.visibility = View.GONE
+//                binding.homeBottomSheetRv.visibility = View.VISIBLE
+                binding.homeBottomsheetPseudo.visibility = View.VISIBLE
+                binding.homeBottomSheetRv.visibility = View.GONE
             }
         }
 
@@ -280,7 +282,7 @@ class HomeFragment : Fragment() {
             }
         }
 
-        // 감정 선택에 따른 홈화면 변경
+        // 감정 선택에 따른 홈화면 리소스 변경
         viewModel.currentDate.observe(viewLifecycleOwner) { date ->
             binding.homeDateTv.text = date
         }

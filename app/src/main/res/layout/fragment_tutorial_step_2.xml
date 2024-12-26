@@ -34,9 +34,9 @@
 
     <ImageView
         android:id="@+id/tutorial_step_2_device"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/tutorial_step_2"
+        android:layout_width="284dp"
+        android:layout_height="535dp"
+        android:src="@drawable/tutorial_step_2_device"
         android:layout_marginTop="37dp"
         android:layout_marginStart="20dp"
         app:layout_constraintStart_toStartOf="parent"

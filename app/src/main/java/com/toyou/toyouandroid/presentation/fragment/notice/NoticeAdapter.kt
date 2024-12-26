@@ -9,13 +9,15 @@ import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.ItemNoticeCardCheckBinding
 import com.toyou.toyouandroid.databinding.ItemNoticeFriendRequestAcceptedBinding
 import com.toyou.toyouandroid.databinding.ItemNoticeFriendRequestBinding
+import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
 import timber.log.Timber
 
 class NoticeAdapter(
     private val items: MutableList<NoticeItem>,
     private val viewModel: NoticeViewModel,
-    private val listener: NoticeAdapterListener
-    ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private val listener: NoticeAdapterListener,
+    private val socialViewModel: SocialViewModel
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     companion object {
         private const val TYPE_FRIEND_REQUEST = 1
         private const val TYPE_CARD_CHECK = 2
@@ -89,6 +91,7 @@ class NoticeAdapter(
             binding.noticeCardCheckDelete.setOnClickListener {
                 // 삭제 API 호출
                 viewModel.deleteNotice(item.alarmId, this.layoutPosition)
+                socialViewModel.deleteFriend(item.nickname)
                 removeItem(this.layoutPosition)
             }
 

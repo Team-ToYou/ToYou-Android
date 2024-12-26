@@ -259,7 +259,7 @@
             android:enabled="@{viewModel.isNextButtonEnabled}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-             />
+            app:layout_constraintTop_toTopOf="@id/login_btn_h" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

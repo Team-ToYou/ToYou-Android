@@ -6,6 +6,20 @@
     android:layout_height="match_parent"
     android:background="#E6E6E6">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_calendar_april_v"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.8" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_calendar_april_h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.3" />
+
     <TextView
         android:id="@+id/tutorial_step_4_title"
         android:layout_width="wrap_content"
@@ -33,30 +47,28 @@
         app:layout_constraintTop_toBottomOf="@+id/tutorial_step_4_title" />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/tutorial_step_4_calendar_behind"
-        android:layout_marginEnd="160dp"
-        android:layout_marginTop="91dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tutorial_step_4_subtitle" />
+        android:id="@+id/tutorial_step_4_april"
+        android:layout_width="360dp"
+        android:layout_height="400dp"
+        android:src="@drawable/tutorial_step_4_april"
+        app:layout_constraintEnd_toEndOf="@+id/guideline_calendar_april_v"
+        app:layout_constraintTop_toTopOf="@+id/guideline_calendar_april_h"/>
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/tutorial_step_4_calendar_middle"
-        android:layout_marginEnd="120dp"
-        android:layout_marginTop="111dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tutorial_step_4_subtitle" />
+        android:id="@+id/tutorial_step_4_may"
+        android:layout_width="400dp"
+        android:layout_height="450dp"
+        android:src="@drawable/tutorial_step_4_may"
+        android:layout_marginTop="25dp"
+        app:layout_constraintStart_toStartOf="@+id/tutorial_step_4_april"
+        app:layout_constraintTop_toTopOf="@+id/tutorial_step_4_april"/>
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/tutorial_step_4_calendar_front"
-        android:layout_marginEnd="70dp"
-        android:layout_marginTop="128dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tutorial_step_4_subtitle" />
+        android:layout_width="440dp"
+        android:layout_height="500dp"
+        android:src="@drawable/tutorial_step_4_june"
+        android:layout_marginTop="25dp"
+        app:layout_constraintStart_toStartOf="@+id/tutorial_step_4_april"
+        app:layout_constraintTop_toTopOf="@+id/tutorial_step_4_may"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

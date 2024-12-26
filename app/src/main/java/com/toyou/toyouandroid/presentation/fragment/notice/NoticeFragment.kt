@@ -27,7 +27,6 @@ import com.toyou.toyouandroid.fcm.service.FCMService
 import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModelFactory
-import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.NoticeViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModelFactory
@@ -99,7 +98,7 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
             SocialViewModelFactory(socialRepository, tokenManager, fcmRepository)
         )[SocialViewModel::class.java]
 
-        noticeAdapter = NoticeAdapter(mutableListOf(), viewModel, this)
+        noticeAdapter = NoticeAdapter(mutableListOf(), viewModel, this, socialViewModel)
 
         listener = object : NoticeAdapterListener {
 
@@ -177,7 +176,7 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
     }
 
     private fun setupRecyclerView(items: List<NoticeItem>) {
-        val adapter = NoticeAdapter(items.toMutableList(), viewModel, listener)
+        val adapter = NoticeAdapter(items.toMutableList(), viewModel, listener, socialViewModel)
         binding.noticeRv.layoutManager = GridLayoutManager(context, 1)
         binding.noticeRv.adapter = adapter
 
