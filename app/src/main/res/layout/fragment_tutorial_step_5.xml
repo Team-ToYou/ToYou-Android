@@ -6,6 +6,20 @@
     android:layout_height="match_parent"
     android:background="#E6E6E6">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_start_btn_h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.95" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_title_h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.13" />
+
     <TextView
         android:id="@+id/tutorial_step_5_title"
         android:layout_width="wrap_content"
@@ -14,10 +28,9 @@
         android:gravity="center"
         android:text="@string/tutorial_step_5_title"
         android:textColor="@color/black"
-        android:layout_marginTop="111dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/guideline_title_h" />
 
     <ImageView
         android:id="@+id/tutorial_step_5_device"
@@ -38,6 +51,6 @@
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="@+id/tutorial_step_5_device" />
+        app:layout_constraintTop_toTopOf="@+id/guideline_start_btn_h" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
