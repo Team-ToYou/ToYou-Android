@@ -26,8 +26,8 @@ import com.toyou.toyouandroid.domain.create.repository.CreateRepository
 import com.toyou.toyouandroid.domain.social.repostitory.SocialRepository
 import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.network.NetworkModule
-import com.toyou.toyouandroid.presentation.fragment.mypage.MypageDialogViewModel
-import com.toyou.toyouandroid.presentation.fragment.record.CalendarDialog
+import com.toyou.toyouandroid.presentation.fragment.mypage.MyPageLogoutDialog
+import com.toyou.toyouandroid.presentation.fragment.record.CalendarDialogViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
 import com.toyou.toyouandroid.presentation.fragment.social.adapter.SocialRVAdapter
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModelFactory
@@ -49,8 +49,8 @@ class SocialFragment : Fragment() {
     private lateinit var addFriendLinearLayout: LinearLayout
     private lateinit var userViewModel: UserViewModel
 
-    private var calendarDialog: CalendarDialog? = null
-    private val mypageDialogViewModel: MypageDialogViewModel by activityViewModels()
+    private var myPageLogoutDialog: MyPageLogoutDialog? = null
+    private val calendarDialogViewModel: CalendarDialogViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -282,9 +282,8 @@ class SocialFragment : Fragment() {
     }
 
     private fun showDeleteDialog(friendName: String) {
-        mypageDialogViewModel.setDialogData(
+        calendarDialogViewModel.setDialogData(
             title = "선택한 친구를\n삭제하시겠습니까?",
-            subTitle = "",
             leftButtonText = "취소",
             rightButtonText = "삭제",
             leftButtonTextColor = Color.BLACK,
@@ -292,8 +291,8 @@ class SocialFragment : Fragment() {
             leftButtonClickAction = { dismissDialog() },
             rightButtonClickAction = { deleteFriend(friendName) }
         )
-        calendarDialog = CalendarDialog()
-        calendarDialog?.show(parentFragmentManager, "CustomDialog")
+        myPageLogoutDialog = MyPageLogoutDialog()
+        myPageLogoutDialog?.show(parentFragmentManager, "CustomDialog")
     }
 
     private fun deleteFriend(friendName: String) {
@@ -303,11 +302,11 @@ class SocialFragment : Fragment() {
         socialViewModel.resetFriendRequestRemove()
         Toast.makeText(requireContext(), "선택한 친구가 삭제 되었습니다.", Toast.LENGTH_SHORT).show()
 
-        calendarDialog?.dismiss()
+        myPageLogoutDialog?.dismiss()
     }
 
     private fun dismissDialog() {
         Timber.tag("dismissDialog").d("dismissDialog")
-        calendarDialog?.dismiss()
+        myPageLogoutDialog?.dismiss()
     }
 }

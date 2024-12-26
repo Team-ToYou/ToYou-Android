@@ -26,6 +26,7 @@ import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.viewmodel.AuthViewModelFactory
 import com.toyou.toyouandroid.presentation.fragment.home.HomeViewModel
 import com.toyou.toyouandroid.presentation.fragment.record.CalendarDialog
+import com.toyou.toyouandroid.presentation.fragment.record.CalendarDialogViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModelFactory
 import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.presentation.viewmodel.ViewModelManager
@@ -45,7 +46,9 @@ class MypageFragment : Fragment() {
 
     private val nicknameViewModel: SignupNicknameViewModel by activityViewModels()
     private val mypageDialogViewModel: MypageDialogViewModel by activityViewModels()
+    private val calendarDialogViewModel: CalendarDialogViewModel by activityViewModels()
     private var mypageDialog: MypageDialog? = null
+    private var myPageLogoutDialog: MyPageLogoutDialog? = null
     private var calendarDialog: CalendarDialog? = null
 
     private lateinit var homeViewModel: HomeViewModel
@@ -182,18 +185,17 @@ class MypageFragment : Fragment() {
         }
 
         binding.mypageLogoutBtn.setOnClickListener {
-            mypageDialogViewModel.setDialogData(
+            calendarDialogViewModel.setDialogData(
                 title = "정말 로그아웃하시겠어요?",
-                subTitle = "",
                 leftButtonText = "취소",
                 rightButtonText = "로그아웃",
                 leftButtonTextColor = Color.BLACK,
                 rightButtonTextColor = Color.RED,
-                leftButtonClickAction = { dismissDialog() },
+                leftButtonClickAction = { dismissLogoutDialog() },
                 rightButtonClickAction = { handleLogout() }
             )
-            calendarDialog = CalendarDialog()
-            calendarDialog?.show(parentFragmentManager, "CustomDialog")
+            myPageLogoutDialog = MyPageLogoutDialog()
+            myPageLogoutDialog?.show(parentFragmentManager, "CustomDialog")
         }
     }
 
@@ -232,12 +234,17 @@ class MypageFragment : Fragment() {
         }
 
         mypageViewModel.kakaoLogout()
-        mypageDialog?.dismiss()
+        myPageLogoutDialog?.dismiss()
     }
 
     private fun dismissDialog() {
         Timber.tag("dismissDialog").d("dismissDialog")
         mypageDialog?.dismiss()
+    }
+
+    private fun dismissLogoutDialog() {
+        Timber.tag("dismissDialog").d("dismissDialog")
+        myPageLogoutDialog?.dismiss()
     }
 
     private fun redirectLink(uri: String) {
