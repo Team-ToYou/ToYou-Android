@@ -29,6 +29,7 @@ import com.toyou.toyouandroid.fcm.service.FCMService
 import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.fragment.mypage.MyPageLogoutDialog
+import com.toyou.toyouandroid.presentation.fragment.record.CalendarDialog
 import com.toyou.toyouandroid.presentation.fragment.record.CalendarDialogViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
 import com.toyou.toyouandroid.presentation.fragment.social.adapter.SocialRVAdapter
@@ -51,7 +52,7 @@ class SocialFragment : Fragment() {
     private lateinit var addFriendLinearLayout: LinearLayout
     private lateinit var userViewModel: UserViewModel
 
-    private var myPageLogoutDialog: MyPageLogoutDialog? = null
+    private var calendarDialog: CalendarDialog? = null
     private val calendarDialogViewModel: CalendarDialogViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -295,8 +296,8 @@ class SocialFragment : Fragment() {
             leftButtonClickAction = { dismissDialog() },
             rightButtonClickAction = { deleteFriend(friendName) }
         )
-        myPageLogoutDialog = MyPageLogoutDialog()
-        myPageLogoutDialog?.show(parentFragmentManager, "CustomDialog")
+        calendarDialog = CalendarDialog()
+        calendarDialog?.show(parentFragmentManager, "CustomDialog")
     }
 
     private fun deleteFriend(friendName: String) {
@@ -306,11 +307,11 @@ class SocialFragment : Fragment() {
         socialViewModel.resetFriendRequestRemove()
         Toast.makeText(requireContext(), "선택한 친구가 삭제 되었습니다.", Toast.LENGTH_SHORT).show()
 
-        myPageLogoutDialog?.dismiss()
+        calendarDialog?.dismiss()
     }
 
     private fun dismissDialog() {
         Timber.tag("dismissDialog").d("dismissDialog")
-        myPageLogoutDialog?.dismiss()
+        calendarDialog?.dismiss()
     }
 }
