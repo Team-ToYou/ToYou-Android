@@ -7,6 +7,34 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_chat_yellow_v"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.1" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_chat_yellow_h"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.3" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_chat_white_v"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.3" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_chat_white_h"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.4" />
+
         <ImageView
             android:id="@+id/tutorial_step_2_device"
             android:layout_width="wrap_content"
@@ -54,64 +82,37 @@
             app:layout_constraintTop_toBottomOf="@+id/tutorial_step_3_title" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/tutorial_step_3_yellow_triangle"
-            android:layout_marginEnd="225dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="@+id/tutorial_step_3_yellow_circle"
-            app:layout_constraintTop_toTopOf="@+id/tutorial_step_3_yellow_circle" />
-
-        <TextView
-            android:id="@+id/tutorial_step_3_yellow_circle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/tutorial_step_3_yellow_circle"
-            android:layout_marginTop="274dp"
-            android:layout_marginStart="43dp"
-            android:text="더없이 행복한 하루였어요"
-            android:textColor="@color/black"
-            style="@style/gangwon20"
-            android:paddingStart="21dp"
-            android:gravity="center_vertical"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_width="240dp"
+            android:layout_height="49dp"
+            android:src="@drawable/tutorial_step_3_chat_title"
+            app:layout_constraintStart_toStartOf="@+id/guideline_chat_yellow_v"
+            app:layout_constraintTop_toTopOf="@+id/guideline_chat_yellow_h" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/tutorial_step_3_smile"
-            android:layout_marginEnd="25dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintEnd_toEndOf="@+id/tutorial_step_3_yellow_circle"
-            app:layout_constraintTop_toTopOf="@+id/tutorial_step_3_yellow_circle" />
+            android:layout_width="240dp"
+            android:layout_height="49dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginStart="15dp"
+            android:src="@drawable/tutorial_step_3_chat_3"
+            app:layout_constraintStart_toStartOf="@+id/guideline_chat_white_v"
+            app:layout_constraintTop_toTopOf="@+id/tutorial_step_4_chat_2" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/tutorial_step_3_message_1"
-            android:layout_marginStart="125dp"
-            android:layout_marginTop="26dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tutorial_step_3_yellow_circle" />
+            android:id="@+id/tutorial_step_4_chat_2"
+            android:layout_width="240dp"
+            android:layout_height="49dp"
+            android:layout_marginTop="40dp"
+            android:src="@drawable/tutorial_step_3_chat_2"
+            app:layout_constraintStart_toStartOf="@+id/guideline_chat_white_v"
+            app:layout_constraintTop_toTopOf="@+id/tutorial_step_4_chat_1" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/tutorial_step_3_message_3"
-            android:layout_marginStart="125dp"
-            android:layout_marginTop="113dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tutorial_step_3_yellow_circle" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/tutorial_step_3_message_2"
-            android:layout_marginStart="125dp"
-            android:layout_marginTop="71dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tutorial_step_3_yellow_circle" />
+            android:id="@+id/tutorial_step_4_chat_1"
+            android:layout_width="240dp"
+            android:layout_height="49dp"
+            android:src="@drawable/tutorial_step_3_chat_1"
+            app:layout_constraintStart_toStartOf="@+id/guideline_chat_white_v"
+            app:layout_constraintTop_toBottomOf="@+id/guideline_chat_white_h" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
