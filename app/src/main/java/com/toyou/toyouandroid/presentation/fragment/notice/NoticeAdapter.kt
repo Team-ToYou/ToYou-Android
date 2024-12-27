@@ -29,7 +29,6 @@ class NoticeAdapter(
             is NoticeItem.NoticeFriendRequestItem -> TYPE_FRIEND_REQUEST
             is NoticeItem.NoticeFriendRequestAcceptedItem -> TYPE_FRIEND_REQUEST_ACCEPTED
             is NoticeItem.NoticeCardCheckItem -> TYPE_CARD_CHECK
-            else -> {TYPE_CARD_CHECK}
         }
     }
 
@@ -90,7 +89,6 @@ class NoticeAdapter(
 
             binding.noticeCardCheckDelete.setOnClickListener {
                 // 삭제 API 호출
-                viewModel.deleteNotice(item.alarmId, this.layoutPosition)
                 socialViewModel.deleteFriend(item.nickname)
                 removeItem(this.layoutPosition)
             }
@@ -99,7 +97,6 @@ class NoticeAdapter(
                 // 친구 요청 수락 버튼 클릭 후 알림 메시지 제거
                 Timber.d(item.nickname)
                 listener.onFriendRequestApprove(item.nickname, item.alarmId, this.layoutPosition)
-                viewModel.deleteNotice(item.alarmId, this.layoutPosition)
                 removeItem(this.layoutPosition)
             }
 
