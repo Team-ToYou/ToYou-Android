@@ -40,8 +40,8 @@
 
     <ImageView
         android:id="@+id/tutorial_step_1_device"
-        android:layout_width="330dp"
-        android:layout_height="730dp"
+        android:layout_width="280dp"
+        android:layout_height="680dp"
         android:src="@drawable/tutorial_step_1_3x"
         android:layout_marginStart="15dp"
         app:layout_constraintStart_toStartOf="parent"

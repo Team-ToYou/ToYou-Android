@@ -34,13 +34,13 @@
 
     <ImageView
         android:id="@+id/tutorial_step_5_device"
-        android:layout_width="330dp"
-        android:layout_height="730dp"
+        android:layout_width="280dp"
+        android:layout_height="680dp"
         android:src="@drawable/tutorial_step_5_3x"
         android:layout_marginStart="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tutorial_step_5_title" />
+        app:layout_constraintTop_toTopOf="@+id/tutorial_step_5_title" />
 
     <TextView
         android:id="@+id/tutorial_complete_btn"

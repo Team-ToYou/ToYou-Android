@@ -40,14 +40,13 @@
 
     <ImageView
         android:id="@+id/tutorial_step_2_device"
-        android:layout_width="284dp"
-        android:layout_height="535dp"
+        android:layout_width="280dp"
+        android:layout_height="680dp"
         android:src="@drawable/tutorial_step_2_device"
-        android:layout_marginTop="37dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tutorial_step_2_subtitle" />
+        app:layout_constraintTop_toTopOf="@+id/tutorial_step_2_subtitle" />
 
     <ImageView
         android:id="@+id/tutorial_step_emotion_5"
