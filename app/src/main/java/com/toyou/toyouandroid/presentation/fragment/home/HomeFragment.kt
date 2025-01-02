@@ -300,8 +300,8 @@ class HomeFragment : Fragment() {
         }
 
         // 알림 존재할 경우 알림 아이콘 빨간점 표시
-        noticeViewModel.hasNotifications.observe(viewLifecycleOwner) { hasNotifications ->
-            if (hasNotifications) {
+        userViewModel.uncheckedAlarm.observe(viewLifecycleOwner) { uncheckedAlarm ->
+            if (uncheckedAlarm) {
                 binding.homeNoticeNew.visibility = View.VISIBLE
             } else {
                 binding.homeNoticeNew.visibility = View.GONE
