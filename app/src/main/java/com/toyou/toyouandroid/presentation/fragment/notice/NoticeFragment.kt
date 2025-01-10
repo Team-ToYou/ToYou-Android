@@ -111,25 +111,25 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
                 Timber.d(myName)
                 socialViewModel.patchApproveNotice(name, myName, alarmId, position)
 
-                socialViewModel.approveSuccess.observe(viewLifecycleOwner) { result ->
-                    if (result != null) {
-                        if (result.isSuccess) {
-                            navController.navigate(R.id.action_navigation_notice_to_social_fragment)
-
-                            socialViewModel.resetApproveSuccess() // 메서드 호출하여 상태 초기화
-                        } else {
-                            noticeDialogViewModel.setDialogData(
-                                title = "존재하지 않는 \n 사용자입니다",
-                                leftButtonText = "확인",
-                                leftButtonClickAction = { dismissDialog() },
-                            )
-                            noticeDialog = NoticeDialog()
-                            noticeDialog?.show(parentFragmentManager, "CustomDialog")
-
-                            socialViewModel.resetApproveSuccess() // 메서드 호출하여 상태 초기화
-                        }
-                    }
-                }
+//                socialViewModel.approveSuccess.observe(viewLifecycleOwner) { result ->
+//                    if (result != null) {
+//                        if (result.isSuccess) {
+//                            navController.navigate(R.id.action_navigation_notice_to_social_fragment)
+//
+//                            socialViewModel.resetApproveSuccess() // 메서드 호출하여 상태 초기화
+//                        } else {
+//                            noticeDialogViewModel.setDialogData(
+//                                title = "존재하지 않는 \n 사용자입니다",
+//                                leftButtonText = "확인",
+//                                leftButtonClickAction = { dismissDialog() },
+//                            )
+//                            noticeDialog = NoticeDialog()
+//                            noticeDialog?.show(parentFragmentManager, "CustomDialog")
+//
+//                            socialViewModel.resetApproveSuccess() // 메서드 호출하여 상태 초기화
+//                        }
+//                    }
+//                }
             }
 
             override fun onFriendRequestAcceptedItemClick(item: NoticeItem.NoticeFriendRequestAcceptedItem) {
