@@ -12,37 +12,37 @@ import com.toyou.toyouandroid.databinding.ItemNoticeFriendRequestBinding
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
 import timber.log.Timber
 
-class NoticeAdapter(
+class NoticeEntireAdapter(
     private val items: MutableList<NoticeItem>,
     private val viewModel: NoticeViewModel,
     private val listener: NoticeAdapterListener,
-    private val socialViewModel: SocialViewModel
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     companion object {
-        private const val TYPE_FRIEND_REQUEST = 1
+//        private const val TYPE_FRIEND_REQUEST = 1
         private const val TYPE_CARD_CHECK = 2
         private const val TYPE_FRIEND_REQUEST_ACCEPTED = 3
     }
 
     override fun getItemViewType(position: Int): Int {
         return when (items[position]) {
-            is NoticeItem.NoticeFriendRequestItem -> TYPE_FRIEND_REQUEST
+//            is NoticeItem.NoticeFriendRequestItem -> TYPE_FRIEND_REQUEST
             is NoticeItem.NoticeFriendRequestAcceptedItem -> TYPE_FRIEND_REQUEST_ACCEPTED
             is NoticeItem.NoticeCardCheckItem -> TYPE_CARD_CHECK
+            is NoticeItem.NoticeFriendRequestItem -> TODO()
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            TYPE_FRIEND_REQUEST -> {
-                val binding = DataBindingUtil.inflate<ItemNoticeFriendRequestBinding>(
-                    LayoutInflater.from(parent.context),
-                    R.layout.item_notice_friend_request,
-                    parent,
-                    false
-                )
-                FriendRequestViewHolder(binding)
-            }
+//            TYPE_FRIEND_REQUEST -> {
+//                val binding = DataBindingUtil.inflate<ItemNoticeFriendRequestBinding>(
+//                    LayoutInflater.from(parent.context),
+//                    R.layout.item_notice_friend_request,
+//                    parent,
+//                    false
+//                )
+//                FriendRequestViewHolder(binding)
+//            }
             TYPE_CARD_CHECK -> {
                 val binding = DataBindingUtil.inflate<ItemNoticeCardCheckBinding>(
                     LayoutInflater.from(parent.context),
@@ -61,13 +61,13 @@ class NoticeAdapter(
                 )
                 FriendRequestAcceptedViewHolder(binding)
             }
-            else -> throw IllegalArgumentException("유효하지 않은 NoticeAdapter type입니다.")
+            else -> throw IllegalArgumentException("유효하지 않은 NoticeRequestAdapter type입니다.")
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is FriendRequestViewHolder -> holder.bind(items[position] as NoticeItem.NoticeFriendRequestItem)
+//            is FriendRequestViewHolder -> holder.bind(items[position] as NoticeItem.NoticeFriendRequestItem)
             is FriendRequestAcceptedViewHolder -> holder.bind(items[position] as NoticeItem.NoticeFriendRequestAcceptedItem)
             is CardCheckViewHolder -> holder.bind(items[position] as NoticeItem.NoticeCardCheckItem)
         }
@@ -75,34 +75,41 @@ class NoticeAdapter(
 
     override fun getItemCount(): Int = items.size
 
-    inner class FriendRequestViewHolder(private val binding: ItemNoticeFriendRequestBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: NoticeItem.NoticeFriendRequestItem) {
-            binding.itemFriendRequest = item
-
-            val nickname = if (item.nickname.length > 7) {
-                TextUtils.ellipsize(item.nickname, binding.noticeBox.paint, 7 * binding.noticeBox.textSize, TextUtils.TruncateAt.END).toString()
-            } else {
-                item.nickname
-            }
-            val formattedMessage = binding.root.context.getString(R.string.notice_friend_request, nickname)
-            binding.noticeBox.text = formattedMessage
-
-            binding.noticeCardCheckDelete.setOnClickListener {
-                // 삭제 API 호출
-                socialViewModel.deleteFriend(item.nickname)
-                removeItem(this.layoutPosition)
-            }
-
-            binding.noticeFriendRequestBtn.setOnClickListener {
-                // 친구 요청 수락 버튼 클릭 후 알림 메시지 제거
-                Timber.d(item.nickname)
-                listener.onFriendRequestApprove(item.nickname, item.alarmId, this.layoutPosition)
-                removeItem(this.layoutPosition)
-            }
-
-            binding.executePendingBindings()
-        }
+    fun updateItems(newItems: List<NoticeItem>) {
+        Timber.d("Updating items. Adapter: $this, Items: ${System.identityHashCode(items)}")
+        items.clear()
+        items.addAll(newItems.toMutableList())
+        notifyDataSetChanged()
     }
+
+//    inner class FriendRequestViewHolder(private val binding: ItemNoticeFriendRequestBinding) : RecyclerView.ViewHolder(binding.root) {
+//        fun bind(item: NoticeItem.NoticeFriendRequestItem) {
+//            binding.itemFriendRequest = item
+//
+//            val nickname = if (item.nickname.length > 7) {
+//                TextUtils.ellipsize(item.nickname, binding.noticeBox.paint, 7 * binding.noticeBox.textSize, TextUtils.TruncateAt.END).toString()
+//            } else {
+//                item.nickname
+//            }
+//            val formattedMessage = binding.root.context.getString(R.string.notice_friend_request, nickname)
+//            binding.noticeBox.text = formattedMessage
+//
+//            binding.noticeCardCheckDelete.setOnClickListener {
+//                // 삭제 API 호출
+//                socialViewModel.deleteFriend(item.nickname)
+//                removeItem(this.layoutPosition)
+//            }
+//
+//            binding.noticeFriendRequestBtn.setOnClickListener {
+//                // 친구 요청 수락 버튼 클릭 후 알림 메시지 제거
+//                Timber.d(item.nickname)
+//                listener.onFriendRequestApprove(item.nickname, item.alarmId, this.layoutPosition)
+//                removeItem(this.layoutPosition)
+//            }
+//
+//            binding.executePendingBindings()
+//        }
+//    }
 
     inner class FriendRequestAcceptedViewHolder(private val binding: ItemNoticeFriendRequestAcceptedBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: NoticeItem.NoticeFriendRequestAcceptedItem) {
