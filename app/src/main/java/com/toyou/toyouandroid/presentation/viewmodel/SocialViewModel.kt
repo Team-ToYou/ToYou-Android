@@ -397,7 +397,8 @@ class SocialViewModel(
         }
     }
 
-    fun postFCM(name: String, token: String, type: Int) {
+    fun postFCM(name: String, token: String, type: Int, retryCount: Int = 0) {
+        val maxRetries = 5 // 최대 재시도 횟수
         val fcm = when (type) {
             1 -> FCM(token = token, title = "친구 요청", body = "${name}님이 친구 요청을 보냈습니다.")
             2 -> FCM(token = token, title = "친구 수락", body = "${name}님이 친구 요청을 수락했습니다.")
@@ -413,14 +414,19 @@ class SocialViewModel(
         viewModelScope.launch {
             try {
                 fcmRepository.postFCM(fcm).let {
-                    Timber.tag("fcm api 성공!").d("성공")
+                    Timber.tag("socialViewModel postFCM").d("성공")
+                    // 호출 성공 시 retryCount 초기화
+                    Timber.tag("socialViewModel postFCM").d("API 호출 성공 - 재시도 횟수 초기화")
                 }
             } catch (e: Exception) {
-                Timber.tag("fcm api 실패!").e("Exception occurred: ${e.message}")
-                tokenManager.refreshToken(
-                    onSuccess = { postFCM(name, token, type) },
-                    onFailure = { Timber.e("FCM API Call Failed - Refresh token failed") }
-                )
+                Timber.tag("socialViewModel postFCM").e("Exception occurred: ${e.message}")
+
+                if (retryCount < maxRetries) {
+                    Timber.tag("socialViewModel postFCM").d("Retrying... (${retryCount + 1}/$maxRetries)")
+                    postFCM(name, token, type, retryCount + 1)
+                } else {
+                    Timber.tag("socialViewModel postFCM").e("Max retry attempts reached.")
+                }
             }
         }
     }
