@@ -19,8 +19,9 @@ class NoticeViewModel(
     private val tokenManager: TokenManager
 ) : ViewModel() {
 
-    private val _noticeItems = MutableLiveData<List<NoticeItem>?>()
-    val noticeItems: MutableLiveData<List<NoticeItem>?> get() = _noticeItems
+    private val _noticeItems = MutableLiveData<List<NoticeItem>>(emptyList())
+    val noticeItems: LiveData<List<NoticeItem>> get() = _noticeItems
+
 
     private val _hasNotifications = MutableLiveData<Boolean>()
     val hasNotifications: LiveData<Boolean> get() = _hasNotifications
@@ -84,7 +85,7 @@ class NoticeViewModel(
                         val updatedList = _noticeItems.value?.toMutableList()?.apply {
                             removeAt(position)
                         }
-                        _noticeItems.value = updatedList
+                        _noticeItems.value = updatedList!!
                     } else {
                         if (retryCount < maxRetries) {
                             tokenManager.refreshToken(

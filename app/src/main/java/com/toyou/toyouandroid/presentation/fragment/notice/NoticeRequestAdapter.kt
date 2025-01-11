@@ -6,28 +6,21 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.R
-import com.toyou.toyouandroid.databinding.ItemNoticeCardCheckBinding
-import com.toyou.toyouandroid.databinding.ItemNoticeFriendRequestAcceptedBinding
 import com.toyou.toyouandroid.databinding.ItemNoticeFriendRequestBinding
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
 import timber.log.Timber
 
 class NoticeRequestAdapter(
     private val items: MutableList<NoticeItem.NoticeFriendRequestItem>,
-    private val viewModel: NoticeViewModel,
     private val listener: NoticeAdapterListener,
     private val socialViewModel: SocialViewModel
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     companion object {
         private const val TYPE_FRIEND_REQUEST = 1
-//        private const val TYPE_CARD_CHECK = 2
-//        private const val TYPE_FRIEND_REQUEST_ACCEPTED = 3
     }
 
     override fun getItemViewType(position: Int): Int {
         return when (items[position]) {
-//            is NoticeItem.NoticeFriendRequestAcceptedItem -> TYPE_FRIEND_REQUEST_ACCEPTED
-//            is NoticeItem.NoticeCardCheckItem -> TYPE_CARD_CHECK
             else -> TYPE_FRIEND_REQUEST
         }
     }
@@ -43,33 +36,13 @@ class NoticeRequestAdapter(
                 )
                 FriendRequestViewHolder(binding)
             }
-//            TYPE_CARD_CHECK -> {
-//                val binding = DataBindingUtil.inflate<ItemNoticeCardCheckBinding>(
-//                    LayoutInflater.from(parent.context),
-//                    R.layout.item_notice_card_check,
-//                    parent,
-//                    false
-//                )
-//                CardCheckViewHolder(binding)
-//            }
-//            TYPE_FRIEND_REQUEST_ACCEPTED -> {
-//                val binding = DataBindingUtil.inflate<ItemNoticeFriendRequestAcceptedBinding>(
-//                    LayoutInflater.from(parent.context),
-//                    R.layout.item_notice_friend_request_accepted,
-//                    parent,
-//                    false
-//                )
-//                FriendRequestAcceptedViewHolder(binding)
-//            }
             else -> throw IllegalArgumentException("유효하지 않은 NoticeRequestAdapter type입니다.")
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is FriendRequestViewHolder -> holder.bind(items[position] as NoticeItem.NoticeFriendRequestItem)
-//            is FriendRequestAcceptedViewHolder -> holder.bind(items[position] as NoticeItem.NoticeFriendRequestAcceptedItem)
-//            is CardCheckViewHolder -> holder.bind(items[position] as NoticeItem.NoticeCardCheckItem)
+            is FriendRequestViewHolder -> holder.bind(items[position])
         }
     }
 
@@ -110,68 +83,6 @@ class NoticeRequestAdapter(
             binding.executePendingBindings()
         }
     }
-
-//    inner class FriendRequestAcceptedViewHolder(private val binding: ItemNoticeFriendRequestAcceptedBinding) : RecyclerView.ViewHolder(binding.root) {
-//        fun bind(item: NoticeItem.NoticeFriendRequestAcceptedItem) {
-//            binding.itemFriendRequestAccepted = item
-//
-//            val nickname = if (item.nickname.length > 7) {
-//                TextUtils.ellipsize(item.nickname, binding.noticeBox.paint, 7 * binding.noticeBox.textSize, TextUtils.TruncateAt.END).toString()
-//            } else {
-//                item.nickname
-//            }
-//            val formattedMessage = binding.root.context.getString(R.string.notice_friend_request_accepted, nickname)
-//            binding.noticeBox.text = formattedMessage
-//
-//            binding.noticeCardCheckDelete.setOnClickListener {
-//                // 삭제 API 호출
-//                viewModel.deleteNotice(item.alarmId, this.layoutPosition)
-//                removeItem(this.layoutPosition)
-//            }
-//
-//            binding.noticeLayout.setOnClickListener {
-//                // 알림 메시지 클릭 후 메시지 삭제
-//                listener.onFriendRequestAcceptedItemClick(item)
-//                viewModel.deleteNotice(item.alarmId, this.layoutPosition)
-//                removeItem(this.layoutPosition)
-//            }
-//
-//            val layoutParams = binding.root.layoutParams
-//            layoutParams.width = (binding.root.context.resources.displayMetrics.widthPixels * 5 / 6)
-//            binding.root.layoutParams = layoutParams
-//
-//            binding.executePendingBindings()
-//        }
-//    }
-//
-//    inner class CardCheckViewHolder(private val binding: ItemNoticeCardCheckBinding) : RecyclerView.ViewHolder(binding.root) {
-//        fun bind(item: NoticeItem.NoticeCardCheckItem) {
-//            binding.itemCardCheck = item
-//
-//            val nickname = if (item.nickname.length > 4) {
-//                TextUtils.ellipsize(item.nickname, binding.noticeBox.paint, 4 * binding.noticeBox.textSize, TextUtils.TruncateAt.END).toString()
-//            } else {
-//                item.nickname
-//            }
-//            val formattedMessage = binding.root.context.getString(R.string.notice_card_check, nickname)
-//            binding.noticeBox.text = formattedMessage
-//
-//            binding.noticeCardCheckDelete.setOnClickListener {
-//                // 삭제 API 호출
-//                viewModel.deleteNotice(item.alarmId, this.layoutPosition)
-//                removeItem(this.layoutPosition)
-//            }
-//
-//            binding.noticeLayout.setOnClickListener {
-//                // 알림 메시지 클릭 후 메시지 삭제
-//                listener.onFriendCardItemClick(item)
-//                viewModel.deleteNotice(item.alarmId, this.layoutPosition)
-//                removeItem(this.layoutPosition)
-//            }
-//
-//            binding.executePendingBindings()
-//        }
-//    }
 
     fun removeItem(position: Int) {
         if (position >= 0 && position < items.size) {

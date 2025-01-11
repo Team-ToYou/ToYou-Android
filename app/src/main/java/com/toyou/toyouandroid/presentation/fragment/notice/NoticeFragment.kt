@@ -99,7 +99,7 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
             SocialViewModelFactory(socialRepository, tokenManager, fcmRepository)
         )[SocialViewModel::class.java]
 
-        noticeRequestAdapter = NoticeRequestAdapter(mutableListOf(), viewModel, this, socialViewModel)
+        noticeRequestAdapter = NoticeRequestAdapter(mutableListOf(), this, socialViewModel)
         noticeEntireAdapter = NoticeEntireAdapter(mutableListOf(), viewModel, this)
 
         listener = object : NoticeAdapterListener {
@@ -174,14 +174,22 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
     }
 
     private fun setupRecyclerView() {
-        val friendRequestAdapter = NoticeRequestAdapter(mutableListOf(), viewModel, listener, socialViewModel)
+        val friendRequestAdapter = NoticeRequestAdapter(mutableListOf(), listener, socialViewModel)
         val entireNoticeRequestAdapter = NoticeEntireAdapter(mutableListOf(), viewModel, listener)
+        val noticeRequestBlankAdapter = NoticeRequestBlankAdapter()
+        val noticeEntireBlankAdapter = NoticeEntireBlankAdapter()
 
         binding.rvNoticeFriendRequest.layoutManager = GridLayoutManager(context, 1)
         binding.rvNoticeFriendRequest.adapter = friendRequestAdapter
 
         binding.rvNoticeEntire.layoutManager = GridLayoutManager(context, 1)
         binding.rvNoticeEntire.adapter = entireNoticeRequestAdapter
+
+        binding.rvNoticeFriendRequestBlank.layoutManager = GridLayoutManager(context, 1)
+        binding.rvNoticeFriendRequestBlank.adapter = noticeRequestBlankAdapter
+
+        binding.rvNoticeEntireBlank.layoutManager = GridLayoutManager(context, 1)
+        binding.rvNoticeEntireBlank.adapter = noticeEntireBlankAdapter
 
         val swipeToDeleteNoticeRequest = SwipeToDeleteNotice().apply {
             setClamp(resources.displayMetrics.widthPixels.toFloat() / 5)
@@ -217,11 +225,19 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
         }
 
         viewModel.noticeItems.observe(viewLifecycleOwner) { items ->
-            if (items != null) {
+            if (items.isEmpty()) {
+                Timber.d("NoticeItems is null")
+                binding.rvNoticeFriendRequestBlank.visibility = View.VISIBLE
+                binding.rvNoticeEntireBlank.visibility = View.VISIBLE
+            } else {
+                Timber.d("NoticeItems: $items")
                 val friendRequests = items.filterIsInstance<NoticeItem.NoticeFriendRequestItem>()
                 val otherNotices = items.filter { it !is NoticeItem.NoticeFriendRequestItem }
                 friendRequestAdapter.updateItems(friendRequests.toMutableList())
                 entireNoticeRequestAdapter.updateItems(otherNotices.toMutableList())
+
+                binding.rvNoticeFriendRequestBlank.visibility = View.GONE
+                binding.rvNoticeEntireBlank.visibility = View.GONE
             }
         }
     }

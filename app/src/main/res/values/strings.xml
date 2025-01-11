@@ -55,6 +55,8 @@
     <string name="notice_friend_request_accepted">%1$s님이 친구 요청을 수락했습니다.</string>
     <string name="notice_friend_request_btn">친구 수락</string>
     <string name="notice_card_check">%1$s님이 질문을 보냈습니다. 확인해보세요!</string>
+    <string name="notice_friend_request_blank">새로운 친구 요청이 없어요</string>
+    <string name="notice_entire_blank">새로운 알림이 없어요</string>
 
     <string name="home_stamp_title_1">오늘 하루는 어땠나요?</string>
     <string name="home_stamp_title_2">감정우표를 선택해주세요</string>
