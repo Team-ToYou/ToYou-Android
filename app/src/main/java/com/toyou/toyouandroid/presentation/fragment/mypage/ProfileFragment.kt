@@ -160,6 +160,7 @@ class ProfileFragment : Fragment() {
         binding.signupNicknameBtn.setOnClickListener{
             viewModel.changeNickname()
             viewModel.changeStatus()
+            mypageViewModel.updateMypage()
             navController.navigate(R.id.action_navigation_profile_to_mypage_fragment)
             Toast.makeText(requireContext(), "프로필 수정이 완료되었습니다", Toast.LENGTH_SHORT).show()
         }

@@ -105,12 +105,10 @@ class CardViewModel(private val tokenManager: TokenManager,
 
                 if (response.isSuccess) {
                     Timber.tag("sendData").d("카드 전송 성공")
-                    response.result?.let { answerPost ->
+                    response.result.let { answerPost ->
                         // ID 값이 필요한 추가 작업 수행
                         _cardId.value = answerPost.id
                         Timber.tag("sendData").d("카드 ID: ${_cardId.value}")
-                    } ?: run {
-                        Timber.tag("sendData").d("응답 데이터가 없습니다.")
                     }
                 } else {
                     Timber.tag("sendData").d("카드 전송 실패: ${response.message}")
@@ -228,6 +226,10 @@ class CardViewModel(private val tokenManager: TokenManager,
                 }
             } catch (e: Exception) {
                 Timber.tag("CardViewModel").d("detail 예외 발생: ${e.message}")
+                tokenManager.refreshToken(
+                    onSuccess = { getCardDetail(id) },
+                    onFailure = { Timber.tag("CardViewModel").d("refresh error")}
+                )
             }
         }
     }

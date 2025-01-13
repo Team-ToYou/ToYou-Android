@@ -48,7 +48,8 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
 
     private val noticeDialogViewModel: NoticeDialogViewModel by activityViewModels()
     private lateinit var listener: NoticeAdapterListener
-    private var noticeAdapter: NoticeAdapter? = null
+    private var noticeRequestAdapter: NoticeRequestAdapter? = null
+    private var noticeEntireAdapter: NoticeEntireAdapter? = null
     private var noticeDialog: NoticeDialog? = null
 
     private lateinit var viewModel: NoticeViewModel
@@ -98,7 +99,8 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
             SocialViewModelFactory(socialRepository, tokenManager, fcmRepository)
         )[SocialViewModel::class.java]
 
-        noticeAdapter = NoticeAdapter(mutableListOf(), viewModel, this, socialViewModel)
+        noticeRequestAdapter = NoticeRequestAdapter(mutableListOf(), this, socialViewModel)
+        noticeEntireAdapter = NoticeEntireAdapter(mutableListOf(), viewModel, this)
 
         listener = object : NoticeAdapterListener {
 
@@ -111,25 +113,25 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
                 Timber.d(myName)
                 socialViewModel.patchApproveNotice(name, myName, alarmId, position)
 
-                socialViewModel.approveSuccess.observe(viewLifecycleOwner) { result ->
-                    if (result != null) {
-                        if (result.isSuccess) {
-                            navController.navigate(R.id.action_navigation_notice_to_social_fragment)
-
-                            socialViewModel.resetApproveSuccess() // 메서드 호출하여 상태 초기화
-                        } else {
-                            noticeDialogViewModel.setDialogData(
-                                title = "존재하지 않는 \n 사용자입니다",
-                                leftButtonText = "확인",
-                                leftButtonClickAction = { dismissDialog() },
-                            )
-                            noticeDialog = NoticeDialog()
-                            noticeDialog?.show(parentFragmentManager, "CustomDialog")
-
-                            socialViewModel.resetApproveSuccess() // 메서드 호출하여 상태 초기화
-                        }
-                    }
-                }
+//                socialViewModel.approveSuccess.observe(viewLifecycleOwner) { result ->
+//                    if (result != null) {
+//                        if (result.isSuccess) {
+//                            navController.navigate(R.id.action_navigation_notice_to_social_fragment)
+//
+//                            socialViewModel.resetApproveSuccess() // 메서드 호출하여 상태 초기화
+//                        } else {
+//                            noticeDialogViewModel.setDialogData(
+//                                title = "존재하지 않는 \n 사용자입니다",
+//                                leftButtonText = "확인",
+//                                leftButtonClickAction = { dismissDialog() },
+//                            )
+//                            noticeDialog = NoticeDialog()
+//                            noticeDialog?.show(parentFragmentManager, "CustomDialog")
+//
+//                            socialViewModel.resetApproveSuccess() // 메서드 호출하여 상태 초기화
+//                        }
+//                    }
+//                }
             }
 
             override fun onFriendRequestAcceptedItemClick(item: NoticeItem.NoticeFriendRequestAcceptedItem) {
@@ -162,38 +164,80 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
 
-        viewModel.noticeItems.observe(viewLifecycleOwner) { items ->
-            if (items != null) {
-                setupRecyclerView(items)
-            }
-        }
-
         viewModel.fetchNotices()
+
+        setupRecyclerView()
 
         binding.noticeBackLayout.setOnClickListener {
             navController.navigate(R.id.action_navigation_notice_to_home_fragment)
         }
     }
 
-    private fun setupRecyclerView(items: List<NoticeItem>) {
-        val adapter = NoticeAdapter(items.toMutableList(), viewModel, listener, socialViewModel)
-        binding.noticeRv.layoutManager = GridLayoutManager(context, 1)
-        binding.noticeRv.adapter = adapter
+    private fun setupRecyclerView() {
+        val friendRequestAdapter = NoticeRequestAdapter(mutableListOf(), listener, socialViewModel)
+        val entireNoticeRequestAdapter = NoticeEntireAdapter(mutableListOf(), viewModel, listener)
+        val noticeRequestBlankAdapter = NoticeRequestBlankAdapter()
+        val noticeEntireBlankAdapter = NoticeEntireBlankAdapter()
 
-        val swipeToDeleteNotice = SwipeToDeleteNotice().apply {
+        binding.rvNoticeFriendRequest.layoutManager = GridLayoutManager(context, 1)
+        binding.rvNoticeFriendRequest.adapter = friendRequestAdapter
+
+        binding.rvNoticeEntire.layoutManager = GridLayoutManager(context, 1)
+        binding.rvNoticeEntire.adapter = entireNoticeRequestAdapter
+
+        binding.rvNoticeFriendRequestBlank.layoutManager = GridLayoutManager(context, 1)
+        binding.rvNoticeFriendRequestBlank.adapter = noticeRequestBlankAdapter
+
+        binding.rvNoticeEntireBlank.layoutManager = GridLayoutManager(context, 1)
+        binding.rvNoticeEntireBlank.adapter = noticeEntireBlankAdapter
+
+        val swipeToDeleteNoticeRequest = SwipeToDeleteNotice().apply {
             setClamp(resources.displayMetrics.widthPixels.toFloat() / 5)
         }
-        ItemTouchHelper(swipeToDeleteNotice).attachToRecyclerView(binding.noticeRv)
+        val swipeToDeleteNoticeEntire = SwipeToDeleteNotice().apply {
+            setClamp(resources.displayMetrics.widthPixels.toFloat() / 5)
+        }
+        ItemTouchHelper(swipeToDeleteNoticeRequest).attachToRecyclerView(binding.rvNoticeFriendRequest)
+        ItemTouchHelper(swipeToDeleteNoticeEntire).attachToRecyclerView(binding.rvNoticeEntire)
 
-        binding.noticeRv.apply {
+        binding.rvNoticeFriendRequest.apply {
             setOnTouchListener { v, _ ->
-                swipeToDeleteNotice.removePreviousClamp(this)
+                swipeToDeleteNoticeRequest.removePreviousClamp(this)
                 v.performClick()
                 invalidateItemDecorations()
                 false
             }
 
             setOnClickListener {
+            }
+        }
+
+        binding.rvNoticeEntire.apply {
+            setOnTouchListener { v, _ ->
+                swipeToDeleteNoticeEntire.removePreviousClamp(this)
+                v.performClick()
+                invalidateItemDecorations()
+                false
+            }
+
+            setOnClickListener {
+            }
+        }
+
+        viewModel.noticeItems.observe(viewLifecycleOwner) { items ->
+            if (items.isEmpty()) {
+                Timber.d("NoticeItems is null")
+                binding.rvNoticeFriendRequestBlank.visibility = View.VISIBLE
+                binding.rvNoticeEntireBlank.visibility = View.VISIBLE
+            } else {
+                Timber.d("NoticeItems: $items")
+                val friendRequests = items.filterIsInstance<NoticeItem.NoticeFriendRequestItem>()
+                val otherNotices = items.filter { it !is NoticeItem.NoticeFriendRequestItem }
+                friendRequestAdapter.updateItems(friendRequests.toMutableList())
+                entireNoticeRequestAdapter.updateItems(otherNotices.toMutableList())
+
+                binding.rvNoticeFriendRequestBlank.visibility = View.GONE
+                binding.rvNoticeEntireBlank.visibility = View.GONE
             }
         }
     }

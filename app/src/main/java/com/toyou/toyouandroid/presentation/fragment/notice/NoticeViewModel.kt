@@ -19,8 +19,9 @@ class NoticeViewModel(
     private val tokenManager: TokenManager
 ) : ViewModel() {
 
-    private val _noticeItems = MutableLiveData<List<NoticeItem>?>()
-    val noticeItems: MutableLiveData<List<NoticeItem>?> get() = _noticeItems
+    private val _noticeItems = MutableLiveData<List<NoticeItem>>(emptyList())
+    val noticeItems: LiveData<List<NoticeItem>> get() = _noticeItems
+
 
     private val _hasNotifications = MutableLiveData<Boolean>()
     val hasNotifications: LiveData<Boolean> get() = _hasNotifications
@@ -70,7 +71,9 @@ class NoticeViewModel(
         }
     }
 
-    fun deleteNotice(alarmId: Int, position: Int) {
+    fun deleteNotice(alarmId: Int, position: Int, retryCount: Int = 0) {
+        val maxRetries = 5 // 최대 재시도 횟수
+
         viewModelScope.launch {
             val response = repository.deleteNotice(alarmId)
             response.enqueue(object : Callback<AlarmDeleteResponse> {
@@ -82,17 +85,26 @@ class NoticeViewModel(
                         val updatedList = _noticeItems.value?.toMutableList()?.apply {
                             removeAt(position)
                         }
-                        _noticeItems.value = updatedList
+                        _noticeItems.value = updatedList!!
                     } else {
-                        tokenManager.refreshToken(
-                            onSuccess = { deleteNotice(alarmId, position) }, // 토큰 갱신 후 다시 요청
-                            onFailure = { Timber.e("Failed to refresh token and get notices") }
-                        )
+                        if (retryCount < maxRetries) {
+                            tokenManager.refreshToken(
+                                onSuccess = {
+                                    Timber.d("Retrying token refresh... ($retryCount/$maxRetries)")
+                                    deleteNotice(alarmId, position, retryCount + 1) // 재호출
+                                },
+                                onFailure = {
+                                    Timber.e("Failed to refresh token after $retryCount retries")
+                                }
+                            )
+                        } else {
+                            Timber.e("Max token refresh retries reached ($maxRetries)")
+                        }
                     }
                 }
 
                 override fun onFailure(call: Call<AlarmDeleteResponse>, t: Throwable) {
-                    // 에러 처리 로직
+                    Timber.e("Delete notice API call failed: ${t.message}")
                 }
             })
         }
