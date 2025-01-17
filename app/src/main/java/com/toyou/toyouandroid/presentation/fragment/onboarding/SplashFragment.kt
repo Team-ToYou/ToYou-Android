@@ -58,9 +58,6 @@ class SplashFragment : Fragment() {
         val fcmService = AuthNetworkModule.getClient().create(FCMService::class.java)
         val fcmRepository = FCMRepository(fcmService)
 
-
-
-
         loginViewModel = ViewModelProvider(
             this,
         LoginViewModelFactory(
