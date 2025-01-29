@@ -196,7 +196,7 @@ class LoginViewModel(
     private var isSendingToken = false // 호출 여부를 추적하는 플래그
 
     private fun sendTokenToServer(token: String, retryCount: Int = 0) {
-
+      
         val maxRetries = 2
 
         // 재시도 횟수가 maxRetries를 초과하면 더 이상 호출하지 않음

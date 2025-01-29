@@ -18,7 +18,7 @@ interface FCMService {
 
     @GET("/fcm/token")
     suspend fun getToken(
-        @Query("keyword") name: String
+        @Query("userId") userId: Long
     ) : BaseResponse<GetToken>
 
     @POST("/fcm/send")

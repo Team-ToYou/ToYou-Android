@@ -20,8 +20,8 @@ class FCMRepository(private val fcmService: FCMService) {
     suspend fun postToken(token: Token): BaseResponse<Unit> {
         return fcmService.postToken(token)
     }
-    suspend fun getToken(name: String): BaseResponse<GetToken> {
-        return fcmService.getToken(name)
+    suspend fun getToken(id:Long): BaseResponse<GetToken> {
+        return fcmService.getToken(id)
     }
 
 
