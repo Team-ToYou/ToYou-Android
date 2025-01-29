@@ -3,10 +3,12 @@ name: Android CI
 on:
   push:
     branches:
-      - master
+      - main
+      - develop
   pull_request:
     branches:
-      - master
+      - main
+      - develop
 
 jobs:
   build:
@@ -26,13 +28,16 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
+      - name: Accept Android SDK Licenses
+        run: |
+          yes | sdkmanager --licenses
+
       - name: Create local.properties
         run: |
-          echo "sdk.dir=$ANDROID_SDK_PATH" > local.properties
-          echo "kakao_NATIVE_APP_KEY=${{ secrets.KAKAO_NATIVE_APP_KEY }}" >> local.properties
-          echo "kakao_NATIVE_APP_KEY_MANIFEST=${{ secrets.KAKAO_NATIVE_APP_KEY_MANIFEST }}" >> local.properties
+          echo "NAVER_MAP_CLIENT_ID=${{ secrets.NAVER_MAP_CLIENT_ID }}" > local.properties
+          echo "NAVER_MAP_CLIENT_SECRET=${{ secrets.NAVER_MAP_CLIENT_SECRET }}" >> local.properties
 
-      - name: Grant execute permission to Gradle
+      - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
       - name: Build with Gradle
