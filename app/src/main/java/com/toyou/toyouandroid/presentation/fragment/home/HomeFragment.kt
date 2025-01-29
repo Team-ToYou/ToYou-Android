@@ -173,7 +173,7 @@ class HomeFragment : Fragment() {
         }
 
         // 작일 친구 일기 카드 자동 조회
-        //viewModel.loadYesterdayDiaryCards()
+        viewModel.loadYesterdayDiaryCards()
 
         // 바텀 시트 터치 이벤트 처리
         binding.homeBottomSheet.apply {

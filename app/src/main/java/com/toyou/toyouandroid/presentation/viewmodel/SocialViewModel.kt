@@ -537,7 +537,6 @@ class SocialViewModel(
         viewModelScope.launch {
             try {
                 val response = withContext(Dispatchers.IO) {
-                    Log.d("id", id.toString())
                     fcmRepository.getToken(id)
                 }
 
