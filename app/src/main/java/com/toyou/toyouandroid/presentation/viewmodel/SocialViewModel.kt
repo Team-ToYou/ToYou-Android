@@ -453,7 +453,9 @@ class SocialViewModel(
         _approveSuccess.value = ApprovalResult(false, -1, -1) // 초기값으로 설정
     }
 
-    fun patchApproveNotice(id: Long, myName: String, alarmId: Int, position: Int) {
+    fun patchApproveNotice(name: String, myName: String, alarmId: Int, position: Int) {
+        val id = 0L //이후 수정할 부분!!@@
+
         _friendRequest.value = RequestFriend(userId = id)
         viewModelScope.launch {
             try {
