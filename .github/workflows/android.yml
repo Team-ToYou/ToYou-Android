@@ -28,11 +28,11 @@ jobs:
 
       - name: Accept Android SDK Licenses
         run: |
-          sudo chmod +x $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager
-          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
+          sudo chmod +x $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager
+          yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses
         env:
-          ANDROID_HOME: ${{ env.ANDROID_SDK_ROOT }}
           ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+          ANDROID_HOME: /usr/local/lib/android/sdk
 
       - name: Create local.properties
         run: |
