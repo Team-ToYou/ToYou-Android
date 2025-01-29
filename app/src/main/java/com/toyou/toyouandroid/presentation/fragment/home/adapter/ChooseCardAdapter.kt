@@ -21,7 +21,6 @@ class ChooseCardAdapter(private val cardViewModel: CardViewModel) : RecyclerView
     fun setCards(cards: List<PreviewCardModel>) {
         notifyDataSetChanged()
         this.cardList = cards.filter { it.type == 2 || it.type == 3 }
-        Log.d("선택4", cards.toString())
     }
 
     override fun getItemViewType(position: Int): Int {

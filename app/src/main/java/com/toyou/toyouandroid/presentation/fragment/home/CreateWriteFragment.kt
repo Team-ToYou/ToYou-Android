@@ -102,7 +102,6 @@ class CreateWriteFragment: Fragment() {
         }
 
         cardViewModel.isAllAnswersFilled.observe(viewLifecycleOwner) { isFilled ->
-            Log.d("카드수", isFilled.toString())
             binding.nextBtn.isEnabled = isFilled
         }
 

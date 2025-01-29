@@ -22,8 +22,8 @@ android {
         applicationId = "com.toyou.toyouandroid"
         minSdk = 28
         targetSdk = 34
-        versionCode = 3
-        versionName = "1.0.2"
+        versionCode = 4
+        versionName = "1.0.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -94,5 +94,6 @@ dependencies {
     implementation ("com.google.firebase:firebase-messaging-ktx")
     implementation("com.tbuonomo:dotsindicator:5.0")
 
+    implementation("androidx.core:core-splashscreen:1.0.1")
 }
 apply(plugin = "com.google.gms.google-services")

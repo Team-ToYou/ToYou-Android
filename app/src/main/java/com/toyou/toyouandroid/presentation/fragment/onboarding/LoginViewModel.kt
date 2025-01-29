@@ -195,14 +195,15 @@ class LoginViewModel(
     }
     private var isSendingToken = false // 호출 여부를 추적하는 플래그
 
-    private fun sendTokenToServer(token: String) {
+    private fun sendTokenToServer(token: String, retryCount: Int = 0) {
+      
+        val maxRetries = 2
 
-        /*if (tokenStorage.isTokenSent()) {
-            Timber.d("Token already sent, skipping sendTokenToServer call.")
+        // 재시도 횟수가 maxRetries를 초과하면 더 이상 호출하지 않음
+        if (retryCount > maxRetries) {
+            Timber.e("sendTokenToServer failed after $maxRetries retries. Aborting.")
             return
         }
-
-         */
 
         if (isSendingToken) {
             Timber.d("sendTokenToServer is already in progress, skipping this call.")
@@ -224,7 +225,7 @@ class LoginViewModel(
                     tokenManager.refreshToken(
                         onSuccess = {
                             Timber.d("Token refreshed successfully. Retrying sendTokenToServer.")
-                            sendTokenToServer(token) // 재시도
+                            sendTokenToServer(token, retryCount + 1) // 재시도
                         },
                         onFailure = {
                             Timber.e("sendTokenToServer API Call Failed - Refresh token failed.")
@@ -237,7 +238,7 @@ class LoginViewModel(
                 tokenManager.refreshToken(
                     onSuccess = {
                         Timber.d("Token refreshed successfully. Retrying sendTokenToServer.")
-                        sendTokenToServer(token) // 재시도
+                        sendTokenToServer(token, retryCount + 1) // 재시도
                     },
                     onFailure = {
                         Timber.e("sendTokenToServer API Call Failed - Refresh token failed.")
