@@ -4,11 +4,6 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/transparent</item>
         <item name="android:windowTranslucentStatus">true</item>
-        <!-- Customize your theme here. -->
-        <item name="windowSplashScreenAnimatedIcon">@drawable/login_logo</item>
-        <item name="windowSplashScreenAnimationDuration">1000</item>
-        <item name="windowSplashScreenBackground">@android:color/transparent</item>
-        <item name="android:windowIsTranslucent">true</item>
     </style>
 
     <style name="NoDimBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
@@ -26,11 +21,19 @@
         <item name="android:backgroundDimAmount">0.2</item>
     </style>
 
-<!--    <style name="AppTheme.SplashScreen" parent="Theme.SplashScreen">-->
-<!--        <item name="windowSplashScreenAnimatedIcon">@drawable/login_logo</item>-->
-<!--        <item name="windowSplashScreenAnimationDuration">1000</item>-->
-<!--        <item name="windowSplashScreenBackground">@android:color/transparent</item>-->
-<!--        <item name="android:windowIsTranslucent">true</item>-->
-<!--        <item name="postSplashScreenTheme">Theme.ToYou</item>-->
-<!--    </style>-->
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <!-- Set the splash screen background, animated icon, and animation
+        duration. -->
+        <item name="windowSplashScreenBackground">@android:color/transparent</item>
+
+        <!-- Use windowSplashScreenAnimatedIcon to add a drawable or an animated
+             drawable. One of these is required. -->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/login_logo</item>
+        <!-- Required for animated icons. -->
+        <item name="windowSplashScreenAnimationDuration">200</item>
+
+        <!-- Set the theme of the Activity that directly follows your splash
+        screen. This is required. -->
+        <item name="postSplashScreenTheme">@style/Theme.ToYou</item>
+    </style>
 </resources>
