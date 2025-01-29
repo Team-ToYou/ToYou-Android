@@ -56,8 +56,10 @@
         android:gravity="top"
         android:padding="5dp"
         android:background="@null"
-        android:text="@={card.answer}"
-        android:maxLength="200" />
+        android:includeFontPadding="false"
+        android:lineSpacingExtra="2dp"
+        android:maxLength="200"
+        android:inputType="text|textNoSuggestions"/>
 
     <TextView
         android:id="@+id/limit_200"
