@@ -78,9 +78,11 @@ class SocialViewModel(
         _questionDto.value = QuestionDto(0, "", "", false, null) // 초기화
     }
 
-    fun setTargetFriend(friendId: Long, emotion: Int?, ment: String?) {
+    fun setTargetFriend(friendName: String, emotion: Int?, ment: String?) {
         val currentQuestionDto = _questionDto.value ?: QuestionDto(0, "", "", false, null)
-        _questionDto.value = currentQuestionDto.copy(targetId = friendId)
+
+        val targetId = _friends.value?.find { it.name == friendName }?.id ?: 0L
+        _questionDto.value = currentQuestionDto.copy(targetId = targetId)
         _selectedEmotion!!.value = emotion
         _selectedEmotionMent!!.value = ment
     }
@@ -359,8 +361,15 @@ class SocialViewModel(
     }
 
     // 토큰 재발급 정상 호출 완료
-    fun deleteFriend(id: Long) {
-        _friendRequest.value = RequestFriend(userId = id)
+    fun deleteFriend(friendName: String?, friendId: Long?) {
+
+        val targetId = when { //만약  id가 주어진다면 id 넣고 name이 주어진다면 name 넣기
+            friendId != null && friendId > 0L -> friendId
+            !friendName.isNullOrBlank() -> _friends.value?.find { it.name == friendName }?.id ?: 0L
+            else -> 0L
+        }
+
+        _friendRequest.value = RequestFriend(userId = targetId)
         viewModelScope.launch {
             try {
                 _friendRequest.value?.let { friendRequest ->
@@ -375,7 +384,7 @@ class SocialViewModel(
                         if (retryCount < maxRetryCount) {
                             retryCount++
                             tokenManager.refreshToken(
-                                onSuccess = { deleteFriend(id) },
+                                onSuccess = { deleteFriend(friendName, friendId) },
                                 onFailure = { Timber.e("deleteFriend API Call Failed") }
                             )
                         } else {
@@ -391,7 +400,7 @@ class SocialViewModel(
                 if (retryCount < maxRetryCount) {
                     retryCount++
                     tokenManager.refreshToken(
-                        onSuccess = { deleteFriend(id) },
+                        onSuccess = { deleteFriend(friendName, friendId) },
                         onFailure = { Timber.e("deleteFriend API Call Failed") }
                     )
                 } else {
