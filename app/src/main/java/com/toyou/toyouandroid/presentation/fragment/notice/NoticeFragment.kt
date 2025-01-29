@@ -108,10 +108,10 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
                 viewModel.deleteNotice(alarmId, position)
             }
 
-            override fun onFriendRequestApprove(name: String, alarmId: Int, position: Int) {
+            override fun onFriendRequestApprove(id: Long, alarmId: Int, position: Int) {
                 val myName = userViewModel.nickname.value ?: ""
                 Timber.d(myName)
-                socialViewModel.patchApproveNotice(name, myName, alarmId, position)
+                socialViewModel.patchApproveNotice(id, myName, alarmId, position)
 
 //                socialViewModel.approveSuccess.observe(viewLifecycleOwner) { result ->
 //                    if (result != null) {
@@ -246,7 +246,7 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
         noticeDialog?.dismiss()
     }
 
-    override fun onFriendRequestApprove(name: String, alarmId: Int, position: Int) {}
+    override fun onFriendRequestApprove(id: Long, alarmId: Int, position: Int) {}
     override fun onDeleteNotice(alarmId: Int, position: Int) {}
     override fun onFriendRequestAcceptedItemClick(item: NoticeItem.NoticeFriendRequestAcceptedItem) {}
     override fun onFriendCardItemClick(item: NoticeItem.NoticeCardCheckItem) {}

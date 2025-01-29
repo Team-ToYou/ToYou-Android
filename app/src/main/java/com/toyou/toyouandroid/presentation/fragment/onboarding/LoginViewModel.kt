@@ -197,10 +197,12 @@ class LoginViewModel(
 
     private fun sendTokenToServer(token: String) {
 
-        if (tokenStorage.isTokenSent()) {
+        /*if (tokenStorage.isTokenSent()) {
             Timber.d("Token already sent, skipping sendTokenToServer call.")
             return
         }
+
+         */
 
         if (isSendingToken) {
             Timber.d("sendTokenToServer is already in progress, skipping this call.")
