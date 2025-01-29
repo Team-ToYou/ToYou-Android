@@ -14,12 +14,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_toyou_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ToYou"
-        tools:targetApi="31">
+        android:theme="@style/Theme.ToYou">
         <activity
             android:name=".presentation.base.MainActivity"
             android:windowSoftInputMode="adjustNothing"
             android:exported="true"
+            android:theme="@style/AppTheme.SplashScreen"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

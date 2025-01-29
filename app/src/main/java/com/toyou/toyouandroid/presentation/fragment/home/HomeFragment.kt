@@ -160,20 +160,23 @@ class HomeFragment : Fragment() {
         bottomSheetBehavior.peekHeight = resources.getDimensionPixelSize(R.dimen.bottom_sheet_peek_height)
 
         // 작일 친구 일기카드 존재 여부 판단
-        viewModel.isEmpty.observe(viewLifecycleOwner) { isEmpty ->
-            if (isEmpty) {
-                binding.homeBottomsheetPseudo.visibility = View.VISIBLE
-                binding.homeBottomSheetRv.visibility = View.GONE
-            } else {
-//                binding.homeBottomsheetPseudo.visibility = View.GONE
-//                binding.homeBottomSheetRv.visibility = View.VISIBLE
-                binding.homeBottomsheetPseudo.visibility = View.VISIBLE
-                binding.homeBottomSheetRv.visibility = View.GONE
-            }
-        }
+//        viewModel.isEmpty.observe(viewLifecycleOwner) { isEmpty ->
+//            if (isEmpty) {
+//                binding.homeBottomsheetPseudo.visibility = View.VISIBLE
+//                binding.homeBottomSheetRv.visibility = View.GONE
+//            } else {
+////                binding.homeBottomsheetPseudo.visibility = View.GONE
+////                binding.homeBottomSheetRv.visibility = View.VISIBLE
+//                binding.homeBottomsheetPseudo.visibility = View.VISIBLE
+//                binding.homeBottomSheetRv.visibility = View.GONE
+//            }
+//        }
+
+        binding.homeBottomsheetPseudo.visibility = View.VISIBLE
+        binding.homeBottomSheetRv.visibility = View.GONE
 
         // 작일 친구 일기 카드 자동 조회
-        viewModel.loadYesterdayDiaryCards()
+//        viewModel.loadYesterdayDiaryCards()
 
         // 바텀 시트 터치 이벤트 처리
         binding.homeBottomSheet.apply {
