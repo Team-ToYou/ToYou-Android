@@ -93,7 +93,7 @@ class SignupNicknameFragment : Fragment() {
         }
 
         binding.signupAgreeNicknameDoublecheckBtn.setOnClickListener {
-            viewModel.checkDuplicate()
+            viewModel.checkDuplicate(1)
             hideKeyboard()
         }
 

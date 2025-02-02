@@ -14,7 +14,8 @@ interface OnboardingService {
 
     @GET("users/nickname/check")
     fun getNicknameCheck(
-        @Query("nickname") nickname: String
+        @Query("nickname") nickname: String,
+        @Query("userId") userId: Int
     ): Call<NicknameCheckResponse>
 
     @PATCH("users/nickname")

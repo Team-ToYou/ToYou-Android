@@ -112,6 +112,9 @@ class MypageViewModel(
     private val _friendNum = MutableLiveData<Int?>()
     val friendNum: LiveData<Int?> get() = _friendNum
 
+    private val _userId = MutableLiveData<Int?>()
+    val userId: LiveData<Int?> get() = _userId
+
     private val _nickname = MutableLiveData<String?>()
     val nickname: LiveData<String?> get() = _nickname
 
@@ -127,10 +130,12 @@ class MypageViewModel(
                 response: Response<MypageResponse>
             ) {
                 if (response.isSuccessful) {
-                    val friendNumber = response.body()?.result?.friendNum
+                    val userId = response.body()?.result?.userId
                     val nickname = response.body()?.result?.nickname
+                    val friendNumber = response.body()?.result?.friendNum
                     val status = response.body()?.result?.status
 
+                    _userId.postValue(userId)
                     _friendNum.postValue(friendNumber)
                     _nickname.postValue(nickname)
                     _status.postValue(status)

@@ -127,10 +127,10 @@ class ProfileViewModel(private val tokenManager: TokenManager) : ViewModel() {
         OnboardingService::class.java)
 
     // API를 호출하여 닉네임 중복 체크를 수행하는 함수
-    fun checkDuplicate(userNickname: String) {
+    fun checkDuplicate(userNickname: String, userId: Int) {
         val nickname = _nickname.value ?: return
 
-        val call = apiService.getNicknameCheck(nickname)
+        val call = apiService.getNicknameCheck(nickname, userId)
         call.enqueue(object : Callback<NicknameCheckResponse> {
             override fun onResponse(call: Call<NicknameCheckResponse>, response: Response<NicknameCheckResponse>) {
                 if (response.isSuccessful) {
@@ -162,7 +162,7 @@ class ProfileViewModel(private val tokenManager: TokenManager) : ViewModel() {
                     nextButtonEnableCheck()
 
                     tokenManager.refreshToken(
-                        onSuccess = { checkDuplicate(userNickname) }, // 토큰 갱신 후 다시 요청
+                        onSuccess = { checkDuplicate(userNickname, userId) }, // 토큰 갱신 후 다시 요청
                         onFailure = { Timber.e("Failed to refresh token and get notices") }
                     )
                 }

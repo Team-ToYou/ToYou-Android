@@ -117,10 +117,10 @@ class SignupNicknameViewModel : ViewModel() {
     private val apiService: OnboardingService = retrofit.create(OnboardingService::class.java)
 
     // API를 호출하여 닉네임 중복 체크를 수행하는 함수
-    fun checkDuplicate() {
+    fun checkDuplicate(userId: Int) {
         val nickname = _nickname.value ?: return
 
-        val call = apiService.getNicknameCheck(nickname)
+        val call = apiService.getNicknameCheck(nickname, userId)
         call.enqueue(object : Callback<NicknameCheckResponse> {
             override fun onResponse(call: Call<NicknameCheckResponse>, response: Response<NicknameCheckResponse>) {
                 if (response.isSuccessful) {

@@ -17,7 +17,7 @@ interface EmotionService {
         @Body emotion: EmotionRequest
     ): Call<EmotionResponse>
 
-    @GET("friends/yesterday")
+    @GET("diarycards/yesterday")
     fun getYesterdayFriendCard(): Call<YesterdayFriendsResponse>
 
     @GET("diarycards/{cardId}")
