@@ -40,19 +40,7 @@ class HomeBottomSheetAdapter(
                 adapter = homeBottomSheetCardDetailAdapter
             }
 
-            val nickname = item.nickname
             binding.itemHomeBottomSheet = item
-            binding.friendNickname.text = nickname
-
-            binding.itemDetail.text = if (nickname.isNotBlank()) {
-                "To.$nickname"
-            } else {
-                "To. Unknown"
-            }
-
-//            cardDetail.let {
-//                homeBottomSheetCardDetailAdapter.setEmotion(it.emotion)
-//            }
 
             binding.homeBottomSheetItem.setOnClickListener {
                 listener.onDiaryCardClick(item.cardId)

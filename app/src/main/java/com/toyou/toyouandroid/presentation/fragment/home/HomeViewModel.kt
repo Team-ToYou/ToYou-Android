@@ -71,8 +71,14 @@ class HomeViewModel(private val tokenManager: TokenManager) : ViewModel() {
                     Timber.d("API 응답 데이터: $diaryResponse")
 
                     if (diaryResponse?.isSuccess == true) {
+                        // 새로운 응답 구조: 각 카드에 cardContent 필드가 포함됨.
                         val cards = diaryResponse.result.yesterday
                         Timber.d("받아온 카드 목록: $cards")
+
+                        // 디버깅을 위해 각 카드의 상세 정보를 로그로 출력 (예: 수신자, 날짜 등)
+                        cards.forEach { card ->
+                            Timber.d("카드 ID: ${card.cardId}, 수신자: ${card.cardContent.receiver}, 날짜: ${card.cardContent.date}")
+                        }
 
                         if (cards.isEmpty()) {
                             Timber.d("카드 목록이 비어 있습니다.")
@@ -82,20 +88,19 @@ class HomeViewModel(private val tokenManager: TokenManager) : ViewModel() {
                             _isEmpty.value = false
                         }
                     } else {
+                        Timber.e("API 호출 실패 - 응답이 성공하지 않음. 메시지: ${diaryResponse?.message}")
                         tokenManager.refreshToken(
                             onSuccess = { loadYesterdayDiaryCards() },
                             onFailure = { Timber.e("loadYesterdayDiaryCards API call failed") }
                         )
-                        Timber.e("API 호출 실패 - 응답이 성공하지 않음. 메시지: ${diaryResponse?.message}")
                     }
                 } else {
+                    Timber.e("API 호출 실패 - 코드: ${response.code()}, 메시지: ${response.message()}")
                     tokenManager.refreshToken(
                         onSuccess = { loadYesterdayDiaryCards() },
                         onFailure = { Timber.e("loadYesterdayDiaryCards API call failed") }
                     )
-                    Timber.e("API 호출 실패 - 코드: ${response.code()}, 메시지: ${response.message()}")
                 }
-
                 _isLoading.value = false
             }
 

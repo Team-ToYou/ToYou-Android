@@ -35,5 +35,22 @@ data class ResultData(
 
 data class DiaryCard(
     val cardId: Int,
-    val nickname: String
+    val cardContent: CardContent
+)
+
+data class CardContent(
+    val date: String,
+    val receiver: String,
+    val emotion: String,
+    val exposure: Boolean,
+    val questionList: List<Question>
+)
+
+data class Question(
+    val questionId: Int,
+    val content: String,
+    val questionType: String,
+    val questioner: String,
+    val answer: String,
+    val answerOption: List<String>
 )
