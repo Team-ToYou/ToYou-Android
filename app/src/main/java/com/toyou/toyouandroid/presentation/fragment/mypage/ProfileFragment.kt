@@ -167,8 +167,12 @@ class ProfileFragment : Fragment() {
 
         // 닉네임 중복 확인
         binding.signupAgreeNicknameDoublecheckBtn.setOnClickListener {
-            userViewModel.nickname.observe(viewLifecycleOwner) { nickname ->
-                viewModel.checkDuplicate(nickname)
+            mypageViewModel.nickname.observe(viewLifecycleOwner) { nickname ->
+                mypageViewModel.userId.observe(viewLifecycleOwner) { userId ->
+                    if (nickname != null && userId != null) {
+                        viewModel.checkDuplicate(nickname, userId)
+                    }
+                }
             }
             hideKeyboard()
         }
