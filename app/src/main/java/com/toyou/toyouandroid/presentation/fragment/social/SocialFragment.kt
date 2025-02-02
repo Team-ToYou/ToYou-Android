@@ -97,8 +97,8 @@ class SocialFragment : Fragment() {
         socialAdapter = SocialRVAdapter(socialViewModel, { position ->
             navController.navigate(R.id.action_navigation_social_to_questionTypeFragment)
             Timber.tag("아이템").d(position.toString())
-        }) { friendName ->
-            showDeleteDialog(friendName) // 다이얼로그 표시 함수 호출
+        }) { name ->
+            showDeleteDialog(name) // 다이얼로그 표시 함수 호출
         }
 
         binding.socialRv.apply {
@@ -253,15 +253,17 @@ class SocialFragment : Fragment() {
 
         stateBtn.setOnClickListener {
             val myName = userViewModel.nickname.value ?: ""
-
-            if (isFriend == "NOT_FRIEND") {
-                socialViewModel.sendFriendRequest(name, myName)
-            } else if (isFriend == "REQUEST_RECEIVED") {
-                socialViewModel.patchApprove(name, myName)
-            } else if (isFriend == "REQUEST_SENT") {
-                socialViewModel.deleteFriend(name)
+            socialViewModel.searchFriendId.observe(viewLifecycleOwner) { id ->
+                if (isFriend == "NOT_FRIEND") {
+                    socialViewModel.sendFriendRequest(id, myName)
+                } else if (isFriend == "REQUEST_RECEIVED") {
+                    socialViewModel.patchApprove(id, myName)
+                } else if (isFriend == "REQUEST_SENT") {
+                    socialViewModel.deleteFriend(null,id)
+                }
             }
         }
+
 
         addFriendLinearLayout.addView(addFriendView)
 
@@ -286,7 +288,7 @@ class SocialFragment : Fragment() {
 
     }
 
-    private fun showDeleteDialog(friendName: String) {
+    private fun showDeleteDialog(name: String) {
         calendarDialogViewModel.setDialogData(
             title = "선택한 친구를\n삭제하시겠습니까?",
             leftButtonText = "취소",
@@ -294,16 +296,16 @@ class SocialFragment : Fragment() {
             leftButtonTextColor = Color.BLACK,
             rightButtonTextColor = Color.RED,
             leftButtonClickAction = { dismissDialog() },
-            rightButtonClickAction = { deleteFriend(friendName) }
+            rightButtonClickAction = { deleteFriend(name) }
         )
         calendarDialog = CalendarDialog()
         calendarDialog?.show(parentFragmentManager, "CustomDialog")
     }
 
-    private fun deleteFriend(friendName: String) {
+    private fun deleteFriend(name: String) {
         Timber.tag("deleteFriend").d("deleteFriend")
 
-        socialViewModel.deleteFriend(friendName)
+        socialViewModel.deleteFriend(name, null)
         socialViewModel.resetFriendRequestRemove()
         Toast.makeText(requireContext(), "선택한 친구가 삭제 되었습니다.", Toast.LENGTH_SHORT).show()
 

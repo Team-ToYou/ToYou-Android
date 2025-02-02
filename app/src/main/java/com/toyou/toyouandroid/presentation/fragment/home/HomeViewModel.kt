@@ -64,51 +64,50 @@ class HomeViewModel(private val tokenManager: TokenManager) : ViewModel() {
     fun loadYesterdayDiaryCards() {
         _isLoading.value = true
 
-        apiService.getYesterdayFriendCard().enqueue(object : Callback<YesterdayFriendsResponse> {
-            override fun onResponse(call: Call<YesterdayFriendsResponse>, response: Response<YesterdayFriendsResponse>) {
-                if (response.isSuccessful) {
-                    val diaryResponse = response.body()
-                    Timber.d("API 응답 데이터: $diaryResponse")
+        tokenManager.refreshToken(
+            onSuccess = { token ->
+                Timber.d("API 호출 - 사용된 Access Token: $token")
 
-                    if (diaryResponse?.isSuccess == true) {
-                        // 새로운 응답 구조: 각 카드에 cardContent 필드가 포함됨.
-                        val cards = diaryResponse.result.yesterday
-                        Timber.d("받아온 카드 목록: $cards")
+                apiService.getYesterdayFriendCard().enqueue(object : Callback<YesterdayFriendsResponse> {
+                    override fun onResponse(call: Call<YesterdayFriendsResponse>, response: Response<YesterdayFriendsResponse>) {
+                        if (response.isSuccessful) {
+                            val diaryResponse = response.body()
+                            Timber.d("API 응답 데이터: $diaryResponse")
 
-                        // 디버깅을 위해 각 카드의 상세 정보를 로그로 출력 (예: 수신자, 날짜 등)
-                        cards.forEach { card ->
-                            Timber.d("카드 ID: ${card.cardId}, 수신자: ${card.cardContent.receiver}, 날짜: ${card.cardContent.date}")
-                        }
+                            if (diaryResponse?.isSuccess == true) {
+                                val cards = diaryResponse.result.yesterday
+                                Timber.d("받아온 카드 목록: $cards")
 
-                        if (cards.isEmpty()) {
-                            Timber.d("카드 목록이 비어 있습니다.")
-                            _isEmpty.value = true
+                                if (cards.isEmpty()) {
+                                    Timber.d("카드 목록이 비어 있습니다.")
+                                    _isEmpty.value = true
+                                } else {
+                                    _diaryCards.value = cards
+                                    _isEmpty.value = false
+                                }
+                            } else {
+                                Timber.e("API 호출 실패 - 응답이 성공하지 않음. 메시지: ${diaryResponse?.message}")
+                            }
                         } else {
-                            _diaryCards.value = cards
-                            _isEmpty.value = false
+                            Timber.e("API 호출 실패 - 코드: ${response.code()}, 메시지: ${response.message()}")
                         }
-                    } else {
-                        Timber.e("API 호출 실패 - 응답이 성공하지 않음. 메시지: ${diaryResponse?.message}")
-                        tokenManager.refreshToken(
-                            onSuccess = { loadYesterdayDiaryCards() },
-                            onFailure = { Timber.e("loadYesterdayDiaryCards API call failed") }
-                        )
-                    }
-                } else {
-                    Timber.e("API 호출 실패 - 코드: ${response.code()}, 메시지: ${response.message()}")
-                    tokenManager.refreshToken(
-                        onSuccess = { loadYesterdayDiaryCards() },
-                        onFailure = { Timber.e("loadYesterdayDiaryCards API call failed") }
-                    )
-                }
-                _isLoading.value = false
-            }
 
-            override fun onFailure(call: Call<YesterdayFriendsResponse>, t: Throwable) {
-                Timber.e(t, "API 호출 실패 - 네트워크 오류")
+                        _isLoading.value = false
+                    }
+
+                    override fun onFailure(call: Call<YesterdayFriendsResponse>, t: Throwable) {
+                        Timber.e(t, "API 호출 실패 - 네트워크 오류")
+                        _isLoading.value = false
+                        _isEmpty.value = true // 실패 시 빈 상태로 간주
+                    }
+                })
+            },
+            onFailure = {
+                Timber.e("토큰 갱신 실패 - API 호출 중단")
                 _isLoading.value = false
-                _isEmpty.value = true // 실패 시 빈 상태로 간주
             }
-        })
+        )
     }
+
+
 }

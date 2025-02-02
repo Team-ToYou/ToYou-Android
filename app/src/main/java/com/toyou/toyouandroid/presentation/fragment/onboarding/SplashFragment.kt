@@ -3,6 +3,7 @@ package com.toyou.toyouandroid.presentation.fragment.onboarding
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -110,6 +111,7 @@ class SplashFragment : Fragment() {
         loginViewModel.navigationEvent.observe(viewLifecycleOwner) { isSuccess ->
             if (isSuccess) {
                 loginViewModel.patchFcm(fcmToken.toString())
+                Log.d("fcm token", fcmToken.toString())
                 Handler(Looper.getMainLooper()).postDelayed({
                     findNavController().navigate(R.id.action_navigation_splash_to_home_fragment)
                 }, 1000)

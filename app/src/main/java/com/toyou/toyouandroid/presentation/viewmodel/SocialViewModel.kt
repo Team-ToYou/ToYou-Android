@@ -54,6 +54,9 @@ class SocialViewModel(
     private val _searchName = MutableLiveData<String>()
     val searchName: LiveData<String> get() = _searchName
 
+    private val _searchFriendId = MutableLiveData<Long>()
+    val searchFriendId : LiveData<Long> get() = _searchFriendId
+
     private val _friendRequest = MutableLiveData<RequestFriend>()
     val friendRequest: LiveData<RequestFriend> get() = _friendRequest
     private val _retrieveToken = MutableLiveData<List<String>?>()
@@ -72,12 +75,14 @@ class SocialViewModel(
         loadInitQuestionType()
         _selectedChar.value = -1
         _nextBtnEnabled.value = false
-        _questionDto.value = QuestionDto("", "", "", false, null) // 초기화
+        _questionDto.value = QuestionDto(0, "", "", false, null) // 초기화
     }
 
     fun setTargetFriend(friendName: String, emotion: Int?, ment: String?) {
-        val currentQuestionDto = _questionDto.value ?: QuestionDto("", "", "", false, null)
-        _questionDto.value = currentQuestionDto.copy(target = friendName)
+        val currentQuestionDto = _questionDto.value ?: QuestionDto(0, "", "", false, null)
+
+        val targetId = _friends.value?.find { it.name == friendName }?.id ?: 0L
+        _questionDto.value = currentQuestionDto.copy(targetId = targetId)
         _selectedEmotion!!.value = emotion
         _selectedEmotionMent!!.value = ment
     }
@@ -123,6 +128,7 @@ class SocialViewModel(
                     response.result.let { result ->
                         _isFriend.value = result.status
                         _searchName.value = result.name
+                        _searchFriendId.value = result.userId
                         Timber.tag("search API 성공").d(_isFriend.value.toString())
                     }
                     retryCount = 0 // 성공 시 재시도 횟수 초기화
@@ -190,6 +196,7 @@ class SocialViewModel(
         for (friend in friendsDto.friends) {
             friendListModel.add(
                 FriendListModel(
+                    id = friend.userId,
                     name = friend.nickname,
                     message = friend.ment ?: "",
                     emotion = emotionType(friend.emotion)
@@ -262,7 +269,7 @@ class SocialViewModel(
                     if (response.isSuccess) {
                         Timber.tag("SocialViewModel").d("질문 전송 성공")
 
-                        retrieveTokenFromServer(questionDto.value!!.target)
+                        retrieveTokenFromServer(questionDto.value!!.targetId)
                         if (_questionDto.value!!.anonymous){
                             _retrieveToken.value?.let { tokens ->
                                 for (token in tokens) {
@@ -299,8 +306,8 @@ class SocialViewModel(
     }
 
     // 토큰 재발급 정상 호출 완료
-    fun sendFriendRequest(friendName: String, myName: String) {
-        _friendRequest.value = RequestFriend(name = friendName)
+    fun sendFriendRequest(friendId: Long, myName: String) {
+        _friendRequest.value = RequestFriend(userId = friendId)
         viewModelScope.launch {
             try {
                 _friendRequest.value?.let { name ->
@@ -309,7 +316,7 @@ class SocialViewModel(
                         Timber.tag("SocialViewModel").d("친구 요청 전송 성공")
 
                         // 작업이 성공적으로 완료되었음을 표시
-                        retrieveTokenFromServer(friendName)
+                        retrieveTokenFromServer(friendId)
                         _retrieveToken.value?.let { tokens ->
                             for (token in tokens) {
                                 postFCM(myName, token, 1)
@@ -319,7 +326,7 @@ class SocialViewModel(
                     } else {
                         Timber.tag("SocialViewModel").d("친구 삭제 실패: ${response.message}")
                         tokenManager.refreshToken(
-                            onSuccess = { sendFriendRequest(name.toString(), myName)},
+                            onSuccess = { sendFriendRequest(friendId, myName)},
                             onFailure = { Timber.e("sendFriendRequest Failed")}
                         )
                     }
@@ -331,7 +338,7 @@ class SocialViewModel(
                 Timber.tag("api 실패!").e(e.message.toString())
                 _friendRequestCompleted.postValue(false)
                 tokenManager.refreshToken(
-                    onSuccess = { sendFriendRequest(friendName, myName)},
+                    onSuccess = { sendFriendRequest(friendId, myName)},
                     onFailure = { Timber.e("sendFriendRequest Failed")}
                 )
             }
@@ -354,8 +361,15 @@ class SocialViewModel(
     }
 
     // 토큰 재발급 정상 호출 완료
-    fun deleteFriend(name: String) {
-        _friendRequest.value = RequestFriend(name = name)
+    fun deleteFriend(friendName: String?, friendId: Long?) {
+
+        val targetId = when { //만약  id가 주어진다면 id 넣고 name이 주어진다면 name 넣기
+            friendId != null && friendId > 0L -> friendId
+            !friendName.isNullOrBlank() -> _friends.value?.find { it.name == friendName }?.id ?: 0L
+            else -> 0L
+        }
+
+        _friendRequest.value = RequestFriend(userId = targetId)
         viewModelScope.launch {
             try {
                 _friendRequest.value?.let { friendRequest ->
@@ -370,7 +384,7 @@ class SocialViewModel(
                         if (retryCount < maxRetryCount) {
                             retryCount++
                             tokenManager.refreshToken(
-                                onSuccess = { deleteFriend(name) },
+                                onSuccess = { deleteFriend(friendName, friendId) },
                                 onFailure = { Timber.e("deleteFriend API Call Failed") }
                             )
                         } else {
@@ -386,7 +400,7 @@ class SocialViewModel(
                 if (retryCount < maxRetryCount) {
                     retryCount++
                     tokenManager.refreshToken(
-                        onSuccess = { deleteFriend(name) },
+                        onSuccess = { deleteFriend(friendName, friendId) },
                         onFailure = { Timber.e("deleteFriend API Call Failed") }
                     )
                 } else {
@@ -440,7 +454,9 @@ class SocialViewModel(
     }
 
     fun patchApproveNotice(name: String, myName: String, alarmId: Int, position: Int) {
-        _friendRequest.value = RequestFriend(name = name)
+        val id = 0L //이후 수정할 부분!!@@
+
+        _friendRequest.value = RequestFriend(userId = id)
         viewModelScope.launch {
             try {
                 _friendRequest.value?.let { request ->
@@ -451,7 +467,7 @@ class SocialViewModel(
                     } else {
                         _approveSuccess.postValue(ApprovalResult(false, alarmId, position))
                         tokenManager.refreshToken(
-                            onSuccess = { patchApprove(name, myName) },
+                            onSuccess = { patchApprove(id, myName) },
                             onFailure = { Timber.e("patchApprove API call failed") }
                         )
                     }
@@ -460,7 +476,7 @@ class SocialViewModel(
                     _approveSuccess.postValue(ApprovalResult(false, alarmId, position))
                 }
 
-                retrieveTokenFromServer(name)
+                retrieveTokenFromServer(id)
                 _retrieveToken.value?.let { tokens ->
                     for (token in tokens) {
                         postFCM(myName, token, 2)
@@ -477,8 +493,8 @@ class SocialViewModel(
     }
 
     // 토큰 재발급 정상 호출 완료
-    fun patchApprove(name: String, myName: String) {
-        _friendRequest.value = RequestFriend(name = name)
+    fun patchApprove(friendId: Long, myName: String) {
+        _friendRequest.value = RequestFriend(friendId)
         viewModelScope.launch {
             try {
                 _friendRequest.value?.let { request ->
@@ -488,7 +504,7 @@ class SocialViewModel(
                     } else {
                         Timber.tag("SocialViewModel").d("API 호출 실패: ${response.message}")
                         tokenManager.refreshToken(
-                            onSuccess = { patchApprove(name, myName) },
+                            onSuccess = { patchApprove(friendId, myName) },
                             onFailure = { Timber.e("patchApprove API call failed") }
                         )
                     }
@@ -496,7 +512,7 @@ class SocialViewModel(
                     Timber.e("Friend request is null")
                 }
 
-                retrieveTokenFromServer(name)
+                retrieveTokenFromServer(friendId)
                 _retrieveToken.value?.let { tokens ->
                     for (token in tokens) {
                         postFCM(myName, token, 2)
@@ -506,7 +522,7 @@ class SocialViewModel(
             } catch (e: Exception) {
                 Timber.e("Exception occurred: ${e.message}")
                 tokenManager.refreshToken(
-                    onSuccess = { patchApprove(name, myName) },
+                    onSuccess = { patchApprove(friendId, myName) },
                     onFailure = { Timber.e("patchApprove API call failed") }
                 )
             }
@@ -516,13 +532,12 @@ class SocialViewModel(
     private var retryCount = 0 // 재시도 횟수 관리
     private val maxRetryCount = 1 // 최대 재시도 횟수
 
-    private fun retrieveTokenFromServer(name: String) {
+    private fun retrieveTokenFromServer(id: Long) {
         resetToken()
         viewModelScope.launch {
             try {
                 val response = withContext(Dispatchers.IO) {
-                    Log.d("name", name)
-                    fcmRepository.getToken(name)
+                    fcmRepository.getToken(id)
                 }
 
                 if (response.isSuccess) {
@@ -536,7 +551,7 @@ class SocialViewModel(
                     if (retryCount < maxRetryCount) {
                         retryCount++
                         tokenManager.refreshToken(
-                            onSuccess = { retrieveTokenFromServer(name) },
+                            onSuccess = { retrieveTokenFromServer(id) },
                             onFailure = { Timber.e("Token Retrieval failed - Refresh token failed") }
                         )
                     } else {
@@ -548,7 +563,7 @@ class SocialViewModel(
                 if (retryCount < maxRetryCount) {
                     retryCount++
                     tokenManager.refreshToken(
-                        onSuccess = { retrieveTokenFromServer(name) },
+                        onSuccess = { retrieveTokenFromServer(id) },
                         onFailure = { Timber.e("Token Retrieval failed - Refresh token failed") }
                     )
                 } else {
@@ -561,7 +576,7 @@ class SocialViewModel(
     fun resetQuestionData() {
         _selectedChar.value = -1
         _nextBtnEnabled.value = false
-        _questionDto.value = QuestionDto("", "", "", false, null) // 초기화
+        _questionDto.value = QuestionDto(0, "", "", false, null) // 초기화
         _selectedEmotion.value = 0
         _selectedEmotionMent.value = ""
         _optionList.value = emptyList()
