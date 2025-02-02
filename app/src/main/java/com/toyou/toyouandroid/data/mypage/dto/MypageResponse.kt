@@ -8,6 +8,7 @@ data class MypageResponse(
 )
 
 data class MypageResult(
+    val userId: Int,
     val nickname: String,
     val friendNum: Int,
     val status: String
