@@ -11,6 +11,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.toyou.toyouHoandroid.data.create.service.CreateService
 import com.toyou.toyouandroid.R
@@ -28,6 +29,7 @@ import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
 import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
+import timber.log.Timber
 
 class SplashFragment : Fragment() {
 
@@ -39,6 +41,19 @@ class SplashFragment : Fragment() {
     private lateinit var database: UserDatabase
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var userViewModel: UserViewModel
+
+    private val handler = Handler(Looper.getMainLooper())
+    private val runnableLogin = Runnable {
+        // 프래그먼트가 attach된 상태에서만 네비게이션을 수행
+        if (isAdded && !isStateSaved) {
+            findNavController().navigate(R.id.action_navigation_splash_to_login_fragment)
+        }
+    }
+    private val runnableHome = Runnable {
+        if (isAdded && !isStateSaved) {
+            findNavController().navigate(R.id.action_navigation_splash_to_home_fragment)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -80,38 +95,27 @@ class SplashFragment : Fragment() {
 
         (requireActivity() as MainActivity).hideBottomNavigation(true)
 
+        navController = Navigation.findNavController(view)
+
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 requireActivity().finish()
             }
         })
 
-        //userViewModel.getHomeEntry()
-
-        /*userViewModel.cardId.observe(viewLifecycleOwner) {
-            Timber.tag("get home").d(userViewModel.cardId.value.toString())
-        }*/
-
         val refreshToken = TokenStorage(requireContext()).getRefreshToken()
         val fcmToken = TokenStorage(requireContext()).getFcmToken()
+
         if (refreshToken != null) {
             loginViewModel.reissueJWT(refreshToken)
-            //userViewModel.getHomeEntry()
-
-            /*userViewModel.cardId.observe(viewLifecycleOwner) { cardId ->
-                Timber.tag("get home").d(cardId.toString())
-            }*/
         } else {
-            // 토큰이 없으면 로그인 화면으로 이동
-            Handler(Looper.getMainLooper()).postDelayed({
-                findNavController().navigate(R.id.action_navigation_splash_to_login_fragment)
-            }, 3000)
+            handler.postDelayed(runnableLogin, 3000)
         }
 
         loginViewModel.navigationEvent.observe(viewLifecycleOwner) { isSuccess ->
             if (isSuccess) {
                 loginViewModel.patchFcm(fcmToken.toString())
-                Log.d("fcm token", fcmToken.toString())
+                Timber.tag("fcm token").d(fcmToken.toString())
                 Handler(Looper.getMainLooper()).postDelayed({
                     findNavController().navigate(R.id.action_navigation_splash_to_home_fragment)
                 }, 1000)
@@ -123,18 +127,8 @@ class SplashFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        handler.removeCallbacks(runnableLogin)
+        handler.removeCallbacks(runnableHome)
         _binding = null
     }
-
-    /*private fun saveUserInfo(){
-        CoroutineScope(Dispatchers.IO).launch {
-            database.dao().insert(UserEntity(cardId = splashViewModel.cardId.value, emotion = splashViewModel.emotion.value))
-            val users = database.dao().getAll()
-
-            for (user in users) {
-                Log.d("get home", "cardId: ${user.cardId}, emotion: ${user.emotion}")
-            }
-        }
-    }*/
-
 }

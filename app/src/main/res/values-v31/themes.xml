@@ -1,24 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.ToYou" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/transparent</item>
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 
+    <style name="NoDimBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetDialogTheme">@style/NoDimBottomSheetStyle</item>
+    </style>
+
+    <style name="NoDimBottomSheetStyle" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+    <style name="MypageDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowBackground">@color/dialog_background_color</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.2</item>
+    </style>
+
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
-        <!-- Set the splash screen background, animated icon, and animation
-        duration. -->
         <item name="windowSplashScreenBackground">@android:color/transparent</item>
-
-        <!-- Use windowSplashScreenAnimatedIcon to add a drawable or an animated
-             drawable. One of these is required. -->
         <item name="windowSplashScreenAnimatedIcon">@drawable/login_logo</item>
-        <!-- Required for animated icons. -->
-        <item name="windowSplashScreenAnimationDuration">200</item>
-
-        <!-- Set the theme of the Activity that directly follows your splash
-        screen. This is required. -->
+        <item name="windowSplashScreenAnimationDuration">0</item>
         <item name="postSplashScreenTheme">@style/Theme.ToYou</item>
     </style>
 </resources>
