@@ -22,7 +22,7 @@ android {
         applicationId = "com.toyou.toyouandroid"
         minSdk = 28
         targetSdk = 34
-        versionCode = 5
+        versionCode = 6
         versionName = "1.0.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
