@@ -67,7 +67,7 @@ class NoticeRequestAdapter(
             val formattedMessage = binding.root.context.getString(R.string.notice_friend_request, nickname)
             binding.noticeBox.text = formattedMessage
 
-            /*
+
             binding.noticeCardCheckDelete.setOnClickListener {
                 socialViewModel.getFriendsData() //친구 목록 불러오는 api
                 // 삭제 API 호출
@@ -81,7 +81,6 @@ class NoticeRequestAdapter(
                 listener.onFriendRequestApprove(item.nickname, item.alarmId, this.layoutPosition)
                 removeItem(this.layoutPosition)
             }
-            */
 
             binding.executePendingBindings()
         }
