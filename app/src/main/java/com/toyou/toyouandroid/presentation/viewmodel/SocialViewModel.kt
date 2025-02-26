@@ -456,7 +456,7 @@ class SocialViewModel(
     fun patchApproveNotice(name: String, myName: String, alarmId: Int, position: Int) {
         val id = 0L //이후 수정할 부분!!@@
 
-        _friendRequest.value = RequestFriend(userId = id)
+        _friendRequest.value = RequestFriend(userId = alarmId.toLong())
         viewModelScope.launch {
             try {
                 _friendRequest.value?.let { request ->
@@ -467,7 +467,7 @@ class SocialViewModel(
                     } else {
                         _approveSuccess.postValue(ApprovalResult(false, alarmId, position))
                         tokenManager.refreshToken(
-                            onSuccess = { patchApprove(id, myName) },
+                            onSuccess = { patchApprove(alarmId.toLong(), myName) },
                             onFailure = { Timber.e("patchApprove API call failed") }
                         )
                     }
