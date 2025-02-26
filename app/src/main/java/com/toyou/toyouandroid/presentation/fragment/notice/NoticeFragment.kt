@@ -108,10 +108,10 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
                 viewModel.deleteNotice(alarmId, position)
             }
 
-            override fun onFriendRequestApprove(name: String, alarmId: Int, position: Int) {
+            override fun onFriendRequestApprove(name: String, userId: Int, position: Int) {
                 val myName = userViewModel.nickname.value ?: ""
                 Timber.d(myName)
-                socialViewModel.patchApproveNotice(name, myName, alarmId, position)
+                socialViewModel.patchApprove(userId.toLong(), myName)
 
 //                socialViewModel.approveSuccess.observe(viewLifecycleOwner) { result ->
 //                    if (result != null) {
@@ -165,6 +165,7 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
         navController = Navigation.findNavController(view)
 
         viewModel.fetchNotices()
+        viewModel.fetchFriendsRequestNotices()
 
         setupRecyclerView()
 
@@ -224,19 +225,22 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
             }
         }
 
-        viewModel.noticeItems.observe(viewLifecycleOwner) { items ->
-            if (items.isEmpty()) {
-                Timber.d("NoticeItems is null")
+        viewModel.friendRequestNotices.observe(viewLifecycleOwner) { friendRequests ->
+            if (friendRequests.isEmpty()) {
+                Timber.d("Friend request notices are empty")
                 binding.rvNoticeFriendRequestBlank.visibility = View.VISIBLE
+            } else {
+                friendRequestAdapter.updateItems(friendRequests.toMutableList())
+                binding.rvNoticeFriendRequestBlank.visibility = View.GONE
+            }
+        }
+
+        viewModel.generalNotices.observe(viewLifecycleOwner) { generalNotices ->
+            if (generalNotices.isEmpty()) {
+                Timber.d("General notices are empty")
                 binding.rvNoticeEntireBlank.visibility = View.VISIBLE
             } else {
-                Timber.d("NoticeItems: $items")
-                val friendRequests = items.filterIsInstance<NoticeItem.NoticeFriendRequestItem>()
-                val otherNotices = items.filter { it !is NoticeItem.NoticeFriendRequestItem }
-                friendRequestAdapter.updateItems(friendRequests.toMutableList())
-                entireNoticeRequestAdapter.updateItems(otherNotices.toMutableList())
-
-                binding.rvNoticeFriendRequestBlank.visibility = View.GONE
+                entireNoticeRequestAdapter.updateItems(generalNotices.toMutableList())
                 binding.rvNoticeEntireBlank.visibility = View.GONE
             }
         }

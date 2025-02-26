@@ -45,3 +45,26 @@ data class AlarmDeleteResponse(
     @SerializedName("message")
     val message: String
 )
+
+data class FriendsRequestResponse(
+    @SerializedName("isSuccess")
+    val isSuccess: Boolean,
+    @SerializedName("code")
+    val code: String,
+    @SerializedName("message")
+    val message: String,
+    @SerializedName("result")
+    val result: FriendsRequestResult
+)
+
+data class FriendsRequestResult(
+    @SerializedName("senderInfos")
+    val friendsRequestList: List<FriendsRequest>
+)
+
+data class FriendsRequest(
+    @SerializedName("userId")
+    val userId: Int,
+    @SerializedName("nickname")
+    val nickname: String
+)
