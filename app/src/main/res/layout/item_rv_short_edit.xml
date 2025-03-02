@@ -59,7 +59,7 @@
             app:layout_constraintTop_toBottomOf="@id/textMessage"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:maxLength="50"
+            android:maxLength="999"
             android:gravity="top"
             android:layout_marginTop="6dp"/>
 
