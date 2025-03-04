@@ -12,4 +12,8 @@ interface HomeService {
     suspend fun getCardDetail(
         @Path("cardId") card : Long
     ) : BaseResponse<CardDetail>
+
+    @GET("/diarycards/yesterday")
+    suspend fun getCardYesterday(
+    ) : BaseResponse<>
 }
