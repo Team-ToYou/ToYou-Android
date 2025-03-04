@@ -7,7 +7,7 @@
     <data>
         <variable
             name="item_home_bottom_sheet"
-            type="com.toyou.toyouandroid.data.emotion.dto.DiaryCard" />
+            type="com.toyou.toyouandroid.data.home.dto.response.YesterdayCard" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

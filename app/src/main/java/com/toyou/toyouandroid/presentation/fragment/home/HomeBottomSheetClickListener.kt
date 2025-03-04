@@ -2,5 +2,5 @@ package com.toyou.toyouandroid.presentation.fragment.home
 
 interface HomeBottomSheetClickListener {
 
-    fun onDiaryCardClick(cardId: Int?)
+    fun onDiaryCardClick(cardId: Long?)
 }

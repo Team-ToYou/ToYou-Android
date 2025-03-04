@@ -14,7 +14,7 @@ data class YesterdayCard(
 )
 
 data class YesterdayCardContent(
-    @SerializedName("date") val date : LocalDate,
+    @SerializedName("date") val date : String,
     @SerializedName("receiver") val receiver : String,
     @SerializedName("emotion") val emotion : String,
     @SerializedName("exposure") val exposure : Boolean,

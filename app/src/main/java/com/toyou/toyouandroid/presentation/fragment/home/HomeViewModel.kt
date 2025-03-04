@@ -75,7 +75,6 @@ class HomeViewModel(private val tokenManager: TokenManager,
                 val response = repository.getYesterdayCard()
                 if (response.isSuccess) {
                     _yesterdayCards.value = response.result.yesterday
-                    Timber.tag("어제 일기")
                 } else {
                     tokenManager.refreshToken(
                         onSuccess = { getYesterdayCard() },

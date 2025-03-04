@@ -21,6 +21,7 @@ import com.toyou.toyouandroid.databinding.FragmentHomeBinding
 import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.data.emotion.dto.DiaryCard
+import com.toyou.toyouandroid.data.home.dto.response.YesterdayCard
 import com.toyou.toyouandroid.presentation.fragment.home.adapter.HomeBottomSheetAdapter
 import com.toyou.toyouandroid.presentation.fragment.notice.NoticeViewModel
 import com.toyou.toyouandroid.domain.notice.NoticeRepository
@@ -120,12 +121,12 @@ class HomeFragment : Fragment() {
         noticeViewModel.fetchNotices()
 
         listener = object : HomeBottomSheetClickListener {
-            override fun onDiaryCardClick(cardId: Int?) {
+            override fun onDiaryCardClick(cardId: Long?) {
                 Timber.tag("HomeFragment").d("$cardId")
                 cardId?.let {
                     cardInfoViewModel.getCardDetail(cardId.toLong())
                     val bundle = Bundle().apply {
-                        putInt("cardId", it)
+                        putLong("cardId", it)
                     }
                     navController.navigate(R.id.action_navigation_home_to_friend_card_container_fragment, bundle)
                 }
@@ -146,6 +147,7 @@ class HomeFragment : Fragment() {
 
         //일기카드 조회
         viewModel.getYesterdayCard()
+
 
         // 질문 개수에 따른 우체통 이미지 변경
         userViewModel.cardNum.observe(viewLifecycleOwner) { cardNum ->
@@ -206,10 +208,8 @@ class HomeFragment : Fragment() {
         }
 
         // 홈 화면 바텀 시트 설정
-        viewModel.diaryCards.observe(viewLifecycleOwner) { diaryCards ->
-            if (diaryCards != null) {
-                setupRecyclerView(diaryCards)
-            }
+        viewModel.yesterdayCards.observe(viewLifecycleOwner) { yesterdayCards ->
+            setupRecyclerView(yesterdayCards)
         }
 
         // 우체통 클릭시 일기카드 생성 화면으로 전환(임시)
@@ -317,7 +317,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun setupRecyclerView(items: List<DiaryCard>) {
+    private fun setupRecyclerView(items: List<YesterdayCard>) {
 
         val adapter = HomeBottomSheetAdapter(items.toMutableList(), listener)
         binding.homeBottomSheetRv.layoutManager = GridLayoutManager(context, 2)
