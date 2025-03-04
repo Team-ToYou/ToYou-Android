@@ -28,6 +28,7 @@ import com.toyou.toyouandroid.data.notice.service.NoticeService
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
 import com.toyou.toyouandroid.data.record.service.RecordService
 import com.toyou.toyouandroid.domain.create.repository.CreateRepository
+import com.toyou.toyouandroid.domain.home.repository.HomeRepository
 import com.toyou.toyouandroid.domain.record.RecordRepository
 import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.viewmodel.NoticeViewModelFactory
@@ -79,6 +80,7 @@ class HomeFragment : Fragment() {
         val recordRepository = RecordRepository(recordService)
         val createService = AuthNetworkModule.getClient().create(CreateService::class.java)
         val createRepository = CreateRepository(createService)
+        val homeRepository = HomeRepository()
 
 
         noticeViewModel = ViewModelProvider(
@@ -88,7 +90,7 @@ class HomeFragment : Fragment() {
 
         viewModel = ViewModelProvider(
             this,
-            HomeViewModelFactory(tokenManager)
+            HomeViewModelFactory(tokenManager, homeRepository)
         )[HomeViewModel::class.java]
 
         binding.lifecycleOwner = viewLifecycleOwner
@@ -141,6 +143,9 @@ class HomeFragment : Fragment() {
         (requireActivity() as MainActivity).hideBottomNavigation(false)
 
         database = UserDatabase.getDatabase(requireContext())
+
+        //일기카드 조회
+        viewModel.getYesterdayCard()
 
         // 질문 개수에 따른 우체통 이미지 변경
         userViewModel.cardNum.observe(viewLifecycleOwner) { cardNum ->

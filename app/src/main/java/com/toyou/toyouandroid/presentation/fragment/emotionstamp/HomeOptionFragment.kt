@@ -19,6 +19,7 @@ import com.toyou.toyouandroid.data.emotion.dto.EmotionRequest
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
 import com.toyou.toyouandroid.data.social.service.SocialService
 import com.toyou.toyouandroid.domain.create.repository.CreateRepository
+import com.toyou.toyouandroid.domain.home.repository.HomeRepository
 import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.fragment.notice.NoticeDialog
@@ -57,18 +58,19 @@ class HomeOptionFragment : Fragment() {
 
         val createService = AuthNetworkModule.getClient().create(CreateService::class.java)
         val createRepository = CreateRepository(createService)
+        val homeRepository = HomeRepository()
 
         homeOptionViewModel = ViewModelProvider(
             this,
             HomeViewModelFactory(
-                tokenManager
+                tokenManager, homeRepository
             )
         )[HomeOptionViewModel::class.java]
 
         homeViewModel = ViewModelProvider(
             this,
             HomeViewModelFactory(
-                tokenManager
+                tokenManager, homeRepository
             )
         )[HomeViewModel::class.java]
 
