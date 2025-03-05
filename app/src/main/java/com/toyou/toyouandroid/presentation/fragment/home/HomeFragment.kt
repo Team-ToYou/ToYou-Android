@@ -182,9 +182,6 @@ class HomeFragment : Fragment() {
         binding.homeBottomsheetPseudo.visibility = View.VISIBLE
         binding.homeBottomSheetRv.visibility = View.GONE
 
-        // 작일 친구 일기 카드 자동 조회
-//        viewModel.loadYesterdayDiaryCards()
-
         // 바텀 시트 터치 이벤트 처리
         binding.homeBottomSheet.apply {
             setOnTouchListener { v, event ->
@@ -213,12 +210,9 @@ class HomeFragment : Fragment() {
                 binding.homeBottomsheetPseudo.visibility = View.GONE
                 binding.homeBottomSheetRv.visibility = View.VISIBLE
                 setupRecyclerView(yesterdayCards)
-                Timber.tag("yester"+yesterdayCards.toString())
-
             } else {
                 binding.homeBottomsheetPseudo.visibility = View.VISIBLE
                 binding.homeBottomSheetRv.visibility = View.GONE
-                Timber.tag("yester"+yesterdayCards.toString())
             }
         }
 

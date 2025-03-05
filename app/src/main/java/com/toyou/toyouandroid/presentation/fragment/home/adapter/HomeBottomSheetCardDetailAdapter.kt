@@ -17,16 +17,21 @@ import com.toyou.toyouandroid.model.type3
 class HomeBottomSheetCardDetailAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var questionList: List<YesterdayCardQuestion> = emptyList()
-    //private lateinit var emotion: String
-    private var emotion: String = "NORMAL"
+    private var emotionMap: Map<Long, String> = emptyMap() // cardId -> emotion
+    private var questionToCardMap: Map<Long, Long> = emptyMap() // questionId -> cardId
 
     fun setCards(newCards: List<YesterdayCard>) {
         questionList = newCards.flatMap { it.cardContent.questionList }
-        notifyDataSetChanged()
-    }
 
-    fun setEmotion(emotion : String){
-        this.emotion = emotion
+        // 카드 ID별 감정을 저장
+        emotionMap = newCards.associate { it.cardId to it.cardContent.emotion }
+
+        // 질문 ID별 카드 ID를 저장
+        questionToCardMap = newCards.flatMap { card ->
+            card.cardContent.questionList.map { it.id to card.cardId }
+        }.toMap()
+
+        notifyDataSetChanged()
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -65,34 +70,35 @@ class HomeBottomSheetCardDetailAdapter : RecyclerView.Adapter<RecyclerView.ViewH
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = questionList[position]
 
+        // 해당 질문이 속한 카드의 ID 찾기
+        val cardId = questionToCardMap[item.id] ?: -1
+        // 카드 ID를 통해 감정을 찾기 (없으면 기본값 "ANGRY")
+        val emotion = emotionMap[cardId] ?: "ANGRY"
+
         when (item.type) {
             "LONG_ANSWER", "SHORT_ANSWER" -> {
                 (holder as MultiViewHolderPreview1).bind(
-                    PreviewCardModel(item.content, item.answer,mapQuestionType(item.type),item.questioner,item.options, item.id)
+                    PreviewCardModel(item.content, item.answer, mapQuestionType(item.type), item.questioner, item.options, item.id)
                 )
-                holder.setIsRecyclable(false)
             }
             "OPTIONAL" -> {
                 (holder as MultiViewHolderPreview3).bind(
-                    PreviewCardModel(item.content, item.answer,mapQuestionType(item.type),item.questioner,item.options, item.id)
+                    PreviewCardModel(item.content, item.answer, mapQuestionType(item.type), item.questioner, item.options, item.id),
+                    emotion
                 )
-                holder.setIsRecyclable(false)
             }
             else -> {
                 (holder as MultiViewHolderPreview4).bind(
-                    PreviewCardModel(item.content, item.answer,mapQuestionType(item.type),item.questioner,item.options, item.id)
+                    PreviewCardModel(item.content, item.answer, mapQuestionType(item.type), item.questioner, item.options, item.id),
+                    emotion
                 )
-                holder.setIsRecyclable(false)
             }
         }
     }
 
-    override fun getItemCount(): Int {
-        return questionList.size
-    }
+    override fun getItemCount(): Int = questionList.size
 
-
-    inner class MultiViewHolderPreview1(view: View) : RecyclerView.ViewHolder(view){
+    inner class MultiViewHolderPreview1(view: View) : RecyclerView.ViewHolder(view) {
         private val question: TextView = view.findViewById(R.id.question)
         private val answer: TextView = view.findViewById(R.id.answer)
 
@@ -102,88 +108,51 @@ class HomeBottomSheetCardDetailAdapter : RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    inner class MultiViewHolderPreview3(view: View) : RecyclerView.ViewHolder(view){
+    inner class MultiViewHolderPreview3(view: View) : RecyclerView.ViewHolder(view) {
         private val question: TextView = view.findViewById(R.id.question)
         private val txtOption1: TextView = view.findViewById(R.id.choose_three_first_tv)
         private val txtOption2: TextView = view.findViewById(R.id.choose_three_second_tv)
 
-        fun bind(item: PreviewCardModel) {
+        fun bind(item: PreviewCardModel, emotion: String) {
             question.text = item.question
             txtOption1.text = item.options!![0]
             txtOption2.text = item.options[1]
 
-            if (item.answer == item.options[0]) {
-                when(emotion){
-                    "HAPPY" -> txtOption1.setBackgroundResource(R.drawable.selected_option_happy)
-                    "EXCITED" -> txtOption1.setBackgroundResource(R.drawable.selected_option_excited)
-                    "NORMAL" -> txtOption1.setBackgroundResource(R.drawable.selected_option_normal)
-                    "NERVOUS" -> txtOption1.setBackgroundResource(R.drawable.selected_option_container)
-                    "ANGRY" -> txtOption1.setBackgroundResource(R.drawable.selected_option_angry)
-                }
-            } else {
-                txtOption1.setBackgroundResource(R.drawable.search_container)
-            }
-
-            if (item.answer == item.options[1]) {
-                when(emotion){
-                    "HAPPY" -> txtOption2.setBackgroundResource(R.drawable.selected_option_happy)
-                    "EXCITED" -> txtOption2.setBackgroundResource(R.drawable.selected_option_excited)
-                    "NORMAL" -> txtOption2.setBackgroundResource(R.drawable.selected_option_normal)
-                    "NERVOUS" -> txtOption2.setBackgroundResource(R.drawable.selected_option_container)
-                    "ANGRY" -> txtOption2.setBackgroundResource(R.drawable.selected_option_angry)
-                }
-            } else {
-                txtOption2.setBackgroundResource(R.drawable.search_container)
-            }
+            applyEmotionStyle(txtOption1, item.answer == item.options[0], emotion)
+            applyEmotionStyle(txtOption2, item.answer == item.options[1], emotion)
         }
     }
 
-    inner class MultiViewHolderPreview4(view: View) : RecyclerView.ViewHolder(view){
+    inner class MultiViewHolderPreview4(view: View) : RecyclerView.ViewHolder(view) {
         private val question: TextView = view.findViewById(R.id.question)
         private val txtOption1: TextView = view.findViewById(R.id.choose_three_first_tv)
         private val txtOption2: TextView = view.findViewById(R.id.choose_three_second_tv)
         private val txtOption3: TextView = view.findViewById(R.id.choose_three_third_tv)
 
-        fun bind(item: PreviewCardModel) {
+        fun bind(item: PreviewCardModel, emotion: String) {
             question.text = item.question
             txtOption1.text = item.options!![0]
             txtOption2.text = item.options[1]
             txtOption3.text = item.options[2]
 
-            if (item.answer == item.options[0]) {
-                when(emotion){
-                    "HAPPY" -> txtOption1.setBackgroundResource(R.drawable.selected_option_happy)
-                    "EXCITED" -> txtOption1.setBackgroundResource(R.drawable.selected_option_excited)
-                    "NORMAL" -> txtOption1.setBackgroundResource(R.drawable.selected_option_normal)
-                    "NERVOUS" -> txtOption1.setBackgroundResource(R.drawable.selected_option_container)
-                    "ANGRY" -> txtOption1.setBackgroundResource(R.drawable.selected_option_angry)
-                }
-            } else {
-                txtOption1.setBackgroundResource(R.drawable.search_container)
-            }
+            applyEmotionStyle(txtOption1, item.answer == item.options[0], emotion)
+            applyEmotionStyle(txtOption2, item.answer == item.options[1], emotion)
+            applyEmotionStyle(txtOption3, item.answer == item.options[2], emotion)
+        }
+    }
 
-            if (item.answer == item.options[1]) {
-                when(emotion){
-                    "HAPPY" -> txtOption2.setBackgroundResource(R.drawable.selected_option_happy)
-                    "EXCITED" -> txtOption2.setBackgroundResource(R.drawable.selected_option_excited)
-                    "NORMAL" -> txtOption2.setBackgroundResource(R.drawable.selected_option_normal)
-                    "NERVOUS" -> txtOption2.setBackgroundResource(R.drawable.selected_option_container)
-                    "ANGRY" -> txtOption2.setBackgroundResource(R.drawable.selected_option_angry)
-                }
-            } else {
-                txtOption2.setBackgroundResource(R.drawable.search_container)
+    private fun applyEmotionStyle(view: TextView, isSelected: Boolean, emotion: String) {
+        if (isSelected) {
+            when (emotion) {
+                "HAPPY" -> view.setBackgroundResource(R.drawable.selected_option_happy)
+                "EXCITED" -> view.setBackgroundResource(R.drawable.selected_option_excited)
+                "NORMAL" -> view.setBackgroundResource(R.drawable.selected_option_normal)
+                "NERVOUS" -> view.setBackgroundResource(R.drawable.selected_option_container)
+                "ANGRY" -> view.setBackgroundResource(R.drawable.selected_option_angry)
+                else -> view.setBackgroundResource(R.drawable.search_container)
             }
-            if (item.answer == item.options[2]) {
-                when(emotion){
-                    "HAPPY" -> txtOption3.setBackgroundResource(R.drawable.selected_option_happy)
-                    "EXCITED" -> txtOption3.setBackgroundResource(R.drawable.selected_option_excited)
-                    "NORMAL" -> txtOption3.setBackgroundResource(R.drawable.selected_option_normal)
-                    "NERVOUS" -> txtOption3.setBackgroundResource(R.drawable.selected_option_container)
-                    "ANGRY" -> txtOption3.setBackgroundResource(R.drawable.selected_option_angry)
-                }
-            } else {
-                txtOption3.setBackgroundResource(R.drawable.search_container)
-            }
+        } else {
+            view.setBackgroundResource(R.drawable.search_container)
         }
     }
 
@@ -195,6 +164,4 @@ class HomeBottomSheetCardDetailAdapter : RecyclerView.Adapter<RecyclerView.ViewH
             else -> 4
         }
     }
-
-
 }
