@@ -209,7 +209,17 @@ class HomeFragment : Fragment() {
 
         // 홈 화면 바텀 시트 설정
         viewModel.yesterdayCards.observe(viewLifecycleOwner) { yesterdayCards ->
-            setupRecyclerView(yesterdayCards)
+            if (yesterdayCards.isNotEmpty()) {
+                binding.homeBottomsheetPseudo.visibility = View.GONE
+                binding.homeBottomSheetRv.visibility = View.VISIBLE
+                setupRecyclerView(yesterdayCards)
+                Timber.tag("yester"+yesterdayCards.toString())
+
+            } else {
+                binding.homeBottomsheetPseudo.visibility = View.VISIBLE
+                binding.homeBottomSheetRv.visibility = View.GONE
+                Timber.tag("yester"+yesterdayCards.toString())
+            }
         }
 
         // 우체통 클릭시 일기카드 생성 화면으로 전환(임시)

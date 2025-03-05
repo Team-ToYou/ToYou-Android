@@ -73,8 +73,10 @@ class HomeViewModel(private val tokenManager: TokenManager,
         viewModelScope.launch {
             try {
                 val response = repository.getYesterdayCard()
+                Timber.tag("HomeViewModel").d("yesterdayCards: ${response.result}")
                 if (response.isSuccess) {
                     _yesterdayCards.value = response.result.yesterday
+                    Timber.tag("HomeViewModel").d("yesterdayCards: ${response.result.yesterday}")
                 } else {
                     tokenManager.refreshToken(
                         onSuccess = { getYesterdayCard() },
