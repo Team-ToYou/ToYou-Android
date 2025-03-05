@@ -48,7 +48,7 @@ class HomeBottomSheetCardDetailAdapter : RecyclerView.Adapter<RecyclerView.ViewH
         return when (viewType) {
             1, 2 -> {
                 view = LayoutInflater.from(parent.context).inflate(
-                    R.layout.card_qa_list, parent, false
+                    R.layout.item_yesterday_qa, parent, false
                 )
                 MultiViewHolderPreview1(view)
             }

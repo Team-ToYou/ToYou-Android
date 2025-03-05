@@ -50,6 +50,10 @@ class HomeBottomSheetAdapter(
                 listener.onDiaryCardClick(item.cardId)
             }
 
+            binding.itemTitle.text = item.cardContent.receiver
+
+            binding.itemDetail.text = item.cardContent.date
+
             when(item.cardContent.emotion){
                 "HAPPY" -> {
                     binding.itemImage.setImageResource(R.drawable.home_stamp_option_happy)
