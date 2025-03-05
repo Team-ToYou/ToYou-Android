@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.toyou.toyouandroid.databinding.ItemHomeBottomSheetBinding
-import com.toyou.toyouandroid.data.emotion.dto.DiaryCard
 import com.toyou.toyouandroid.data.home.dto.response.YesterdayCard
 import com.toyou.toyouandroid.presentation.fragment.home.HomeBottomSheetClickListener
 
@@ -36,10 +35,13 @@ class HomeBottomSheetAdapter(
         fun bind(item: YesterdayCard) {
 
             val homeBottomSheetCardDetailAdapter = HomeBottomSheetCardDetailAdapter()
+            homeBottomSheetCardDetailAdapter.setCards(listOf(item))
             binding.cardList.apply {
                 layoutManager = LinearLayoutManager(binding.root.context, LinearLayoutManager.VERTICAL, false)
                 adapter = homeBottomSheetCardDetailAdapter
             }
+            binding.itemHomeBottomSheet = item
+
 
             binding.itemHomeBottomSheet = item
 
