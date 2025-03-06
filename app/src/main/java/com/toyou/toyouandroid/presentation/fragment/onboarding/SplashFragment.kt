@@ -3,7 +3,6 @@ package com.toyou.toyouandroid.presentation.fragment.onboarding
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +14,6 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.toyou.toyouHoandroid.data.create.service.CreateService
 import com.toyou.toyouandroid.R
-import com.toyou.toyouandroid.data.UserDatabase
 import com.toyou.toyouandroid.databinding.FragmentSplashBinding
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.network.NetworkModule
@@ -38,7 +36,6 @@ class SplashFragment : Fragment() {
     private val binding: FragmentSplashBinding
         get() = requireNotNull(_binding){"FragmentSplashBinding -> null"}
 
-    private lateinit var database: UserDatabase
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var userViewModel: UserViewModel
 
@@ -91,7 +88,6 @@ class SplashFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        database = UserDatabase.getDatabase(requireContext())
 
         (requireActivity() as MainActivity).hideBottomNavigation(true)
 

@@ -202,7 +202,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="아직 준비중인 기능이에요"
+                    android:text="아직 친구들이 일기카드를\n작성하지 않았어요"
                     android:textColor="@color/bl01"
                     android:textAlignment="center"
                     style="@style/gangwon30"

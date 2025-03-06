@@ -5,7 +5,7 @@
         <item name="android:fontStyle">normal</item>
         <item name="android:fontFamily">@font/gangwoneduhyeonokt</item>
         <item name="android:fontWeight">400</item>
-        <item name="android:textSize">8.389sp</item>
+        <item name="android:textSize">10sp</item>
     </style>
 
     <style name="gangwon10">

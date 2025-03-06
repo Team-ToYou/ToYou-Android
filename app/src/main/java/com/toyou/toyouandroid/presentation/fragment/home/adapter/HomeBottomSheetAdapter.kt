@@ -12,7 +12,6 @@ import com.toyou.toyouandroid.presentation.fragment.home.HomeBottomSheetClickLis
 
 class HomeBottomSheetAdapter(
     private val items: MutableList<YesterdayCard>,
-//    private val cardDetails: List<CardDetail>,
     private val listener: HomeBottomSheetClickListener
 ) : RecyclerView.Adapter<HomeBottomSheetAdapter.ViewHolder>() {
 
@@ -24,7 +23,6 @@ class HomeBottomSheetAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
-//        val cardDetail = cardDetails.getOrNull(position)
         holder.bind(item)
     }
 
@@ -53,6 +51,8 @@ class HomeBottomSheetAdapter(
             binding.itemTitle.text = item.cardContent.receiver
 
             binding.itemDetail.text = item.cardContent.date
+
+            binding.friendNickname.text = item.cardContent.receiver
 
             when(item.cardContent.emotion){
                 "HAPPY" -> {

@@ -16,11 +16,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.toyou.toyouHoandroid.data.create.service.CreateService
 import com.toyou.toyouandroid.R
-import com.toyou.toyouandroid.data.UserDatabase
 import com.toyou.toyouandroid.databinding.FragmentHomeBinding
 import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.presentation.base.MainActivity
-import com.toyou.toyouandroid.data.emotion.dto.DiaryCard
 import com.toyou.toyouandroid.data.home.dto.response.YesterdayCard
 import com.toyou.toyouandroid.presentation.fragment.home.adapter.HomeBottomSheetAdapter
 import com.toyou.toyouandroid.presentation.fragment.notice.NoticeViewModel
@@ -56,7 +54,6 @@ class HomeFragment : Fragment() {
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
 
     private lateinit var userViewModel: UserViewModel
-    private lateinit var database: UserDatabase
     private lateinit var cardViewModel: CardViewModel
 
     private lateinit var listener: HomeBottomSheetClickListener
@@ -143,7 +140,6 @@ class HomeFragment : Fragment() {
 
         (requireActivity() as MainActivity).hideBottomNavigation(false)
 
-        database = UserDatabase.getDatabase(requireContext())
 
         //일기카드 조회
         viewModel.getYesterdayCard()

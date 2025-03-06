@@ -54,13 +54,13 @@ class HomeBottomSheetCardDetailAdapter : RecyclerView.Adapter<RecyclerView.ViewH
             }
             3 -> {
                 view = LayoutInflater.from(parent.context).inflate(
-                    R.layout.item_answer_option_two, parent, false
+                    R.layout.item_yesterday_option_two, parent, false
                 )
                 MultiViewHolderPreview3(view)
             }
             else -> {
                 view = LayoutInflater.from(parent.context).inflate(
-                    R.layout.item_answer_option_three, parent, false
+                    R.layout.item_yesterday_option_three, parent, false
                 )
                 MultiViewHolderPreview4(view)
             }
