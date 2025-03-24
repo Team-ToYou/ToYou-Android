@@ -58,8 +58,8 @@
         android:background="@null"
         android:includeFontPadding="false"
         android:lineSpacingExtra="2dp"
-        android:maxLength="200"
-        android:inputType="text|textNoSuggestions"/>
+        android:maxLength="50"
+        />
 
     <TextView
         android:id="@+id/limit_200"
