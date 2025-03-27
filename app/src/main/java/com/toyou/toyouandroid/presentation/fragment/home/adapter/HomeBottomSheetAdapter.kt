@@ -70,7 +70,6 @@ class HomeBottomSheetAdapter(
                 "NERVOUS" -> {
                     binding.itemImage.setImageResource(R.drawable.home_stamp_option_anxiety)
                     binding.cardView.setCardBackgroundColor(Color.parseColor("#FFD6E4D9"))
-
                 }
                 "ANGRY" -> {
                     binding.itemImage.setImageResource(R.drawable.home_stamp_option_upset)
