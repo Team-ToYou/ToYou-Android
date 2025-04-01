@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">투유</string>
+    <string name="app_name_debug">투유블랙</string>
     <string name="title_home">Home</string>
     <string name="title_calendar">Calendar</string>
     <string name="title_diary">Diary</string>

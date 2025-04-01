@@ -15,6 +15,10 @@ val kakaoApiKey = localProperties.getProperty("kakao_NATIVE_APP_KEY")?:""
 val nativeAppKey = localProperties.getProperty("kakao_NATIVE_APP_KEY_MANIFEST")?:""
 
 android {
+    signingConfigs {
+        create("release") {
+        }
+    }
     namespace = "com.toyou.toyouandroid"
     compileSdk = 34
 
@@ -34,10 +38,24 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
+            isDebuggable = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            manifestPlaceholders["appName"] = "@string/app_name"
+            manifestPlaceholders["appIcon"] = "@mipmap/ic_toyou"
+            manifestPlaceholders["roundAppIcon"] = "@mipmap/ic_toyou_round"
+            signingConfig = signingConfigs.getByName("debug")
+        }
+        debug {
+            isMinifyEnabled = false
+            isDebuggable = true
+            manifestPlaceholders["appName"] = "@string/app_name_debug"
+            manifestPlaceholders["appIcon"] = "@mipmap/ic_toyou_debug"
+            manifestPlaceholders["roundAppIcon"] = "@mipmap/ic_toyou_debug_round"
+            applicationIdSuffix = ".debug"
+            versionNameSuffix = "-debug"
             signingConfig = signingConfigs.getByName("debug")
         }
     }
