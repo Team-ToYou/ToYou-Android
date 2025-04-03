@@ -126,10 +126,10 @@ class NoticeViewModel(
                     response: Response<AlarmDeleteResponse>
                 ) {
                     if (response.isSuccessful) {
-                        val updatedList = _noticeItems.value?.toMutableList()?.apply {
-                            removeAt(position)
-                        }
-                        _noticeItems.value = updatedList!!
+//                        val updatedList = _noticeItems.value?.toMutableList()?.apply {
+//                            removeAt(position)
+//                        }
+//                        _noticeItems.value = updatedList!!
                     } else {
                         if (retryCount < maxRetries) {
                             tokenManager.refreshToken(
