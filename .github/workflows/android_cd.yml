@@ -70,8 +70,8 @@ jobs:
                 run: cat local.properties
 
             # 8. Release APK Build
-            - name: Build Debug APK
-              run: ./gradlew assembleDebug --stacktrace
+            - name: Build Release APK
+              run: ./gradlew assembleRelease --stacktrace
 
             # # 9. AAB Artifact Upload
             # - name: Upload Debug AAB
@@ -81,11 +81,11 @@ jobs:
             #       path: app/build/outputs/bundle/release/app-debug.aab
 
             # 10. APK Artifact Upload
-            - name: Upload Debug APK
+            - name: Upload Release APK
               uses: actions/upload-artifact@v4
               with:
-                  name: debug-apk
-                  path: app/build/outputs/apk/debug/app-debug.apk
+                  name: release-apk
+                  path: app/build/outputs/apk/release/app-release.apk
 
             # 11. Firebase App Distribution
             - name: Upload to Firebase App Distribution
@@ -94,7 +94,7 @@ jobs:
                   appId: ${{secrets.FIREBASE_APP_ID}}
                   serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
                   groups: seungwon
-                  file: app/build/outputs/apk/debug/app-debug.apk
+                  file: app/build/outputs/apk/release/app-release.apk
 
             # 12. Notify Discord
             - name: Notify Discord
