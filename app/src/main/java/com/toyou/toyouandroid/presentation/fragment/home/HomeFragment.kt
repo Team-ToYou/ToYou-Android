@@ -118,12 +118,11 @@ class HomeFragment : Fragment() {
         noticeViewModel.fetchNotices()
 
         listener = object : HomeBottomSheetClickListener {
-            override fun onDiaryCardClick(cardId: Long?) {
+            override fun onDiaryCardClick(cardId: Int?) {
                 Timber.tag("HomeFragment").d("$cardId")
                 cardId?.let {
-                    cardInfoViewModel.getCardDetail(cardId.toLong())
                     val bundle = Bundle().apply {
-                        putLong("cardId", it)
+                        putInt("cardId", it)
                     }
                     navController.navigate(R.id.action_navigation_home_to_friend_card_container_fragment, bundle)
                 }

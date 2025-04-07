@@ -45,7 +45,7 @@ class HomeBottomSheetAdapter(
             binding.itemHomeBottomSheet = item
 
             binding.homeBottomSheetItem.setOnClickListener {
-                listener.onDiaryCardClick(item.cardId)
+                listener.onDiaryCardClick(item.cardId.toInt())
             }
 
             binding.itemTitle.text = item.cardContent.receiver
