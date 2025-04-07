@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- 클릭했을 경우 -->
-    <item android:state_checked="true" android:color="@color/black" />
-    <!-- 클릭하지 않은 경우 -->
-    <item android:state_checked="false" android:color="@color/g00" />
-</selector>
