@@ -8,7 +8,8 @@
   <img height="20px" src="https://img.shields.io/badge/Android-3DDC84?style=flat-square&logo=android&logoColor=white"/> 
   <img height="20px" src="https://img.shields.io/badge/Kotlin 2.0-7F52FF?style=for-the-badge&logo=Kotlin&logoColor=white">
   <a href="https://android-arsenal.com/api?level=34"><img alt="API" src="https://img.shields.io/badge/API-34%2B-brightgreen.svg?style=flat"/></a>
-  <a href="https://github.com/Team-ToYou/ToYou-Android/blob/master/.github/workflows/android.yml"><img alt="Build Status" src="https://github.com/GetStream/android-xr-video/actions/workflows/android.yml/badge.svg"/></a>
+  <a href="https://github.com/Team-ToYou/ToYou-Android/blob/master/.github/workflows/android_ci.yml"><img alt="Build Status" src="https://github.com/Team-ToYou/ToYou-Android/actions/workflows/android_ci.yml/badge.svg?branch=master"/></a>
+  <a href="https://github.com/Team-ToYou/ToYou-Android/blob/master/.github/workflows/android_cd.yml"><img alt="Build Status" src="https://github.com/Team-ToYou/ToYou-Android/actions/workflows/android_cd.yml/badge.svg?branch=master"/></a>
 </div>
 
 <br>
