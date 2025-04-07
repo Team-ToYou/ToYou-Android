@@ -1,4 +1,4 @@
-name: test CD
+name: Android Firebase CD
 
 on:
     push:
