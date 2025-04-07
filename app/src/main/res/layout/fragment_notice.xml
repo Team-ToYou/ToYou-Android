@@ -55,7 +55,7 @@
         android:layout_height="wrap_content"
         android:text="친구 요청"
         android:textColor="@color/black"
-        style="@style/sc_r10"
+        style="@style/sc_r15"
         app:layout_constraintStart_toStartOf="@+id/guideline_tv_title_v"
         app:layout_constraintTop_toTopOf="@+id/guideline_tv_title_h" />
 
@@ -94,7 +94,7 @@
         android:layout_height="wrap_content"
         android:text="전체 알림"
         android:textColor="@color/black"
-        style="@style/sc_r10"
+        style="@style/sc_r15"
         android:layout_marginTop="32dp"
         app:layout_constraintStart_toStartOf="@+id/guideline_tv_title_v"
         app:layout_constraintTop_toBottomOf="@+id/cl_notice_friend_request" />
