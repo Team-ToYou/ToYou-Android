@@ -79,7 +79,7 @@ class FriendCardDetailFragment : Fragment() {
         // 카드 미리 보기 설정
         friendCardViewModel.previewCards.observe(viewLifecycleOwner) { previewCards ->
             listAdapter.setCards(previewCards)
-            Timber.tag("CardInfoFragment").d(previewCards.toString())
+            Timber.tag("FriendCardDetailFragment").d(previewCards.toString())
         }
 
         // 카드 주인 정보 설정

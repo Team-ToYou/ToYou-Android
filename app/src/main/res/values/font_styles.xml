@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <style name="gangwon8">
+        <item name="android:fontStyle">normal</item>
+        <item name="android:fontFamily">@font/gangwoneduhyeonokt</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
     <style name="gangwon10">
         <item name="android:fontStyle">normal</item>
         <item name="android:fontFamily">@font/gangwoneduhyeonokt</item>
