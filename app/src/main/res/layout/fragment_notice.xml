@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:text="@string/notice"
         android:textColor="@color/black"
-        style="@style/sc_r15"
+        style="@style/sc_m15"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/notice_back_layout"
@@ -56,7 +56,7 @@
         android:text="친구 요청"
         android:textColor="@color/black"
         style="@style/sc_r15"
-        app:layout_constraintStart_toStartOf="@+id/guideline_tv_title_v"
+        app:layout_constraintStart_toStartOf="@+id/cl_notice_friend_request"
         app:layout_constraintTop_toTopOf="@+id/guideline_tv_title_h" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -64,7 +64,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        app:layout_constraintStart_toStartOf="@+id/guideline_tv_title_v"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_title_friend_request" >
 
         <androidx.recyclerview.widget.RecyclerView
@@ -96,7 +97,7 @@
         android:textColor="@color/black"
         style="@style/sc_r15"
         android:layout_marginTop="32dp"
-        app:layout_constraintStart_toStartOf="@+id/guideline_tv_title_v"
+        app:layout_constraintStart_toStartOf="@+id/rv_notice_entire_blank"
         app:layout_constraintTop_toBottomOf="@+id/cl_notice_friend_request" />
 
     <androidx.recyclerview.widget.RecyclerView
