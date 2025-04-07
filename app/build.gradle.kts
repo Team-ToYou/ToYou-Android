@@ -16,7 +16,11 @@ val nativeAppKey = localProperties.getProperty("kakao_NATIVE_APP_KEY_MANIFEST")?
 
 android {
     signingConfigs {
-        create("release") {
+        getByName("debug") {
+            keyAlias = localProperties["SIGNED_KEY_ALIAS"] as String?
+            keyPassword = localProperties["SIGNED_KEY_PASSWORD"] as String?
+            storeFile = localProperties["SIGNED_STORE_FILE"]?.let { file(it) }
+            storePassword = localProperties["SIGNED_STORE_PASSWORD"] as String?
         }
     }
     namespace = "com.toyou.toyouandroid"
