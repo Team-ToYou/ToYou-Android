@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E6E6E6">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_title_h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.13" />
+
+    <TextView
+        android:id="@+id/tutorial_step_2_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/sc_r15"
+        android:gravity="center"
+        android:text="@string/tutorial_step_2_title"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline_title_h" />
+
+    <TextView
+        android:id="@+id/tutorial_step_2_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/sc_l12"
+        android:gravity="center"
+        android:text="@string/tutorial_step_2_subtitle"
+        android:textColor="@color/black"
+        android:layout_marginTop="14dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tutorial_step_2_title" />
+
+    <ImageView
+        android:id="@+id/tutorial_step_2_device"
+        android:layout_width="280dp"
+        android:layout_height="680dp"
+        android:src="@drawable/tutorial_step_2_device"
+        android:layout_marginStart="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tutorial_step_2_subtitle" />
+
+    <ImageView
+        android:id="@+id/tutorial_step_emotion_5"
+        android:layout_width="57dp"
+        android:layout_height="63dp"
+        android:src="@drawable/home_emotion_normal"
+        app:layout_constraintStart_toEndOf="@+id/tutorial_step_emotion_4"
+        app:layout_constraintTop_toTopOf="@+id/tutorial_step_emotion_3" />
+
+    <ImageView
+        android:id="@+id/tutorial_step_emotion_4"
+        android:layout_width="57dp"
+        android:layout_height="63dp"
+        android:src="@drawable/home_emotion_exciting"
+        app:layout_constraintStart_toEndOf="@+id/tutorial_step_emotion_3"
+        app:layout_constraintTop_toTopOf="@+id/tutorial_step_emotion_3" />
+
+    <ImageView
+        android:id="@+id/tutorial_step_emotion_3"
+        android:layout_width="57dp"
+        android:layout_height="63dp"
+        android:src="@drawable/home_emotion_upset"
+        android:layout_marginTop="345dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/tutorial_step_emotion_2"
+        android:layout_width="57dp"
+        android:layout_height="63dp"
+        android:src="@drawable/home_emotion_anxiety"
+        app:layout_constraintEnd_toStartOf="@+id/tutorial_step_emotion_3"
+        app:layout_constraintTop_toTopOf="@+id/tutorial_step_emotion_3" />
+
+    <ImageView
+        android:id="@+id/tutorial_step_emotion_1"
+        android:layout_width="57dp"
+        android:layout_height="63dp"
+        android:src="@drawable/home_emotion_happy"
+        app:layout_constraintEnd_toStartOf="@+id/tutorial_step_emotion_2"
+        app:layout_constraintTop_toTopOf="@+id/tutorial_step_emotion_3" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

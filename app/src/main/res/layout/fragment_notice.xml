@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/background_white">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_tv_title_h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.09" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_tv_title_v"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.1" />
+
+    <LinearLayout
+        android:id="@+id/notice_back_layout"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="17dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/notice_back_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:src="@drawable/back_button" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/notice_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/notice"
+        android:textColor="@color/black"
+        style="@style/sc_r15"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/notice_back_layout"
+        app:layout_constraintBottom_toBottomOf="@+id/notice_back_layout"/>
+
+    <TextView
+        android:id="@+id/tv_title_friend_request"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="친구 요청"
+        android:textColor="@color/black"
+        style="@style/sc_r10"
+        app:layout_constraintStart_toStartOf="@+id/guideline_tv_title_v"
+        app:layout_constraintTop_toTopOf="@+id/guideline_tv_title_h" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_notice_friend_request"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="@+id/guideline_tv_title_v"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title_friend_request" >
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_notice_friend_request_blank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/item_notice_request_blank"
+            tools:itemCount="1"
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_notice_friend_request"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tv_title_entire_notice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="전체 알림"
+        android:textColor="@color/black"
+        style="@style/sc_r10"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="@+id/guideline_tv_title_v"
+        app:layout_constraintTop_toBottomOf="@+id/cl_notice_friend_request" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_notice_entire_blank"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        tools:listitem="@layout/item_notice_entire_blank"
+        tools:itemCount="1"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title_entire_notice" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_notice_entire"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title_entire_notice" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
