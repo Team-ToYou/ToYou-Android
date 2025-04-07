@@ -52,7 +52,7 @@ jobs:
               run: |
                   echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > app/keystore.jks
             - name: Create google-services.json
-              run: echo "$GOOGLE_SERVICES_JSON" > app/google-services.json
+              run: echo "$GOOGLE_SERVICES_JSON" > app/src/debug/google-services.json
 
             # 6. Install Firebase CLI
             - name: Install Firebase CLI
