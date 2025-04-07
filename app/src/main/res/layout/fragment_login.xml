@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/background_white">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/login_logo_h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.4" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/login_title_h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.42" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/login_btn_h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.87" />
+
+    <ImageView
+        android:id="@+id/login_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/login_logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/login_logo_h" />
+
+    <TextView
+        android:id="@+id/login_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login_title"
+        android:textColor="@color/black"
+        style="@style/sc_l12"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/login_title_h" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ToYou_hanguel"
+        android:textColor="@color/black"
+        android:textSize="46sp"
+        android:fontFamily="@font/gangwoneduhyeonokt"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login_title" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/kakao_login_btn"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:stateListAnimator="@null"
+        android:text="카카오 로그인"
+        android:textColor="@color/black"
+        style="@style/sc_m13"
+        android:background="@drawable/kakao_btn"
+        android:layout_marginBottom="120dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/login_btn_h"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/kakao_talk"
+        android:layout_marginStart="12dp"
+        app:layout_constraintStart_toStartOf="@id/kakao_login_btn"
+        app:layout_constraintTop_toTopOf="@id/kakao_login_btn"
+        app:layout_constraintBottom_toBottomOf="@+id/kakao_login_btn"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

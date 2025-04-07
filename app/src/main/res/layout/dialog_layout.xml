@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/container_r12"
+    android:paddingTop="18dp"
+    android:paddingBottom="12dp">
+
+
+    <TextView
+        android:id="@+id/dialog_tv"
+        style="@style/sc_m15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="선택한 친구를\n삭제하시겠습니까?"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+    
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/dialog_tv"
+        app:layout_constraintStart_toStartOf="@id/dialog_tv"
+        app:layout_constraintEnd_toEndOf="@id/dialog_tv"
+        android:gravity="center"
+        android:layout_marginTop="17dp">
+
+        <TextView
+            android:id="@+id/cancle_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="취소"
+            android:layout_weight="1"
+            android:gravity="center"
+            style="@style/sc_l12"
+            android:textColor="@color/black"
+            />
+
+        <TextView
+            android:id="@+id/ok_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="확인"
+            android:layout_weight="1"
+            android:gravity="center"
+            style="@style/sc_l12"
+            android:textColor="@color/r01"
+            />
+    </LinearLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

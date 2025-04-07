@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        card_view:cardBackgroundColor="@color/gr00"
+        card_view:cardCornerRadius="5dp"
+        android:outlineProvider="none"
+        card_view:cardElevation="0dp"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="15dp"
+            >
+
+            <ImageView
+                android:id="@+id/item_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:paddingLeft="13dp"
+                android:src="@drawable/preview_char1" />
+
+
+            <TextView
+                android:id="@+id/item_title"
+                style="@style/gangwon25"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-7dp"
+                android:layout_toEndOf="@+id/item_image"
+                android:layout_toRightOf="@id/item_image"
+                android:text="240509"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/item_detail"
+                style="@style/gangwon20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/item_title"
+                android:layout_marginTop="-7dp"
+                android:layout_toEndOf="@+id/item_image"
+                android:layout_toRightOf="@+id/item_image"
+                android:text="To.xxx"
+                android:textColor="@color/black" />
+
+            <ImageView
+                android:id="@+id/lock_free_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/lock_selector" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/card_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/item_detail"
+                android:layout_marginTop="20dp"
+                android:divider="#00000000" />
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

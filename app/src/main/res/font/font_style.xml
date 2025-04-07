@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<font-family xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/gangwoneduhyeonokt" />
+
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="200"
+        android:font="@font/scdream2" />
+
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="300"
+        android:font="@font/scdream3" />
+
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="200"
+        android:font="@font/scdream4" />
+
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="500"
+        android:font="@font/scdream5" />
+
+
+</font-family>
