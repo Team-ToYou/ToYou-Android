@@ -20,6 +20,8 @@ jobs:
             # 1. Code Checkout
             - name: Checkout code
               uses: actions/checkout@v4
+              with:
+                  ref: ${{ github.head_ref }}  # PR이 열릴 때의 브랜치로 체크아웃
 
             # 2. Gradle Cache
             - name: Cache Gradle dependencies
