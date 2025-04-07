@@ -71,13 +71,13 @@ jobs:
             # - name: Run Ktlint Check
             #   run: ./gradlew ktlintCheck --stacktrace
 
-            # 9. Debug APK Build
-            - name: Build Debug APK
-              run: ./gradlew assembleDebug --stacktrace
+            # # 9. Debug APK Build
+            # - name: Build Debug APK
+            #   run: ./gradlew assembleDebug --stacktrace
 
-            # 10. Release AAB Build
-            - name: Build Release AAB
-              run: ./gradlew bundleRelease --stacktrace
+            # # 10. Release AAB Build
+            # - name: Build Release AAB
+            #   run: ./gradlew bundleRelease --stacktrace
 
             # 11. Release APK Build
             - name: Build Release APK
