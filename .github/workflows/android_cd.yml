@@ -51,8 +51,9 @@ jobs:
             - name: Decode And Save Keystore Base64
               run: |
                   echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > app/keystore.jks
+                  
             - name: Create google-services.json
-              run: echo "$GOOGLE_SERVICES_JSON" > app/src/debug/google-services.json
+              run: echo "$GOOGLE_SERVICES_JSON" > app/google-services.json
 
             # 6. Install Firebase CLI
             - name: Install Firebase CLI
@@ -84,7 +85,7 @@ jobs:
               uses: actions/upload-artifact@v4
               with:
                   name: debug-apk
-                  path: app/build/outputs/apk/release/app-debug.apk
+                  path: app/build/outputs/apk/debug/app-debug.apk
 
             # 11. Firebase App Distribution
             - name: Upload to Firebase App Distribution
@@ -92,8 +93,8 @@ jobs:
               with:
                   appId: ${{secrets.FIREBASE_APP_ID}}
                   serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
-                  groups: test
-                  file: app/build/outputs/apk/release/app-debug.apk
+                  groups: seungwon
+                  file: app/build/outputs/apk/debug/app-debug.apk
 
             # 12. Notify Discord
             - name: Notify Discord
