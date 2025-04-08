@@ -3,7 +3,7 @@ name: Android Firebase CD
 on:
     push:
         branches:
-            - master
+            - release/1.1.0
     pull_request:
         branches:
             - master
@@ -15,11 +15,14 @@ jobs:
 
         env:
             GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+            LOCAL_PROPERTIES_CONTENTS: ${{ secrets.LOCAL_PROPERTIES_CONTENTS }}
 
         steps:
             # 1. Code Checkout
             - name: Checkout code
               uses: actions/checkout@v4
+              with:
+                  ref: ${{ github.head_ref }}  # PR이 열릴 때의 브랜치로 체크아웃
 
             # 2. Gradle Cache
             - name: Cache Gradle dependencies
@@ -57,60 +60,37 @@ jobs:
 
             # Add Local Properties
             - name: Add Local Properties
-              env:
-                  BASE_URL: ${{ secrets.KAKAO_NATIVE_APP_KEY }}
-                  AMPLITUDE_API_KEY: ${{ secrets.KAKAO_NATIVE_APP_KEY_MANIFEST }}
               run: |
-                  echo -e "kakao_NATIVE_APP_KEY=$KAKAO_NATIVE_APP_KEY\kakao_NATIVE_APP_KEY_MANIFEST=$KAKAO_NATIVE_APP_KEY_MANIFEST" >> local.properties
+                  echo "$LOCAL_PROPERTIES_CONTENTS" > local.properties
+                  echo "SIGNED_STORE_FILE=keystore.jks" >> local.properties
 
             # 7. Debug Local Properties Check
-            -   name: Debug Local Properties
-                run: cat local.properties
+            - name: Debug Local Properties
+              run: cat local.properties
 
-            # # 8. Ktlint
-            # - name: Run Ktlint Check
-            #   run: ./gradlew ktlintCheck --stacktrace
-
-            # 9. Debug APK Build
-            - name: Build Debug APK
-              run: ./gradlew assembleDebug --stacktrace
-
-            # 10. Release AAB Build
-            - name: Build Release AAB
-              run: ./gradlew bundleRelease --stacktrace
-
-            # 11. Release APK Build
+            # 8. Release APK Build
             - name: Build Release APK
               run: ./gradlew assembleRelease --stacktrace
 
-            # 12. AAB Artifact Upload
+            # 9. AAB Artifact Upload
             - name: Upload Release AAB
               uses: actions/upload-artifact@v4
               with:
                   name: release-aab
                   path: app/build/outputs/bundle/release/app-release.aab
 
-            # 13. APK Artifact Upload
+            # 10. APK Artifact Upload
             - name: Upload Release APK
               uses: actions/upload-artifact@v4
               with:
                   name: release-apk
                   path: app/build/outputs/apk/release/app-release.apk
 
+            # 11. Firebase App Distribution
             - name: Upload to Firebase App Distribution
               uses: wzieba/Firebase-Distribution-Github-Action@v1
               with:
                   appId: ${{secrets.FIREBASE_APP_ID}}
                   serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
-                  groups: test
+                  groups: seungwon
                   file: app/build/outputs/apk/release/app-release.apk
-
-            # 17. Notify Discord
-            - name: Notify Discord
-              env:
-                  DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-              run: |
-                  curl -H "Content-Type: application/json" \
-                  -X POST \
-                  -d '{"content": "🚀 새로운 데모 버전이 Firebase App Distribution에 업로드되었습니다!\nAPK 다운로드: https://appdistribution.firebase.google.com"}' \
-                  $DISCORD_WEBHOOK_URL
