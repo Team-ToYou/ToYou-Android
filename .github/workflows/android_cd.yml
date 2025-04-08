@@ -86,7 +86,7 @@ jobs:
                   name: release-apk
                   path: app/build/outputs/apk/release/app-release.apk
 
-            # 버전 정보 추출 (예: app/build.gradle 파일 내 versionName 추출)
+            # 버전 정보 추출
             - name: Get App Version
               id: get_version
               run: |
@@ -104,7 +104,7 @@ jobs:
                   file: app/build/outputs/apk/release/app-release.apk
                   releaseNotes: "새로운 버전 v${{ env.VERSION }} 출시"
                   
-            # 17. Notify Discord
+            # 12. Notify Discord
             - name: Notify Discord
               env:
                   DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
@@ -112,5 +112,4 @@ jobs:
                   curl -H "Content-Type: application/json" \
                   -X POST \
                   -d "{\"content\": \"🚀 새로운 버전 v${{ env.VERSION }}이 Firebase App Distribution에 업로드되었습니다!\nAPK 다운로드: https://appdistribution.firebase.google.com\"}" \
-                  $DISCORD_WEBHOOK_URL
                   $DISCORD_WEBHOOK_URL
