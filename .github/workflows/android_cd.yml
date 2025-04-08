@@ -3,7 +3,7 @@ name: Android Firebase CD
 on:
     push:
         branches:
-            - release/1.1.0
+            - master
     pull_request:
         branches:
             - master
@@ -86,6 +86,14 @@ jobs:
                   name: release-apk
                   path: app/build/outputs/apk/release/app-release.apk
 
+            # 버전 정보 추출 (예: app/build.gradle 파일 내 versionName 추출)
+            - name: Get App Version
+              id: get_version
+              run: |
+                version=$(grep -oP 'versionName\s*"\K[^"]+' app/build.gradle)
+                echo "VERSION=$version" >> $GITHUB_ENV
+                echo "Extracted version: $version"
+
             # 11. Firebase App Distribution
             - name: Upload to Firebase App Distribution
               uses: wzieba/Firebase-Distribution-Github-Action@v1
@@ -94,3 +102,15 @@ jobs:
                   serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
                   groups: seungwon
                   file: app/build/outputs/apk/release/app-release.apk
+                  releaseNotes: "새로운 버전 v${{ env.VERSION }} 출시"
+                  
+            # 17. Notify Discord
+            - name: Notify Discord
+              env:
+                  DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+              run: |
+                  curl -H "Content-Type: application/json" \
+                  -X POST \
+                  -d "{\"content\": \"🚀 새로운 버전 v${{ env.VERSION }}이 Firebase App Distribution에 업로드되었습니다!\nAPK 다운로드: https://appdistribution.firebase.google.com\"}" \
+                  $DISCORD_WEBHOOK_URL
+                  $DISCORD_WEBHOOK_URL
