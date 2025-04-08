@@ -68,6 +68,10 @@ jobs:
             - name: Debug Local Properties
               run: cat local.properties
 
+            - name: Extract Version Name
+              run: echo "##[set-output name=version;]v$(echo '${{ github.event.pull_request.title }}' | grep -oP 'release v\K[0-9]+\.[0-9]+\.[0-9]+')"
+              id: extract_version
+
             # 8. Release APK Build
             - name: Build Release APK
               run: ./gradlew assembleRelease --stacktrace
@@ -86,14 +90,6 @@ jobs:
                   name: release-apk
                   path: app/build/outputs/apk/release/app-release.apk
 
-            # 버전 정보 추출
-            - name: Get App Version
-              id: get_version
-              run: |
-                version=$(grep -oP 'versionName\s*"\K[^"]+' app/build.gradle)
-                echo "VERSION=$version" >> $GITHUB_ENV
-                echo "Extracted version: $version"
-
             # 11. Firebase App Distribution
             - name: Upload to Firebase App Distribution
               uses: wzieba/Firebase-Distribution-Github-Action@v1
@@ -102,7 +98,7 @@ jobs:
                   serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
                   groups: seungwon
                   file: app/build/outputs/apk/release/app-release.apk
-                  releaseNotes: "새로운 버전 v${{ env.VERSION }} 출시"
+                  releaseNotes: "새로운 버전 v${{ steps.extract_version.outputs.version }} 출시"
                   
             # 12. Notify Discord
             - name: Notify Discord
@@ -111,5 +107,5 @@ jobs:
               run: |
                   curl -H "Content-Type: application/json" \
                   -X POST \
-                  -d "{\"content\": \"🚀 새로운 버전 v${{ env.VERSION }}이 Firebase App Distribution에 업로드되었습니다!\nAPK 다운로드: https://appdistribution.firebase.google.com\"}" \
+                  -d "{\"content\": \"🚀 새로운 버전 v${{ steps.extract_version.outputs.version }}이 Firebase App Distribution에 업로드되었습니다!\nAPK 다운로드: https://appdistribution.firebase.google.com\"}" \
                   $DISCORD_WEBHOOK_URL
