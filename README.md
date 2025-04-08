@@ -11,6 +11,7 @@
   <a href="https://github.com/Team-ToYou/ToYou-Android/blob/master/.github/workflows/android_ci.yml"><img alt="Build Status" src="https://github.com/Team-ToYou/ToYou-Android/actions/workflows/android_ci.yml/badge.svg?branch=master"/></a>
   <a href="https://github.com/Team-ToYou/ToYou-Android/blob/master/.github/workflows/android_cd.yml"><img alt="Build Status" src="https://github.com/Team-ToYou/ToYou-Android/actions/workflows/android_cd.yml/badge.svg?branch=master"/></a>
   <a href="https://www.codefactor.io/repository/github/team-toyou/toyou-android"><img alt="Build Status" src="https://www.codefactor.io/repository/github/team-toyou/toyou-android/badge"/></a>
+  <a href="https://sonarcloud.io/summary/new_code?id=Team-ToYou_ToYou-Android"><img src="https://sonarcloud.io/api/project_badges/measure?project=Team-ToYou_ToYou-Android&metric=alert_status"/></a>
 </div>
 
 <br>
