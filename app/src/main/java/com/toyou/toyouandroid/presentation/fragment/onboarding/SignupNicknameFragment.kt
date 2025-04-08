@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
 import com.toyou.toyouandroid.databinding.FragmentSignupnicknameBinding
+import com.toyou.toyouandroid.domain.home.repository.HomeRepository
 import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.presentation.fragment.home.HomeViewModel
@@ -47,10 +48,11 @@ class SignupNicknameFragment : Fragment() {
         val tokenStorage = TokenStorage(requireContext())
         val authService: AuthService = NetworkModule.getClient().create(AuthService::class.java)
         val tokenManager = TokenManager(authService, tokenStorage)
+        val homeRepository = HomeRepository()
 
         homeViewModel = ViewModelProvider(
             this,
-            HomeViewModelFactory(tokenManager)
+            HomeViewModelFactory(tokenManager, homeRepository)
         )[HomeViewModel::class.java]
 
         binding.viewModel = viewModel

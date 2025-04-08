@@ -20,6 +20,7 @@ import com.toyou.toyouandroid.databinding.FragmentProfileBinding
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
 import com.toyou.toyouandroid.domain.create.repository.CreateRepository
+import com.toyou.toyouandroid.domain.home.repository.HomeRepository
 import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.viewmodel.AuthViewModelFactory
@@ -63,12 +64,13 @@ class ProfileFragment : Fragment() {
         val tokenManager = TokenManager(authService, tokenStorage)
         val createService = AuthNetworkModule.getClient().create(CreateService::class.java)
         val createRepository = CreateRepository(createService)
+        val homeRepository = HomeRepository()
 
 
         viewModel = ViewModelProvider(
             this,
             HomeViewModelFactory(
-                tokenManager
+                tokenManager, homeRepository
             )
         )[ProfileViewModel::class.java]
 

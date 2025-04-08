@@ -16,11 +16,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.toyou.toyouHoandroid.data.create.service.CreateService
 import com.toyou.toyouandroid.R
-import com.toyou.toyouandroid.data.UserDatabase
 import com.toyou.toyouandroid.databinding.FragmentHomeBinding
 import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.presentation.base.MainActivity
-import com.toyou.toyouandroid.data.emotion.dto.DiaryCard
+import com.toyou.toyouandroid.data.home.dto.response.YesterdayCard
 import com.toyou.toyouandroid.presentation.fragment.home.adapter.HomeBottomSheetAdapter
 import com.toyou.toyouandroid.presentation.fragment.notice.NoticeViewModel
 import com.toyou.toyouandroid.domain.notice.NoticeRepository
@@ -28,6 +27,7 @@ import com.toyou.toyouandroid.data.notice.service.NoticeService
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
 import com.toyou.toyouandroid.data.record.service.RecordService
 import com.toyou.toyouandroid.domain.create.repository.CreateRepository
+import com.toyou.toyouandroid.domain.home.repository.HomeRepository
 import com.toyou.toyouandroid.domain.record.RecordRepository
 import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.viewmodel.NoticeViewModelFactory
@@ -54,7 +54,6 @@ class HomeFragment : Fragment() {
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
 
     private lateinit var userViewModel: UserViewModel
-    private lateinit var database: UserDatabase
     private lateinit var cardViewModel: CardViewModel
 
     private lateinit var listener: HomeBottomSheetClickListener
@@ -79,6 +78,7 @@ class HomeFragment : Fragment() {
         val recordRepository = RecordRepository(recordService)
         val createService = AuthNetworkModule.getClient().create(CreateService::class.java)
         val createRepository = CreateRepository(createService)
+        val homeRepository = HomeRepository()
 
 
         noticeViewModel = ViewModelProvider(
@@ -88,7 +88,7 @@ class HomeFragment : Fragment() {
 
         viewModel = ViewModelProvider(
             this,
-            HomeViewModelFactory(tokenManager)
+            HomeViewModelFactory(tokenManager, homeRepository)
         )[HomeViewModel::class.java]
 
         binding.lifecycleOwner = viewLifecycleOwner
@@ -121,7 +121,6 @@ class HomeFragment : Fragment() {
             override fun onDiaryCardClick(cardId: Int?) {
                 Timber.tag("HomeFragment").d("$cardId")
                 cardId?.let {
-                    cardInfoViewModel.getCardDetail(cardId.toLong())
                     val bundle = Bundle().apply {
                         putInt("cardId", it)
                     }
@@ -140,7 +139,10 @@ class HomeFragment : Fragment() {
 
         (requireActivity() as MainActivity).hideBottomNavigation(false)
 
-        database = UserDatabase.getDatabase(requireContext())
+
+        //일기카드 조회
+        viewModel.getYesterdayCard()
+
 
         // 질문 개수에 따른 우체통 이미지 변경
         userViewModel.cardNum.observe(viewLifecycleOwner) { cardNum ->
@@ -175,9 +177,6 @@ class HomeFragment : Fragment() {
         binding.homeBottomsheetPseudo.visibility = View.VISIBLE
         binding.homeBottomSheetRv.visibility = View.GONE
 
-        // 작일 친구 일기 카드 자동 조회
-//        viewModel.loadYesterdayDiaryCards()
-
         // 바텀 시트 터치 이벤트 처리
         binding.homeBottomSheet.apply {
             setOnTouchListener { v, event ->
@@ -201,9 +200,14 @@ class HomeFragment : Fragment() {
         }
 
         // 홈 화면 바텀 시트 설정
-        viewModel.diaryCards.observe(viewLifecycleOwner) { diaryCards ->
-            if (diaryCards != null) {
-                setupRecyclerView(diaryCards)
+        viewModel.yesterdayCards.observe(viewLifecycleOwner) { yesterdayCards ->
+            if (yesterdayCards.isNotEmpty()) {
+                binding.homeBottomsheetPseudo.visibility = View.GONE
+                binding.homeBottomSheetRv.visibility = View.VISIBLE
+                setupRecyclerView(yesterdayCards)
+            } else {
+                binding.homeBottomsheetPseudo.visibility = View.VISIBLE
+                binding.homeBottomSheetRv.visibility = View.GONE
             }
         }
 
@@ -312,7 +316,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun setupRecyclerView(items: List<DiaryCard>) {
+    private fun setupRecyclerView(items: List<YesterdayCard>) {
 
         val adapter = HomeBottomSheetAdapter(items.toMutableList(), listener)
         binding.homeBottomSheetRv.layoutManager = GridLayoutManager(context, 2)

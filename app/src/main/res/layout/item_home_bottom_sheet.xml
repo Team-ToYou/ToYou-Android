@@ -7,7 +7,7 @@
     <data>
         <variable
             name="item_home_bottom_sheet"
-            type="com.toyou.toyouandroid.data.emotion.dto.DiaryCard" />
+            type="com.toyou.toyouandroid.data.home.dto.response.YesterdayCard" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,7 +19,7 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/card_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="260dp"
             card_view:cardBackgroundColor="@color/gr00"
             card_view:cardCornerRadius="5dp"
             card_view:contentPadding="4dp"
@@ -31,16 +31,15 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="15dp">
+                android:layout_marginTop="8dp"
+                >
 
                 <ImageView
                     android:id="@+id/item_image"
-                    android:layout_width="48dp"
-                    android:layout_height="49dp"
-                    android:layout_marginEnd="16dp"
-                    android:paddingLeft="20dp"
+                    android:layout_width="20dp"
+                    android:layout_height="23dp"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginTop="2dp"
                     android:src="@drawable/preview_char1" />
 
 
@@ -49,8 +48,7 @@
                     style="@style/gangwon10"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="6dp"
                     android:layout_toEndOf="@+id/item_image"
                     android:layout_toRightOf="@id/item_image"
                     android:text="240509"
@@ -62,7 +60,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/item_title"
-                    android:layout_marginStart="5dp"
+                    android:layout_marginStart="6dp"
                     android:layout_toEndOf="@+id/item_image"
                     android:layout_toRightOf="@+id/item_image"
                     android:text="To.xxx"
@@ -73,9 +71,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/item_detail"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="7dp"
+                    android:layout_marginTop="9dp"
+                    android:layout_marginEnd="7dp"
                     android:divider="#00000000" />
 
             </RelativeLayout>
@@ -102,9 +100,11 @@
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             style="@style/gangwon16"
+            android:text="닉네임"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/card_view" />
+            app:layout_constraintTop_toBottomOf="@id/card_view" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>
