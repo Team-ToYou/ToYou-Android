@@ -50,8 +50,7 @@ jobs:
             # 5. keystore, google-services
             - name: Decode And Save Keystore Base64
               run: |
-                  echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > app/keystore.jks
-                  
+                  echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > app/key.jks
             - name: Create google-services.json
               run: echo "$GOOGLE_SERVICES_JSON" > app/google-services.json
 
@@ -63,22 +62,22 @@ jobs:
             - name: Add Local Properties
               run: |
                   echo "$LOCAL_PROPERTIES_CONTENTS" > local.properties
-                  echo "SIGNED_STORE_FILE=keystore.jks" >> local.properties
+                  echo "SIGNED_STORE_FILE=key.jks" >> local.properties
 
             # 7. Debug Local Properties Check
-            -   name: Debug Local Properties
-                run: cat local.properties
+            - name: Debug Local Properties
+              run: cat local.properties
 
             # 8. Release APK Build
             - name: Build Release APK
               run: ./gradlew assembleRelease --stacktrace
 
-            # # 9. AAB Artifact Upload
-            # - name: Upload Debug AAB
-            #   uses: actions/upload-artifact@v4
-            #   with:
-            #       name: debug-aab
-            #       path: app/build/outputs/bundle/release/app-debug.aab
+            # 9. AAB Artifact Upload
+            - name: Upload Release AAB
+              uses: actions/upload-artifact@v4
+              with:
+                  name: release-aab
+                  path: app/build/outputs/bundle/release/app-release.aab
 
             # 10. APK Artifact Upload
             - name: Upload Release APK
@@ -86,6 +85,14 @@ jobs:
               with:
                   name: release-apk
                   path: app/build/outputs/apk/release/app-release.apk
+
+            # 버전 정보 추출
+            - name: Get App Version
+              id: get_version
+              run: |
+                version=$(grep -oP 'versionName\s*"\K[^"]+' app/build.gradle)
+                echo "VERSION=$version" >> $GITHUB_ENV
+                echo "Extracted version: $version"
 
             # 11. Firebase App Distribution
             - name: Upload to Firebase App Distribution
@@ -95,7 +102,8 @@ jobs:
                   serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
                   groups: seungwon
                   file: app/build/outputs/apk/release/app-release.apk
-
+                  releaseNotes: "새로운 버전 v${{ env.VERSION }} 출시"
+                  
             # 12. Notify Discord
             - name: Notify Discord
               env:
@@ -103,5 +111,5 @@ jobs:
               run: |
                   curl -H "Content-Type: application/json" \
                   -X POST \
-                  -d '{"content": "🚀 새로운 데모 버전이 Firebase App Distribution에 업로드되었습니다!\nAPK 다운로드: https://appdistribution.firebase.google.com"}' \
+                  -d "{\"content\": \"🚀 새로운 버전 v${{ env.VERSION }}이 Firebase App Distribution에 업로드되었습니다!\nAPK 다운로드: https://appdistribution.firebase.google.com\"}" \
                   $DISCORD_WEBHOOK_URL
