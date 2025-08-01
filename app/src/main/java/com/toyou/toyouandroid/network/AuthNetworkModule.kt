@@ -7,7 +7,7 @@ import timber.log.Timber
 
 object AuthNetworkModule {
 
-    private const val BASE_URL = "https://to-you.store"
+    private const val BASE_URL = "https://to-you.shop"
     private var retrofit: Retrofit? = null
     private var accessToken: String? = null
 
