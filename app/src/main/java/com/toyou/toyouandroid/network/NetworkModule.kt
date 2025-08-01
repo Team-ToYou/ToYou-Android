@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object NetworkModule {
 
-    private const val BASE_URL = "https://to-you.store"
+    private const val BASE_URL = "https://to-you.shop"
 
     private var retrofit: Retrofit? = null
 
