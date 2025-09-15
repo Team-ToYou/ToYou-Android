@@ -3,153 +3,136 @@ package com.toyou.toyouandroid.presentation.fragment.onboarding
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.toyou.toyouandroid.R
-import com.toyou.toyouandroid.network.NetworkModule
-import com.toyou.toyouandroid.data.onboarding.dto.NicknameCheckResponse
-import com.toyou.toyouandroid.data.onboarding.service.OnboardingService
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import androidx.lifecycle.viewModelScope
+import com.toyou.toyouandroid.domain.profile.repository.ProfileRepository
+import com.toyou.toyouandroid.presentation.fragment.mypage.DuplicateCheckMessageType
+import com.toyou.toyouandroid.presentation.fragment.mypage.ProfileUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
-class SignupNicknameViewModel : ViewModel() {
-
-    private val _title = MutableLiveData<String>()
-    val title: LiveData<String> get() = _title
-
-    private val _backButtonAction = MutableLiveData<() -> Unit>()
-    val backButtonAction: LiveData<() -> Unit> get() = _backButtonAction
-
-    private val _textCount = MutableLiveData("0/15")
-    val textCount: LiveData<String> get() = _textCount
-
-    fun updateTextCount(count: Int) {
-        _textCount.value = "($count/15)"
-    }
-
-    private val inputText = MutableLiveData<String>()
-
-    private val _isDuplicateCheckEnabled = MutableLiveData(false)
-    val isDuplicateCheckEnabled: LiveData<Boolean> = _isDuplicateCheckEnabled
-
-    private val _duplicateCheckMessage = MutableLiveData<String>().apply {
-        value = "중복된 닉네임인지 확인해주세요"
-    }
-    val duplicateCheckMessage: LiveData<String> = _duplicateCheckMessage
-
-    private val _duplicateCheckMessageColor = MutableLiveData<Int>().apply {
-        value = 0xFF000000.toInt()
-    }
-    val duplicateCheckMessageColor: LiveData<Int> = _duplicateCheckMessageColor
-
-    private val _duplicateCheckButtonTextColor = MutableLiveData<Int>().apply {
-        value = 0xFFA6A6A6.toInt()
-    }
-    val duplicateCheckButtonTextColor: LiveData<Int> = _duplicateCheckButtonTextColor
-
-    private val _duplicateCheckButtonBackground = MutableLiveData<Int>().apply {
-        value = R.drawable.next_button
-    }
-    val duplicateCheckButtonBackground: LiveData<Int> = _duplicateCheckButtonBackground
-
-
-    private val _isNextButtonEnabled = MutableLiveData(false)
-    val isNextButtonEnabled: LiveData<Boolean> = _isNextButtonEnabled
-
-    private val _nextButtonTextColor = MutableLiveData<Int>().apply {
-        value = 0xFFA6A6A6.toInt()
-    }
-    val nextButtonTextColor: LiveData<Int> = _nextButtonTextColor
-
-    private val _nextButtonBackground = MutableLiveData<Int>().apply {
-        value = R.drawable.next_button
-    }
-    val nextButtonBackground: LiveData<Int> = _nextButtonBackground
-
-    private val _nickname = MutableLiveData<String>()
-    val nickname: LiveData<String> get() = _nickname
-
+@HiltViewModel
+class SignupNicknameViewModel @Inject constructor(
+    private val profileRepository: ProfileRepository
+) : ViewModel() {
+    
+    private val _uiState = MutableLiveData(ProfileUiState())
+    val uiState: LiveData<ProfileUiState> get() = _uiState
+    
+    // 데이터 바인딩 호환성을 위한 프로퍼티
+    val nickname: LiveData<String> = MutableLiveData()
+    val textCount: LiveData<String> = MutableLiveData("0/15")
+    val duplicateCheckButtonTextColor: LiveData<Int> = MutableLiveData(0xFFA6A6A6.toInt())
+    val duplicateCheckButtonBackground: LiveData<Int> = MutableLiveData(com.toyou.toyouandroid.R.drawable.next_button)
+    val duplicateCheckMessage: LiveData<String> = MutableLiveData("중복된 닉네임인지 확인해주세요")
+    val duplicateCheckMessageColor: LiveData<Int> = MutableLiveData(0xFF000000.toInt())
+    val nextButtonBackground: LiveData<Int> = MutableLiveData(com.toyou.toyouandroid.R.drawable.next_button)
+    val nextButtonTextColor: LiveData<Int> = MutableLiveData(0xFFA6A6A6.toInt())
+    val isNextButtonEnabled: LiveData<Boolean> = MutableLiveData(false)
+    
+    private val _duplicateCheckMessageType = MutableLiveData<DuplicateCheckMessageType>()
+    val duplicateCheckMessageType: LiveData<DuplicateCheckMessageType> get() = _duplicateCheckMessageType
+    
     init {
-        inputText.observeForever { text ->
-            _isDuplicateCheckEnabled.value = !text.isNullOrEmpty()
-        }
-        _title.value = "회원가입"
-//        _backButtonAction.value = { /* 회원가입 화면에서의 back 버튼 로직 */ }
+        _uiState.value = ProfileUiState(title = "회원가입")
     }
-
-    fun duplicateBtnActivate() {
-        _duplicateCheckButtonTextColor.value = 0xFF000000.toInt()
-        _duplicateCheckButtonBackground.value = R.drawable.signupnickname_doublecheck_activate
+    
+    fun updateTextCount(count: Int) {
+        val countText = "($count/15)"
+        _uiState.value = _uiState.value?.copy(
+            textCount = countText
+        )
+        (textCount as MutableLiveData).value = countText
     }
-
-    fun updateLength15(length: Int) {
-        if (length >= 15) {
-            _duplicateCheckMessage.value = "15자 이내로 입력해주세요."
-            _duplicateCheckMessageColor.value = 0xFF000000.toInt()
-        } else {
-            _duplicateCheckMessage.value = "중복된 닉네임인지 확인해주세요"
-            _duplicateCheckMessageColor.value = 0xFF000000.toInt()
-        }
-    }
-
+    
     fun setNickname(newNickname: String) {
-        _nickname.value = newNickname
+        _uiState.value = _uiState.value?.copy(
+            nickname = newNickname,
+            isDuplicateCheckEnabled = newNickname.isNotEmpty()
+        )
+        (nickname as MutableLiveData).value = newNickname
     }
-
+    
+    fun updateLength15(length: Int) {
+        val messageType = if (length >= 15) {
+            DuplicateCheckMessageType.LENGTH_EXCEEDED
+        } else {
+            DuplicateCheckMessageType.CHECK_REQUIRED
+        }
+        _duplicateCheckMessageType.value = messageType
+        _uiState.value = _uiState.value?.copy(
+            duplicateCheckMessage = messageType.message
+        )
+    }
+    
+    fun duplicateBtnActivate() {
+        _uiState.value = _uiState.value?.copy(
+            isDuplicateCheckEnabled = true
+        )
+        (duplicateCheckButtonTextColor as MutableLiveData).value = 0xFF000000.toInt()
+        (duplicateCheckButtonBackground as MutableLiveData).value = com.toyou.toyouandroid.R.drawable.signupnickname_doublecheck_activate
+    }
+    
     fun resetState() {
-        _duplicateCheckMessage.value = "중복된 닉네임인지 확인해주세요"
-        _duplicateCheckMessageColor.value = 0xFF000000.toInt()
-        _isNextButtonEnabled.value = false
-        _nextButtonTextColor.value = 0xFFA6A6A6.toInt()
-        _nextButtonBackground.value = R.drawable.next_button
-        _nickname.value = ""
-        _duplicateCheckButtonTextColor.value = 0xFFA6A6A6.toInt()
-        _duplicateCheckButtonBackground.value = R.drawable.next_button
+        _uiState.value = ProfileUiState(title = "회원가입")
+        _duplicateCheckMessageType.value = DuplicateCheckMessageType.CHECK_REQUIRED
     }
-
-    fun nextButtonDisable() {
-        _isNextButtonEnabled.value = false
-        _nextButtonTextColor.value = 0xFFA6A6A6.toInt()
-        _nextButtonBackground.value = R.drawable.next_button
-    }
-
-    private val retrofit = NetworkModule.getClient()
-    private val apiService: OnboardingService = retrofit.create(OnboardingService::class.java)
-
-    // API를 호출하여 닉네임 중복 체크를 수행하는 함수
+    
     fun checkDuplicate(userId: Int) {
-        val nickname = _nickname.value ?: return
-
-        val call = apiService.getNicknameCheck(nickname, userId)
-        call.enqueue(object : Callback<NicknameCheckResponse> {
-            override fun onResponse(call: Call<NicknameCheckResponse>, response: Response<NicknameCheckResponse>) {
+        val nickname = _uiState.value?.nickname ?: return
+        
+        viewModelScope.launch {
+            try {
+                val response = profileRepository.checkNickname(nickname, userId)
                 if (response.isSuccessful) {
                     val exists = response.body()?.result?.exists ?: false
-                    if (!exists) {
-                        _duplicateCheckMessage.value = "사용 가능한 닉네임입니다."
-                        _duplicateCheckMessageColor.value = 0xFFEA9797.toInt()
-
-                        _isNextButtonEnabled.value = true
-                        _nextButtonTextColor.value = 0xFF000000.toInt()
-                        _nextButtonBackground.value = R.drawable.next_button_enabled
-                    } else {
-                        _duplicateCheckMessage.value = "이미 사용 중인 닉네임입니다."
-                        _duplicateCheckMessageColor.value = 0xFFFF0000.toInt()
-                        nextButtonDisable()
-                    }
+                    handleNicknameCheckResult(exists)
                 } else {
-                    _duplicateCheckMessage.value = "닉네임 확인에 실패했습니다."
-                    _duplicateCheckMessageColor.value = 0xFFFF0000.toInt()
-                    nextButtonDisable()
+                    handleNicknameCheckError()
                 }
+            } catch (e: Exception) {
+                Timber.tag("API Failure").e(e, "Error checking nickname")
+                _duplicateCheckMessageType.value = DuplicateCheckMessageType.SERVER_ERROR
+                _uiState.value = _uiState.value?.copy(
+                    duplicateCheckMessage = DuplicateCheckMessageType.SERVER_ERROR.message,
+                    isNicknameValid = false,
+                    isNextButtonEnabled = false
+                )
             }
-
-            override fun onFailure(call: Call<NicknameCheckResponse>, t: Throwable) {
-                Timber.tag("API Failure").e(t, "Error checking nickname")
-                _duplicateCheckMessage.value = "서버에 연결할 수 없습니다."
-                _duplicateCheckMessageColor.value = 0xFFFF0000.toInt()
-                nextButtonDisable()
-            }
-        })
+        }
+    }
+    
+    private fun handleNicknameCheckResult(exists: Boolean) {
+        val messageType = if (!exists) {
+            DuplicateCheckMessageType.AVAILABLE
+        } else {
+            DuplicateCheckMessageType.ALREADY_IN_USE
+        }
+        
+        _duplicateCheckMessageType.value = messageType
+        _uiState.value = _uiState.value?.copy(
+            duplicateCheckMessage = messageType.message,
+            isNicknameValid = !exists,
+            isNextButtonEnabled = !exists
+        )
+        
+        // 호환성 프로퍼티 업데이트
+        (duplicateCheckMessage as MutableLiveData).value = messageType.message
+        (duplicateCheckMessageColor as MutableLiveData).value = if (!exists) 0xFFEA9797.toInt() else 0xFFFF0000.toInt()
+        (isNextButtonEnabled as MutableLiveData).value = !exists
+        if (!exists) {
+            (nextButtonTextColor as MutableLiveData).value = 0xFF000000.toInt()
+            (nextButtonBackground as MutableLiveData).value = com.toyou.toyouandroid.R.drawable.next_button_enabled
+        }
+    }
+    
+    private fun handleNicknameCheckError() {
+        _duplicateCheckMessageType.value = DuplicateCheckMessageType.CHECK_FAILED
+        _uiState.value = _uiState.value?.copy(
+            duplicateCheckMessage = DuplicateCheckMessageType.CHECK_FAILED.message,
+            isNicknameValid = false,
+            isNextButtonEnabled = false
+        )
     }
 }
