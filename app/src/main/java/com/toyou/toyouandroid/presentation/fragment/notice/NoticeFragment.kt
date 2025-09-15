@@ -146,7 +146,7 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
                                 navController.navigate(R.id.action_navigation_notice_to_create_fragment)
                             }
                             else {
-                                cardViewModel.getCardDetail(cardId.toLong())
+//                                cardViewModel.getCardDetail(cardId.toLong())
                                 navController.navigate(R.id.action_navigation_notice_to_modify_fragment)
                             }
                         }
