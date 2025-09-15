@@ -1,14 +1,14 @@
 package com.toyou.toyouandroid.domain.home.repository
 
-import com.toyou.toyouandroid.data.home.dto.response.YesterdayCardResponse
 import com.toyou.toyouandroid.data.home.service.HomeService
-import com.toyou.toyouandroid.network.AuthNetworkModule
-import com.toyou.toyouandroid.network.BaseResponse
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class HomeRepository {
-    private val client = AuthNetworkModule.getClient().create(HomeService::class.java)
+@Singleton
+class HomeRepository @Inject constructor(
+    private val homeService: HomeService
+) {
+    suspend fun getCardDetail(id: Long) = homeService.getCardDetail(id)
 
-    suspend fun getCardDetail(id : Long)=client.getCardDetail(id)
-
-    suspend fun getYesterdayCard() = client.getCardYesterday()
+    suspend fun getYesterdayCard() = homeService.getCardYesterday()
 }

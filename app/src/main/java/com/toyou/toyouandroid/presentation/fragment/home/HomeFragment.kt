@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -35,13 +36,15 @@ import com.toyou.toyouandroid.presentation.fragment.record.CardInfoViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.RecordViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModelFactory
-import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
 import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import androidx.navigation.findNavController
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     private lateinit var navController: NavController
@@ -49,7 +52,7 @@ class HomeFragment : Fragment() {
     private val binding: FragmentHomeBinding
         get() = requireNotNull(_binding){"FragmentHomeBinding -> null"}
     private lateinit var noticeViewModel: NoticeViewModel
-    private lateinit var viewModel: HomeViewModel
+    private val viewModel: HomeViewModel by viewModels()
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
 
@@ -67,6 +70,9 @@ class HomeFragment : Fragment() {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
+        // HomeViewModel은 Hilt로 주입됨
+        
+        // 다른 ViewModel들은 기존 방식 유지
         val tokenStorage = TokenStorage(requireContext())
         val authService = NetworkModule.getClient().create(AuthService::class.java)
         val tokenManager = TokenManager(authService, tokenStorage)
@@ -78,18 +84,11 @@ class HomeFragment : Fragment() {
         val recordRepository = RecordRepository(recordService)
         val createService = AuthNetworkModule.getClient().create(CreateService::class.java)
         val createRepository = CreateRepository(createService)
-        val homeRepository = HomeRepository()
-
 
         noticeViewModel = ViewModelProvider(
             this,
             NoticeViewModelFactory(noticeRepository, tokenManager)
         )[NoticeViewModel::class.java]
-
-        viewModel = ViewModelProvider(
-            this,
-            HomeViewModelFactory(tokenManager, homeRepository)
-        )[HomeViewModel::class.java]
 
         binding.lifecycleOwner = viewLifecycleOwner
 
@@ -135,7 +134,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        navController = Navigation.findNavController(view)
+        navController = view.findNavController()
 
         (requireActivity() as MainActivity).hideBottomNavigation(false)
 
@@ -199,17 +198,17 @@ class HomeFragment : Fragment() {
             setOnClickListener {}
         }
 
-        // 홈 화면 바텀 시트 설정
-        viewModel.yesterdayCards.observe(viewLifecycleOwner) { yesterdayCards ->
-            if (yesterdayCards.isNotEmpty()) {
-                binding.homeBottomsheetPseudo.visibility = View.GONE
-                binding.homeBottomSheetRv.visibility = View.VISIBLE
-                setupRecyclerView(yesterdayCards)
-            } else {
-                binding.homeBottomsheetPseudo.visibility = View.VISIBLE
-                binding.homeBottomSheetRv.visibility = View.GONE
-            }
-        }
+//        // 홈 화면 바텀 시트 설정
+//        viewModel.yesterdayCards.observe(viewLifecycleOwner) { yesterdayCards ->
+//            if (yesterdayCards.isNotEmpty()) {
+//                binding.homeBottomsheetPseudo.visibility = View.GONE
+//                binding.homeBottomSheetRv.visibility = View.VISIBLE
+//                setupRecyclerView(yesterdayCards)
+//            } else {
+//                binding.homeBottomsheetPseudo.visibility = View.VISIBLE
+//                binding.homeBottomSheetRv.visibility = View.GONE
+//            }
+//        }
 
         // 우체통 클릭시 일기카드 생성 화면으로 전환(임시)
         binding.homeMailboxIv.setOnClickListener {
@@ -221,7 +220,7 @@ class HomeFragment : Fragment() {
                             cardViewModel.disableLock(false)
                         }
                         else {
-                            cardViewModel.getCardDetail(cardId.toLong())
+//                            cardViewModel.getCardDetail(cardId.toLong())
                             navController.navigate(R.id.action_navigation_home_to_modifyFragment)
                             cardViewModel.disableLock(true)
                         }
@@ -243,68 +242,68 @@ class HomeFragment : Fragment() {
             navController.navigate(R.id.action_navigation_home_to_home_option_fragment)
         }
 
-        // 홈화면 조회 후 사용자의 당일 감정우표 반영
-        userViewModel.emotion.observe(viewLifecycleOwner) { emotion ->
-            when (emotion) {
-                "HAPPY" -> {
-                    viewModel.updateHomeEmotion(
-                        R.drawable.home_emotion_happy,
-                        getString(R.string.home_emotion_happy_title),
-                        R.color.y01,
-                        R.drawable.background_yellow
-                    )
-                }
-                "EXCITED" -> {
-                    viewModel.updateHomeEmotion(
-                        R.drawable.home_emotion_exciting,
-                        getString(R.string.home_emotion_exciting_title),
-                        R.color.b01,
-                        R.drawable.background_skyblue
-                    )
-                }
-                "NORMAL" -> {
-                    viewModel.updateHomeEmotion(
-                        R.drawable.home_emotion_normal,
-                        getString(R.string.home_emotion_normal_title),
-                        R.color.p01,
-                        R.drawable.background_purple
-                    )
-                }
-                "NERVOUS" -> {
-                    viewModel.updateHomeEmotion(
-                        R.drawable.home_emotion_anxiety,
-                        getString(R.string.home_emotion_anxiety_title),
-                        R.color.g02,
-                        R.drawable.background_green
-                    )
-                }
-                "ANGRY" -> {
-                    viewModel.updateHomeEmotion(
-                        R.drawable.home_emotion_upset,
-                        getString(R.string.home_emotion_upset_title),
-                        R.color.r01,
-                        R.drawable.background_red
-                    )
-                }
-            }
-        }
+//        // 홈화면 조회 후 사용자의 당일 감정우표 반영
+//        userViewModel.emotion.observe(viewLifecycleOwner) { emotion ->
+//            when (emotion) {
+//                "HAPPY" -> {
+//                    viewModel.updateHomeEmotion(
+//                        R.drawable.home_emotion_happy,
+//                        getString(R.string.home_emotion_happy_title),
+//                        R.color.y01,
+//                        R.drawable.background_yellow
+//                    )
+//                }
+//                "EXCITED" -> {
+//                    viewModel.updateHomeEmotion(
+//                        R.drawable.home_emotion_exciting,
+//                        getString(R.string.home_emotion_exciting_title),
+//                        R.color.b01,
+//                        R.drawable.background_skyblue
+//                    )
+//                }
+//                "NORMAL" -> {
+//                    viewModel.updateHomeEmotion(
+//                        R.drawable.home_emotion_normal,
+//                        getString(R.string.home_emotion_normal_title),
+//                        R.color.p01,
+//                        R.drawable.background_purple
+//                    )
+//                }
+//                "NERVOUS" -> {
+//                    viewModel.updateHomeEmotion(
+//                        R.drawable.home_emotion_anxiety,
+//                        getString(R.string.home_emotion_anxiety_title),
+//                        R.color.g02,
+//                        R.drawable.background_green
+//                    )
+//                }
+//                "ANGRY" -> {
+//                    viewModel.updateHomeEmotion(
+//                        R.drawable.home_emotion_upset,
+//                        getString(R.string.home_emotion_upset_title),
+//                        R.color.r01,
+//                        R.drawable.background_red
+//                    )
+//                }
+//            }
+//        }
 
         // 감정 선택에 따른 홈화면 리소스 변경
-        viewModel.currentDate.observe(viewLifecycleOwner) { date ->
-            binding.homeDateTv.text = date
-        }
-        viewModel.homeEmotion.observe(viewLifecycleOwner) { emotion ->
-            binding.homeEmotionIv.setImageResource(emotion)
-        }
-        viewModel.text.observe(viewLifecycleOwner) { text ->
-            binding.homeEmotionTv.text = text
-        }
-        viewModel.homeDateBackground.observe(viewLifecycleOwner) { date ->
-            binding.homeDateTv.setBackgroundResource(date)
-        }
-        viewModel.homeBackground.observe(viewLifecycleOwner) { background ->
-            binding.layoutHome.setBackgroundResource(background)
-        }
+//        viewModel.currentDate.observe(viewLifecycleOwner) { date ->
+//            binding.homeDateTv.text = date
+//        }
+//        viewModel.homeEmotion.observe(viewLifecycleOwner) { emotion ->
+//            binding.homeEmotionIv.setImageResource(emotion)
+//        }
+//        viewModel.text.observe(viewLifecycleOwner) { text ->
+//            binding.homeEmotionTv.text = text
+//        }
+//        viewModel.homeDateBackground.observe(viewLifecycleOwner) { date ->
+//            binding.homeDateTv.setBackgroundResource(date)
+//        }
+//        viewModel.homeBackground.observe(viewLifecycleOwner) { background ->
+//            binding.layoutHome.setBackgroundResource(background)
+//        }
 
         // 알림 존재할 경우 알림 아이콘 빨간점 표시
         userViewModel.uncheckedAlarm.observe(viewLifecycleOwner) { uncheckedAlarm ->
