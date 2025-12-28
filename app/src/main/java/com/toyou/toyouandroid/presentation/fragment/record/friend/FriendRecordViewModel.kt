@@ -10,16 +10,19 @@ import com.toyou.toyouandroid.data.record.dto.DiaryCardPerDay
 import com.toyou.toyouandroid.data.record.dto.DiaryCardPerDayResponse
 import com.toyou.toyouandroid.domain.record.RecordRepository
 import com.toyou.toyouandroid.utils.TokenManager
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
+import javax.inject.Inject
 
-class FriendRecordViewModel(
+@HiltViewModel
+class FriendRecordViewModel @Inject constructor(
     private val repository: RecordRepository,
     private val tokenManager: TokenManager
-): ViewModel() {
+) : ViewModel() {
 
     private val _diaryCardsNum = MutableLiveData<List<DiaryCardNum>>()
     val diaryCardsNum: LiveData<List<DiaryCardNum>> get() = _diaryCardsNum

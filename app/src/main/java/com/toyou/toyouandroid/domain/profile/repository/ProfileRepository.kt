@@ -6,8 +6,11 @@ import com.toyou.toyouandroid.data.onboarding.dto.PatchNicknameResponse
 import com.toyou.toyouandroid.data.onboarding.dto.PatchStatusRequest
 import com.toyou.toyouandroid.data.onboarding.service.OnboardingService
 import retrofit2.Response
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ProfileRepository(
+@Singleton
+class ProfileRepository @Inject constructor(
     private val onboardingService: OnboardingService
 ) {
     suspend fun checkNickname(nickname: String, userId: Int): Response<NicknameCheckResponse> {

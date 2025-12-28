@@ -1,22 +1,19 @@
 package com.toyou.toyouandroid.domain.create.repository
 
-import com.toyou.toyouHoandroid.data.create.service.CreateService
+import com.toyou.toyouandroid.data.create.service.CreateService
 import com.toyou.toyouandroid.data.create.dto.request.Answer
 import com.toyou.toyouandroid.data.create.dto.request.AnswerDto
 import com.toyou.toyouandroid.data.create.dto.response.AnswerPost
 import com.toyou.toyouandroid.data.create.dto.response.HomeDto
 import com.toyou.toyouandroid.data.create.dto.response.QuestionsDto
-import com.toyou.toyouandroid.data.social.dto.response.ResponseFriend
 import com.toyou.toyouandroid.model.PreviewCardModel
-import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.network.BaseResponse
-import com.toyou.toyouandroid.utils.TokenManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class CreateRepository(private val createService: CreateService) {
+@Singleton
+class CreateRepository @Inject constructor(private val createService: CreateService) {
     //private val client = AuthNetworkModule.getClient().create(CreateService::class.java)
 
     //suspend fun getAllData() = client.getQuestions()

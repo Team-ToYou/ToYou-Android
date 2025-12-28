@@ -9,8 +9,11 @@ import com.toyou.toyouandroid.data.record.dto.PatchDiaryCardResponse
 import com.toyou.toyouandroid.data.record.service.RecordService
 import com.toyou.toyouandroid.network.BaseResponse
 import retrofit2.Call
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class RecordRepository(private val recordService: RecordService) {
+@Singleton
+class RecordRepository @Inject constructor(private val recordService: RecordService) {
 
     fun getMyRecord(year: Int, month: Int): Call<DiaryCardResponse> {
         return recordService.getDiarycardsMine(year, month)

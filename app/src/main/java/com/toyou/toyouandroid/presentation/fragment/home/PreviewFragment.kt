@@ -8,52 +8,28 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import com.toyou.toyouHoandroid.data.create.service.CreateService
 import com.toyou.toyouandroid.R
-import com.toyou.toyouandroid.data.onboarding.service.AuthService
 import com.toyou.toyouandroid.databinding.FragmentPreviewBinding
-import com.toyou.toyouandroid.domain.create.repository.CreateRepository
-import com.toyou.toyouandroid.network.AuthNetworkModule
-import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
-import com.toyou.toyouandroid.presentation.viewmodel.CardViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
-import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
-import com.toyou.toyouandroid.utils.TokenManager
-import com.toyou.toyouandroid.utils.TokenStorage
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class PreviewFragment : Fragment(){
 
     private var _binding : FragmentPreviewBinding? = null
     private val binding: FragmentPreviewBinding get() = requireNotNull(_binding){"FragmentPreview 널"}
 
-    private lateinit var cardViewModel : CardViewModel
-    private lateinit var userViewModel: UserViewModel
+    private val cardViewModel: CardViewModel by activityViewModels()
+    private val userViewModel: UserViewModel by activityViewModels()
 
     lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val tokenStorage = TokenStorage(requireContext())
-        val authService = NetworkModule.getClient().create(AuthService::class.java)
-        val tokenManager = TokenManager(authService, tokenStorage)
-        val createService = AuthNetworkModule.getClient().create(CreateService::class.java)
-        val createRepository = CreateRepository(createService)
-
-
-        cardViewModel = ViewModelProvider(
-            requireActivity(),
-            CardViewModelFactory(createRepository,tokenManager)
-        )[CardViewModel::class.java]
-        userViewModel = ViewModelProvider(
-            requireActivity(),
-            UserViewModelFactory(createRepository,tokenManager)
-        )[UserViewModel::class.java]
-
     }
 
     override fun onCreateView(

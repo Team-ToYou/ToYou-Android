@@ -6,25 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentSignupstatusBinding
 import com.toyou.toyouandroid.presentation.base.MainActivity
-import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.data.onboarding.dto.request.SignUpRequest
-import com.toyou.toyouandroid.data.onboarding.service.AuthService
-import com.toyou.toyouandroid.fcm.domain.FCMRepository
-import com.toyou.toyouandroid.fcm.service.FCMService
-import com.toyou.toyouandroid.network.AuthNetworkModule
-//import com.toyou.toyouandroid.presentation.viewmodel.AuthViewModelFactory
-import com.toyou.toyouandroid.presentation.viewmodel.LoginViewModelFactory
-import com.toyou.toyouandroid.utils.TokenManager
-import com.toyou.toyouandroid.utils.TokenStorage
 import com.toyou.toyouandroid.utils.TutorialStorage
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
+@AndroidEntryPoint
 class SignupStatusFragment : Fragment() {
 
     private lateinit var navController: NavController
@@ -37,22 +29,7 @@ class SignupStatusFragment : Fragment() {
 
     private lateinit var tutorialStorage: TutorialStorage
 
-    /*private val loginViewModel: LoginViewModel by activityViewModels{
-        val tokenStorage = TokenStorage(requireContext())
-        val authService = NetworkModule.getClient().create(AuthService::class.java)
-        val tokenManager = TokenManager(authService, tokenStorage)
-
-        AuthViewModelFactory(authService, tokenStorage, tokenManager)
-    }*/
-    private val loginViewModel: LoginViewModel by activityViewModels{
-        val tokenStorage = TokenStorage(requireContext())
-        val authService = NetworkModule.getClient().create(AuthService::class.java)
-        val tokenManager = TokenManager(authService, tokenStorage)
-        val fcmService = AuthNetworkModule.getClient().create(FCMService::class.java)
-        val fcmRepository = FCMRepository(fcmService)
-
-        LoginViewModelFactory(authService, tokenStorage, tokenManager,fcmRepository)
-    }
+    private val loginViewModel: LoginViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

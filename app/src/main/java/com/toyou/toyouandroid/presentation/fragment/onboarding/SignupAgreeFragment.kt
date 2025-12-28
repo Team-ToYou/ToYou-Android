@@ -13,7 +13,9 @@ import androidx.navigation.fragment.findNavController
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentSignupagreeBinding
 import com.toyou.toyouandroid.presentation.base.MainActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SignupAgreeFragment : Fragment() {
 
     private lateinit var navController: NavController

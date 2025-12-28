@@ -4,15 +4,12 @@ import com.toyou.toyouandroid.fcm.dto.request.FCM
 import com.toyou.toyouandroid.fcm.dto.request.Token
 import com.toyou.toyouandroid.fcm.dto.response.GetToken
 import com.toyou.toyouandroid.fcm.service.FCMService
-import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.network.BaseResponse
-import com.toyou.toyouandroid.utils.TokenManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import timber.log.Timber
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class FCMRepository(private val fcmService: FCMService) {
+@Singleton
+class FCMRepository @Inject constructor(private val fcmService: FCMService) {
 
     //private val client = AuthNetworkModule.getClient().create(FCMService::class.java)
 

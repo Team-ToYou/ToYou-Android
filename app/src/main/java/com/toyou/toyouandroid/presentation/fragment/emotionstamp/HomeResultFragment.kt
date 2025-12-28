@@ -11,10 +11,12 @@ import android.view.animation.DecelerateInterpolator
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import dagger.hilt.android.AndroidEntryPoint
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentHomeResultBinding
 import com.toyou.toyouandroid.presentation.base.MainActivity
 
+@AndroidEntryPoint
 class HomeResultFragment : Fragment() {
 
     lateinit var navController: NavController

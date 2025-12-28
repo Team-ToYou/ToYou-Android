@@ -8,28 +8,16 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
-import com.toyou.toyouHoandroid.data.create.service.CreateService
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentHomeOptionBinding
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.data.emotion.dto.EmotionData
 import com.toyou.toyouandroid.data.emotion.dto.EmotionRequest
-import com.toyou.toyouandroid.data.onboarding.service.AuthService
-import com.toyou.toyouandroid.data.social.service.SocialService
-import com.toyou.toyouandroid.domain.create.repository.CreateRepository
-import com.toyou.toyouandroid.domain.home.repository.HomeRepository
-import com.toyou.toyouandroid.network.AuthNetworkModule
-import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.fragment.notice.NoticeDialog
 import com.toyou.toyouandroid.presentation.fragment.notice.NoticeDialogViewModel
 import com.toyou.toyouandroid.presentation.fragment.home.HomeViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
-import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
-import com.toyou.toyouandroid.utils.TokenManager
-import com.toyou.toyouandroid.utils.TokenStorage
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.navigation.findNavController
 
@@ -44,7 +32,7 @@ class HomeOptionFragment : Fragment() {
     private val noticeDialogViewModel: NoticeDialogViewModel by activityViewModels()
     private var noticeDialog: NoticeDialog? = null
 
-    private lateinit var userViewModel: UserViewModel
+    private val userViewModel: UserViewModel by activityViewModels()
     private val homeOptionViewModel: HomeOptionViewModel by viewModels()
     private val homeViewModel: HomeViewModel by viewModels()
 
@@ -54,20 +42,6 @@ class HomeOptionFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentHomeOptionBinding.inflate(layoutInflater, container, false)
-
-        val tokenStorage = TokenStorage(requireContext())
-        val authService = NetworkModule.getClient().create(AuthService::class.java)
-        val tokenManager = TokenManager(authService, tokenStorage)
-
-        val createService = AuthNetworkModule.getClient().create(CreateService::class.java)
-        val createRepository = CreateRepository(createService)
-
-        // HomeOptionViewModel과 HomeViewModel은 Hilt로 주입됨
-
-        userViewModel = ViewModelProvider(
-            requireActivity(),
-            UserViewModelFactory(createRepository, tokenManager)
-        )[UserViewModel::class.java]
 
         return binding.root
     }

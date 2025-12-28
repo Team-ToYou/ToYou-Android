@@ -6,10 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.toyou.toyouandroid.domain.create.repository.CreateRepository
 import com.toyou.toyouandroid.utils.TokenManager
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
-class UserViewModel(
+@HiltViewModel
+class UserViewModel @Inject constructor(
     private val tokenManager: TokenManager,
     private val repository: CreateRepository
 ) : ViewModel() {

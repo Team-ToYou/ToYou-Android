@@ -5,28 +5,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.viewpager2.widget.ViewPager2
 import com.toyou.toyouandroid.R
-import com.toyou.toyouandroid.data.onboarding.service.AuthService
 import com.toyou.toyouandroid.databinding.FragmentCalendarMyrecordBinding
-import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.data.record.dto.DiaryCard
-import com.toyou.toyouandroid.domain.record.RecordRepository
-import com.toyou.toyouandroid.data.record.service.RecordService
 import com.toyou.toyouandroid.model.calendar.MyDate
-import com.toyou.toyouandroid.network.NetworkModule
-import com.toyou.toyouandroid.presentation.viewmodel.RecordViewModelFactory
-import com.toyou.toyouandroid.utils.TokenManager
-import com.toyou.toyouandroid.utils.TokenStorage
 import com.toyou.toyouandroid.utils.calendar.MyDates
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.util.Calendar
 import java.util.Date
 
+@AndroidEntryPoint
 class CalendarMyRecordFragment : Fragment(), OnMyDateClickListener {
 
     lateinit var navController: NavController
@@ -41,7 +35,7 @@ class CalendarMyRecordFragment : Fragment(), OnMyDateClickListener {
     private var currentYear: Int = -1
     private var currentMonth: Int = -1
 
-    private lateinit var myRecordViewModel: MyRecordViewModel
+    private val myRecordViewModel: MyRecordViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,17 +43,6 @@ class CalendarMyRecordFragment : Fragment(), OnMyDateClickListener {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCalendarMyrecordBinding.inflate(inflater, container, false)
-
-        val tokenStorage = TokenStorage(requireContext())
-        val authService = NetworkModule.getClient().create(AuthService::class.java)
-        val tokenManager = TokenManager(authService, tokenStorage)
-        val recordService = AuthNetworkModule.getClient().create(RecordService::class.java)
-        val recordRepository = RecordRepository(recordService)
-
-        myRecordViewModel = ViewModelProvider(
-            this,
-            RecordViewModelFactory(recordRepository, tokenManager)
-        )[MyRecordViewModel::class.java]
 
         return binding.root
     }

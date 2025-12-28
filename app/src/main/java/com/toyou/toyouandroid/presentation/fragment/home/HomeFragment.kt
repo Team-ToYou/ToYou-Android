@@ -9,38 +9,21 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.toyou.toyouHoandroid.data.create.service.CreateService
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentHomeBinding
-import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.data.home.dto.response.YesterdayCard
 import com.toyou.toyouandroid.presentation.fragment.home.adapter.HomeBottomSheetAdapter
 import com.toyou.toyouandroid.presentation.fragment.notice.NoticeViewModel
-import com.toyou.toyouandroid.domain.notice.NoticeRepository
-import com.toyou.toyouandroid.data.notice.service.NoticeService
-import com.toyou.toyouandroid.data.onboarding.service.AuthService
-import com.toyou.toyouandroid.data.record.service.RecordService
-import com.toyou.toyouandroid.domain.create.repository.CreateRepository
-import com.toyou.toyouandroid.domain.home.repository.HomeRepository
-import com.toyou.toyouandroid.domain.record.RecordRepository
-import com.toyou.toyouandroid.network.NetworkModule
-import com.toyou.toyouandroid.presentation.viewmodel.NoticeViewModelFactory
-import com.toyou.toyouandroid.presentation.fragment.record.CardInfoViewModel
-import com.toyou.toyouandroid.presentation.viewmodel.RecordViewModelFactory
-import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
-import com.toyou.toyouandroid.presentation.viewmodel.CardViewModelFactory
-import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
-import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
-import com.toyou.toyouandroid.utils.TokenManager
-import com.toyou.toyouandroid.utils.TokenStorage
 import dagger.hilt.android.AndroidEntryPoint
+import com.toyou.toyouandroid.presentation.fragment.record.CardInfoViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
+import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
 import timber.log.Timber
 import androidx.navigation.findNavController
 
@@ -51,16 +34,16 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding: FragmentHomeBinding
         get() = requireNotNull(_binding){"FragmentHomeBinding -> null"}
-    private lateinit var noticeViewModel: NoticeViewModel
+    private val noticeViewModel: NoticeViewModel by viewModels()
     private val viewModel: HomeViewModel by viewModels()
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
 
-    private lateinit var userViewModel: UserViewModel
-    private lateinit var cardViewModel: CardViewModel
+    private val userViewModel: UserViewModel by activityViewModels()
+    private val cardViewModel: CardViewModel by activityViewModels()
 
     private lateinit var listener: HomeBottomSheetClickListener
-    private lateinit var cardInfoViewModel: CardInfoViewModel
+    private val cardInfoViewModel: CardInfoViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -70,26 +53,6 @@ class HomeFragment : Fragment() {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        // HomeViewModel은 Hilt로 주입됨
-        
-        // 다른 ViewModel들은 기존 방식 유지
-        val tokenStorage = TokenStorage(requireContext())
-        val authService = NetworkModule.getClient().create(AuthService::class.java)
-        val tokenManager = TokenManager(authService, tokenStorage)
-
-        val noticeService = AuthNetworkModule.getClient().create(NoticeService::class.java)
-        val noticeRepository = NoticeRepository(noticeService)
-
-        val recordService = AuthNetworkModule.getClient().create(RecordService::class.java)
-        val recordRepository = RecordRepository(recordService)
-        val createService = AuthNetworkModule.getClient().create(CreateService::class.java)
-        val createRepository = CreateRepository(createService)
-
-        noticeViewModel = ViewModelProvider(
-            this,
-            NoticeViewModelFactory(noticeRepository, tokenManager)
-        )[NoticeViewModel::class.java]
-
         binding.lifecycleOwner = viewLifecycleOwner
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
@@ -97,21 +60,6 @@ class HomeFragment : Fragment() {
                 requireActivity().finish()
             }
         })
-
-        cardViewModel = ViewModelProvider(
-            requireActivity(),
-            CardViewModelFactory(createRepository,tokenManager)
-        )[CardViewModel::class.java]
-
-        userViewModel = ViewModelProvider(
-            requireActivity(),
-            UserViewModelFactory(createRepository,tokenManager)
-        )[UserViewModel::class.java]
-
-        cardInfoViewModel = ViewModelProvider(
-            requireActivity(),
-            RecordViewModelFactory(recordRepository, tokenManager)
-        )[CardInfoViewModel::class.java]
 
         userViewModel.getHomeEntry()
         noticeViewModel.fetchNotices()

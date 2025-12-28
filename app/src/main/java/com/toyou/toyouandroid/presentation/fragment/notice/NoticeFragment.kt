@@ -7,36 +7,21 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
-import com.toyou.toyouHoandroid.data.create.service.CreateService
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentNoticeBinding
-import com.toyou.toyouandroid.network.AuthNetworkModule
-import com.toyou.toyouandroid.domain.notice.NoticeRepository
-import com.toyou.toyouandroid.data.notice.service.NoticeService
-import com.toyou.toyouandroid.data.onboarding.service.AuthService
-import com.toyou.toyouandroid.data.social.service.SocialService
-import com.toyou.toyouandroid.domain.create.repository.CreateRepository
-import com.toyou.toyouandroid.domain.social.repostitory.SocialRepository
-import com.toyou.toyouandroid.fcm.domain.FCMRepository
-import com.toyou.toyouandroid.fcm.service.FCMService
-import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
-import com.toyou.toyouandroid.presentation.viewmodel.CardViewModelFactory
-import com.toyou.toyouandroid.presentation.viewmodel.NoticeViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
-import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
-import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
-import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.notice.SwipeToDeleteNotice
-import com.toyou.toyouandroid.utils.TokenStorage
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
+@AndroidEntryPoint
 class NoticeFragment : Fragment(), NoticeAdapterListener {
 
     lateinit var navController: NavController
@@ -52,10 +37,10 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
     private var noticeEntireAdapter: NoticeEntireAdapter? = null
     private var noticeDialog: NoticeDialog? = null
 
-    private lateinit var viewModel: NoticeViewModel
-    private lateinit var userViewModel: UserViewModel
-    private lateinit var socialViewModel : SocialViewModel
-    private lateinit var cardViewModel: CardViewModel
+    private val viewModel: NoticeViewModel by viewModels()
+    private val userViewModel: UserViewModel by activityViewModels()
+    private val socialViewModel: SocialViewModel by activityViewModels()
+    private val cardViewModel: CardViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,41 +48,6 @@ class NoticeFragment : Fragment(), NoticeAdapterListener {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentNoticeBinding.inflate(inflater, container, false)
-
-        val tokenStorage = TokenStorage(requireContext())
-        val authService = NetworkModule.getClient().create(AuthService::class.java)
-        val tokenManager = TokenManager(authService, tokenStorage)
-
-        val noticeService = AuthNetworkModule.getClient().create(NoticeService::class.java)
-        val noticeRepository = NoticeRepository(noticeService)
-
-        val socialService = AuthNetworkModule.getClient().create(SocialService::class.java)
-        val socialRepository = SocialRepository(socialService)
-        val createService = AuthNetworkModule.getClient().create(CreateService::class.java)
-        val createRepository = CreateRepository(createService)
-        val fcmService = AuthNetworkModule.getClient().create(FCMService::class.java)
-        val fcmRepository = FCMRepository(fcmService)
-
-
-        viewModel = ViewModelProvider(
-            this,
-            NoticeViewModelFactory(noticeRepository, tokenManager)
-        )[NoticeViewModel::class.java]
-
-        cardViewModel = ViewModelProvider(
-            requireActivity(),
-            CardViewModelFactory(createRepository,tokenManager)
-        )[CardViewModel::class.java]
-
-        userViewModel = ViewModelProvider(
-            requireActivity(),
-            UserViewModelFactory(createRepository,tokenManager)
-        )[UserViewModel::class.java]
-
-        socialViewModel = ViewModelProvider(
-            requireActivity(),
-            SocialViewModelFactory(socialRepository, tokenManager, fcmRepository)
-        )[SocialViewModel::class.java]
 
         noticeRequestAdapter = NoticeRequestAdapter(mutableListOf(), this, socialViewModel)
         noticeEntireAdapter = NoticeEntireAdapter(mutableListOf(), viewModel, this)

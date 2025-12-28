@@ -8,27 +8,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
-import com.toyou.toyouHoandroid.data.create.service.CreateService
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentSplashBinding
 import com.toyou.toyouandroid.presentation.base.MainActivity
-import com.toyou.toyouandroid.network.NetworkModule
-import com.toyou.toyouandroid.data.onboarding.service.AuthService
-import com.toyou.toyouandroid.domain.create.repository.CreateRepository
-import com.toyou.toyouandroid.fcm.domain.FCMRepository
-import com.toyou.toyouandroid.fcm.service.FCMService
-import com.toyou.toyouandroid.network.AuthNetworkModule
-import com.toyou.toyouandroid.presentation.viewmodel.LoginViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
-import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
-import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
+@AndroidEntryPoint
 class SplashFragment : Fragment() {
 
     private lateinit var navController: NavController
@@ -36,8 +29,8 @@ class SplashFragment : Fragment() {
     private val binding: FragmentSplashBinding
         get() = requireNotNull(_binding){"FragmentSplashBinding -> null"}
 
-    private lateinit var loginViewModel: LoginViewModel
-    private lateinit var userViewModel: UserViewModel
+    private val loginViewModel: LoginViewModel by viewModels()
+    private val userViewModel: UserViewModel by activityViewModels()
 
     private val handler = Handler(Looper.getMainLooper())
     private val runnableLogin = Runnable {
@@ -59,29 +52,6 @@ class SplashFragment : Fragment() {
     ): View {
 
         _binding = FragmentSplashBinding.inflate(inflater, container, false)
-
-        val tokenStorage = TokenStorage(requireContext())
-        val authService = NetworkModule.getClient().create(AuthService::class.java)
-        val tokenManager = TokenManager(authService, tokenStorage)
-        val createService = AuthNetworkModule.getClient().create(CreateService::class.java)
-        val createRepository = CreateRepository(createService)
-        val fcmService = AuthNetworkModule.getClient().create(FCMService::class.java)
-        val fcmRepository = FCMRepository(fcmService)
-
-        loginViewModel = ViewModelProvider(
-            this,
-        LoginViewModelFactory(
-                authService,
-                tokenStorage,
-                tokenManager,
-                fcmRepository
-            )
-        )[LoginViewModel::class.java]
-
-        userViewModel = ViewModelProvider(
-            requireActivity(),
-            UserViewModelFactory(createRepository,tokenManager)
-        )[UserViewModel::class.java]
 
         return binding.root
     }

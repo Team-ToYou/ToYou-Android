@@ -6,33 +6,25 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.toyou.toyouHoandroid.data.create.service.CreateService
 import com.toyou.toyouandroid.R
-import com.toyou.toyouandroid.data.onboarding.service.AuthService
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.databinding.FragmentCreateBinding
-import com.toyou.toyouandroid.domain.create.repository.CreateRepository
-import com.toyou.toyouandroid.network.AuthNetworkModule
-import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.fragment.home.adapter.CardAdapter
 import com.toyou.toyouandroid.presentation.fragment.home.adapter.CardChooseAdapter
 import com.toyou.toyouandroid.presentation.fragment.home.adapter.CardShortAdapter
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
-import com.toyou.toyouandroid.presentation.viewmodel.CardViewModelFactory
-import com.toyou.toyouandroid.utils.TokenManager
-import com.toyou.toyouandroid.utils.TokenStorage
-import timber.log.Timber
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CreateFragment : Fragment(){
 
     private var _binding: FragmentCreateBinding? = null
@@ -41,7 +33,7 @@ class CreateFragment : Fragment(){
     private lateinit var cardAdapter : CardAdapter
     private lateinit var cardShortAdapter : CardShortAdapter
     private lateinit var cardChooseAdapter: CardChooseAdapter
-    private lateinit var cardViewModel: CardViewModel
+    private val cardViewModel: CardViewModel by activityViewModels()
 
     lateinit var navController: NavController
     var count : Int = 0
@@ -50,19 +42,6 @@ class CreateFragment : Fragment(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val tokenStorage = TokenStorage(requireContext())
-        val authService = NetworkModule.getClient().create(AuthService::class.java)
-        val tokenManager = TokenManager(authService, tokenStorage)
-        val createService = AuthNetworkModule.getClient().create(CreateService::class.java)
-        val createRepository = CreateRepository(createService)
-
-
-        cardViewModel = ViewModelProvider(
-            requireActivity(),
-            CardViewModelFactory(createRepository,tokenManager)
-        )[CardViewModel::class.java]
-
-        //cardViewModel.loadCardData()
         cardViewModel.getAllData()
 
     }

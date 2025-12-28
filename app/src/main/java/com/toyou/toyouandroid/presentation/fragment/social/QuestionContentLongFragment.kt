@@ -8,48 +8,26 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.toyou.toyouandroid.R
-import com.toyou.toyouandroid.data.onboarding.service.AuthService
-import com.toyou.toyouandroid.data.social.service.SocialService
 import com.toyou.toyouandroid.databinding.FragmentContentLongBinding
-import com.toyou.toyouandroid.domain.social.repostitory.SocialRepository
-import com.toyou.toyouandroid.fcm.domain.FCMRepository
-import com.toyou.toyouandroid.fcm.service.FCMService
-import com.toyou.toyouandroid.network.AuthNetworkModule
-import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
-import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModelFactory
-import com.toyou.toyouandroid.utils.TokenManager
-import com.toyou.toyouandroid.utils.TokenStorage
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class QuestionContentLongFragment: Fragment() {
 
     private var _binding : FragmentContentLongBinding? = null
     private val binding : FragmentContentLongBinding get() = requireNotNull(_binding){"널"}
 
     private lateinit var navController: NavController
-    private lateinit var socialViewModel : SocialViewModel
+    private val socialViewModel: SocialViewModel by activityViewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val tokenStorage = TokenStorage(requireContext())
-        val authService = NetworkModule.getClient().create(AuthService::class.java)
-        val tokenManager = TokenManager(authService, tokenStorage)
-
-        val socialService = AuthNetworkModule.getClient().create(SocialService::class.java)
-        val socialRepository = SocialRepository(socialService)
-        val fcmService = AuthNetworkModule.getClient().create(FCMService::class.java)
-        val fcmRepository = FCMRepository(fcmService)
-
-        socialViewModel = ViewModelProvider(
-            requireActivity(),
-            SocialViewModelFactory(socialRepository, tokenManager,fcmRepository)
-        )[SocialViewModel::class.java]
     }
 
     override fun onCreateView(

@@ -13,33 +13,20 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.toyou.toyouHoandroid.data.create.service.CreateService
 import com.toyou.toyouandroid.R
-import com.toyou.toyouandroid.data.onboarding.service.AuthService
-import com.toyou.toyouandroid.data.social.service.SocialService
 import com.toyou.toyouandroid.databinding.FragmentSocialBinding
-import com.toyou.toyouandroid.domain.create.repository.CreateRepository
-import com.toyou.toyouandroid.domain.social.repostitory.SocialRepository
-import com.toyou.toyouandroid.fcm.domain.FCMRepository
-import com.toyou.toyouandroid.fcm.service.FCMService
-import com.toyou.toyouandroid.network.AuthNetworkModule
-import com.toyou.toyouandroid.network.NetworkModule
-import com.toyou.toyouandroid.presentation.fragment.mypage.MyPageLogoutDialog
+import dagger.hilt.android.AndroidEntryPoint
 import com.toyou.toyouandroid.presentation.fragment.record.CalendarDialog
 import com.toyou.toyouandroid.presentation.fragment.record.CalendarDialogViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
 import com.toyou.toyouandroid.presentation.fragment.social.adapter.SocialRVAdapter
-import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
-import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
-import com.toyou.toyouandroid.utils.TokenManager
-import com.toyou.toyouandroid.utils.TokenStorage
 import timber.log.Timber
 
+@AndroidEntryPoint
 class SocialFragment : Fragment() {
 
     private var _binding : FragmentSocialBinding? = null
@@ -48,37 +35,15 @@ class SocialFragment : Fragment() {
     lateinit var navController: NavController
 
     private lateinit var socialAdapter: SocialRVAdapter
-    private lateinit var socialViewModel : SocialViewModel
+    private val socialViewModel: SocialViewModel by activityViewModels()
     private lateinit var addFriendLinearLayout: LinearLayout
-    private lateinit var userViewModel: UserViewModel
+    private val userViewModel: UserViewModel by activityViewModels()
 
     private var calendarDialog: CalendarDialog? = null
     private val calendarDialogViewModel: CalendarDialogViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val tokenStorage = TokenStorage(requireContext())
-        val authService = NetworkModule.getClient().create(AuthService::class.java)
-        val tokenManager = TokenManager(authService, tokenStorage)
-
-        val socialService = AuthNetworkModule.getClient().create(SocialService::class.java)
-        val socialRepository = SocialRepository(socialService)
-        val createService = AuthNetworkModule.getClient().create(CreateService::class.java)
-        val createRepository = CreateRepository(createService)
-        val fcmService = AuthNetworkModule.getClient().create(FCMService::class.java)
-        val fcmRepository = FCMRepository(fcmService)
-
-
-        socialViewModel = ViewModelProvider(
-            requireActivity(),
-            SocialViewModelFactory(socialRepository, tokenManager, fcmRepository)
-        )[SocialViewModel::class.java]
-
-        userViewModel = ViewModelProvider(
-            requireActivity(),
-            UserViewModelFactory(createRepository,tokenManager)
-        )[UserViewModel::class.java]
 
         socialViewModel.getFriendsData()
     }

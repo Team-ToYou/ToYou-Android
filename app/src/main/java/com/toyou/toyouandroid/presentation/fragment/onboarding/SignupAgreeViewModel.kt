@@ -4,8 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.toyou.toyouandroid.R
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class SignupAgreeViewModel : ViewModel() {
+@HiltViewModel
+class SignupAgreeViewModel @Inject constructor() : ViewModel() {
 
     private val _imageStates = MutableLiveData(listOf(false, false, false, false))
     val imageStates: LiveData<List<Boolean>> get() = _imageStates

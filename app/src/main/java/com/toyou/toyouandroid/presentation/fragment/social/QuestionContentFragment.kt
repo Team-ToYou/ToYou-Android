@@ -3,41 +3,31 @@ package com.toyou.toyouandroid.presentation.fragment.social
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.toyou.toyouandroid.R
-import com.toyou.toyouandroid.data.onboarding.service.AuthService
-import com.toyou.toyouandroid.data.social.service.SocialService
 import com.toyou.toyouandroid.databinding.FragmentQuestionContentBinding
-import com.toyou.toyouandroid.domain.social.repostitory.SocialRepository
-import com.toyou.toyouandroid.fcm.domain.FCMRepository
-import com.toyou.toyouandroid.fcm.service.FCMService
-import com.toyou.toyouandroid.network.AuthNetworkModule
-import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModel
-import com.toyou.toyouandroid.presentation.viewmodel.SocialViewModelFactory
-import com.toyou.toyouandroid.utils.TokenManager
-import com.toyou.toyouandroid.utils.TokenStorage
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class QuestionContentFragment : Fragment() {
     private var _binding : FragmentQuestionContentBinding? = null
     private val binding : FragmentQuestionContentBinding get() = requireNotNull(_binding){"널"}
 
     private lateinit var navController: NavController
-    private lateinit var socialViewModel : SocialViewModel
+    private val socialViewModel: SocialViewModel by activityViewModels()
 
     private lateinit var optionsContainer: LinearLayout
     private lateinit var addOptionButton: ImageView
@@ -46,20 +36,6 @@ class QuestionContentFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val tokenStorage = TokenStorage(requireContext())
-        val authService = NetworkModule.getClient().create(AuthService::class.java)
-        val tokenManager = TokenManager(authService, tokenStorage)
-
-        val socialService = AuthNetworkModule.getClient().create(SocialService::class.java)
-        val socialRepository = SocialRepository(socialService)
-        val fcmService = AuthNetworkModule.getClient().create(FCMService::class.java)
-        val fcmRepository = FCMRepository(fcmService)
-
-        socialViewModel = ViewModelProvider(
-            requireActivity(),
-            SocialViewModelFactory(socialRepository, tokenManager,fcmRepository)
-        )[SocialViewModel::class.java]
     }
 
     override fun onCreateView(

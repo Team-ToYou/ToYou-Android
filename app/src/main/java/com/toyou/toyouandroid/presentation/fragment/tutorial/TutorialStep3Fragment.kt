@@ -10,7 +10,9 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.databinding.FragmentTutorialStep3Binding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TutorialStep3Fragment : Fragment() {
 
     private lateinit var navController: NavController
