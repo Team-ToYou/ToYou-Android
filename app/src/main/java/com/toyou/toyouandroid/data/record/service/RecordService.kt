@@ -7,7 +7,7 @@ import com.toyou.toyouandroid.data.record.dto.DiaryCardPerDayResponse
 import com.toyou.toyouandroid.data.record.dto.DiaryCardResponse
 import com.toyou.toyouandroid.data.record.dto.PatchDiaryCardResponse
 import com.toyou.toyouandroid.network.BaseResponse
-import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
@@ -16,33 +16,33 @@ import retrofit2.http.Query
 
 interface RecordService {
     @GET("diarycards/mine")
-    fun getDiarycardsMine(
+    suspend fun getDiarycardsMine(
         @Query("year") year: Int,
         @Query("month") month: Int
-    ): Call<DiaryCardResponse>
+    ): Response<DiaryCardResponse>
 
     @GET("diarycards/friends")
-    fun getDiarycardsNumFriend(
+    suspend fun getDiarycardsNumFriend(
         @Query("year") year: Int,
         @Query("month") month: Int,
-    ): Call<DiaryCardNumResponse>
+    ): Response<DiaryCardNumResponse>
 
     @GET("diarycards/friends")
-    fun getDiarycardsPerDayFriend(
+    suspend fun getDiarycardsPerDayFriend(
         @Query("year") year: Int,
         @Query("month") month: Int,
         @Query("day") day: Int
-    ): Call<DiaryCardPerDayResponse>
+    ): Response<DiaryCardPerDayResponse>
 
     @DELETE("diarycards/{cardId}")
-    fun deleteDiarycard(
+    suspend fun deleteDiarycard(
         @Path("cardId") cardId: Int
-    ): Call<DeleteDiaryCardResponse>
+    ): Response<DeleteDiaryCardResponse>
 
     @PATCH("diarycards/{cardId}/exposure")
-    fun patchDiarycardExposure(
+    suspend fun patchDiarycardExposure(
         @Path("cardId") cardId: Int
-    ): Call<PatchDiaryCardResponse>
+    ): Response<PatchDiaryCardResponse>
 
     @GET("/diarycards/{cardId}")
     suspend fun getCardDetail(

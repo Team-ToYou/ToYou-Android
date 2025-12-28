@@ -4,7 +4,6 @@ import com.toyou.toyouandroid.data.home.dto.response.CardDetail
 import com.toyou.toyouandroid.data.emotion.dto.EmotionRequest
 import com.toyou.toyouandroid.data.emotion.dto.EmotionResponse
 import com.toyou.toyouandroid.data.emotion.dto.YesterdayFriendsResponse
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -14,18 +13,13 @@ import retrofit2.http.Path
 interface EmotionService {
 
     @POST("users/emotions")
-    fun patchEmotion(
-        @Body emotion: EmotionRequest
-    ): Call<EmotionResponse>
-
-    @POST("users/emotions")
-    suspend fun patchEmotionSuspend(
+    suspend fun patchEmotion(
         @Body emotion: EmotionRequest
     ): Response<EmotionResponse>
 
     @GET("diarycards/yesterday")
-    fun getYesterdayFriendCard(): Call<YesterdayFriendsResponse>
+    suspend fun getYesterdayFriendCard(): Response<YesterdayFriendsResponse>
 
     @GET("diarycards/{cardId}")
-    fun getDiaryCardDetail(@Path("cardId") cardId : Int): Call<CardDetail>
+    suspend fun getDiaryCardDetail(@Path("cardId") cardId: Int): Response<CardDetail>
 }

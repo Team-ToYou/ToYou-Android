@@ -19,7 +19,8 @@ import com.kakao.sdk.user.UserApiClient
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentLoginBinding
 import com.toyou.toyouandroid.presentation.base.MainActivity
-import com.toyou.toyouandroid.utils.TutorialStorage
+import com.toyou.core.datastore.TutorialStorage
+import javax.inject.Inject
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -31,7 +32,8 @@ class LoginFragment : Fragment() {
     private val binding: FragmentLoginBinding
         get() = requireNotNull(_binding){"FragmentLoginBinding -> null"}
 
-    private lateinit var tutorialStorage: TutorialStorage
+    @Inject
+    lateinit var tutorialStorage: TutorialStorage
 
     private val loginViewModel: LoginViewModel by activityViewModels()
 
@@ -41,8 +43,6 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
-
-        tutorialStorage = TutorialStorage(requireContext())
 
         return binding.root
     }
@@ -134,7 +134,7 @@ class LoginFragment : Fragment() {
     private fun checkTutorial() {
         if (!tutorialStorage.isTutorialShown()) {
             navController.navigate(R.id.action_navigation_login_to_tutorial_fragment)
-            tutorialStorage.setTutorialShown()
+            tutorialStorage.setTutorialShownSync()
         } else {
             // 튜토리얼을 본 적이 있으면 홈 화면으로 바로 이동
             // 액세스 토큰이 있으면 홈 화면으로 이동

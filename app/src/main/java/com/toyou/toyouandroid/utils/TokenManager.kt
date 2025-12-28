@@ -1,45 +1,55 @@
 package com.toyou.toyouandroid.utils
 
-import com.toyou.toyouandroid.data.onboarding.dto.response.SignUpResponse
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
 import com.toyou.toyouandroid.network.AuthNetworkModule
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.toyou.core.datastore.TokenStorage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class TokenManager(private val authService: AuthService, private val tokenStorage: TokenStorage) {
+@Singleton
+class TokenManager @Inject constructor(
+    private val authService: AuthService,
+    private val tokenStorage: TokenStorage
+) {
+    suspend fun refreshTokenSuspend(): Result<String> {
+        return try {
+            val response = authService.reissue(tokenStorage.getRefreshToken().toString())
+            if (response.isSuccessful) {
+                val newAccessToken = response.headers()["access_token"]
+                val newRefreshToken = response.headers()["refresh_token"]
+                if (newAccessToken != null && newRefreshToken != null) {
+                    Timber.d("Tokens received from server - Access: $newAccessToken, Refresh: $newRefreshToken")
+                    tokenStorage.saveTokens(newAccessToken, newRefreshToken)
+                    AuthNetworkModule.setAccessToken(newAccessToken)
+                    Timber.i("Tokens saved successfully")
+                    Result.success(newAccessToken)
+                } else {
+                    Timber.e("Token missing in response headers")
+                    Result.failure(Exception("Token missing in response headers"))
+                }
+            } else {
+                val errorMessage = response.errorBody()?.string() ?: "Unknown error"
+                Timber.e("API Error: $errorMessage")
+                Result.failure(Exception(errorMessage))
+            }
+        } catch (e: Exception) {
+            Timber.e("Token refresh failed: ${e.message}")
+            Result.failure(e)
+        }
+    }
 
     fun refreshToken(onSuccess: (String) -> Unit, onFailure: () -> Unit) {
-        authService.reissue(tokenStorage.getRefreshToken().toString()).enqueue(object :
-            Callback<SignUpResponse> {
-            override fun onResponse(call: Call<SignUpResponse>, response: Response<SignUpResponse>) {
-                if (response.isSuccessful) {
-                    response.headers()["access_token"]?.let { newAccessToken ->
-                        response.headers()["refresh_token"]?.let { newRefreshToken ->
-                            Timber.d("Tokens received from server - Access: $newAccessToken, Refresh: $newRefreshToken")
-
-                            // 암호화된 토큰 저장소에 저장
-                            tokenStorage.saveTokens(newAccessToken, newRefreshToken)
-                            Timber.i("Tokens saved successfully")
-
-                            // 인증 네트워크 모듈에 재발급받은 access token 저장
-                            AuthNetworkModule.setAccessToken(newAccessToken)
-
-                            // 성공 콜백 실행
-                            onSuccess(newAccessToken)
-
-                        } ?: Timber.e("Refresh token missing in response headers")
-                    } ?: Timber.e("Access token missing in response headers")
-                } else {
-                    val errorMessage = response.errorBody()?.string() ?: "Unknown error"
-                    Timber.e("API Error: $errorMessage")
-                }
-            }
-
-            override fun onFailure(call: Call<SignUpResponse>, t: Throwable) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val result = refreshTokenSuspend()
+            result.onSuccess { token ->
+                onSuccess(token)
+            }.onFailure {
                 onFailure()
             }
-        })
+        }
     }
 }

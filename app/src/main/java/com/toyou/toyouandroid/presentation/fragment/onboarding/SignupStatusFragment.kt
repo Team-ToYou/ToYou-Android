@@ -12,7 +12,8 @@ import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentSignupstatusBinding
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.data.onboarding.dto.request.SignUpRequest
-import com.toyou.toyouandroid.utils.TutorialStorage
+import com.toyou.core.datastore.TutorialStorage
+import javax.inject.Inject
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -27,7 +28,8 @@ class SignupStatusFragment : Fragment() {
     private val signUpStatusViewModel: SignupStatusViewModel by activityViewModels()
     private val signupNicknameViewModel: SignupNicknameViewModel by activityViewModels()
 
-    private lateinit var tutorialStorage: TutorialStorage
+    @Inject
+    lateinit var tutorialStorage: TutorialStorage
 
     private val loginViewModel: LoginViewModel by activityViewModels()
 
@@ -40,8 +42,6 @@ class SignupStatusFragment : Fragment() {
 
         binding.viewModel = signUpStatusViewModel
         binding.lifecycleOwner = this
-
-        tutorialStorage = TutorialStorage(requireContext())
 
         return binding.root
     }
@@ -99,7 +99,7 @@ class SignupStatusFragment : Fragment() {
             loginViewModel.signUp(signUpRequest)
 
             navController.navigate(R.id.action_navigation_signup_status_to_tutorial_fragment)
-            tutorialStorage.setTutorialShown()
+            tutorialStorage.setTutorialShownSync()
         }
     }
 

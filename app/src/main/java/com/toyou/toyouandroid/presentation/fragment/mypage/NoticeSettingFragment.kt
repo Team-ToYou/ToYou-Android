@@ -1,7 +1,5 @@
 package com.toyou.toyouandroid.presentation.fragment.mypage
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,11 +8,13 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.toyou.core.datastore.NotificationPreferences
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentNoticeSettingBinding
 import com.toyou.toyouandroid.fcm.MyFirebaseMessagingService
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class NoticeSettingFragment : Fragment() {
@@ -26,7 +26,9 @@ class NoticeSettingFragment : Fragment() {
         get() = requireNotNull(_binding){"FragmentNoticeSettingBinding -> null"}
 
     private lateinit var myFirebaseMessagingService: MyFirebaseMessagingService
-    private lateinit var sharedPreferences: SharedPreferences
+
+    @Inject
+    lateinit var notificationPreferences: NotificationPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,11 +50,9 @@ class NoticeSettingFragment : Fragment() {
         }
 
         myFirebaseMessagingService = MyFirebaseMessagingService()
-        sharedPreferences =
-            context?.getSharedPreferences("FCM_PREFERENCES", Context.MODE_PRIVATE) ?: return
 
-        // 기존 구독 상태를 SharedPreferences에서 불러오기
-        val isSubscribed = sharedPreferences.getBoolean("isSubscribed", false)
+        // 기존 구독 상태를 DataStore에서 불러오기
+        val isSubscribed = notificationPreferences.isSubscribed()
 
         // SwitchCompat 초기 상태 설정
         binding.noticeToggle.isChecked = isSubscribed
@@ -70,7 +70,7 @@ class NoticeSettingFragment : Fragment() {
                 Toast.makeText(context, "알림 수신을 거부하였습니다", Toast.LENGTH_SHORT).show()
             }
 
-            sharedPreferences.edit().putBoolean("isSubscribed", isChecked).apply()
+            notificationPreferences.setSubscribedSync(isChecked)
         }
     }
 

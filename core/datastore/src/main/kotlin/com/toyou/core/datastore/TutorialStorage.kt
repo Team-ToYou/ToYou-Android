@@ -1,29 +1,57 @@
 package com.toyou.core.datastore
 
 import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 import javax.inject.Singleton
 
+private val Context.tutorialDataStore: DataStore<Preferences> by preferencesDataStore(name = "tutorial_prefs")
+
 @Singleton
 class TutorialStorage @Inject constructor(
-    @ApplicationContext context: Context
+    @ApplicationContext private val context: Context
 ) {
-    private val preferences = context.getSharedPreferences("tutorial_prefs", Context.MODE_PRIVATE)
+    private val dataStore = context.tutorialDataStore
 
-    fun isTutorialShown(): Boolean {
-        return preferences.getBoolean(KEY_TUTORIAL_SHOWN, false)
+    val tutorialShownFlow: Flow<Boolean> = dataStore.data.map { prefs ->
+        prefs[KEY_TUTORIAL_SHOWN] ?: false
     }
 
-    fun setTutorialShown() {
-        preferences.edit().putBoolean(KEY_TUTORIAL_SHOWN, true).apply()
+    suspend fun setTutorialShown() {
+        dataStore.edit { prefs ->
+            prefs[KEY_TUTORIAL_SHOWN] = true
+        }
     }
 
-    fun setTutorialNotShown() {
-        preferences.edit().putBoolean(KEY_TUTORIAL_SHOWN, false).apply()
+    suspend fun setTutorialNotShown() {
+        dataStore.edit { prefs ->
+            prefs[KEY_TUTORIAL_SHOWN] = false
+        }
+    }
+
+    // Blocking versions for backward compatibility
+    fun isTutorialShown(): Boolean = runBlocking {
+        dataStore.data.map { it[KEY_TUTORIAL_SHOWN] ?: false }.first()
+    }
+
+    fun setTutorialShownSync() = runBlocking {
+        setTutorialShown()
+    }
+
+    fun setTutorialNotShownSync() = runBlocking {
+        setTutorialNotShown()
     }
 
     companion object {
-        private const val KEY_TUTORIAL_SHOWN = "tutorial_shown"
+        private val KEY_TUTORIAL_SHOWN = booleanPreferencesKey("tutorial_shown")
     }
 }

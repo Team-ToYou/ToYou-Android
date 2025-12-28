@@ -2,188 +2,239 @@ package com.toyou.toyouandroid.presentation.fragment.mypage
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.toyou.toyouandroid.domain.profile.repository.ProfileRepository
+import com.toyou.core.common.mvi.MviViewModel
+import com.toyou.toyouandroid.domain.profile.repository.IProfileRepository
 import com.toyou.toyouandroid.utils.TokenManager
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val profileRepository: ProfileRepository,
+    private val profileRepository: IProfileRepository,
     private val tokenManager: TokenManager
-) : ViewModel() {
-    
-    private val _uiState = MutableLiveData(ProfileUiState())
-    val uiState: LiveData<ProfileUiState> get() = _uiState
-    
-    // 데이터 바인딩 호환성을 위한 프로퍼티
-    val textCount: LiveData<String> = MutableLiveData("0/15")
-    val nickname: LiveData<String> = MutableLiveData()
-    val duplicateCheckButtonTextColor: LiveData<Int> = MutableLiveData(0xFFA6A6A6.toInt())
-    val duplicateCheckButtonBackground: LiveData<Int> = MutableLiveData(com.toyou.toyouandroid.R.drawable.next_button)
-    val duplicateCheckMessage: LiveData<String> = MutableLiveData("중복된 닉네임인지 확인해주세요")
-    val duplicateCheckMessageColor: LiveData<Int> = MutableLiveData(0xFF000000.toInt())
-    val nextButtonBackground: LiveData<Int> = MutableLiveData(com.toyou.toyouandroid.R.drawable.next_button)
-    val nextButtonTextColor: LiveData<Int> = MutableLiveData(0xFFA6A6A6.toInt())
-    val isNextButtonEnabled: LiveData<Boolean> = MutableLiveData(false)
-    
+) : MviViewModel<ProfileUiState, ProfileEvent, ProfileAction>(ProfileUiState()) {
+
+    private val _textCount = MutableLiveData("0/15")
+    val textCount: LiveData<String> get() = _textCount
+
+    private val _nickname = MutableLiveData<String>()
+    val nickname: LiveData<String> get() = _nickname
+
+    private val _duplicateCheckButtonTextColor = MutableLiveData(0xFFA6A6A6.toInt())
+    val duplicateCheckButtonTextColor: LiveData<Int> get() = _duplicateCheckButtonTextColor
+
+    private val _duplicateCheckButtonBackground = MutableLiveData(com.toyou.toyouandroid.R.drawable.next_button)
+    val duplicateCheckButtonBackground: LiveData<Int> get() = _duplicateCheckButtonBackground
+
+    private val _duplicateCheckMessage = MutableLiveData("중복된 닉네임인지 확인해주세요")
+    val duplicateCheckMessage: LiveData<String> get() = _duplicateCheckMessage
+
+    private val _duplicateCheckMessageColor = MutableLiveData(0xFF000000.toInt())
+    val duplicateCheckMessageColor: LiveData<Int> get() = _duplicateCheckMessageColor
+
+    private val _nextButtonBackground = MutableLiveData(com.toyou.toyouandroid.R.drawable.next_button)
+    val nextButtonBackground: LiveData<Int> get() = _nextButtonBackground
+
+    private val _nextButtonTextColor = MutableLiveData(0xFFA6A6A6.toInt())
+    val nextButtonTextColor: LiveData<Int> get() = _nextButtonTextColor
+
+    private val _isNextButtonEnabled = MutableLiveData(false)
+    val isNextButtonEnabled: LiveData<Boolean> get() = _isNextButtonEnabled
+
     private val _nicknameChangedSuccess = MutableLiveData<Boolean>()
     val nicknameChangedSuccess: LiveData<Boolean> get() = _nicknameChangedSuccess
-    
+
     private val _duplicateCheckMessageType = MutableLiveData<DuplicateCheckMessageType>()
     val duplicateCheckMessageType: LiveData<DuplicateCheckMessageType> get() = _duplicateCheckMessageType
-    
+
+    @Deprecated("Use state instead", ReplaceWith("state"))
+    private val _uiState = MutableLiveData(ProfileUiState())
+    @Deprecated("Use state instead", ReplaceWith("state"))
+    val uiState: LiveData<ProfileUiState> get() = _uiState
+
     init {
-        _uiState.value = ProfileUiState(title = "회원가입")
+        updateState { copy(title = "회원가입") }
+        performSyncLegacyLiveData()
     }
-    
-    fun updateTextCount(count: Int) {
+
+    override fun handleAction(action: ProfileAction) {
+        when (action) {
+            is ProfileAction.UpdateTextCount -> performUpdateTextCount(action.count)
+            is ProfileAction.SetNickname -> performSetNickname(action.nickname)
+            is ProfileAction.UpdateLength15 -> performUpdateLength15(action.length)
+            is ProfileAction.DuplicateBtnActivate -> performDuplicateBtnActivate()
+            is ProfileAction.ResetNicknameEditState -> performResetNicknameEditState()
+            is ProfileAction.CheckDuplicate -> performCheckDuplicate(action.userNickname, action.userId)
+            is ProfileAction.ChangeNickname -> performChangeNickname()
+            is ProfileAction.ChangeStatus -> performChangeStatus()
+            is ProfileAction.OnStatusButtonClicked -> performOnStatusButtonClicked(action.statusType)
+        }
+    }
+
+    private fun performSyncLegacyLiveData() {
+        state.onEach { uiState ->
+            _uiState.value = uiState
+            _textCount.value = uiState.textCount
+            _nickname.value = uiState.nickname
+            _duplicateCheckMessage.value = uiState.duplicateCheckMessage
+            _isNextButtonEnabled.value = uiState.isNextButtonEnabled
+        }.launchIn(viewModelScope)
+    }
+
+    private fun performUpdateTextCount(count: Int) {
         val countText = "($count/15)"
-        _uiState.value = _uiState.value?.copy(
-            textCount = countText
-        )
-        (textCount as MutableLiveData).value = countText
+        updateState { copy(textCount = countText) }
     }
-    
-    fun setNickname(newNickname: String) {
-        _uiState.value = _uiState.value?.copy(
-            nickname = newNickname,
-            isDuplicateCheckEnabled = newNickname.isNotEmpty()
-        )
-        (nickname as MutableLiveData).value = newNickname
+
+    private fun performSetNickname(newNickname: String) {
+        updateState {
+            copy(
+                nickname = newNickname,
+                isDuplicateCheckEnabled = newNickname.isNotEmpty()
+            )
+        }
     }
-    
-    fun updateLength15(length: Int) {
+
+    private fun performUpdateLength15(length: Int) {
         val messageType = if (length >= 15) {
             DuplicateCheckMessageType.LENGTH_EXCEEDED
         } else {
             DuplicateCheckMessageType.CHECK_REQUIRED
         }
+        sendEvent(ProfileEvent.DuplicateCheckMessageChanged(messageType))
         _duplicateCheckMessageType.value = messageType
-        _uiState.value = _uiState.value?.copy(
-            duplicateCheckMessage = messageType.message
-        )
+        updateState { copy(duplicateCheckMessage = messageType.message) }
     }
-    
-    fun duplicateBtnActivate() {
-        _uiState.value = _uiState.value?.copy(
-            isDuplicateCheckEnabled = true
-        )
-        (duplicateCheckButtonTextColor as MutableLiveData).value = 0xFF000000.toInt()
-        (duplicateCheckButtonBackground as MutableLiveData).value = com.toyou.toyouandroid.R.drawable.signupnickname_doublecheck_activate
+
+    private fun performDuplicateBtnActivate() {
+        updateState { copy(isDuplicateCheckEnabled = true) }
+        _duplicateCheckButtonTextColor.value = 0xFF000000.toInt()
+        _duplicateCheckButtonBackground.value = com.toyou.toyouandroid.R.drawable.signupnickname_doublecheck_activate
     }
-    
-    fun resetNicknameEditState() {
-        _uiState.value = _uiState.value?.copy(
-            duplicateCheckMessage = DuplicateCheckMessageType.CHECK_REQUIRED.message,
-            isNextButtonEnabled = false,
-            isNicknameValid = false
-        )
+
+    private fun performResetNicknameEditState() {
+        updateState {
+            copy(
+                duplicateCheckMessage = DuplicateCheckMessageType.CHECK_REQUIRED.message,
+                isNextButtonEnabled = false,
+                isNicknameValid = false
+            )
+        }
+        sendEvent(ProfileEvent.DuplicateCheckMessageChanged(DuplicateCheckMessageType.CHECK_REQUIRED))
         _duplicateCheckMessageType.value = DuplicateCheckMessageType.CHECK_REQUIRED
     }
-    
-    fun checkDuplicate(userNickname: String, userId: Int) {
-        val nickname = _uiState.value?.nickname ?: return
-        
+
+    private fun performCheckDuplicate(userNickname: String, userId: Int) {
+        val nickname = currentState.nickname
+        if (nickname.isEmpty()) return
+
         viewModelScope.launch {
             try {
                 val response = profileRepository.checkNickname(nickname, userId)
                 if (response.isSuccessful) {
                     val exists = response.body()?.result?.exists ?: false
-                    handleNicknameCheckResult(exists, userNickname, nickname)
+                    performHandleNicknameCheckResult(exists, userNickname, nickname)
                 } else {
-                    handleNicknameCheckError()
+                    performHandleNicknameCheckError()
                     tokenManager.refreshToken(
-                        onSuccess = { checkDuplicate(userNickname, userId) },
+                        onSuccess = { performCheckDuplicate(userNickname, userId) },
                         onFailure = { Timber.e("Failed to refresh token and check nickname") }
                     )
                 }
             } catch (e: Exception) {
                 Timber.tag("API Failure").e(e, "Error checking nickname")
+                sendEvent(ProfileEvent.DuplicateCheckMessageChanged(DuplicateCheckMessageType.SERVER_ERROR))
                 _duplicateCheckMessageType.value = DuplicateCheckMessageType.SERVER_ERROR
-                _uiState.value = _uiState.value?.copy(
-                    duplicateCheckMessage = DuplicateCheckMessageType.SERVER_ERROR.message,
-                    isNicknameValid = false,
-                    isNextButtonEnabled = false
-                )
+                updateState {
+                    copy(
+                        duplicateCheckMessage = DuplicateCheckMessageType.SERVER_ERROR.message,
+                        isNicknameValid = false,
+                        isNextButtonEnabled = false
+                    )
+                }
             }
         }
     }
-    
-    private fun handleNicknameCheckResult(exists: Boolean, userNickname: String, nickname: String) {
+
+    private fun performHandleNicknameCheckResult(exists: Boolean, userNickname: String, nickname: String) {
         val messageType = when {
             !exists -> DuplicateCheckMessageType.AVAILABLE
             userNickname == nickname -> DuplicateCheckMessageType.ALREADY_IN_USE_SAME
             else -> DuplicateCheckMessageType.ALREADY_IN_USE
         }
-        
+
+        sendEvent(ProfileEvent.DuplicateCheckMessageChanged(messageType))
         _duplicateCheckMessageType.value = messageType
         val isValid = !exists || (userNickname == nickname)
-        
-        _uiState.value = _uiState.value?.copy(
-            duplicateCheckMessage = messageType.message,
-            isNicknameValid = isValid,
-            isNextButtonEnabled = isValid
-        )
-        
-        // 호환성 프로퍼티 업데이트
-        (duplicateCheckMessage as MutableLiveData).value = messageType.message
-        (duplicateCheckMessageColor as MutableLiveData).value = when {
+
+        updateState {
+            copy(
+                duplicateCheckMessage = messageType.message,
+                isNicknameValid = isValid,
+                isNextButtonEnabled = isValid
+            )
+        }
+
+        _duplicateCheckMessageColor.value = when {
             !exists -> 0xFFEA9797.toInt()
             else -> 0xFFFF0000.toInt()
         }
-        (isNextButtonEnabled as MutableLiveData).value = isValid
         if (isValid) {
-            (nextButtonTextColor as MutableLiveData).value = 0xFF000000.toInt()
-            (nextButtonBackground as MutableLiveData).value = com.toyou.toyouandroid.R.drawable.next_button_enabled
+            _nextButtonTextColor.value = 0xFF000000.toInt()
+            _nextButtonBackground.value = com.toyou.toyouandroid.R.drawable.next_button_enabled
         }
     }
-    
-    private fun handleNicknameCheckError() {
+
+    private fun performHandleNicknameCheckError() {
+        sendEvent(ProfileEvent.DuplicateCheckMessageChanged(DuplicateCheckMessageType.CHECK_FAILED))
         _duplicateCheckMessageType.value = DuplicateCheckMessageType.CHECK_FAILED
-        _uiState.value = _uiState.value?.copy(
-            duplicateCheckMessage = DuplicateCheckMessageType.CHECK_FAILED.message,
-            isNicknameValid = false,
-            isNextButtonEnabled = false
-        )
+        updateState {
+            copy(
+                duplicateCheckMessage = DuplicateCheckMessageType.CHECK_FAILED.message,
+                isNicknameValid = false,
+                isNextButtonEnabled = false
+            )
+        }
     }
-    
-    fun changeNickname() {
-        val nickname = _uiState.value?.nickname ?: return
-        
+
+    private fun performChangeNickname() {
+        val nickname = currentState.nickname
+        if (nickname.isEmpty()) return
+
         viewModelScope.launch {
             try {
                 val response = profileRepository.updateNickname(nickname)
                 if (response.isSuccessful) {
                     _nicknameChangedSuccess.postValue(true)
+                    sendEvent(ProfileEvent.NicknameChangedSuccess)
                     Timber.tag("changeNickname").d("$response")
                 } else {
+                    sendEvent(ProfileEvent.DuplicateCheckMessageChanged(DuplicateCheckMessageType.UPDATE_FAILED))
                     _duplicateCheckMessageType.value = DuplicateCheckMessageType.UPDATE_FAILED
-                    _uiState.value = _uiState.value?.copy(
-                        duplicateCheckMessage = DuplicateCheckMessageType.UPDATE_FAILED.message
-                    )
+                    updateState { copy(duplicateCheckMessage = DuplicateCheckMessageType.UPDATE_FAILED.message) }
                     tokenManager.refreshToken(
-                        onSuccess = { changeNickname() },
+                        onSuccess = { performChangeNickname() },
                         onFailure = { Timber.e("Failed to refresh token and update nickname") }
                     )
                 }
             } catch (e: Exception) {
                 Timber.tag("API Failure").e(e, "Error updating nickname")
+                sendEvent(ProfileEvent.DuplicateCheckMessageChanged(DuplicateCheckMessageType.SERVER_ERROR))
                 _duplicateCheckMessageType.value = DuplicateCheckMessageType.SERVER_ERROR
-                _uiState.value = _uiState.value?.copy(
-                    duplicateCheckMessage = DuplicateCheckMessageType.SERVER_ERROR.message
-                )
+                updateState { copy(duplicateCheckMessage = DuplicateCheckMessageType.SERVER_ERROR.message) }
             }
         }
     }
-    
-    fun changeStatus() {
-        val status = _uiState.value?.status ?: return
-        
+
+    private fun performChangeStatus() {
+        val status = currentState.status
+        if (status.isEmpty()) return
+
         viewModelScope.launch {
             try {
                 val response = profileRepository.updateStatus(status)
@@ -191,7 +242,7 @@ class ProfileViewModel @Inject constructor(
                     Timber.tag("changeStatus").d("${response.body()}")
                 } else {
                     tokenManager.refreshToken(
-                        onSuccess = { changeStatus() },
+                        onSuccess = { performChangeStatus() },
                         onFailure = { Timber.e("Failed to refresh token and update status") }
                     )
                 }
@@ -200,25 +251,61 @@ class ProfileViewModel @Inject constructor(
             }
         }
     }
-    
-    fun onStatusButtonClicked(statusType: StatusType) {
-        if (_uiState.value?.selectedStatusType == statusType) return
-        
-        _uiState.value = _uiState.value?.copy(
-            selectedStatusType = statusType,
-            status = statusType.value,
-            isNextButtonEnabled = true
-        )
-    }
-}
 
-enum class DuplicateCheckMessageType(val message: String) {
-    CHECK_REQUIRED("중복된 닉네임인지 확인해주세요"),
-    LENGTH_EXCEEDED("15자 이내로 입력해주세요."),
-    AVAILABLE("사용 가능한 닉네임입니다."),
-    ALREADY_IN_USE("이미 사용 중인 닉네임입니다."),
-    ALREADY_IN_USE_SAME("이미 사용 중인 닉네임입니다."),
-    CHECK_FAILED("닉네임 확인에 실패했습니다."),
-    UPDATE_FAILED("닉네임 변경에 실패했습니다."),
-    SERVER_ERROR("서버에 연결할 수 없습니다.")
+    private fun performOnStatusButtonClicked(statusType: StatusType) {
+        if (currentState.selectedStatusType == statusType) return
+
+        updateState {
+            copy(
+                selectedStatusType = statusType,
+                status = statusType.value,
+                isNextButtonEnabled = true
+            )
+        }
+    }
+
+    @Deprecated("Use onAction(ProfileAction.UpdateTextCount) instead")
+    fun updateTextCount(count: Int) {
+        onAction(ProfileAction.UpdateTextCount(count))
+    }
+
+    @Deprecated("Use onAction(ProfileAction.SetNickname) instead")
+    fun setNickname(newNickname: String) {
+        onAction(ProfileAction.SetNickname(newNickname))
+    }
+
+    @Deprecated("Use onAction(ProfileAction.UpdateLength15) instead")
+    fun updateLength15(length: Int) {
+        onAction(ProfileAction.UpdateLength15(length))
+    }
+
+    @Deprecated("Use onAction(ProfileAction.DuplicateBtnActivate) instead")
+    fun duplicateBtnActivate() {
+        onAction(ProfileAction.DuplicateBtnActivate)
+    }
+
+    @Deprecated("Use onAction(ProfileAction.ResetNicknameEditState) instead")
+    fun resetNicknameEditState() {
+        onAction(ProfileAction.ResetNicknameEditState)
+    }
+
+    @Deprecated("Use onAction(ProfileAction.CheckDuplicate) instead")
+    fun checkDuplicate(userNickname: String, userId: Int) {
+        onAction(ProfileAction.CheckDuplicate(userNickname, userId))
+    }
+
+    @Deprecated("Use onAction(ProfileAction.ChangeNickname) instead")
+    fun changeNickname() {
+        onAction(ProfileAction.ChangeNickname)
+    }
+
+    @Deprecated("Use onAction(ProfileAction.ChangeStatus) instead")
+    fun changeStatus() {
+        onAction(ProfileAction.ChangeStatus)
+    }
+
+    @Deprecated("Use onAction(ProfileAction.OnStatusButtonClicked) instead")
+    fun onStatusButtonClicked(statusType: StatusType) {
+        onAction(ProfileAction.OnStatusButtonClicked(statusType))
+    }
 }

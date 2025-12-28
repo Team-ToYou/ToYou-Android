@@ -10,18 +10,19 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ProfileRepository @Inject constructor(
+class ProfileRepositoryImpl @Inject constructor(
     private val onboardingService: OnboardingService
-) {
-    suspend fun checkNickname(nickname: String, userId: Int): Response<NicknameCheckResponse> {
-        return onboardingService.getNicknameCheckSuspend(nickname, userId)
+) : IProfileRepository {
+
+    override suspend fun checkNickname(nickname: String, userId: Int): Response<NicknameCheckResponse> {
+        return onboardingService.getNicknameCheck(nickname, userId)
     }
-    
-    suspend fun updateNickname(nickname: String): Response<PatchNicknameResponse> {
-        return onboardingService.patchNicknameSuspend(PatchNicknameRequest(nickname))
+
+    override suspend fun updateNickname(nickname: String): Response<PatchNicknameResponse> {
+        return onboardingService.patchNickname(PatchNicknameRequest(nickname))
     }
-    
-    suspend fun updateStatus(status: String): Response<PatchNicknameResponse> {
-        return onboardingService.patchStatusSuspend(PatchStatusRequest(status))
+
+    override suspend fun updateStatus(status: String): Response<PatchNicknameResponse> {
+        return onboardingService.patchStatus(PatchStatusRequest(status))
     }
 }

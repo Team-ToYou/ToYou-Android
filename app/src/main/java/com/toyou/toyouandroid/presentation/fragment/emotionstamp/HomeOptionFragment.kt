@@ -170,11 +170,10 @@ class HomeOptionFragment : Fragment() {
             putString("text", getString(emotionTitleResId)) // 선택한 텍스트 전달
         }
 
-        homeViewModel.updateHomeEmotion(
-            emotionData.homeEmotionDrawable.toString(),
-//            emotionData.homeEmotionTitle,
-//            emotionData.homeColorRes,
-//            emotionData.backgroundDrawable
+        homeViewModel.onAction(
+            com.toyou.toyouandroid.presentation.fragment.home.HomeAction.UpdateEmotion(
+                emotionData.homeEmotionDrawable.toString()
+            )
         )
 
         // 감정 우표 선택 API 호출

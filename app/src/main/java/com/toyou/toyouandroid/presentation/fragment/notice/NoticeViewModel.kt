@@ -2,158 +2,170 @@ package com.toyou.toyouandroid.presentation.fragment.notice
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.toyou.toyouandroid.data.notice.dto.AlarmDeleteResponse
-import com.toyou.toyouandroid.data.notice.dto.AlarmResponse
-import com.toyou.toyouandroid.data.notice.dto.FriendsRequestResponse
-import com.toyou.toyouandroid.domain.notice.NoticeRepository
+import com.toyou.core.common.mvi.MviViewModel
+import com.toyou.toyouandroid.domain.notice.INoticeRepository
 import com.toyou.toyouandroid.utils.TokenManager
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class NoticeViewModel @Inject constructor(
-    private val repository: NoticeRepository,
+    private val repository: INoticeRepository,
     private val tokenManager: TokenManager
-) : ViewModel() {
+) : MviViewModel<NoticeUiState, NoticeEvent, NoticeAction>(
+    initialState = NoticeUiState()
+) {
 
     private val _noticeItems = MutableLiveData<List<NoticeItem>>(emptyList())
     val noticeItems: LiveData<List<NoticeItem>> get() = _noticeItems
 
-    // 일반 알림 전용 LiveData
     private val _generalNotices = MutableLiveData<List<NoticeItem>>(emptyList())
     val generalNotices: LiveData<List<NoticeItem>> get() = _generalNotices
 
-    // 친구 요청 알림 전용 LiveData
     private val _friendRequestNotices = MutableLiveData<List<NoticeItem.NoticeFriendRequestItem>>(emptyList())
     val friendRequestNotices: LiveData<List<NoticeItem.NoticeFriendRequestItem>> get() = _friendRequestNotices
 
     private val _hasNotifications = MutableLiveData<Boolean>()
     val hasNotifications: LiveData<Boolean> get() = _hasNotifications
 
-    fun fetchNotices() {
-        viewModelScope.launch {
-            val response = repository.getNotices()
-            response.enqueue(object : Callback<AlarmResponse> {
-                override fun onResponse(
-                    call: Call<AlarmResponse>,
-                    response: Response<AlarmResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val alarmResponse = response.body()
-                        Timber.d("AlarmResponse: $alarmResponse")
-                        val items = alarmResponse?.result?.alarmList?.mapNotNull { alarm ->
-                            when (alarm.alarmType) {
-                                "FRIEND_REQUEST" -> NoticeItem.NoticeFriendRequestItem(
-                                    alarm.nickname,
-                                    alarm.alarmId
-                                )
-                                "REQUEST_ACCEPTED" -> NoticeItem.NoticeFriendRequestAcceptedItem(
-                                    alarm.nickname,
-                                    alarm.alarmId
-                                )
-                                "NEW_QUESTION" -> NoticeItem.NoticeCardCheckItem(
-                                    alarm.nickname,
-                                    alarm.alarmId
-                                )
-                                else -> null
-                            }
-                        }?.reversed() ?: emptyList()
+    init {
+        state.onEach { uiState ->
+            _noticeItems.value = uiState.noticeItems
+            _generalNotices.value = uiState.generalNotices
+            _friendRequestNotices.value = uiState.friendRequestNotices
+            _hasNotifications.value = uiState.hasNotifications
+        }.launchIn(viewModelScope)
+    }
 
-                        _hasNotifications.value = items.isNotEmpty()
-                        _generalNotices.value = items
-                    } else {
-                        tokenManager.refreshToken(
-                            onSuccess = { fetchNotices() }, // 토큰 갱신 후 다시 요청
-                            onFailure = { Timber.e("Failed to refresh token and get notices") }
-                        )
-                    }
-                }
-
-                override fun onFailure(call: Call<AlarmResponse>, t: Throwable) {
-                    // 에러 처리 로직
-                }
-            })
+    override fun handleAction(action: NoticeAction) {
+        when (action) {
+            is NoticeAction.FetchNotices -> performFetchNotices()
+            is NoticeAction.FetchFriendsRequestNotices -> performFetchFriendsRequestNotices()
+            is NoticeAction.DeleteNotice -> performDeleteNotice(action.alarmId, action.position)
         }
     }
 
-    fun fetchFriendsRequestNotices() {
+    private fun performFetchNotices() {
         viewModelScope.launch {
-            val response = repository.getFriendsRequestNotices()
-            response.enqueue(object : Callback<FriendsRequestResponse> {
-                override fun onResponse(
-                    call: Call<FriendsRequestResponse>,
-                    response: Response<FriendsRequestResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val friendsRequestResponse = response.body()
-                        Timber.d("FriendsRequestResponse: $friendsRequestResponse")
-                        val items = friendsRequestResponse?.result?.friendsRequestList?.map { friendRequest ->
-                            NoticeItem.NoticeFriendRequestItem(
-                                nickname = friendRequest.nickname,
-                                alarmId = friendRequest.userId  // 혹은 API에서 제공하는 고유한 알림 식별자 사용
+            updateState { copy(isLoading = true) }
+            try {
+                val response = repository.getNotices()
+                if (response.isSuccessful) {
+                    val alarmResponse = response.body()
+                    Timber.d("AlarmResponse: $alarmResponse")
+                    val items = alarmResponse?.result?.alarmList?.mapNotNull { alarm ->
+                        when (alarm.alarmType) {
+                            "FRIEND_REQUEST" -> NoticeItem.NoticeFriendRequestItem(
+                                alarm.nickname,
+                                alarm.alarmId
                             )
-                        }?.reversed() ?: emptyList()
-
-                        _hasNotifications.value = items.isNotEmpty()
-                        _friendRequestNotices.value = items
-                    } else {
-                        tokenManager.refreshToken(
-                            onSuccess = { fetchFriendsRequestNotices() }, // 토큰 갱신 후 다시 요청
-                            onFailure = { Timber.e("Failed to refresh token and get notices") }
-                        )
-                    }
-                }
-
-                override fun onFailure(call: Call<FriendsRequestResponse>, t: Throwable) {
-                    TODO("Not yet implemented")
-                }
-            })
-        }
-    }
-
-    fun deleteNotice(alarmId: Int, position: Int, retryCount: Int = 0) {
-        val maxRetries = 5 // 최대 재시도 횟수
-
-        viewModelScope.launch {
-            val response = repository.deleteNotice(alarmId)
-            response.enqueue(object : Callback<AlarmDeleteResponse> {
-                override fun onResponse(
-                    call: Call<AlarmDeleteResponse>,
-                    response: Response<AlarmDeleteResponse>
-                ) {
-                    if (response.isSuccessful) {
-//                        val updatedList = _noticeItems.value?.toMutableList()?.apply {
-//                            removeAt(position)
-//                        }
-//                        _noticeItems.value = updatedList!!
-                    } else {
-                        if (retryCount < maxRetries) {
-                            tokenManager.refreshToken(
-                                onSuccess = {
-                                    Timber.d("Retrying token refresh... ($retryCount/$maxRetries)")
-                                    deleteNotice(alarmId, position, retryCount + 1) // 재호출
-                                },
-                                onFailure = {
-                                    Timber.e("Failed to refresh token after $retryCount retries")
-                                }
+                            "REQUEST_ACCEPTED" -> NoticeItem.NoticeFriendRequestAcceptedItem(
+                                alarm.nickname,
+                                alarm.alarmId
                             )
-                        } else {
-                            Timber.e("Max token refresh retries reached ($maxRetries)")
+                            "NEW_QUESTION" -> NoticeItem.NoticeCardCheckItem(
+                                alarm.nickname,
+                                alarm.alarmId
+                            )
+                            else -> null
                         }
-                    }
-                }
+                    }?.reversed() ?: emptyList()
 
-                override fun onFailure(call: Call<AlarmDeleteResponse>, t: Throwable) {
-                    Timber.e("Delete notice API call failed: ${t.message}")
+                    updateState {
+                        copy(
+                            generalNotices = items,
+                            hasNotifications = items.isNotEmpty(),
+                            isLoading = false
+                        )
+                    }
+                } else {
+                    updateState { copy(isLoading = false) }
+                    tokenManager.refreshToken(
+                        onSuccess = { performFetchNotices() },
+                        onFailure = { Timber.e("Failed to refresh token and get notices") }
+                    )
                 }
-            })
+            } catch (e: Exception) {
+                updateState { copy(isLoading = false) }
+                sendEvent(NoticeEvent.ShowError(e.message ?: "Unknown error"))
+            }
         }
     }
+
+    private fun performFetchFriendsRequestNotices() {
+        viewModelScope.launch {
+            updateState { copy(isLoading = true) }
+            try {
+                val response = repository.getFriendsRequestNotices()
+                if (response.isSuccessful) {
+                    val friendsRequestResponse = response.body()
+                    Timber.d("FriendsRequestResponse: $friendsRequestResponse")
+                    val items = friendsRequestResponse?.result?.friendsRequestList?.map { friendRequest ->
+                        NoticeItem.NoticeFriendRequestItem(
+                            nickname = friendRequest.nickname,
+                            alarmId = friendRequest.userId
+                        )
+                    }?.reversed() ?: emptyList()
+
+                    updateState {
+                        copy(
+                            friendRequestNotices = items,
+                            hasNotifications = items.isNotEmpty(),
+                            isLoading = false
+                        )
+                    }
+                } else {
+                    updateState { copy(isLoading = false) }
+                    tokenManager.refreshToken(
+                        onSuccess = { performFetchFriendsRequestNotices() },
+                        onFailure = { Timber.e("Failed to refresh token and get notices") }
+                    )
+                }
+            } catch (e: Exception) {
+                updateState { copy(isLoading = false) }
+                sendEvent(NoticeEvent.ShowError(e.message ?: "Unknown error"))
+            }
+        }
+    }
+
+    private fun performDeleteNotice(alarmId: Int, position: Int, retryCount: Int = 0) {
+        val maxRetries = 5
+
+        viewModelScope.launch {
+            try {
+                val response = repository.deleteNotice(alarmId)
+                if (response.isSuccessful) {
+                    sendEvent(NoticeEvent.NoticeDeleted(alarmId, position))
+                } else {
+                    if (retryCount < maxRetries) {
+                        tokenManager.refreshToken(
+                            onSuccess = {
+                                Timber.d("Retrying token refresh... ($retryCount/$maxRetries)")
+                                performDeleteNotice(alarmId, position, retryCount + 1)
+                            },
+                            onFailure = {
+                                Timber.e("Failed to refresh token after $retryCount retries")
+                                sendEvent(NoticeEvent.NoticeDeleteFailed(alarmId, position))
+                            }
+                        )
+                    } else {
+                        Timber.e("Max token refresh retries reached ($maxRetries)")
+                        sendEvent(NoticeEvent.NoticeDeleteFailed(alarmId, position))
+                    }
+                }
+            } catch (e: Exception) {
+                Timber.e("Delete notice API call failed: ${e.message}")
+                sendEvent(NoticeEvent.NoticeDeleteFailed(alarmId, position))
+            }
+        }
+    }
+
+    fun fetchNotices() = onAction(NoticeAction.FetchNotices)
+    fun fetchFriendsRequestNotices() = onAction(NoticeAction.FetchFriendsRequestNotices)
+    fun deleteNotice(alarmId: Int, position: Int) = onAction(NoticeAction.DeleteNotice(alarmId, position))
 }

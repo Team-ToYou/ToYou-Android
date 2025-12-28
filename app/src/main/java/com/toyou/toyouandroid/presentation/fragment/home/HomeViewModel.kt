@@ -1,10 +1,8 @@
 package com.toyou.toyouandroid.presentation.fragment.home
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.toyou.toyouandroid.domain.home.repository.HomeRepository
+import com.toyou.core.common.mvi.MviViewModel
+import com.toyou.toyouandroid.domain.home.repository.IHomeRepository
 import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.calendar.getCurrentDate
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,66 +12,75 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val homeRepository: HomeRepository,
+    private val homeRepository: IHomeRepository,
     private val tokenManager: TokenManager
-) : ViewModel() {
+) : MviViewModel<HomeUiState, HomeEvent, HomeAction>(
+    initialState = HomeUiState(currentDate = getCurrentDate())
+) {
 
-    private val _uiState = MutableLiveData(HomeUiState())
-    val uiState: LiveData<HomeUiState> get() = _uiState
-
-    init {
-        _uiState.value = _uiState.value?.copy(
-            currentDate = getCurrentDate()
-        )
+    override fun handleAction(action: HomeAction) {
+        when (action) {
+            is HomeAction.LoadYesterdayCards -> loadYesterdayCards()
+            is HomeAction.UpdateEmotion -> updateEmotion(action.emotionText)
+            is HomeAction.ResetState -> resetState()
+        }
     }
 
-    fun updateHomeEmotion(emotionText: String) {
-        _uiState.value = _uiState.value?.copy(
-            emotionText = emotionText
-        )
+    private fun updateEmotion(emotionText: String) {
+        updateState { copy(emotionText = emotionText) }
     }
 
-    fun resetState() {
-        _uiState.value = _uiState.value?.copy(
-            emotionText = "멘트",
-            diaryCards = null,
-            yesterdayCards = emptyList()
-        )
+    private fun resetState() {
+        updateState {
+            copy(
+                emotionText = "멘트",
+                diaryCards = null,
+                yesterdayCards = emptyList()
+            )
+        }
     }
 
-    fun getYesterdayCard() {
+    private fun loadYesterdayCards() {
         viewModelScope.launch {
-            _uiState.value = _uiState.value?.copy(isLoading = true)
+            updateState { copy(isLoading = true) }
             try {
                 val response = homeRepository.getYesterdayCard()
                 Timber.tag("HomeViewModel").d("yesterdayCards: ${response.result}")
                 if (response.isSuccess) {
-                    _uiState.value = _uiState.value?.copy(
-                        yesterdayCards = response.result.yesterday,
-                        isLoading = false,
-                        isEmpty = response.result.yesterday.isEmpty()
-                    )
+                    updateState {
+                        copy(
+                            yesterdayCards = response.result.yesterday,
+                            isLoading = false,
+                            isEmpty = response.result.yesterday.isEmpty()
+                        )
+                    }
                     Timber.tag("HomeViewModel").d("yesterdayCards: ${response.result.yesterday}")
                 } else {
-                    _uiState.value = _uiState.value?.copy(isLoading = false)
+                    updateState { copy(isLoading = false) }
                     tokenManager.refreshToken(
-                        onSuccess = { getYesterdayCard() },
-                        onFailure = { 
+                        onSuccess = { loadYesterdayCards() },
+                        onFailure = {
                             Timber.tag("HomeViewModel").d("refresh error")
-                            _uiState.value = _uiState.value?.copy(
-                                isLoading = false,
-                                yesterdayCards = emptyList()
-                            )
+                            updateState {
+                                copy(
+                                    isLoading = false,
+                                    yesterdayCards = emptyList()
+                                )
+                            }
+                            sendEvent(HomeEvent.TokenExpired)
                         }
                     )
                 }
             } catch (e: Exception) {
                 Timber.tag("HomeViewModel").e(e, "Error getting yesterday cards")
-                _uiState.value = _uiState.value?.copy(
-                    yesterdayCards = emptyList(),
-                    isLoading = false,
-                    isEmpty = true
-                )
+                updateState {
+                    copy(
+                        yesterdayCards = emptyList(),
+                        isLoading = false,
+                        isEmpty = true
+                    )
+                }
+                sendEvent(HomeEvent.ShowError(e.message ?: "Unknown error"))
             }
         }
     }

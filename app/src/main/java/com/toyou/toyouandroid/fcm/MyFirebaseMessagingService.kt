@@ -6,7 +6,6 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.app.NotificationCompat
@@ -14,31 +13,47 @@ import androidx.core.content.ContextCompat
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.toyou.core.datastore.NotificationPreferences
+import com.toyou.core.datastore.TokenStorage
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.presentation.base.MainActivity
-import com.toyou.toyouandroid.utils.TokenStorage
+import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import timber.log.Timber
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
-    private lateinit var tokenStorage: TokenStorage
-    private var sharedPreferences: SharedPreferences? = null
+    @EntryPoint
+    @InstallIn(SingletonComponent::class)
+    interface MyFirebaseMessagingServiceEntryPoint {
+        fun tokenStorage(): TokenStorage
+        fun notificationPreferences(): NotificationPreferences
+    }
 
-    override fun onCreate() {
-        super.onCreate()
-        tokenStorage = TokenStorage(applicationContext)
-        sharedPreferences = getSharedPreferences("FCM_PREFERENCES", Context.MODE_PRIVATE)
+    private val tokenStorage: TokenStorage by lazy {
+        EntryPointAccessors.fromApplication(
+            applicationContext,
+            MyFirebaseMessagingServiceEntryPoint::class.java
+        ).tokenStorage()
+    }
+
+    private val notificationPreferences: NotificationPreferences by lazy {
+        EntryPointAccessors.fromApplication(
+            applicationContext,
+            MyFirebaseMessagingServiceEntryPoint::class.java
+        ).notificationPreferences()
     }
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         Timber.d("FCM 토큰: %s", token)
-        tokenStorage.saveFcmToken(token)
+        tokenStorage.saveFcmTokenSync(token)
         Timber.d("토큰이 저장되었습니다: %s", token)
 
         // 구독 여부가 저장되어 있으면 구독
-        val isSubscribed = sharedPreferences?.getBoolean("isSubscribed", true)
-        if (isSubscribed == true) {
+        if (notificationPreferences.isSubscribed()) {
             subscribeToTopic()
         }
     }
@@ -48,7 +63,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Timber.d("topic 구독 성공")
-                    sharedPreferences?.edit()?.putBoolean("isSubscribed", true)?.apply()
+                    notificationPreferences.setSubscribedSync(true)
                 } else {
                     Timber.e(task.exception, "구독 실패")
                 }
@@ -60,7 +75,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Timber.d("topic 구독 취소 성공")
-                    sharedPreferences?.edit()?.putBoolean("isSubscribed", false)?.apply()
+                    notificationPreferences.setSubscribedSync(false)
                 } else {
                     Timber.e(task.exception, "구독 취소 실패")
                 }
