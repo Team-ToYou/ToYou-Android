@@ -2,12 +2,17 @@ package com.toyou.toyouandroid.presentation.fragment.mypage
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.toyou.core.common.mvi.MviViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
-class MypageDialogViewModel @Inject constructor() : ViewModel() {
+class MypageDialogViewModel @Inject constructor() : MviViewModel<MypageDialogUiState, MypageDialogEvent, MypageDialogAction>(
+    MypageDialogUiState()
+) {
     private val _title = MutableLiveData<String>()
     val title: LiveData<String> get() = _title
 
@@ -26,8 +31,67 @@ class MypageDialogViewModel @Inject constructor() : ViewModel() {
     private val _rightButtonTextColor = MutableLiveData<Int>()
     val rightButtonTextColor: LiveData<Int> get() = _rightButtonTextColor
 
-    private val _leftButtonClickAction = MutableLiveData<() -> Unit>()
-    private val _rightButtonClickAction = MutableLiveData<() -> Unit>()
+    init {
+        state.onEach { uiState ->
+            _title.value = uiState.title
+            _subTitle.value = uiState.subTitle
+            _leftButtonText.value = uiState.leftButtonText
+            _rightButtonText.value = uiState.rightButtonText
+            _leftButtonTextColor.value = uiState.leftButtonTextColor
+            _rightButtonTextColor.value = uiState.rightButtonTextColor
+        }.launchIn(viewModelScope)
+    }
+
+    override fun handleAction(action: MypageDialogAction) {
+        when (action) {
+            is MypageDialogAction.SetDialogData -> performSetDialogData(
+                action.title,
+                action.subTitle,
+                action.leftButtonText,
+                action.rightButtonText,
+                action.leftButtonTextColor,
+                action.rightButtonTextColor,
+                action.leftButtonClickAction,
+                action.rightButtonClickAction
+            )
+            is MypageDialogAction.LeftButtonClick -> performLeftButtonClick()
+            is MypageDialogAction.RightButtonClick -> performRightButtonClick()
+        }
+    }
+
+    private fun performSetDialogData(
+        title: String,
+        subTitle: String?,
+        leftButtonText: String,
+        rightButtonText: String,
+        leftButtonTextColor: Int,
+        rightButtonTextColor: Int,
+        leftButtonClickAction: () -> Unit,
+        rightButtonClickAction: () -> Unit
+    ) {
+        updateState {
+            copy(
+                title = title,
+                subTitle = subTitle,
+                leftButtonText = leftButtonText,
+                rightButtonText = rightButtonText,
+                leftButtonTextColor = leftButtonTextColor,
+                rightButtonTextColor = rightButtonTextColor,
+                leftButtonClickAction = leftButtonClickAction,
+                rightButtonClickAction = rightButtonClickAction
+            )
+        }
+    }
+
+    private fun performLeftButtonClick() {
+        currentState.leftButtonClickAction?.invoke()
+        sendEvent(MypageDialogEvent.LeftButtonClicked)
+    }
+
+    private fun performRightButtonClick() {
+        currentState.rightButtonClickAction?.invoke()
+        sendEvent(MypageDialogEvent.RightButtonClicked)
+    }
 
     fun setDialogData(
         title: String,
@@ -39,21 +103,25 @@ class MypageDialogViewModel @Inject constructor() : ViewModel() {
         leftButtonClickAction: () -> Unit,
         rightButtonClickAction: () -> Unit
     ) {
-        _title.value = title
-        _subTitle.value = subTitle
-        _leftButtonText.value = leftButtonText
-        _rightButtonText.value = rightButtonText
-        _leftButtonTextColor.value = leftButtonTextColor
-        _rightButtonTextColor.value = rightButtonTextColor
-        _leftButtonClickAction.value = leftButtonClickAction
-        _rightButtonClickAction.value = rightButtonClickAction
+        onAction(
+            MypageDialogAction.SetDialogData(
+                title,
+                subTitle,
+                leftButtonText,
+                rightButtonText,
+                leftButtonTextColor,
+                rightButtonTextColor,
+                leftButtonClickAction,
+                rightButtonClickAction
+            )
+        )
     }
 
     fun onLeftButtonClick() {
-        _leftButtonClickAction.value?.invoke()
+        onAction(MypageDialogAction.LeftButtonClick)
     }
 
     fun onRightButtonClick() {
-        _rightButtonClickAction.value?.invoke()
+        onAction(MypageDialogAction.RightButtonClick)
     }
 }

@@ -8,34 +8,36 @@ import com.toyou.toyouandroid.data.record.dto.DiaryCardResponse
 import com.toyou.toyouandroid.data.record.dto.PatchDiaryCardResponse
 import com.toyou.toyouandroid.data.record.service.RecordService
 import com.toyou.toyouandroid.network.BaseResponse
-import retrofit2.Call
+import retrofit2.Response
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class RecordRepository @Inject constructor(private val recordService: RecordService) {
+class RecordRepositoryImpl @Inject constructor(
+    private val recordService: RecordService
+) : IRecordRepository {
 
-    fun getMyRecord(year: Int, month: Int): Call<DiaryCardResponse> {
+    override suspend fun getMyRecord(year: Int, month: Int): Response<DiaryCardResponse> {
         return recordService.getDiarycardsMine(year, month)
     }
 
-    fun getFriendRecordNum(year: Int, month: Int): Call<DiaryCardNumResponse> {
+    override suspend fun getFriendRecordNum(year: Int, month: Int): Response<DiaryCardNumResponse> {
         return recordService.getDiarycardsNumFriend(year, month)
     }
 
-    fun getFriendRecordPerDay(year: Int, month: Int, day: Int): Call<DiaryCardPerDayResponse> {
+    override suspend fun getFriendRecordPerDay(year: Int, month: Int, day: Int): Response<DiaryCardPerDayResponse> {
         return recordService.getDiarycardsPerDayFriend(year, month, day)
     }
 
-    fun deleteDiaryCard(cardId: Int): Call<DeleteDiaryCardResponse> {
+    override suspend fun deleteDiaryCard(cardId: Int): Response<DeleteDiaryCardResponse> {
         return recordService.deleteDiarycard(cardId)
     }
 
-    fun patchDiaryCard(cardId: Int): Call<PatchDiaryCardResponse> {
+    override suspend fun patchDiaryCard(cardId: Int): Response<PatchDiaryCardResponse> {
         return recordService.patchDiarycardExposure(cardId)
     }
 
-    suspend fun getCardDetails(cardId: Long): BaseResponse<CardDetail> {
+    override suspend fun getCardDetails(cardId: Long): BaseResponse<CardDetail> {
         return recordService.getCardDetail(cardId)
     }
 }

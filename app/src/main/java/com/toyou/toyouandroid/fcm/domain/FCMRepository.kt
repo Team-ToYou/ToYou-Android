@@ -9,24 +9,23 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class FCMRepository @Inject constructor(private val fcmService: FCMService) {
+class FCMRepositoryImpl @Inject constructor(
+    private val fcmService: FCMService
+) : IFCMRepository {
 
-    //private val client = AuthNetworkModule.getClient().create(FCMService::class.java)
-
-
-    suspend fun postToken(token: Token): BaseResponse<Unit> {
+    override suspend fun postToken(token: Token): BaseResponse<Unit> {
         return fcmService.postToken(token)
     }
-    suspend fun getToken(id:Long): BaseResponse<GetToken> {
+
+    override suspend fun getToken(id: Long): BaseResponse<GetToken> {
         return fcmService.getToken(id)
     }
 
-
-    suspend fun postFCM(request: FCM): BaseResponse<Unit> {
+    override suspend fun postFCM(request: FCM): BaseResponse<Unit> {
         return fcmService.postFCM(request)
     }
 
-    suspend fun patchToken(request: Token): BaseResponse<Unit> {
+    override suspend fun patchToken(request: Token): BaseResponse<Unit> {
         return fcmService.patchToken(request)
     }
     /*suspend fun postToken(

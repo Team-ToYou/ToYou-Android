@@ -1,14 +1,19 @@
 package com.toyou.toyouandroid.domain.home.repository
 
+import com.toyou.toyouandroid.data.home.dto.response.CardDetail
+import com.toyou.toyouandroid.data.home.dto.response.YesterdayCardResponse
 import com.toyou.toyouandroid.data.home.service.HomeService
+import com.toyou.toyouandroid.network.BaseResponse
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class HomeRepository @Inject constructor(
+class HomeRepositoryImpl @Inject constructor(
     private val homeService: HomeService
-) {
-    suspend fun getCardDetail(id: Long) = homeService.getCardDetail(id)
+) : IHomeRepository {
+    override suspend fun getCardDetail(id: Long): BaseResponse<CardDetail> =
+        homeService.getCardDetail(id)
 
-    suspend fun getYesterdayCard() = homeService.getCardYesterday()
+    override suspend fun getYesterdayCard(): BaseResponse<YesterdayCardResponse> =
+        homeService.getCardYesterday()
 }

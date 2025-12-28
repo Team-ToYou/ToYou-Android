@@ -4,22 +4,24 @@ import com.toyou.toyouandroid.data.notice.dto.AlarmDeleteResponse
 import com.toyou.toyouandroid.data.notice.dto.AlarmResponse
 import com.toyou.toyouandroid.data.notice.dto.FriendsRequestResponse
 import com.toyou.toyouandroid.data.notice.service.NoticeService
-import retrofit2.Call
+import retrofit2.Response
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class NoticeRepository @Inject constructor(private val noticeService: NoticeService) {
+class NoticeRepositoryImpl @Inject constructor(
+    private val noticeService: NoticeService
+) : INoticeRepository {
 
-    fun getNotices(): Call<AlarmResponse> {
+    override suspend fun getNotices(): Response<AlarmResponse> {
         return noticeService.getAlarms()
     }
 
-    fun getFriendsRequestNotices(): Call<FriendsRequestResponse> {
+    override suspend fun getFriendsRequestNotices(): Response<FriendsRequestResponse> {
         return noticeService.getFriendsRequest()
     }
 
-    fun deleteNotice(alarmId: Int): Call<AlarmDeleteResponse> {
+    override suspend fun deleteNotice(alarmId: Int): Response<AlarmDeleteResponse> {
         return noticeService.deleteAlarm(alarmId)
     }
 }

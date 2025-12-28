@@ -12,20 +12,22 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.toyou.core.common.mvi.collectEvent
+import com.toyou.core.common.mvi.collectState
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentHomeBinding
-import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.data.home.dto.response.YesterdayCard
+import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.presentation.fragment.home.adapter.HomeBottomSheetAdapter
 import com.toyou.toyouandroid.presentation.fragment.notice.NoticeViewModel
-import dagger.hilt.android.AndroidEntryPoint
 import com.toyou.toyouandroid.presentation.fragment.record.CardInfoViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.CardViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
-import androidx.navigation.findNavController
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -86,9 +88,27 @@ class HomeFragment : Fragment() {
 
         (requireActivity() as MainActivity).hideBottomNavigation(false)
 
+        // MVI: State 수집
+        viewLifecycleOwner.collectState(viewModel.state) { state ->
+            // UI 상태 업데이트는 여기서 처리
+            Timber.tag("HomeFragment").d("State updated: $state")
+        }
 
-        //일기카드 조회
-        viewModel.getYesterdayCard()
+        // MVI: Event 수집
+        viewLifecycleOwner.collectEvent(viewModel.event) { event ->
+            when (event) {
+                is HomeEvent.ShowError -> {
+                    Toast.makeText(requireContext(), event.message, Toast.LENGTH_SHORT).show()
+                }
+                is HomeEvent.TokenExpired -> {
+                    // Token 만료 처리 (로그인 화면으로 이동 등)
+                    Timber.tag("HomeFragment").d("Token expired")
+                }
+            }
+        }
+
+        // MVI: Action 발행 - 일기카드 조회
+        viewModel.onAction(HomeAction.LoadYesterdayCards)
 
 
         // 질문 개수에 따른 우체통 이미지 변경

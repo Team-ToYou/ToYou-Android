@@ -1,9 +1,7 @@
 package com.toyou.toyouandroid.presentation.fragment.mypage
 
 import android.content.ContentValues.TAG
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -21,8 +19,10 @@ import com.toyou.toyouandroid.presentation.fragment.onboarding.SignupNicknameVie
 import com.toyou.toyouandroid.presentation.fragment.home.HomeViewModel
 import com.toyou.toyouandroid.presentation.fragment.record.CalendarDialogViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.ViewModelManager
-import com.toyou.toyouandroid.utils.TutorialStorage
+import com.toyou.core.datastore.TutorialStorage
+import com.toyou.core.datastore.NotificationPreferences
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import timber.log.Timber
 import androidx.navigation.findNavController
 import androidx.core.net.toUri
@@ -46,7 +46,11 @@ class MypageFragment : Fragment() {
 
     private val homeViewModel: HomeViewModel by viewModels()
 
-    private var sharedPreferences: SharedPreferences? = null
+    @Inject
+    lateinit var tutorialStorage: TutorialStorage
+
+    @Inject
+    lateinit var notificationPreferences: NotificationPreferences
 
     private val mypageViewModel: MypageViewModel by viewModels()
 
@@ -58,8 +62,6 @@ class MypageFragment : Fragment() {
         _binding = FragmentMypageBinding.inflate(inflater, container, false)
 
         // MypageViewModel과 HomeViewModel은 Hilt로 주입됨
-
-        sharedPreferences = requireActivity().getSharedPreferences("FCM_PREFERENCES", Context.MODE_PRIVATE)
 
         return binding.root
     }
@@ -187,8 +189,8 @@ class MypageFragment : Fragment() {
             }
         }
 
-        TutorialStorage(requireContext()).setTutorialNotShown()
-        sharedPreferences?.edit()?.putBoolean("isSubscribed", true)?.apply()
+        tutorialStorage.setTutorialNotShownSync()
+        notificationPreferences.setSubscribedSync(true)
 
         mypageViewModel.kakaoSignOut()
         mypageDialog?.dismiss()

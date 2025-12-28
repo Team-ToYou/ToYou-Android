@@ -17,7 +17,8 @@ import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentSplashBinding
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
-import com.toyou.toyouandroid.utils.TokenStorage
+import com.toyou.core.datastore.TokenStorage
+import javax.inject.Inject
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -28,6 +29,9 @@ class SplashFragment : Fragment() {
     private var _binding: FragmentSplashBinding? = null
     private val binding: FragmentSplashBinding
         get() = requireNotNull(_binding){"FragmentSplashBinding -> null"}
+
+    @Inject
+    lateinit var tokenStorage: TokenStorage
 
     private val loginViewModel: LoginViewModel by viewModels()
     private val userViewModel: UserViewModel by activityViewModels()
@@ -69,8 +73,8 @@ class SplashFragment : Fragment() {
             }
         })
 
-        val refreshToken = TokenStorage(requireContext()).getRefreshToken()
-        val fcmToken = TokenStorage(requireContext()).getFcmToken()
+        val refreshToken = tokenStorage.getRefreshToken()
+        val fcmToken = tokenStorage.getFcmToken()
 
         if (refreshToken != null) {
             loginViewModel.reissueJWT(refreshToken)

@@ -2,25 +2,28 @@ package com.toyou.toyouandroid.presentation.fragment.onboarding
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.toyou.toyouandroid.domain.profile.repository.ProfileRepository
+import com.toyou.core.common.mvi.MviViewModel
+import com.toyou.toyouandroid.domain.profile.repository.IProfileRepository
 import com.toyou.toyouandroid.presentation.fragment.mypage.DuplicateCheckMessageType
 import com.toyou.toyouandroid.presentation.fragment.mypage.ProfileUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class SignupNicknameViewModel @Inject constructor(
-    private val profileRepository: ProfileRepository
-) : ViewModel() {
-    
+    private val profileRepository: IProfileRepository
+) : MviViewModel<SignupNicknameUiState, SignupNicknameEvent, SignupNicknameAction>(
+    initialState = SignupNicknameUiState()
+) {
+
     private val _uiState = MutableLiveData(ProfileUiState())
-    val uiState: LiveData<ProfileUiState> get() = _uiState
-    
-    // 데이터 바인딩 호환성을 위한 프로퍼티
+    val uiStateLegacy: LiveData<ProfileUiState> get() = _uiState
+
     val nickname: LiveData<String> = MutableLiveData()
     val textCount: LiveData<String> = MutableLiveData("0/15")
     val duplicateCheckButtonTextColor: LiveData<Int> = MutableLiveData(0xFFA6A6A6.toInt())
@@ -30,109 +33,159 @@ class SignupNicknameViewModel @Inject constructor(
     val nextButtonBackground: LiveData<Int> = MutableLiveData(com.toyou.toyouandroid.R.drawable.next_button)
     val nextButtonTextColor: LiveData<Int> = MutableLiveData(0xFFA6A6A6.toInt())
     val isNextButtonEnabled: LiveData<Boolean> = MutableLiveData(false)
-    
+
     private val _duplicateCheckMessageType = MutableLiveData<DuplicateCheckMessageType>()
     val duplicateCheckMessageType: LiveData<DuplicateCheckMessageType> get() = _duplicateCheckMessageType
-    
+
     init {
-        _uiState.value = ProfileUiState(title = "회원가입")
+        state.onEach { mviState ->
+            _uiState.value = ProfileUiState(
+                title = mviState.title,
+                textCount = mviState.textCount,
+                nickname = mviState.nickname,
+                isDuplicateCheckEnabled = mviState.isDuplicateCheckEnabled,
+                isNextButtonEnabled = mviState.isNextButtonEnabled,
+                duplicateCheckMessage = mviState.duplicateCheckMessage,
+                isNicknameValid = mviState.isNicknameValid
+            )
+            (nickname as MutableLiveData).value = mviState.nickname
+            (textCount as MutableLiveData).value = mviState.textCount
+            (duplicateCheckButtonTextColor as MutableLiveData).value = mviState.duplicateCheckButtonTextColor
+            (duplicateCheckButtonBackground as MutableLiveData).value = mviState.duplicateCheckButtonBackground
+            (duplicateCheckMessage as MutableLiveData).value = mviState.duplicateCheckMessage
+            (duplicateCheckMessageColor as MutableLiveData).value = mviState.duplicateCheckMessageColor
+            (nextButtonBackground as MutableLiveData).value = mviState.nextButtonBackground
+            (nextButtonTextColor as MutableLiveData).value = mviState.nextButtonTextColor
+            (isNextButtonEnabled as MutableLiveData).value = mviState.isNextButtonEnabled
+            _duplicateCheckMessageType.value = mviState.duplicateCheckMessageType
+        }.launchIn(viewModelScope)
     }
-    
-    fun updateTextCount(count: Int) {
+
+    override fun handleAction(action: SignupNicknameAction) {
+        when (action) {
+            is SignupNicknameAction.UpdateTextCount -> performUpdateTextCount(action.count)
+            is SignupNicknameAction.SetNickname -> performSetNickname(action.nickname)
+            is SignupNicknameAction.UpdateLength15 -> performUpdateLength15(action.length)
+            is SignupNicknameAction.ActivateDuplicateButton -> performActivateDuplicateButton()
+            is SignupNicknameAction.ResetState -> performResetState()
+            is SignupNicknameAction.CheckDuplicate -> performCheckDuplicate(action.userId)
+        }
+    }
+
+    private fun performUpdateTextCount(count: Int) {
         val countText = "($count/15)"
-        _uiState.value = _uiState.value?.copy(
-            textCount = countText
-        )
-        (textCount as MutableLiveData).value = countText
+        updateState { copy(textCount = countText) }
     }
-    
-    fun setNickname(newNickname: String) {
-        _uiState.value = _uiState.value?.copy(
-            nickname = newNickname,
-            isDuplicateCheckEnabled = newNickname.isNotEmpty()
-        )
-        (nickname as MutableLiveData).value = newNickname
+
+    private fun performSetNickname(newNickname: String) {
+        updateState {
+            copy(
+                nickname = newNickname,
+                isDuplicateCheckEnabled = newNickname.isNotEmpty()
+            )
+        }
     }
-    
-    fun updateLength15(length: Int) {
+
+    private fun performUpdateLength15(length: Int) {
         val messageType = if (length >= 15) {
             DuplicateCheckMessageType.LENGTH_EXCEEDED
         } else {
             DuplicateCheckMessageType.CHECK_REQUIRED
         }
-        _duplicateCheckMessageType.value = messageType
-        _uiState.value = _uiState.value?.copy(
-            duplicateCheckMessage = messageType.message
-        )
+        updateState {
+            copy(
+                duplicateCheckMessageType = messageType,
+                duplicateCheckMessage = messageType.message
+            )
+        }
     }
-    
-    fun duplicateBtnActivate() {
-        _uiState.value = _uiState.value?.copy(
-            isDuplicateCheckEnabled = true
-        )
-        (duplicateCheckButtonTextColor as MutableLiveData).value = 0xFF000000.toInt()
-        (duplicateCheckButtonBackground as MutableLiveData).value = com.toyou.toyouandroid.R.drawable.signupnickname_doublecheck_activate
+
+    private fun performActivateDuplicateButton() {
+        updateState {
+            copy(
+                isDuplicateCheckEnabled = true,
+                duplicateCheckButtonTextColor = 0xFF000000.toInt(),
+                duplicateCheckButtonBackground = com.toyou.toyouandroid.R.drawable.signupnickname_doublecheck_activate
+            )
+        }
     }
-    
-    fun resetState() {
-        _uiState.value = ProfileUiState(title = "회원가입")
-        _duplicateCheckMessageType.value = DuplicateCheckMessageType.CHECK_REQUIRED
+
+    private fun performResetState() {
+        updateState {
+            SignupNicknameUiState()
+        }
     }
-    
-    fun checkDuplicate(userId: Int) {
-        val nickname = _uiState.value?.nickname ?: return
-        
+
+    private fun performCheckDuplicate(userId: Int) {
+        val nickname = currentState.nickname
+        if (nickname.isEmpty()) return
+
         viewModelScope.launch {
             try {
                 val response = profileRepository.checkNickname(nickname, userId)
                 if (response.isSuccessful) {
                     val exists = response.body()?.result?.exists ?: false
-                    handleNicknameCheckResult(exists)
+                    performHandleNicknameCheckResult(exists)
                 } else {
-                    handleNicknameCheckError()
+                    performHandleNicknameCheckError()
                 }
             } catch (e: Exception) {
                 Timber.tag("API Failure").e(e, "Error checking nickname")
-                _duplicateCheckMessageType.value = DuplicateCheckMessageType.SERVER_ERROR
-                _uiState.value = _uiState.value?.copy(
-                    duplicateCheckMessage = DuplicateCheckMessageType.SERVER_ERROR.message,
-                    isNicknameValid = false,
-                    isNextButtonEnabled = false
-                )
+                updateState {
+                    copy(
+                        duplicateCheckMessageType = DuplicateCheckMessageType.SERVER_ERROR,
+                        duplicateCheckMessage = DuplicateCheckMessageType.SERVER_ERROR.message,
+                        isNicknameValid = false,
+                        isNextButtonEnabled = false
+                    )
+                }
+                sendEvent(SignupNicknameEvent.ServerError)
             }
         }
     }
-    
-    private fun handleNicknameCheckResult(exists: Boolean) {
+
+    private fun performHandleNicknameCheckResult(exists: Boolean) {
         val messageType = if (!exists) {
             DuplicateCheckMessageType.AVAILABLE
         } else {
             DuplicateCheckMessageType.ALREADY_IN_USE
         }
-        
-        _duplicateCheckMessageType.value = messageType
-        _uiState.value = _uiState.value?.copy(
-            duplicateCheckMessage = messageType.message,
-            isNicknameValid = !exists,
-            isNextButtonEnabled = !exists
-        )
-        
-        // 호환성 프로퍼티 업데이트
-        (duplicateCheckMessage as MutableLiveData).value = messageType.message
-        (duplicateCheckMessageColor as MutableLiveData).value = if (!exists) 0xFFEA9797.toInt() else 0xFFFF0000.toInt()
-        (isNextButtonEnabled as MutableLiveData).value = !exists
-        if (!exists) {
-            (nextButtonTextColor as MutableLiveData).value = 0xFF000000.toInt()
-            (nextButtonBackground as MutableLiveData).value = com.toyou.toyouandroid.R.drawable.next_button_enabled
+
+        val messageColor = if (!exists) 0xFFEA9797.toInt() else 0xFFFF0000.toInt()
+
+        updateState {
+            copy(
+                duplicateCheckMessageType = messageType,
+                duplicateCheckMessage = messageType.message,
+                duplicateCheckMessageColor = messageColor,
+                isNicknameValid = !exists,
+                isNextButtonEnabled = !exists,
+                nextButtonTextColor = if (!exists) 0xFF000000.toInt() else nextButtonTextColor,
+                nextButtonBackground = if (!exists) com.toyou.toyouandroid.R.drawable.next_button_enabled else nextButtonBackground
+            )
         }
     }
-    
-    private fun handleNicknameCheckError() {
-        _duplicateCheckMessageType.value = DuplicateCheckMessageType.CHECK_FAILED
-        _uiState.value = _uiState.value?.copy(
-            duplicateCheckMessage = DuplicateCheckMessageType.CHECK_FAILED.message,
-            isNicknameValid = false,
-            isNextButtonEnabled = false
-        )
+
+    private fun performHandleNicknameCheckError() {
+        updateState {
+            copy(
+                duplicateCheckMessageType = DuplicateCheckMessageType.CHECK_FAILED,
+                duplicateCheckMessage = DuplicateCheckMessageType.CHECK_FAILED.message,
+                isNicknameValid = false,
+                isNextButtonEnabled = false
+            )
+        }
     }
+
+    fun updateTextCount(count: Int) = onAction(SignupNicknameAction.UpdateTextCount(count))
+
+    fun setNickname(newNickname: String) = onAction(SignupNicknameAction.SetNickname(newNickname))
+
+    fun updateLength15(length: Int) = onAction(SignupNicknameAction.UpdateLength15(length))
+
+    fun duplicateBtnActivate() = onAction(SignupNicknameAction.ActivateDuplicateButton)
+
+    fun resetState() = onAction(SignupNicknameAction.ResetState)
+
+    fun checkDuplicate(userId: Int) = onAction(SignupNicknameAction.CheckDuplicate(userId))
 }
