@@ -8,13 +8,16 @@ import com.toyou.toyouandroid.domain.record.RecordRepository
 import com.toyou.toyouandroid.model.CardModel
 import com.toyou.toyouandroid.model.PreviewCardModel
 import com.toyou.toyouandroid.utils.TokenManager
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
-class CardInfoViewModel(
+@HiltViewModel
+class CardInfoViewModel @Inject constructor(
     private val recordRepository: RecordRepository,
     private val tokenManager: TokenManager
-) : ViewModel(){
+) : ViewModel() {
     private val _cards = MutableLiveData<List<CardModel>>()
     val cards: LiveData<List<CardModel>> get() = _cards
     private val _previewCards = MutableLiveData<List<PreviewCardModel>>()

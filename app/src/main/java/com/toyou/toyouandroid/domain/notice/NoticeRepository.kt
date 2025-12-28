@@ -5,8 +5,11 @@ import com.toyou.toyouandroid.data.notice.dto.AlarmResponse
 import com.toyou.toyouandroid.data.notice.dto.FriendsRequestResponse
 import com.toyou.toyouandroid.data.notice.service.NoticeService
 import retrofit2.Call
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class NoticeRepository(private val noticeService: NoticeService) {
+@Singleton
+class NoticeRepository @Inject constructor(private val noticeService: NoticeService) {
 
     fun getNotices(): Call<AlarmResponse> {
         return noticeService.getAlarms()

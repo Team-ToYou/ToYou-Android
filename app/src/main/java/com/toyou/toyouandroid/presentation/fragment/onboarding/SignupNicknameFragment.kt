@@ -9,21 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.toyou.toyouandroid.R
-import com.toyou.toyouandroid.data.onboarding.service.AuthService
 import com.toyou.toyouandroid.databinding.FragmentSignupnicknameBinding
-import com.toyou.toyouandroid.domain.home.repository.HomeRepository
-import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.presentation.fragment.home.HomeViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.ViewModelManager
-import com.toyou.toyouandroid.utils.TokenManager
-import com.toyou.toyouandroid.utils.TokenStorage
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -8,8 +8,13 @@
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
 /.idea/misc.xml
+/.idea/.name
+/.idea/AndroidProjectSystem.xml
+/.idea/markdown.xml
+/.idea/runConfigurations.xml
 .DS_Store
-/build
+build/
+**/build/
 /captures
 .externalNativeBuild
 .cxx

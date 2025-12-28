@@ -14,7 +14,9 @@ import com.toyou.toyouandroid.databinding.FragmentRecordBinding
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.presentation.fragment.record.friend.CalendarFriendRecordFragment
 import com.toyou.toyouandroid.presentation.fragment.record.my.CalendarMyRecordFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RecordFragment : Fragment() {
 
     lateinit var navController: NavController

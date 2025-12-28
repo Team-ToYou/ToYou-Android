@@ -4,14 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.toyou.toyouandroid.fcm.domain.FCMRepository
-import com.toyou.toyouandroid.fcm.dto.request.Token
-import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.data.onboarding.dto.request.SignUpRequest
 import com.toyou.toyouandroid.data.onboarding.dto.response.SignUpResponse
 import com.toyou.toyouandroid.data.onboarding.service.AuthService
+import com.toyou.toyouandroid.fcm.domain.FCMRepository
+import com.toyou.toyouandroid.fcm.dto.request.Token
+import com.toyou.toyouandroid.network.AuthNetworkModule
 import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,13 +21,14 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
+import javax.inject.Inject
 
-class LoginViewModel(
+@HiltViewModel
+class LoginViewModel @Inject constructor(
     private val authService: AuthService,
     private val tokenStorage: TokenStorage,
     private val tokenManager: TokenManager,
     private val fcmRepository: FCMRepository
-
 ) : ViewModel() {
 
     private val _loginSuccess = MutableLiveData<Boolean>()

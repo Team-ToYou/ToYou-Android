@@ -6,29 +6,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.toyou.toyouandroid.R
-import com.toyou.toyouandroid.data.onboarding.service.AuthService
-import com.toyou.toyouandroid.data.record.service.RecordService
 import com.toyou.toyouandroid.databinding.FragmentFriendCardContainerBinding
-import com.toyou.toyouandroid.domain.record.RecordRepository
-import com.toyou.toyouandroid.network.AuthNetworkModule
-import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.base.MainActivity
-import com.toyou.toyouandroid.presentation.viewmodel.RecordViewModelFactory
-import com.toyou.toyouandroid.utils.TokenManager
-import com.toyou.toyouandroid.utils.TokenStorage
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
+@AndroidEntryPoint
 class FriendCardContainerFragment : Fragment() {
     private lateinit var navController: NavController
     private var _binding: FragmentFriendCardContainerBinding? = null
     private val binding: FragmentFriendCardContainerBinding
         get() = requireNotNull(_binding){"FragmentFriendCardContainerBinding -> null"}
 
-    private lateinit var friendCardViewModel: FriendCardViewModel
+    private val friendCardViewModel: FriendCardViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,17 +31,6 @@ class FriendCardContainerFragment : Fragment() {
     ): View {
 
         _binding = FragmentFriendCardContainerBinding.inflate(inflater, container, false)
-
-        val tokenStorage = TokenStorage(requireContext())
-        val authService = NetworkModule.getClient().create(AuthService::class.java)
-        val tokenManager = TokenManager(authService, tokenStorage)
-        val recordService = AuthNetworkModule.getClient().create(RecordService::class.java)
-        val recordRepository = RecordRepository(recordService)
-
-        friendCardViewModel = ViewModelProvider(
-            requireActivity(),
-            RecordViewModelFactory(recordRepository, tokenManager)
-        )[FriendCardViewModel::class.java]
 
         if (savedInstanceState == null) {
             val fragment = FriendCardDetailFragment()

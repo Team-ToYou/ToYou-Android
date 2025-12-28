@@ -10,13 +10,16 @@ import com.toyou.toyouandroid.data.record.dto.DiaryCardResponse
 import com.toyou.toyouandroid.data.record.dto.PatchDiaryCardResponse
 import com.toyou.toyouandroid.domain.record.RecordRepository
 import com.toyou.toyouandroid.utils.TokenManager
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
+import javax.inject.Inject
 
-class MyRecordViewModel(
+@HiltViewModel
+class MyRecordViewModel @Inject constructor(
     private val repository: RecordRepository,
     private val tokenManager: TokenManager
 ) : ViewModel() {

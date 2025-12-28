@@ -13,8 +13,10 @@ import androidx.navigation.Navigation
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.FragmentNoticeSettingBinding
 import com.toyou.toyouandroid.fcm.MyFirebaseMessagingService
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
+@AndroidEntryPoint
 class NoticeSettingFragment : Fragment() {
 
     private lateinit var navController: NavController

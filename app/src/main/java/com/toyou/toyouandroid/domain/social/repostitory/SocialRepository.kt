@@ -7,8 +7,11 @@ import com.toyou.toyouandroid.data.social.dto.response.ResponseFriend
 import com.toyou.toyouandroid.data.social.dto.response.SearchFriendDto
 import com.toyou.toyouandroid.data.social.service.SocialService
 import com.toyou.toyouandroid.network.BaseResponse
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class SocialRepository(private val socialService: SocialService) {
+@Singleton
+class SocialRepository @Inject constructor(private val socialService: SocialService) {
 
     suspend fun getFriendsData(): BaseResponse<FriendsDto> {
         return socialService.getFriends()

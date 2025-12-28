@@ -1,11 +1,9 @@
 package com.toyou.toyouandroid.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.room.util.TableInfo
 import com.toyou.toyouandroid.data.social.dto.request.QuestionDto
 import com.toyou.toyouandroid.data.social.dto.request.RequestFriend
 import com.toyou.toyouandroid.data.social.dto.response.FriendsDto
@@ -15,14 +13,16 @@ import com.toyou.toyouandroid.fcm.dto.request.FCM
 import com.toyou.toyouandroid.model.FriendListModel
 import com.toyou.toyouandroid.presentation.fragment.notice.ApprovalResult
 import com.toyou.toyouandroid.utils.TokenManager
-import kotlinx.coroutines.CoroutineScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import timber.log.Timber
+import javax.inject.Inject
 
-class SocialViewModel(
+@HiltViewModel
+class SocialViewModel @Inject constructor(
     private val repository: SocialRepository,
     private val tokenManager: TokenManager,
     private val fcmRepository: FCMRepository

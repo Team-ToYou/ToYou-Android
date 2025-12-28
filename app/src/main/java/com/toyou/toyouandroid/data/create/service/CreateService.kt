@@ -1,4 +1,4 @@
-package com.toyou.toyouHoandroid.data.create.service
+package com.toyou.toyouandroid.data.create.service
 
 import com.toyou.toyouandroid.data.create.dto.request.AnswerDto
 import com.toyou.toyouandroid.data.create.dto.response.AnswerPost

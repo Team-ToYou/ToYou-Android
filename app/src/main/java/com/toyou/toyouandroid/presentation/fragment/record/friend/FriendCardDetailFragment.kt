@@ -6,56 +6,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.toyou.toyouHoandroid.data.create.service.CreateService
 import com.toyou.toyouandroid.R
-import com.toyou.toyouandroid.data.onboarding.service.AuthService
-import com.toyou.toyouandroid.data.record.service.RecordService
 import com.toyou.toyouandroid.databinding.CardLayoutRecordBinding
-import com.toyou.toyouandroid.domain.create.repository.CreateRepository
-import com.toyou.toyouandroid.domain.record.RecordRepository
-import com.toyou.toyouandroid.network.AuthNetworkModule
-import com.toyou.toyouandroid.network.NetworkModule
-import com.toyou.toyouandroid.presentation.viewmodel.RecordViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
-import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
 import com.toyou.toyouandroid.ui.home.adapter.CardPreviewListAdapter
-import com.toyou.toyouandroid.utils.TokenManager
-import com.toyou.toyouandroid.utils.TokenStorage
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
+@AndroidEntryPoint
 class FriendCardDetailFragment : Fragment() {
     private var _binding : CardLayoutRecordBinding? = null
     private val binding: CardLayoutRecordBinding get() = requireNotNull(_binding){"FragmentPreview 널"}
 
     private lateinit var listAdapter : CardPreviewListAdapter
 
-    private lateinit var friendCardViewModel: FriendCardViewModel
-    private lateinit var userViewModel: UserViewModel
+    private val friendCardViewModel: FriendCardViewModel by activityViewModels()
+    private val userViewModel: UserViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val tokenStorage = TokenStorage(requireContext())
-        val authService = NetworkModule.getClient().create(AuthService::class.java)
-        val tokenManager = TokenManager(authService, tokenStorage)
-        val recordService = AuthNetworkModule.getClient().create(RecordService::class.java)
-        val recordRepository = RecordRepository(recordService)
-        val createService = AuthNetworkModule.getClient().create(CreateService::class.java)
-        val createRepository = CreateRepository(createService)
-
-
-        friendCardViewModel = ViewModelProvider(
-            requireActivity(),
-            RecordViewModelFactory(recordRepository, tokenManager)
-        )[FriendCardViewModel::class.java]
-
-        userViewModel = ViewModelProvider(
-            requireActivity() ,
-            UserViewModelFactory(createRepository,tokenManager)
-        )[UserViewModel::class.java]
     }
 
     override fun onCreateView(

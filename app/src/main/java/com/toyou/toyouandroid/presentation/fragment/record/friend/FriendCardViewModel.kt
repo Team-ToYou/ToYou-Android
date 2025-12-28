@@ -11,10 +11,13 @@ import com.toyou.toyouandroid.model.ChooseModel
 import com.toyou.toyouandroid.model.PreviewCardModel
 import com.toyou.toyouandroid.model.PreviewChooseModel
 import com.toyou.toyouandroid.utils.TokenManager
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
-class FriendCardViewModel(
+@HiltViewModel
+class FriendCardViewModel @Inject constructor(
     private val recordRepository: RecordRepository,
     private val tokenManager: TokenManager
 ) : ViewModel() {

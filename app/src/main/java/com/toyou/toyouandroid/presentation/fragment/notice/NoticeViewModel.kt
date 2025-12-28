@@ -9,13 +9,16 @@ import com.toyou.toyouandroid.data.notice.dto.AlarmResponse
 import com.toyou.toyouandroid.data.notice.dto.FriendsRequestResponse
 import com.toyou.toyouandroid.domain.notice.NoticeRepository
 import com.toyou.toyouandroid.utils.TokenManager
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
+import javax.inject.Inject
 
-class NoticeViewModel(
+@HiltViewModel
+class NoticeViewModel @Inject constructor(
     private val repository: NoticeRepository,
     private val tokenManager: TokenManager
 ) : ViewModel() {

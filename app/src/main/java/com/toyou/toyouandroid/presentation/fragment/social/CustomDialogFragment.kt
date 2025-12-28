@@ -12,7 +12,9 @@ import androidx.fragment.app.DialogFragment
 import androidx.navigation.NavController
 import com.toyou.toyouandroid.R
 import com.toyou.toyouandroid.databinding.DialogLayoutBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CustomDialogFragment : DialogFragment() {
 
     private var _binding : DialogLayoutBinding? = null
