@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -25,12 +26,14 @@ import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.fragment.notice.NoticeDialog
 import com.toyou.toyouandroid.presentation.fragment.notice.NoticeDialogViewModel
 import com.toyou.toyouandroid.presentation.fragment.home.HomeViewModel
-import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModel
 import com.toyou.toyouandroid.presentation.viewmodel.UserViewModelFactory
 import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
+import dagger.hilt.android.AndroidEntryPoint
+import androidx.navigation.findNavController
 
+@AndroidEntryPoint
 class HomeOptionFragment : Fragment() {
 
     lateinit var navController: NavController
@@ -42,13 +45,13 @@ class HomeOptionFragment : Fragment() {
     private var noticeDialog: NoticeDialog? = null
 
     private lateinit var userViewModel: UserViewModel
-    private lateinit var homeOptionViewModel: HomeOptionViewModel
-    private lateinit var homeViewModel: HomeViewModel
+    private val homeOptionViewModel: HomeOptionViewModel by viewModels()
+    private val homeViewModel: HomeViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentHomeOptionBinding.inflate(layoutInflater, container, false)
 
@@ -58,21 +61,8 @@ class HomeOptionFragment : Fragment() {
 
         val createService = AuthNetworkModule.getClient().create(CreateService::class.java)
         val createRepository = CreateRepository(createService)
-        val homeRepository = HomeRepository()
 
-        homeOptionViewModel = ViewModelProvider(
-            this,
-            HomeViewModelFactory(
-                tokenManager, homeRepository
-            )
-        )[HomeOptionViewModel::class.java]
-
-        homeViewModel = ViewModelProvider(
-            this,
-            HomeViewModelFactory(
-                tokenManager, homeRepository
-            )
-        )[HomeViewModel::class.java]
+        // HomeOptionViewModel과 HomeViewModel은 Hilt로 주입됨
 
         userViewModel = ViewModelProvider(
             requireActivity(),
@@ -84,7 +74,7 @@ class HomeOptionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        navController = Navigation.findNavController(view)
+        navController = view.findNavController()
 
         (requireActivity() as MainActivity).hideBottomNavigation(true)
 
@@ -207,10 +197,10 @@ class HomeOptionFragment : Fragment() {
         }
 
         homeViewModel.updateHomeEmotion(
-            emotionData.homeEmotionDrawable,
-            emotionData.homeEmotionTitle,
-            emotionData.homeColorRes,
-            emotionData.backgroundDrawable
+            emotionData.homeEmotionDrawable.toString(),
+//            emotionData.homeEmotionTitle,
+//            emotionData.homeColorRes,
+//            emotionData.backgroundDrawable
         )
 
         // 감정 우표 선택 API 호출

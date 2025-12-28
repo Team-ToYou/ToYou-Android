@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -20,11 +21,12 @@ import com.toyou.toyouandroid.domain.home.repository.HomeRepository
 import com.toyou.toyouandroid.network.NetworkModule
 import com.toyou.toyouandroid.presentation.base.MainActivity
 import com.toyou.toyouandroid.presentation.fragment.home.HomeViewModel
-import com.toyou.toyouandroid.presentation.viewmodel.HomeViewModelFactory
 import com.toyou.toyouandroid.presentation.viewmodel.ViewModelManager
 import com.toyou.toyouandroid.utils.TokenManager
 import com.toyou.toyouandroid.utils.TokenStorage
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SignupNicknameFragment : Fragment() {
 
     private lateinit var navController: NavController
@@ -32,10 +34,10 @@ class SignupNicknameFragment : Fragment() {
     private val binding: FragmentSignupnicknameBinding
         get() = requireNotNull(_binding){"FragmentSignupnicknameBinding -> null"}
 
-    private val viewModel: SignupNicknameViewModel by activityViewModels()
-    private val nicknameViewModel: SignupNicknameViewModel by activityViewModels()
+    private val viewModel: SignupNicknameViewModel by viewModels()
+    private val nicknameViewModel: SignupNicknameViewModel by viewModels()
 
-    private lateinit var homeViewModel: HomeViewModel
+    private val homeViewModel: HomeViewModel by viewModels()
     private lateinit var viewModelManager: ViewModelManager
 
     override fun onCreateView(
@@ -45,15 +47,8 @@ class SignupNicknameFragment : Fragment() {
     ): View {
         _binding = FragmentSignupnicknameBinding.inflate(inflater, container, false)
 
-        val tokenStorage = TokenStorage(requireContext())
-        val authService: AuthService = NetworkModule.getClient().create(AuthService::class.java)
-        val tokenManager = TokenManager(authService, tokenStorage)
-        val homeRepository = HomeRepository()
-
-        homeViewModel = ViewModelProvider(
-            this,
-            HomeViewModelFactory(tokenManager, homeRepository)
-        )[HomeViewModel::class.java]
+        // SignupNicknameViewModel은 Hilt로 주입됨
+        // 다른 ViewModel들은 기존 방식 유지할 필요가 있다면 여기에 초기화 코드 추가
 
         binding.viewModel = viewModel
         binding.lifecycleOwner = this

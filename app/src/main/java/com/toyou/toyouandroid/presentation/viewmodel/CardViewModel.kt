@@ -30,7 +30,7 @@ class CardViewModel(private val tokenManager: TokenManager,
     private val _previewChoose = MutableLiveData<List<PreviewChooseModel>>()
     val previewChoose : LiveData<List<PreviewChooseModel>> get() = _previewChoose
     //private val repository = CreateRepository(tokenManager)
-    private val homeRepository = HomeRepository()
+//    private val homeRepository = HomeRepository()
 
     val exposure : LiveData<Boolean> get() = _exposure
     private val _exposure = MutableLiveData<Boolean>()
@@ -163,76 +163,76 @@ class CardViewModel(private val tokenManager: TokenManager,
     private val _receiver = MutableLiveData<String>()
     val receiver: LiveData<String> get() = _receiver
 
-    fun getCardDetail(id : Long) {
-        viewModelScope.launch {
-            try {
-                val response = homeRepository.getCardDetail(id)
-                if (response.isSuccess) {
-                    val detailCard = response.result
-                    val previewCardList = mutableListOf<PreviewCardModel>()
-                    _exposure.value = detailCard.exposure
-                    _date.value = detailCard.date
-                    _emotion.value = detailCard.emotion
-                    _receiver.value = detailCard.receiver
-
-                    detailCard.questions.let { questionList ->
-                        questionList.forEach { question ->
-                            val previewCard = when(question.type) {
-                                "OPTIONAL" -> {
-                                    PreviewCardModel(
-                                        question = question.content,
-                                        fromWho = question.questioner,
-                                        options = question.options,
-                                        type = question.options!!.size,
-                                        answer = question.answer,
-                                        id = question.id
-                                    )
-                                }
-
-                                "SHORT_ANSWER" -> {
-                                    PreviewCardModel(
-                                        question = question.content,
-                                        fromWho = question.questioner,
-                                        options = question.options,
-                                        type = 0,
-                                        answer = question.answer,
-                                        id = question.id
-                                    )
-                                }
-
-                                else -> {
-                                    PreviewCardModel(
-                                        question = question.content,
-                                        fromWho = question.questioner,
-                                        options = question.options,
-                                        type = 1,
-                                        answer = question.answer,
-                                        id = question.id
-                                    )
-                                }
-                            }
-                            previewCardList.add(previewCard)
-                            _previewCards.value = previewCardList
-                        }
-                    }
-
-                } else {
-                    // 오류 처리
-                    Timber.tag("CardViewModel").d("detail API 호출 실패: ${response.message}")
-                    tokenManager.refreshToken(
-                        onSuccess = { getCardDetail(id) },
-                        onFailure = { Timber.tag("CardViewModel").d("refresh error")}
-                    )
-                }
-            } catch (e: Exception) {
-                Timber.tag("CardViewModel").d("detail 예외 발생: ${e.message}")
-                tokenManager.refreshToken(
-                    onSuccess = { getCardDetail(id) },
-                    onFailure = { Timber.tag("CardViewModel").d("refresh error")}
-                )
-            }
-        }
-    }
+//    fun getCardDetail(id : Long) {
+//        viewModelScope.launch {
+//            try {
+//                val response = homeRepository.getCardDetail(id)
+//                if (response.isSuccess) {
+//                    val detailCard = response.result
+//                    val previewCardList = mutableListOf<PreviewCardModel>()
+//                    _exposure.value = detailCard.exposure
+//                    _date.value = detailCard.date
+//                    _emotion.value = detailCard.emotion
+//                    _receiver.value = detailCard.receiver
+//
+//                    detailCard.questions.let { questionList ->
+//                        questionList.forEach { question ->
+//                            val previewCard = when(question.type) {
+//                                "OPTIONAL" -> {
+//                                    PreviewCardModel(
+//                                        question = question.content,
+//                                        fromWho = question.questioner,
+//                                        options = question.options,
+//                                        type = question.options!!.size,
+//                                        answer = question.answer,
+//                                        id = question.id
+//                                    )
+//                                }
+//
+//                                "SHORT_ANSWER" -> {
+//                                    PreviewCardModel(
+//                                        question = question.content,
+//                                        fromWho = question.questioner,
+//                                        options = question.options,
+//                                        type = 0,
+//                                        answer = question.answer,
+//                                        id = question.id
+//                                    )
+//                                }
+//
+//                                else -> {
+//                                    PreviewCardModel(
+//                                        question = question.content,
+//                                        fromWho = question.questioner,
+//                                        options = question.options,
+//                                        type = 1,
+//                                        answer = question.answer,
+//                                        id = question.id
+//                                    )
+//                                }
+//                            }
+//                            previewCardList.add(previewCard)
+//                            _previewCards.value = previewCardList
+//                        }
+//                    }
+//
+//                } else {
+//                    // 오류 처리
+//                    Timber.tag("CardViewModel").d("detail API 호출 실패: ${response.message}")
+//                    tokenManager.refreshToken(
+//                        onSuccess = { getCardDetail(id) },
+//                        onFailure = { Timber.tag("CardViewModel").d("refresh error")}
+//                    )
+//                }
+//            } catch (e: Exception) {
+//                Timber.tag("CardViewModel").d("detail 예외 발생: ${e.message}")
+//                tokenManager.refreshToken(
+//                    onSuccess = { getCardDetail(id) },
+//                    onFailure = { Timber.tag("CardViewModel").d("refresh error")}
+//                )
+//            }
+//        }
+//    }
 
     private fun mapToPatchModels(questionsDto: QuestionsDto) {
         val cardModels = mutableListOf<CardModel>()
