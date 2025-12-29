@@ -7,20 +7,23 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.toyou.core.common.AppConstants
 import com.toyou.core.datastore.NotificationPreferences
 import com.toyou.core.datastore.TokenStorage
 import com.toyou.toyouandroid.R
-import com.toyou.toyouandroid.presentation.base.MainActivity
+import com.toyou.toyouandroid.ui.base.MainActivity
 import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
@@ -48,36 +51,48 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        Timber.d("FCM 토큰: %s", token)
-        tokenStorage.saveFcmTokenSync(token)
-        Timber.d("토큰이 저장되었습니다: %s", token)
+        Timber.d("FCM token received")
+        // FCM 서비스 콜백이므로 blocking call 사용
+        @Suppress("DEPRECATION")
+        tokenStorage.getAccessTokenBlocking() // TokenStorage 초기화 확인용
 
-        // 구독 여부가 저장되어 있으면 구독
-        if (notificationPreferences.isSubscribed()) {
-            subscribeToTopic()
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                tokenStorage.saveFcmToken(token)
+                Timber.d("FCM token saved successfully")
+
+                // 구독 여부 확인 후 구독
+                if (notificationPreferences.isSubscribedBlocking()) {
+                    subscribeToTopic()
+                }
+            } catch (e: Exception) {
+                Timber.e(e, "Failed to save FCM token")
+            }
         }
     }
 
     fun subscribeToTopic() {
-        FirebaseMessaging.getInstance().subscribeToTopic("allUsers")
+        FirebaseMessaging.getInstance().subscribeToTopic(AppConstants.Fcm.TOPIC_ALL_USERS)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    Timber.d("topic 구독 성공")
-                    notificationPreferences.setSubscribedSync(true)
+                    Timber.d("Topic subscription successful")
+                    @Suppress("DEPRECATION")
+                    notificationPreferences.setSubscribedBlocking(true)
                 } else {
-                    Timber.e(task.exception, "구독 실패")
+                    Timber.e(task.exception, "Topic subscription failed")
                 }
             }
     }
 
     fun unsubscribeFromTopic() {
-        FirebaseMessaging.getInstance().unsubscribeFromTopic("allUsers")
+        FirebaseMessaging.getInstance().unsubscribeFromTopic(AppConstants.Fcm.TOPIC_ALL_USERS)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    Timber.d("topic 구독 취소 성공")
-                    notificationPreferences.setSubscribedSync(false)
+                    Timber.d("Topic unsubscription successful")
+                    @Suppress("DEPRECATION")
+                    notificationPreferences.setSubscribedBlocking(false)
                 } else {
-                    Timber.e(task.exception, "구독 취소 실패")
+                    Timber.e(task.exception, "Topic unsubscription failed")
                 }
             }
     }
@@ -112,7 +127,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         )
 
         // 알림 빌더
-        val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
+        val notificationBuilder = NotificationCompat.Builder(this, AppConstants.Fcm.CHANNEL_ID)
             .setSmallIcon(R.drawable.fcm) // 아이콘 설정 (적절한 아이콘으로 대체)
             .setContentTitle(title) // 알림 제목
             .setContentText(message) // 알림 내용
@@ -126,24 +141,17 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
 
     private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                CHANNEL_ID,
-                CHANNEL_NAME,
-                NotificationManager.IMPORTANCE_HIGH // 중요도 설정
-            )
-            channel.enableLights(true)
-            channel.enableVibration(true)
+        val channel = NotificationChannel(
+            AppConstants.Fcm.CHANNEL_ID,
+            AppConstants.Fcm.CHANNEL_NAME,
+            NotificationManager.IMPORTANCE_HIGH // 중요도 설정
+        )
+        channel.enableLights(true)
+        channel.enableVibration(true)
 
-            // NotificationManager에 채널 등록
-            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
-        }
-    }
-
-    companion object {
-        private const val CHANNEL_NAME = "FCM STUDY"
-        private const val CHANNEL_ID = "FCM__channel_id"
+        // NotificationManager에 채널 등록
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
     }
 
 }

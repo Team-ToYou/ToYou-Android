@@ -8,4 +8,6 @@ android {
 
 dependencies {
     // Feature specific dependencies
+    implementation(project(":feature:mypage"))
+    implementation(libs.kakao.sdk)
 }

@@ -73,64 +73,120 @@
 
 - IDE : Android Studio Koala
 - JDK : Java 18 JDK
-- Kotlin Language : 2.0.0
-- AGP : 8.2.1
+- Kotlin Language : 1.9.22
+- AGP : 8.2.2
 
 ### Language
 
 - Kotlin
 
+### Architecture
+
+- Multi-Module Architecture
+- MVI (Model-View-Intent) Pattern
+- Repository Pattern
+- Clean Architecture
+- Single Activity Architecture
+
 ### Libraries
 
 - AndroidX
-  - Activity & Fragment(Single Activity Architecture)
-  - Core
+  - Activity & Jetpack Compose
+  - Core KTX
   - Lifecycle & ViewModel
-  - Navigation
-  - Splash
-  - Material3
-  - Room
+  - Navigation Compose (Type-Safe Navigation)
+  - Splash Screen
+  - Material3 Compose
+  - DataStore
 
-- Kotlin Libraries (Coroutine, Serialization, Immutable Collection)
+- Dependency Injection
+  - [Hilt](https://dagger.dev/hilt/)
 
-- Retrofit, OkHttp
-- [Kakao Open API](https://developers.kakao.com/docs/latest/ko/android/getting-started)
-- [Dotsindicator](https://github.com/tommybuonomo/dotsindicator)
-- [Timber](https://github.com/JakeWharton/timber)
-- [Firebase](https://github.com/firebase/firebase-android-sdk)
+- Network
+  - [Retrofit](https://square.github.io/retrofit/)
+  - [OkHttp](https://square.github.io/okhttp/)
+  - [Kotlin Serialization](https://github.com/Kotlin/kotlinx.serialization)
+
+- Kotlin Libraries
+  - Coroutines
+  - Serialization
+  - Immutable Collections
+
+- Other
+  - [Kakao Open API](https://developers.kakao.com/docs/latest/ko/android/getting-started)
+  - [Dotsindicator](https://github.com/tommybuonomo/dotsindicator)
+  - [Timber](https://github.com/JakeWharton/timber)
+  - [Firebase](https://github.com/firebase/firebase-android-sdk)
+  - [Coil](https://coil-kt.github.io/coil/) (Image Loading)
 
 <br>
 
-## PACKAGE STRUCTURE
+## ARCHITECTURE
+
+### Multi-Module Structure
+
+투유는 확장성과 유지보수성을 위해 멀티모듈 아키텍처를 채택했습니다.
+
+#### Module Dependency Graph
+
+![Project Dependency Graph](docs/project-dependency-graph.png)
+
+#### Module Overview
+
+**:app**
+- 앱의 진입점 및 전체 네비게이션 관리
+- 각 feature 모듈 통합
+
+**:feature modules**
+- `:feature:home` - 홈 화면 및 감정우표 선택
+- `:feature:create` - 일기카드 생성
+- `:feature:social` - 친구 목록 및 질문하기
+- `:feature:record` - 일기카드 기록 확인
+- `:feature:mypage` - 마이페이지 및 프로필 관리
+- `:feature:notice` - 알림 관리
+- `:feature:onboarding` - 로그인 및 회원가입
+
+**:core modules**
+- `:core:data` - Repository 구현 및 데이터 소스 통합
+- `:core:domain` - 비즈니스 로직 및 모델 정의
+- `:core:network` - API 서비스 및 네트워크 설정
+- `:core:datastore` - 로컬 데이터 저장 (Token, Preferences)
+- `:core:designsystem` - 공통 UI 컴포넌트 및 테마
+- `:core:common` - 공통 유틸리티
+
+### Layer Architecture
+
 ```
-🗃️app
- ┣ 📂data
- ┃ ┣ 📂create
- ┃ ┣ 📂emotion
- ┃ ┣ 📂home
- ┃ ┣ 📂mypage
- ┃ ┣ 📂notice
- ┃ ┣ 📂onboarding
- ┃ ┣ 📂record
- ┃ ┗ 📂social
- ┣ 📂domain
- ┃ ┣ 📂create
- ┃ ┣ 📂home
- ┃ ┣ 📂notice
- ┃ ┣ 📂record
- ┃ ┗ 📂social
- ┣ 📂fcm
- ┃ ┣ 📂domain
- ┃ ┣ 📂dto
- ┃ ┗ 📂service
- ┣ 📂model
- ┃ ┣ 📂calendar
- ┃ ┣ 📂local
- ┃ ┗ 📂remote
- ┣ 📂network
- ┣ 📂presentation
- ┃ ┣ 📂base
- ┃ ┣ 📂fragment
- ┃ ┗ 📂viewmodel
- ┣ 📂utils
+┌─────────────────────────────────────┐
+│         Presentation Layer          │
+│   (Jetpack Compose, ViewModel)      │
+└─────────────────────────────────────┘
+              ↓
+┌─────────────────────────────────────┐
+│          Domain Layer               │
+│    (Models, Repository Interface)   │
+└─────────────────────────────────────┘
+              ↓
+┌─────────────────────────────────────┐
+│           Data Layer                │
+│  (Repository Impl, DataSource)      │
+└─────────────────────────────────────┘
 ```
+
+### 의존성 그래프 생성
+
+프로젝트 의존성 그래프를 생성하려면 Graphviz가 필요합니다:
+
+```bash
+# Graphviz 설치 (macOS)
+brew install graphviz
+
+# 의존성 그래프 생성
+./gradlew generateProjectDependencyGraph
+
+# 생성된 파일 위치
+# build/reports/project-dependency-graph/project-dependency-graph.png
+# build/reports/project-dependency-graph/project-dependency-graph.svg
+```
+
+<br>

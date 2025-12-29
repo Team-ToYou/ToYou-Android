@@ -12,6 +12,7 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
             pluginManager.apply {
                 apply("toyou.android.library")
                 apply("toyou.android.hilt")
+                apply("toyou.android.compose")
             }
 
             extensions.configure<LibraryExtension> {
@@ -23,12 +24,16 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
             val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
             dependencies {
                 "implementation"(project(":core:domain"))
+                "implementation"(project(":core:data"))
                 "implementation"(project(":core:designsystem"))
                 "implementation"(project(":core:common"))
+                "implementation"(project(":core:datastore"))
+                "implementation"(project(":core:network"))
 
                 "implementation"(libs.findBundle("lifecycle").get())
                 "implementation"(libs.findBundle("navigation").get())
                 "implementation"(libs.findLibrary("timber").get())
+                "implementation"(libs.findLibrary("retrofit").get())
             }
         }
     }

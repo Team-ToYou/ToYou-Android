@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -61,44 +62,37 @@ class TokenStorage @Inject constructor(
         }
     }
 
-    suspend fun isTokenSentSuspend(): Boolean {
+    suspend fun isTokenSent(): Boolean {
         return dataStore.data.map { prefs ->
             prefs[KEY_IS_TOKEN_SENT] ?: false
         }.first()
     }
 
-    // Blocking versions for backward compatibility during migration
-    fun getAccessToken(): String? = runBlocking {
-        dataStore.data.map { it[KEY_ACCESS_TOKEN] }.first()
+    /**
+     * OkHttp Interceptor/Authenticator를 위한 동기식 토큰 접근 메서드
+     * 주의: 이 메서드는 IO 작업을 차단하므로 Interceptor/Authenticator에서만 사용해야 합니다.
+     * 다른 곳에서는 반드시 Flow 또는 suspend 함수를 사용하세요.
+     */
+    @Deprecated(
+        message = "Only use this in OkHttp Interceptor/Authenticator. Use accessTokenFlow or suspend functions elsewhere.",
+        replaceWith = ReplaceWith("accessTokenFlow.first()"),
+        level = DeprecationLevel.WARNING
+    )
+    fun getAccessTokenBlocking(): String? = runBlocking(Dispatchers.IO) {
+        accessTokenFlow.first()
     }
 
-    fun getRefreshToken(): String? = runBlocking {
-        dataStore.data.map { it[KEY_REFRESH_TOKEN] }.first()
-    }
-
-    fun getFcmToken(): String? = runBlocking {
-        dataStore.data.map { it[KEY_FCM_TOKEN] }.first()
-    }
-
-    fun isTokenSent(): Boolean = runBlocking {
-        dataStore.data.map { it[KEY_IS_TOKEN_SENT] ?: false }.first()
-    }
-
-    // Blocking write methods for backward compatibility
-    fun saveTokensSync(accessToken: String, refreshToken: String) = runBlocking {
-        saveTokens(accessToken, refreshToken)
-    }
-
-    fun saveFcmTokenSync(fcmToken: String) = runBlocking {
-        saveFcmToken(fcmToken)
-    }
-
-    fun clearTokensSync() = runBlocking {
-        clearTokens()
-    }
-
-    fun setTokenSentSync(value: Boolean) = runBlocking {
-        setTokenSent(value)
+    /**
+     * OkHttp Authenticator를 위한 동기식 리프레시 토큰 접근 메서드
+     * 주의: 이 메서드는 IO 작업을 차단하므로 Authenticator에서만 사용해야 합니다.
+     */
+    @Deprecated(
+        message = "Only use this in OkHttp Authenticator. Use refreshTokenFlow or suspend functions elsewhere.",
+        replaceWith = ReplaceWith("refreshTokenFlow.first()"),
+        level = DeprecationLevel.WARNING
+    )
+    fun getRefreshTokenBlocking(): String? = runBlocking(Dispatchers.IO) {
+        refreshTokenFlow.first()
     }
 
     companion object {
