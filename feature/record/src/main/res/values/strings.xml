@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ToYou_hanguel">투유</string>
+    <string name="calendar_my_record">나의 기록</string>
+    <string name="calendar_friend_record">친구 기록</string>
+</resources>

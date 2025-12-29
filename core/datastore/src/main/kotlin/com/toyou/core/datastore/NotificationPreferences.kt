@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -32,12 +33,29 @@ class NotificationPreferences @Inject constructor(
         }
     }
 
-    // Blocking versions for backward compatibility
-    fun isSubscribed(): Boolean = runBlocking {
-        dataStore.data.map { it[KEY_IS_SUBSCRIBED] ?: true }.first()
+    /**
+     * FCM 서비스를 위한 동기식 구독 상태 접근 메서드
+     * 주의: 이 메서드는 IO 작업을 차단하므로 FirebaseMessagingService에서만 사용해야 합니다.
+     */
+    @Deprecated(
+        message = "Only use this in FirebaseMessagingService. Use isSubscribedFlow or suspend functions elsewhere.",
+        replaceWith = ReplaceWith("isSubscribedFlow.first()"),
+        level = DeprecationLevel.WARNING
+    )
+    fun isSubscribedBlocking(): Boolean = runBlocking(Dispatchers.IO) {
+        isSubscribedFlow.first()
     }
 
-    fun setSubscribedSync(value: Boolean) = runBlocking {
+    /**
+     * FCM 서비스를 위한 동기식 구독 설정 메서드
+     * 주의: 이 메서드는 IO 작업을 차단하므로 FirebaseMessagingService에서만 사용해야 합니다.
+     */
+    @Deprecated(
+        message = "Only use this in FirebaseMessagingService. Use suspend setSubscribed() elsewhere.",
+        replaceWith = ReplaceWith("setSubscribed(value)"),
+        level = DeprecationLevel.WARNING
+    )
+    fun setSubscribedBlocking(value: Boolean) = runBlocking(Dispatchers.IO) {
         setSubscribed(value)
     }
 

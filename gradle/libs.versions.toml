@@ -8,6 +8,7 @@ targetSdk = "35"
 agp = "8.2.2"
 kotlin = "1.9.22"
 ksp = "1.9.22-1.0.17"
+kotlinSerialization = "1.6.2"
 
 # AndroidX
 coreKtx = "1.15.0"
@@ -15,7 +16,7 @@ appcompat = "1.7.0"
 activity = "1.9.3"
 fragment = "1.8.5"
 lifecycle = "2.8.3"
-navigation = "2.7.7"
+navigation = "2.8.3"
 recyclerview = "1.3.2"
 constraintlayout = "2.1.4"
 splashscreen = "1.0.1"
@@ -43,6 +44,10 @@ firebaseBom = "33.3.0"
 
 # Kakao
 kakaoSdk = "2.20.3"
+kakaoSdkAll = "2.20.3"
+
+# Compose Compiler
+composeCompiler = "1.5.8"
 
 # UI
 material = "1.12.0"
@@ -58,6 +63,11 @@ timber = "4.7.1"
 junit = "4.13.2"
 junitExt = "1.2.1"
 espresso = "3.6.1"
+uiautomator = "2.3.0"
+
+# Benchmark
+benchmarkMacro = "1.2.3"
+profileinstaller = "1.3.1"
 
 [libraries]
 # Gradle Plugins (for build-logic)
@@ -87,6 +97,9 @@ androidx-navigation-fragment = { group = "androidx.navigation", name = "navigati
 androidx-navigation-ui = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 
+# Kotlin Serialization
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinSerialization" }
+
 # Room
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
@@ -100,6 +113,7 @@ androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
+androidx-compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 
 # Hilt
@@ -121,6 +135,7 @@ firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging
 
 # Kakao
 kakao-sdk = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kakaoSdk" }
+kakao-sdk-all = { group = "com.kakao.sdk", name = "v2-all", version.ref = "kakaoSdkAll" }
 
 # UI
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
@@ -137,6 +152,11 @@ timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "tim
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitExt" }
 androidx-espresso = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
+androidx-uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "uiautomator" }
+
+# Benchmark
+androidx-benchmark-macro = { group = "androidx.benchmark", name = "benchmark-macro-junit4", version.ref = "benchmarkMacro" }
+androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "profileinstaller" }
 
 [bundles]
 lifecycle = [
@@ -171,9 +191,12 @@ compose = [
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+android-test = { id = "com.android.test", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 navigation-safeargs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigation" }
+baselineprofile = { id = "androidx.baselineprofile", version.ref = "benchmarkMacro" }

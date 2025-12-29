@@ -21,6 +21,9 @@ rootProject.name = "ToYou"
 // App Module
 include(":app")
 
+// Baseline Profile
+include(":baselineprofile")
+
 // Core Modules
 include(":core:common")
 include(":core:network")

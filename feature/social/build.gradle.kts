@@ -8,4 +8,5 @@ android {
 
 dependencies {
     // Feature specific dependencies
+    implementation(project(":feature:home"))
 }
